@@ -8,13 +8,13 @@
     using System.Text;
     using System.Threading.Tasks;
     using TaskCat.Data.Model;
-    public class FetchTransitTask: JobTask, IFetchable
+    public class FetchRideTask: JobTask, IFetchable
     {
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
         public Asset SelectedAsset { get; set; }
 
-        public FetchTransitTask()
+        public FetchRideTask() : base("FetchTransit")
         {
 
         }
