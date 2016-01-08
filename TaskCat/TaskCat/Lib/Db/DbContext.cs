@@ -8,7 +8,7 @@
     using System.Linq;
     using System.Web;
 
-    public class DbContext
+    public class DbContext : IDbContext
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private MongoClient mongoClient;

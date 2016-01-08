@@ -8,9 +8,10 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class Job : DbEntity
+    public class DbEntity
     {
-        public IEnumerable<Task> Tasks { get; set; }
-
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
     }
 }
