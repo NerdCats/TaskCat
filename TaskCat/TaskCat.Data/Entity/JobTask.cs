@@ -1,11 +1,14 @@
 ﻿namespace TaskCat.Data.Entity
 {
+    using JobTasks;
+    using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
+    [BsonKnownTypes(typeof(FetchTransitTask))]
     public class JobTask : DbEntity
     {
         public string Name { get; set; }

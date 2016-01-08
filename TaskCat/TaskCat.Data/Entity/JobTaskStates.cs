@@ -9,7 +9,7 @@ namespace TaskCat.Data.Entity
     public enum JobTaskStates
     {
         PENDING,
-        INPROGRESS,
+        IN_PROGRESS,
         COMPLETED
     }
 }

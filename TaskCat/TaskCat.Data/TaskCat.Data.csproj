@@ -56,16 +56,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Asset.cs" />
+    <Compile Include="Entity\DbEntity.cs" />
     <Compile Include="Entity\Job.cs" />
+    <Compile Include="Entity\JobState.cs" />
     <Compile Include="Entity\JobTask.cs" />
+    <Compile Include="Entity\JobTaskStates.cs" />
+    <Compile Include="Entity\JobTasks\FetchTransitTask.cs" />
+    <Compile Include="Interfaces\IFetchable.cs" />
+    <Compile Include="Model\Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entity\JobTask\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

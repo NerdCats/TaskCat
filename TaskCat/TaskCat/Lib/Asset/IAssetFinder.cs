@@ -1,15 +1,15 @@
-﻿namespace TaskCat.Data.Entity
+﻿
+namespace TaskCat.Lib.Asset
 {
+    using Data.Entity;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
-    public enum JobState
+    public interface IAssetFinder
     {
-        ENQUEUED,
-        IN_PROGRESS,
-        COMPLETED
+        List<T> FindAssets<T>() where T : Asset;
     }
 }

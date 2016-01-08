@@ -166,7 +166,9 @@
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controller\JobController.cs" />
+    <Compile Include="Lib\Asset\IAssetFinder.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
+    <Compile Include="Lib\Db\IDbContext.cs" />
     <Compile Include="Lib\Job\FakeJobRepository.cs" />
     <Compile Include="Lib\Job\IJobRepository.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />

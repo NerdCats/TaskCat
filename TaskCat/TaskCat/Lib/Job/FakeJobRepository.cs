@@ -14,7 +14,7 @@
             var task =  Task.Run(()=> {
                 return new Job() {
                     _id = "a1b2c3d4e5f6",
-                    Tasks = new List<Task>()
+                    Tasks = new List<JobTask>()
                 };
             });
             return await task;
