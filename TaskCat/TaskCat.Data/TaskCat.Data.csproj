@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Job.cs" />
-    <Compile Include="Entity\Task.cs" />
+    <Compile Include="Entity\JobTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

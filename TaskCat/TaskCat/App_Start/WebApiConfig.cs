@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autofac.Integration.WebApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -7,7 +9,7 @@ namespace TaskCat
 {
     public static class WebApiConfig
     {
-        public static void Register(HttpConfiguration config)
+        public static void Register(HttpConfiguration config, AutofacWebApiDependencyResolver resolver)
         {
             config.MapHttpAttributeRoutes();
 
@@ -16,6 +18,12 @@ namespace TaskCat
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.DependencyResolver = resolver;
+
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
+            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
         }
     }
 }

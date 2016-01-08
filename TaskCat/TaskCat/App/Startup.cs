@@ -4,6 +4,8 @@ using Microsoft.Owin;
 using Owin;
 using Newtonsoft.Json;
 using System.Configuration;
+using Autofac.Integration.WebApi;
+using System.Web.Http;
 
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
 
@@ -26,11 +28,28 @@ namespace TaskCat.App
                     break;
             }
 
+            AutofacContainerBuilder builder = new AutofacContainerBuilder();
+
+            var container = builder.BuildContainer();
+            app.UseAutofacMiddleware(container);
+
+            var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            var config = new HttpConfiguration();
+
+            WebApiConfig.Register(config, webApiDependencyResolver);
+
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+
+            app.UseWebApi(config);
+            app.UseAutofacWebApi(config);
+
             //FIXME: Can be a small middleware. No? Alright!
-            app.Run(context=> {
+            app.Run(context => {
                 context.Response.ContentType = "text/plain";
                 return context.Response.WriteAsync("Welcome to TaskCat, proudly baked by NerdCats");
             });
+
         }
     }
 }
