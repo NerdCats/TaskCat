@@ -3,12 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+    using System.Web;
     using TaskCat.Data.Entity;
 
-    public interface IJobRepository
+    public class JobManager
     {
-        Task<Job> GetJob(string id);
+        internal async Task<Job> GetJob(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

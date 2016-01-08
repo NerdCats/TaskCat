@@ -11,7 +11,6 @@ namespace TaskCat.App
 {
     public class Startup
     {
-
         public void Configuration(IAppBuilder app)
         {
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
@@ -19,9 +18,12 @@ namespace TaskCat.App
 
             //FIXME: We need a module to load development/production mode so error pages can be turned on/off
             //Better have a global configuration module like Asp.net 5, that looked awesome!
-            if (app.Properties["host.AppMode"].ToString() == "development")
+            switch(app.Properties["host.AppMode"].ToString() )
             {
-                app.UseErrorPage();
+                case ("development"):
+                case ("mock"):
+                    app.UseErrorPage();
+                    break;
             }
 
             //FIXME: Can be a small middleware. No? Alright!

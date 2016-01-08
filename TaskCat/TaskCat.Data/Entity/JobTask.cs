@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TaskCat.Data.Entity
 {
-    public class SubTask
+    public class JobTask
     {
+
     }
 }
