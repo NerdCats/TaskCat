@@ -7,9 +7,11 @@ namespace TaskCat.Lib.Asset
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Data.Model;
+    using Data.Entity.Assets;
 
-    public interface IAssetProvider<T> where T : Asset
+    public interface INearestAssetProvider<T> where T : Asset
     {
-        List<T> FindAssets();
+        Task<List<T>> FindAssets(Location loc);
     }
 }

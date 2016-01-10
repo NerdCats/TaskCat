@@ -8,7 +8,9 @@
     using System.Configuration;
     using System.Linq;
     using System.Web;
+    using Lib.Asset;
     using TaskCat.Lib.Job;
+    using Data.Entity.Assets;
 
     public class AutofacContainerBuilder
     {
@@ -20,6 +22,7 @@
             {
                 case "mock":
                     builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
+                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<Ryde>, ConcreteReflectionActivatorData>();
                     break;
                 default:
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();

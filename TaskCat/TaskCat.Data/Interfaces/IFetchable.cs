@@ -11,6 +11,6 @@
     {
         Location FromLocation { get; set; }
         Location ToLocation { get; set; }
-        List<T> FetchAvailableAssets();
+        Task<List<T>> FetchAvailableAssets();
     }
 }
