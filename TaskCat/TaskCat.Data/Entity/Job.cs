@@ -9,6 +9,8 @@
     using System.Text;
     using System.Threading.Tasks;
     using Model;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     public class Job : DbEntity
     {
@@ -18,6 +20,8 @@
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
         public List<JobTask> Tasks { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        [JsonConverter(typeof (StringEnumConverter))]
         public JobState State { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }

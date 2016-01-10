@@ -43,7 +43,7 @@
             try
             {
                 Job job = await _repository.PostJob(model);
-                return Ok();
+                return Json(job);
             }
             catch (Exception)
             {
