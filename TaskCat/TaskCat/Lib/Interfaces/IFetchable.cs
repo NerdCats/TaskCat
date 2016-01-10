@@ -1,16 +1,18 @@
-﻿namespace TaskCat.Data.Interfaces
+﻿namespace TaskCat.Lib.Interfaces
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Entity;
     using TaskCat.Data.Model;
-    public interface IFetchable<T> where T :Asset
+    using TaskCat.Data.Entity;
+    using Asset;
+
+    public interface IFetchable<T> where T : Asset
     {
         Location FromLocation { get; set; }
         Location ToLocation { get; set; }
-        Task<List<T>> FetchAvailableAssets();
+        Task<List<T>> FetchAvailableAssets(INearestAssetProvider<T> provider);
     }
 }

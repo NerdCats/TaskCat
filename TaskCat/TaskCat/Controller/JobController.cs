@@ -42,7 +42,7 @@
         {
             try
             {
-                //Job job = await _repository.PostJob(model);
+                Job job = await _repository.PostJob(model);
                 return Ok();
             }
             catch (Exception)

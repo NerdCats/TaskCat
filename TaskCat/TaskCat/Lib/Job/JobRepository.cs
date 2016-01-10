@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using System.Web;
     using Data.Entity;
+    using Data.Model.Api;
 
     public class JobRepository : IJobRepository
     {
@@ -19,6 +20,11 @@
         public async Task<Job> GetJob(string id)
         {
             return await _manager.GetJob(id);
+        }
+
+        public Task<Job> PostJob(JobModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

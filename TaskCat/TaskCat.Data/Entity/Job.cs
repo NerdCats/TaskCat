@@ -12,6 +12,7 @@
 
     public class Job : DbEntity
     {
+        public string Name { get; set; }
         // FIXME: Im still not sure how this would be actually done, because
         // We might have to support anonymous requests
         private string _user = "Anonymous";

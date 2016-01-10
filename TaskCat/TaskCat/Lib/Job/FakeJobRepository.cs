@@ -7,6 +7,7 @@
     using System.Web;
     using TaskCat.Data.Entity;
     using Data.Model;
+    using Data.Model.Api;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -18,6 +19,19 @@
                     Tasks = new List<JobTask>()
                 };
             });
+            return await task;
+        }
+
+        public async Task<Job> PostJob(JobModel model)
+        {
+            var task = Task.Run(() =>
+            {
+                var job = new Job();
+                job.Tasks = model.Tasks;
+                job.Name = model.Name;
+                return job;
+            });
+
             return await task;
         }
     }

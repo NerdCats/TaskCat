@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Model.JobTasks
 {
-    using Data.Interfaces;
+    using Lib.Interfaces;
     using MongoDB.Driver.GeoJsonObjectModel;
     using System;
     using System.Collections.Generic;
@@ -13,21 +13,18 @@
 
     public class FetchRideTask<T> : JobTask, IFetchable<T> where T : Ryde // FIXME: RIDE should be categorized as an asset
     {
-        private INearestAssetProvider<Ryde> _rydeProvider;
-
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
         public T SelectedAsset { get; set; }
 
 
-        public FetchRideTask(INearestAssetProvider<Ryde> rydeProvider) : base("Fetching Ride", "FetchRide")
-        {
-            _rydeProvider = rydeProvider;
+        public FetchRideTask() : base("Fetching Ride", "FetchRide")
+        { 
         }
 
-        public async Task<List<T>> FetchAvailableAssets()
+        public async Task<List<T>> FetchAvailableAssets(INearestAssetProvider<T> provider)
         {
-            var data = await _rydeProvider.FindAssets(FromLocation);
+            var data = await provider.FindAssets(FromLocation);
             return data as List<T>;
         }
     }
