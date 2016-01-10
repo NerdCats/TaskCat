@@ -27,7 +27,7 @@
 
         public async Task<List<T>> FetchAvailableAssets()
         {
-            var data = await _rydeProvider.FindAssets(null);
+            var data = await _rydeProvider.FindAssets(FromLocation);
             return data as List<T>;
         }
     }

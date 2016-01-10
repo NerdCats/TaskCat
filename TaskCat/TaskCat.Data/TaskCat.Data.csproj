@@ -61,6 +61,7 @@
     <Compile Include="Entity\DbEntity.cs" />
     <Compile Include="Entity\Job.cs" />
     <Compile Include="Entity\JobState.cs" />
+    <Compile Include="Model\Api\JobModel.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
     <Compile Include="Interfaces\IFetchable.cs" />
