@@ -8,8 +8,8 @@ namespace TaskCat.Lib.Asset
     using System.Text;
     using System.Threading.Tasks;
 
-    public interface IAssetFinder
+    public interface IAssetProvider<T> where T : Asset
     {
-        List<T> FindAssets<T>() where T : Asset;
+        List<T> FindAssets();
     }
 }

@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaskCat.Data.Entity
+namespace TaskCat.Data.Entity.Assets
 {
-    public enum JobTaskStates
+    public class Ryde: Asset
     {
-        PENDING,
-        IN_PROGRESS,
-        COMPLETED
     }
 }

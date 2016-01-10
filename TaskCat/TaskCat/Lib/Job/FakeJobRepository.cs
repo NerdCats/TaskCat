@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using System.Web;
     using TaskCat.Data.Entity;
+    using Data.Model;
 
     public class FakeJobRepository : IJobRepository
     {
