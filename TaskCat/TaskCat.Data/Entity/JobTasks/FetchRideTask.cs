@@ -12,10 +12,17 @@
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
         public AssetEntity SelectedAsset { get; set; }
-        
-        public FetchRideTask() : base("FetchRide")
+
+        public FetchRideTask(): base("FetchRide")
         {
 
+        }
+
+        public FetchRideTask(Location from, Location to, AssetEntity selectedAsset = null) : this
+        {
+            FromLocation = from;
+            ToLocation = to;
+            selectedAsset = null;
         }
 
         

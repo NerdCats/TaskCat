@@ -59,13 +59,15 @@
     <Compile Include="Entity\AssetEntity.cs" />
     <Compile Include="Entity\DbEntity.cs" />
     <Compile Include="Entity\JobEntity.cs" />
+    <Compile Include="Model\Api\JobModel.cs" />
+    <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
     <Compile Include="Entity\JobTasks\FetchRideTask.cs" />
     <Compile Include="Entity\Assets\Ryde.cs" />
-    <Compile Include="Model\Api\JobModel.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -21,6 +22,7 @@
             set { _name = value; }
         }
 
+        [Required(ErrorMessage ="Order Type not provided" , AllowEmptyStrings =false, ErrorMessageResourceName ="Type")]
         public string Type { get; set; }
 
         /// <summary>
