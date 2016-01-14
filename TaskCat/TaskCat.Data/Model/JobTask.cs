@@ -13,13 +13,14 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public JobTaskStates State { get; set; }
+        public string JobStateString { get; set; }
         public AssetEntity AssignedAsset { get; set; }
         public DateTime ETA { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
-        private JobTask TerminalTask { get; set; }
+        
 
         public JobTask()
         {
@@ -34,6 +35,7 @@
         public JobTask(string type, string name):this(type)
         {
             this.Name = name;
+            //FIXME: assign job state string here by using a state converter
         }
 
     }

@@ -27,6 +27,7 @@
         public DateTime? ModifiedTime { get; set; }
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> UserLocation { get; set; }
         public DateTime? PreferredDeliveryTime { get; set; }
+        public JobTask TerminalTask { get; set; }
 
         public JobEntity()
         {

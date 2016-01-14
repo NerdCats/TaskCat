@@ -12,8 +12,8 @@
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
         public AssetEntity SelectedAsset { get; set; }
-
-        public FetchRideTask() : base("FetchTransit")
+        
+        public FetchRideTask() : base("FetchRide")
         {
 
         }
