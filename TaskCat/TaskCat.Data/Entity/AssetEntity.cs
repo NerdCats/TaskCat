@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskCat.Data.Entity
 {
-    public enum JobTaskStates
+    public class AssetEntity
     {
-        PENDING,
-        IN_PROGRESS,
-        COMPLETED
     }
 }

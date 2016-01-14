@@ -56,12 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\Asset.cs" />
+    <Compile Include="Entity\AssetEntity.cs" />
     <Compile Include="Entity\DbEntity.cs" />
-    <Compile Include="Entity\Job.cs" />
-    <Compile Include="Entity\JobState.cs" />
-    <Compile Include="Entity\JobTask.cs" />
-    <Compile Include="Entity\JobTaskStates.cs" />
+    <Compile Include="Entity\JobEntity.cs" />
+    <Compile Include="Model\JobState.cs" />
+    <Compile Include="Model\JobTask.cs" />
+    <Compile Include="Model\JobTaskStates.cs" />
     <Compile Include="Entity\JobTasks\FetchRideTask.cs" />
     <Compile Include="Interfaces\IFetchable.cs" />
     <Compile Include="Model\Location.cs" />

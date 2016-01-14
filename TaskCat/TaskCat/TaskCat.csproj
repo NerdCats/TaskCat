@@ -169,8 +169,10 @@
     <Compile Include="Lib\Asset\IAssetFinder.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
+    <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
     <Compile Include="Lib\Job\FakeJobRepository.cs" />
     <Compile Include="Lib\Job\IJobRepository.cs" />
+    <Compile Include="Lib\Job\JobBuilder.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />
     <Compile Include="Lib\Job\JobRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

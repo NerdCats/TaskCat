@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Entity
+﻿namespace TaskCat.Data.Model
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public enum JobState
+    public enum JobTaskStates
     {
-        ENQUEUED,
+        PENDING,
         IN_PROGRESS,
         COMPLETED
     }

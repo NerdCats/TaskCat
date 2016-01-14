@@ -16,7 +16,7 @@
             _manager = manager;
         }
 
-        public async Task<Job> GetJob(string id)
+        public async Task<JobEntity> GetJob(string id)
         {
             return await _manager.GetJob(id);
         }

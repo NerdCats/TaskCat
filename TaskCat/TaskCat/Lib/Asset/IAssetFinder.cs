@@ -10,6 +10,6 @@ namespace TaskCat.Lib.Asset
 
     public interface IAssetFinder
     {
-        List<T> FindAssets<T>() where T : Asset;
+        List<T> FindAssets<T>() where T : AssetEntity;
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Entity
 {
+    using Model;
     using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Attributes;
     using MongoDB.Driver.GeoJsonObjectModel;
@@ -9,7 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class Job : DbEntity
+    public class JobEntity : DbEntity
     {
         // FIXME: Im still not sure how this would be actually done, because
         // We might have to support anonymous requests
@@ -22,7 +23,7 @@
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> UserLocation { get; set; }
         public DateTime? PreferredDeliveryTime { get; set; }
 
-        public Job()
+        public JobEntity()
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;

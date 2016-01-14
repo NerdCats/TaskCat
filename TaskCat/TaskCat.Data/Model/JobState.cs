@@ -1,14 +1,15 @@
-﻿namespace TaskCat.Lib.Job
+﻿namespace TaskCat.Data.Model
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity;
 
-    public interface IJobRepository
+    public enum JobState
     {
-        Task<JobEntity> GetJob(string id);
+        ENQUEUED,
+        IN_PROGRESS,
+        COMPLETED
     }
 }

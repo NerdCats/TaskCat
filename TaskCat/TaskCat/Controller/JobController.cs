@@ -27,7 +27,7 @@
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            Job job = await _repository.GetJob(id);
+            JobEntity job = await _repository.GetJob(id);
             return Json(job);
         }
     }

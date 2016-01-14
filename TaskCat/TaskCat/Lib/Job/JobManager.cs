@@ -9,7 +9,7 @@
 
     public class JobManager
     {
-        internal async Task<Job> GetJob(string id)
+        internal async Task<JobEntity> GetJob(string id)
         {
             throw new NotImplementedException();
         }
