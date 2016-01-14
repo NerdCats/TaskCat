@@ -10,7 +10,6 @@
 
     public abstract class JobTask
     {
-        public string Name { get; set; }
         public string Type { get; set; }
         public JobTaskStates State { get; set; }
         public string JobStateString { get; set; }
@@ -20,7 +19,7 @@
         public DateTime? ModifiedTime { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
-        
+
 
         public JobTask()
         {
@@ -32,11 +31,7 @@
             Type = type;
         }
 
-        public JobTask(string type, string name):this(type)
-        {
-            this.Name = name;
-            //FIXME: assign job state string here by using a state converter
-        }
 
+        public abstract bool IsReadyToMoveToNextTask();
     }
 }

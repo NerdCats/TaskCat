@@ -8,9 +8,9 @@ using TaskCat.Data.Model;
 
 namespace TaskCat.Lib.Asset
 {
-    public class FakeNearestRideProvider : INearestAssetProvider<Ryde>
+    public class FakeNearestRideProvider : INearestAssetProvider<Ride>
     {
-        public async Task<List<Ryde>> FindAssets(Location loc)
+        public async Task<List<Ride>> FindAssets(Location loc)
         {
             return null;
         }

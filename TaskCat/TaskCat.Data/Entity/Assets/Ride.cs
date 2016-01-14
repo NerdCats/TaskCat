@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskCat.Data.Entity.Assets
 {
-    public class Ryde: AssetEntity
+    public class Ride: AssetEntity
     {
     }
 }

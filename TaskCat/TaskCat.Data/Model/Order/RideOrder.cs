@@ -27,7 +27,7 @@
 
         //FIXME: Im still not sure whether Id want the system to have
         //capability to allow users to interact with the app to select vehicles around them or not
-        public Ryde ProposedRide { get; set; }
+        public Ride ProposedRide { get; set; }
     }
 
     //FIXME: This really shouldnt be done this way man, 

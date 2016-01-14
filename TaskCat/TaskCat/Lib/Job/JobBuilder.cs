@@ -10,7 +10,7 @@
         protected JobEntity _job;
         public JobEntity Job { get { return _job; } }
 
-        public abstract void BuildTaks();
+        public abstract void BuildTasks();
 
         public JobBuilder(string name)
         {

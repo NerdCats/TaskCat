@@ -183,6 +183,7 @@
     <Compile Include="Lib\Order\IOrderRepository.cs" />
     <Compile Include="Lib\Order\OrderRepository.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
+    <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

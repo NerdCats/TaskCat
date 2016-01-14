@@ -22,7 +22,7 @@
             {
                 case "mock":
                     builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<Ryde>, ConcreteReflectionActivatorData>();
+                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<Ride>, ConcreteReflectionActivatorData>();
                     break;
                 default:
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();

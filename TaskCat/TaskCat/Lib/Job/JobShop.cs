@@ -9,7 +9,7 @@ namespace TaskCat.Lib.Job
     {
         public void Construct(JobBuilder jobBuilder)
         {
-            jobBuilder.BuildTaks();
+            jobBuilder.BuildTasks();
         }
     }
 }
