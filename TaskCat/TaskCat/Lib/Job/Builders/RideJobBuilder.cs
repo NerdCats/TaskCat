@@ -28,6 +28,7 @@
             _job.Tasks = new List<JobTask>();
 
             FetchRideTask fetchRideTask = new FetchRideTask();
+
         }
 
 

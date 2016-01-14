@@ -18,7 +18,7 @@
 
         }
 
-        public FetchRideTask(Location from, Location to, AssetEntity selectedAsset = null) : this
+        public FetchRideTask(Location from, Location to, AssetEntity selectedAsset = null) : this()
         {
             FromLocation = from;
             ToLocation = to;
