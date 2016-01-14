@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Lib.Job.Builders
 {
+    using Data.Model;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -7,9 +8,18 @@
     using TaskCat.Data.Entity;
     public class RideJobBuilder : JobBuilder
     {
-        public override void BuildTaks()
+        public RideJobBuilder(string name) : base(name)
         {
-            _job = new JobEntity();
+
+        }
+
+        public override void BuildTaks()
+        { 
+            _job.Tasks = new List<JobTask>();
+            
+            //Now we would add FetchRideTask
+            //PickupTask
+            //DropPassengerTask here :)
         }
 
 

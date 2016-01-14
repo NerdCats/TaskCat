@@ -11,5 +11,10 @@
         public JobEntity Job { get { return _job; } }
 
         public abstract void BuildTaks();
+
+        public JobBuilder(string name)
+        {
+            _job = new JobEntity(name);
+        }
     }
 }

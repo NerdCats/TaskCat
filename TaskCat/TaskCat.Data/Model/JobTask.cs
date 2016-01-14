@@ -19,6 +19,7 @@
         public DateTime? ModifiedTime { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
+        private JobTask TerminalTask { get; set; }
 
         public JobTask()
         {

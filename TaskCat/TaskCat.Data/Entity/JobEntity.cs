@@ -33,5 +33,10 @@
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
         }
+
+        public JobEntity(string name) : this()
+        {
+            Name = name;
+        }
     }
 }
