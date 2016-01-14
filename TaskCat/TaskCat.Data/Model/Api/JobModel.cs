@@ -1,15 +1,15 @@
-﻿
-namespace TaskCat.Lib.Asset
+﻿namespace TaskCat.Data.Model.Api
 {
-    using Data.Entity;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
-    public interface IAssetFinder
+    public class JobModel
     {
-        List<T> FindAssets<T>() where T : AssetEntity;
+        public string Name { get; set; }
+        public List<JobTask> Tasks { get; set; }
+
     }
 }

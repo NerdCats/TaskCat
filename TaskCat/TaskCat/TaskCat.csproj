@@ -147,6 +147,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ClassDiagram.cd" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -166,15 +167,18 @@
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controller\JobController.cs" />
-    <Compile Include="Lib\Asset\IAssetFinder.cs" />
+    <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
+    <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
     <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
+    <Compile Include="Lib\Interfaces\IFetchable.cs" />
     <Compile Include="Lib\Job\FakeJobRepository.cs" />
     <Compile Include="Lib\Job\IJobRepository.cs" />
     <Compile Include="Lib\Job\JobBuilder.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />
     <Compile Include="Lib\Job\JobRepository.cs" />
+    <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Lib\JobTask\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

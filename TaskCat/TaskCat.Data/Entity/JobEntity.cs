@@ -9,14 +9,19 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     public class JobEntity : DbEntity
     {
+        public string Name { get; set; }
         // FIXME: Im still not sure how this would be actually done, because
         // We might have to support anonymous requests
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
         public List<JobTask> Tasks { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        [JsonConverter(typeof (StringEnumConverter))]
         public JobState State { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }

@@ -6,9 +6,11 @@
     using System.Text;
     using System.Threading.Tasks;
     using TaskCat.Data.Entity;
+    using Data.Model.Api;
 
     public interface IJobRepository
     {
         Task<JobEntity> GetJob(string id);
+        Task<JobEntity> PostJob(JobModel model);
     }
 }

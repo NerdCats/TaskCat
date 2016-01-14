@@ -63,7 +63,8 @@
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
     <Compile Include="Entity\JobTasks\FetchRideTask.cs" />
-    <Compile Include="Interfaces\IFetchable.cs" />
+    <Compile Include="Entity\Assets\Ryde.cs" />
+    <Compile Include="Model\Api\JobModel.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

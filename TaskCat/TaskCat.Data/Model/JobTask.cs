@@ -30,5 +30,10 @@
             Type = type;
         }
 
+        public JobTask(string type, string name):this(type)
+        {
+            this.Name = name;
+        }
+
     }
 }

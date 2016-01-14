@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Data.Entity.JobTasks
 {
-    using Interfaces;
     using MongoDB.Driver.GeoJsonObjectModel;
     using System;
     using System.Collections.Generic;
@@ -8,7 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using TaskCat.Data.Model;
-    public class FetchRideTask: JobTask, IFetchable
+    public class FetchRideTask: JobTask
     {
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
