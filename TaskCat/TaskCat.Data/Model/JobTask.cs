@@ -58,10 +58,11 @@
             //FIXME: This is weird, just plain weird
             if(validateDependency)
             {
+                if (task.Result == null)
+                    throw new ArgumentNullException(nameof(task.Result), "Predecessor Task Result is null, please initialize predecessor Task result in consrtuctor before setting it as a predecessor");
 
             }
-            if (task.Result == null && validateDependency)
-                throw new ArgumentNullException(nameof(task.Result), "Predecessor Task Result is null, please initialize predecessor Task result in consrtuctor before setting it as a predecessor");
+            
             this.Predecessor = task;
             IsTerminatingTask = false;
            
