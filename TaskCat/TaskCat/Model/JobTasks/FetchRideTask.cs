@@ -35,12 +35,5 @@
             return data as List<T>;
         }
 
-        public override bool IsReadyToMoveToNextTask()
-        {
-            if (FromLocation == null || ToLocation == null || SelectedAsset == null)
-                return false;
-            return true;
-
-        }
     }
 }

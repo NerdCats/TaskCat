@@ -14,14 +14,8 @@
 
         public RidePickUpTask() : base("RidePickUp")
         {
-
+            
         }
 
-        public override bool IsReadyToMoveToNextTask()
-        {
-            if (FromLocation == null || ToLocation == null || SelectedRide == null)
-                return false;
-            return true;
-        }
     }
 }
