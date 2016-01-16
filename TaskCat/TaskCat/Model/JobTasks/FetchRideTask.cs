@@ -20,6 +20,13 @@
 
         public FetchRideTask() : base("FetchRide")
         {
+            Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;
+            this.Result = new FetchRideTaskResult();
+        }
+
+        private void Predecessor_JobTaskCompleted(JobTask sender, JobTaskResult result)
+        {
+            throw new NotImplementedException();
         }
 
         public FetchRideTask(Location from, Location to, T selectedAsset = null) : this()
@@ -34,6 +41,11 @@
             var data = await provider.FindAssets(FromLocation);
             return data as List<T>;
         }
+
+    }
+
+    public class FetchRideTaskResult : JobTaskResult
+    {
 
     }
 }

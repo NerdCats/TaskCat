@@ -10,11 +10,12 @@
 
     public abstract class JobTask
     {
-        protected JobTask Successor;
+        [BsonIgnore]
+        protected JobTask Predecessor;
 
         //FIXME: The result type would definitelty not be string of course
-        protected delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);
-        protected event JobTaskCompletedEventHandler JobTaskCompleted;
+        public delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);
+        public event JobTaskCompletedEventHandler JobTaskCompleted;
 
         protected delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskStates updatedState);
         protected event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
@@ -23,7 +24,7 @@
         //protected delegate void JobTaskUpdatedEventHandler(JobTask sender, string result);
         //protected event JobTaskUpdatedEventHandler JobTaskUpdated;
 
-        public JobTaskResult Result { get; set; }
+        public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
         public JobTaskStates State { get; set; }
@@ -47,15 +48,23 @@
             
         }
 
-        public JobTask(string type)
+        public JobTask(string type) : this()
         {
             Type = type;
         }
 
-        public virtual void SetSuccessor(JobTask task)
+        public virtual void SetPredecessor(JobTask task, bool validateDependency = true)
         {
-            this.Successor = task;
+            //FIXME: This is weird, just plain weird
+            if(validateDependency)
+            {
+
+            }
+            if (task.Result == null && validateDependency)
+                throw new ArgumentNullException(nameof(task.Result), "Predecessor Task Result is null, please initialize predecessor Task result in consrtuctor before setting it as a predecessor");
+            this.Predecessor = task;
             IsTerminatingTask = false;
+           
         }
 
         public virtual void MoveToNextState(JobTaskResult result = null)
@@ -92,7 +101,7 @@
     }
 
 
-    public class JobTaskResult
+    public abstract class JobTaskResult
     {
         public DateTime? TaskCompletionTime { get; set; }
         public object Result { get; set; }
