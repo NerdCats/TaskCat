@@ -16,13 +16,13 @@
         public Location From { get; set; }
         public Location To { get; set; }
         public T SelectedAsset { get; set; }
+
         public INearestAssetProvider<T> provider { get; set; }
 
         public FetchRideTask() : base("FetchRide")
         {
-            Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;
             this.Result = new FetchRideTaskResult();
-            
+            State = JobTaskStates.IN_PROGRESS;
         }
 
         public FetchRideTask(Location from, Location to, T selectedAsset = null) : this()
@@ -31,12 +31,6 @@
             To = to;
             selectedAsset = null;
         }
-
-        private void Predecessor_JobTaskCompleted(JobTask sender, JobTaskResult result)
-        {
-            //var payloadType = result.ResultType;
-            //var payload = Convert.ChangeType(result, payloadType) as payloadType;
-        }
     
         public async Task<List<T>> FetchAvailableAssets()
         {
@@ -44,6 +38,21 @@
             return data as List<T>;
         }
 
+        public async Task SelectEligibleAsset()
+        {
+            SelectedAsset = await provider.FindNearestEligibleAssets(From);
+        }
+
+        public override void UpdateTask()
+        {
+            //FIXME: I really should use some attribute here to do this
+            //this is just plain ghetto
+            IsReadytoMoveToNextTask = (From != null && To != null && SelectedAsset != null) ? true : false;
+
+            MoveToNextState();
+        }
+
+        
     }
 
     public class FetchRideTaskResult : JobTaskResult

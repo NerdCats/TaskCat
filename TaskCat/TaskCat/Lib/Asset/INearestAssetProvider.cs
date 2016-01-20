@@ -13,5 +13,6 @@ namespace TaskCat.Lib.Asset
     public interface INearestAssetProvider<T> where T : AssetEntity
     {
         Task<List<T>> FindAssets(Location loc);
+        Task<T> FindNearestEligibleAssets(Location from);
     }
 }

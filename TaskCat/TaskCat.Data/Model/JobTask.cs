@@ -2,6 +2,8 @@
 {
     using Entity;
     using MongoDB.Bson.Serialization.Attributes;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -27,7 +29,11 @@
         public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
+
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        [JsonConverter(typeof(StringEnumConverter))]
         public JobTaskStates State { get; set; }
+
         public string JobStateString { get; set; }
         public AssetEntity AssignedAsset { get; set; }
         public DateTime ETA { get; set; }
@@ -41,7 +47,10 @@
         public bool IsReadytoMoveToNextTask { get; set; }
         public bool IsDependencySatisfied { get; set; }
 
-        public bool IsTerminatingTask { get; set; } = true;
+        public bool IsStartingTask { get; set; } = true;
+        public bool IsTerminatingTask { get; set; } = false;
+
+        public bool ETAFailed { get; set; } = false;
 
         public JobTask()
         {
@@ -53,6 +62,8 @@
             Type = type;
         }
 
+        public abstract void UpdateTask();
+
         public virtual void SetPredecessor(JobTask task, bool validateDependency = true)
         {
             //FIXME: This is weird, just plain weird
@@ -63,39 +74,43 @@
             }
             
             this.Predecessor = task;
-            IsTerminatingTask = false;
+            IsStartingTask = false;
            
         }
 
+        
+
         public virtual void MoveToNextState()
         {
-            if (State <= JobTaskStates.COMPLETED)
+            if (State == JobTaskStates.IN_PROGRESS && !IsReadytoMoveToNextTask)
+                return;
+
+            if (State < JobTaskStates.IN_PROGRESS)
             {
                 State++;
                 if (JobTaskStateUpdated != null)
                     JobTaskStateUpdated(this, State);
             }
             else
-            {
                 throw new InvalidOperationException(string.Concat("Cant move job state after ", State));
-            }
-
+            
             if (State == JobTaskStates.COMPLETED && Result != null)
-                NotifyJobTaskCompleted(Result);
+                NotifyJobTaskCompleted();            
         }
 
 
 
-        protected virtual void NotifyJobTaskCompleted(JobTaskResult result)
+        protected virtual void NotifyJobTaskCompleted()
         {
-            if (result.TaskCompletionTime == null)
-                result.TaskCompletionTime = DateTime.UtcNow;
+            if (Result.TaskCompletionTime == null)
+                Result.TaskCompletionTime = DateTime.UtcNow;
 
-            IsReadytoMoveToNextTask = true;
+            if (!IsReadytoMoveToNextTask)
+                throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
 
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
-                JobTaskCompleted(this, result);
+                JobTaskCompleted(this, Result);
         }
 
     }

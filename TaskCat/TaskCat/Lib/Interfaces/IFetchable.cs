@@ -15,5 +15,6 @@
         Location To { get; set; }
         INearestAssetProvider<T> provider { get; set; }
         Task<List<T>> FetchAvailableAssets();
+        Task SelectEligibleAsset();
     }
 }
