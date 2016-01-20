@@ -67,21 +67,21 @@
            
         }
 
-        public virtual void MoveToNextState(JobTaskResult result = null)
+        public virtual void MoveToNextState()
         {
             if (State <= JobTaskStates.COMPLETED)
             {
                 State++;
-                if (JobTaskCompleted != null)
-                    JobTaskCompleted(this, result);
+                if (JobTaskStateUpdated != null)
+                    JobTaskStateUpdated(this, State);
             }
             else
             {
                 throw new InvalidOperationException(string.Concat("Cant move job state after ", State));
             }
 
-            if (State == JobTaskStates.COMPLETED && result != null)
-                NotifyJobTaskCompleted(result);
+            if (State == JobTaskStates.COMPLETED && Result != null)
+                NotifyJobTaskCompleted(Result);
         }
 
 

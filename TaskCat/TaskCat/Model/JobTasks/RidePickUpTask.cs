@@ -44,7 +44,6 @@
                     if (rideType.GetType() != typeof(AssetEntity))
                         throw new InvalidCastException("Type Verification Asset field failed");
 
-
                 }
                 catch (Exception ex)
                 {
