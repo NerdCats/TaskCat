@@ -60,7 +60,6 @@
             {
                 if (task.Result == null)
                     throw new ArgumentNullException(nameof(task.Result), "Predecessor Task Result is null, please initialize predecessor Task result in consrtuctor before setting it as a predecessor");
-
             }
             
             this.Predecessor = task;
@@ -101,10 +100,20 @@
 
     }
 
+    //Should be moved to a new class file? No? Okay!
 
     public abstract class JobTaskResult
     {
-        public DateTime? TaskCompletionTime { get; set; }
-        public object Result { get; set; }
+        public DateTime? TaskCompletionTime { get; set; }       
+        public Type ResultType { get; set; }
+    }
+
+    //FIXME: Might need to move this to an Util function
+    public static class JobTaskResultExtensions
+    {
+        public static T Cast<T>(this object input)
+        {
+            return (T)input;
+        }
     }
 }

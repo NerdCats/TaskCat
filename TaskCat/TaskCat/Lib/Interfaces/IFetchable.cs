@@ -11,8 +11,9 @@
 
     public interface IFetchable<T> where T : AssetEntity
     {
-        Location FromLocation { get; set; }
-        Location ToLocation { get; set; }
-        Task<List<T>> FetchAvailableAssets(INearestAssetProvider<T> provider);
+        Location From { get; set; }
+        Location To { get; set; }
+        INearestAssetProvider<T> provider { get; set; }
+        Task<List<T>> FetchAvailableAssets();
     }
 }
