@@ -35,6 +35,7 @@
         public DateTime? PreferredDeliveryTime { get; set; }
 
         private JobTask _terminalTask;
+        [BsonIgnore]
         public JobTask TerminalTask
         {
             get { return _terminalTask; }

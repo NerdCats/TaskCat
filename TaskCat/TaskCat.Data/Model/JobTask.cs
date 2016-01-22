@@ -48,14 +48,17 @@
         public AssetEntity AssignedAsset { get; set; }
 
         [BsonIgnoreIfNull]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? ETA { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public DateTime? CompletionTime { get; set; }
 
         [BsonIgnoreIfNull]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
         [BsonIgnoreIfNull]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Notes { get; set; }
 
         public bool IsReadytoMoveToNextTask { get; set; }

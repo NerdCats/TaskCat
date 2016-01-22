@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Lib.Job
 {
+    using Data.Model;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,13 +20,16 @@
         internal async Task<JobEntity> GetJob(string id)
         {
             var JobPayload = await _store.FindOne(id);
-
+            JobTask TerminalTask=null;
             // Hooking up JobTask Predecessors, 
             // validation is skipped due to this is already been recorded in DB
             for(int count = JobPayload.Tasks.Count-1; count>0; count--)
             {
                 JobPayload.Tasks[count].SetPredecessor(JobPayload.Tasks[count - 1], false);
+                if (JobPayload.Tasks[count].IsTerminatingTask) TerminalTask = JobPayload.Tasks[count];
             }
+
+            TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
 
             return JobPayload;
         }

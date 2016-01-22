@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Data.Model.Order
 {
     using Data.Model;
+    using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,10 +25,13 @@
         /// are basically
         /// a or relation
         /// </summary>
+        /// 
+        // FIXME: No default vehicle preference
         public List<string> VehiclePreference { get; set; }
 
         //FIXME: Im still not sure whether Id want the system to have
         //capability to allow users to interact with the app to select vehicles around them or not
+        [BsonIgnoreIfNull]
         public Ride ProposedRide { get; set; }
     }
 
