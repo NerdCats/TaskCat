@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Threading.Tasks;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Db;
@@ -16,6 +17,12 @@ namespace TaskCat.Lib.Job
         {
             await _context.Jobs.InsertOneAsync(createdJob);
             return createdJob;
+        }
+
+        internal async Task<JobEntity> FindOne(string id)
+        {
+            var job = await _context.Jobs.Find(x => x._id == id).FirstOrDefaultAsync();
+            return job;
         }
     }
 }

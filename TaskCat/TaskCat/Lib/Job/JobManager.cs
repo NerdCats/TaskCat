@@ -15,9 +15,10 @@
         {
             _store = store;
         }
+
         internal async Task<JobEntity> GetJob(string id)
         {
-            throw new NotImplementedException();
+            return await _store.FindOne(id);
         }
 
         internal async Task<JobEntity> RegisterJob(JobEntity createdJob)
