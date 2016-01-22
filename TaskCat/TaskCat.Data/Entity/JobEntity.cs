@@ -55,6 +55,7 @@
         public JobEntity(string name) : this()
         {
             Name = name;
+
         }
     }
 }

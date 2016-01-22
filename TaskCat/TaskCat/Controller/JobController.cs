@@ -28,6 +28,9 @@
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+
             JobEntity job = await _repository.GetJob(id);
             if (job == null) return NotFound();
             return Json(job);

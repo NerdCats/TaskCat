@@ -30,7 +30,7 @@
             }
         }
 
-        public RidePickUpTask() : base("RidePickUp")
+        public RidePickUpTask() : base("RidePickUp", "Pick Up")
         {
             
         }

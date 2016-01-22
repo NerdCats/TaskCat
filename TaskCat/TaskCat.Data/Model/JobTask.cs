@@ -9,9 +9,10 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-
+    using Utility;
     public abstract class JobTask
     {
+        protected string Name;
         public string id { get; protected set; }
 
         [BsonIgnore]
@@ -34,11 +35,16 @@
 
         public string Type { get; set; }
 
+        [BsonIgnore]
+        public string JobTaskStateString
+        {
+            get { return StateStringGenerator.GenerateStateString(State, Name); }
+        }
+
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
         public JobTaskStates State { get; set; }
-
-        public string JobStateString { get; set; }
+        
         public AssetEntity AssignedAsset { get; set; }
 
         [BsonIgnoreIfNull]
@@ -62,12 +68,14 @@
 
         public JobTask()
         {
-            id = Guid.NewGuid().ToString();
+            
         }
 
-        public JobTask(string type) : this()
+        public JobTask(string type, string name) : this()
         {
+            id = Guid.NewGuid().ToString();
             Type = type;
+            Name = name;
         }
 
         public abstract void UpdateTask();

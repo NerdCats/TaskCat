@@ -20,7 +20,7 @@
 
         public INearestAssetProvider<T> provider { get; set; }
 
-        public FetchRideTask() : base("FetchRide")
+        public FetchRideTask() : base("FetchRide", "Fetching Ride")
         {
             this.Result = new FetchRideTaskResult();
             State = JobTaskStates.IN_PROGRESS;
