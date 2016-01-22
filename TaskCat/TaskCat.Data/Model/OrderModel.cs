@@ -22,7 +22,7 @@
             set { _name = value; }
         }
 
-        [Required(ErrorMessage ="Order Type not provided" , AllowEmptyStrings =false, ErrorMessageResourceName ="Type")]
+        [Required(ErrorMessage ="Order Type not provided" )]
         public string Type { get; set; }
 
         /// <summary>
