@@ -79,6 +79,9 @@
             id = Guid.NewGuid().ToString();
             Type = type;
             Name = name;
+
+            CreateTime = DateTime.Now;
+            ModifiedTime = DateTime.Now;
         }
 
         public abstract void UpdateTask();
