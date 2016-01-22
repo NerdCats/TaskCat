@@ -186,6 +186,7 @@
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Order\IOrderRepository.cs" />
     <Compile Include="Lib\Order\OrderRepository.cs" />
+    <Compile Include="Lib\Utility\OrderModelConverter.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

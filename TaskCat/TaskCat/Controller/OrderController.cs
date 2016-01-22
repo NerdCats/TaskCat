@@ -22,6 +22,9 @@
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var orderResult = await _repository.PostOrder(model);
             return Json(orderResult);
         }

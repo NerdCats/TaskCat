@@ -15,7 +15,7 @@
             get
             {
                 if (string.IsNullOrWhiteSpace(_name))
-                    return string.Concat("Ride Request for ", _user);
+                    return string.Concat(Type, " Request for ", _user);
                 return _name;
             }
 
@@ -36,10 +36,16 @@
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
 
+        public OrderModel()
+        {
+
+        }
+
         public OrderModel(string name, string type)
         {
-            this.Type = type;
             this.Name = name;
+            this.Type = type;
         }
+
     }
 }

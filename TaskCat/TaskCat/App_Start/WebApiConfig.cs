@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using TaskCat.Lib.Utility;
 
 namespace TaskCat
 {
@@ -24,6 +25,9 @@ namespace TaskCat
             config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
             config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
             config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
+            config.Formatters.JsonFormatter.Indent = true;
         }
     }
 }

@@ -12,6 +12,7 @@
     using TaskCat.Lib.Job;
     using Data.Entity.Assets;
     using Lib.Db;
+    using Lib.Order;
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
@@ -23,6 +24,9 @@
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();
+
+            builder.RegisterType<OrderRepository>().SingleInstance();
+            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
 
             switch (ConfigurationManager.AppSettings["ENV"])
             {
