@@ -12,6 +12,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
+    
     public class JobEntity : DbEntity
     {
         public string Name { get; set; }

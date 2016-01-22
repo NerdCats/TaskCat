@@ -165,6 +165,7 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="App\Startup.cs" />
+    <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\OrderController.cs" />
@@ -186,7 +187,9 @@
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Order\IOrderRepository.cs" />
     <Compile Include="Lib\Order\OrderRepository.cs" />
-    <Compile Include="Lib\Utility\OrderModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
+    <Compile Include="Lib\Utility\Discriminator\FetchRideTaskDiscriminator.cs" />
+    <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

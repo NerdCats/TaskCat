@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Utility
+﻿namespace TaskCat.Lib.Utility.Converter
 {
     using Data.Model.Order;
     using Newtonsoft.Json;

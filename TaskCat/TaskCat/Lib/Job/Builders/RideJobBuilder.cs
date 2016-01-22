@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Web;
     using TaskCat.Data.Entity;
+
     public class RideJobBuilder : JobBuilder
     {
         private RideOrder _order;

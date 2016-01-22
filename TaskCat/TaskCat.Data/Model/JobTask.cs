@@ -12,7 +12,7 @@
 
     public abstract class JobTask
     {
-        public Guid id { get; protected set; }
+        public string id { get; protected set; }
 
         [BsonIgnore]
         protected JobTask Predecessor;
@@ -29,6 +29,7 @@
         //protected event JobTaskUpdatedEventHandler JobTaskUpdated;
 
         [BsonIgnore]
+        [JsonIgnore]
         public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
@@ -61,7 +62,7 @@
 
         public JobTask()
         {
-            id = Guid.NewGuid();
+            id = Guid.NewGuid().ToString();
         }
 
         public JobTask(string type) : this()

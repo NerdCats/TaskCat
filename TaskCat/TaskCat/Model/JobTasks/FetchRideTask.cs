@@ -11,6 +11,7 @@
     using TaskCat.Data.Model;
     using Lib.Asset;
     using Data.Entity;
+
     public class FetchRideTask<T> : JobTask, IFetchable<T> where T : Ride // FIXME: RIDE should be categorized as an asset
     {
         public Location From { get; set; }

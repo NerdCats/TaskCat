@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Configuration;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
+using TaskCat.App_Start;
 
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
 
@@ -37,6 +38,7 @@ namespace TaskCat.App
 
             var config = new HttpConfiguration();
 
+            BsonSerializerConfig.Configure();
             WebApiConfig.Register(config, webApiDependencyResolver);
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
