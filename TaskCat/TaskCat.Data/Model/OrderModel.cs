@@ -36,6 +36,29 @@
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
 
+        private DateTime? _eta;
+        public DateTime? ETA
+        {
+            get { return _eta; }
+            set
+            {
+                if (_eta != null)
+                    _eta = value;
+            }
+        }
+
+        private double? _ETAMinutes;
+        public double? ETAMinutes {
+            get {
+                return _ETAMinutes;
+            }
+            set {
+                _ETAMinutes = value;
+                ETA = DateTime.Now.Add(TimeSpan.FromMinutes(value.Value));
+            }
+        }
+
+
         public OrderModel()
         {
 

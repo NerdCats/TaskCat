@@ -28,6 +28,7 @@
         //protected delegate void JobTaskUpdatedEventHandler(JobTask sender, string result);
         //protected event JobTaskUpdatedEventHandler JobTaskUpdated;
 
+        [BsonIgnore]
         public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
@@ -38,12 +39,16 @@
 
         public string JobStateString { get; set; }
         public AssetEntity AssignedAsset { get; set; }
-        public DateTime ETA { get; set; }
+
+        [BsonIgnoreIfNull]
+        public DateTime? ETA { get; set; }
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public DateTime? CompletionTime { get; set; }
 
+        [BsonIgnoreIfNull]
         public string Description { get; set; }
+        [BsonIgnoreIfNull]
         public string Notes { get; set; }
 
         public bool IsReadytoMoveToNextTask { get; set; }
