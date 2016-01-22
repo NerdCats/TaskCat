@@ -171,6 +171,7 @@
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
+    <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Lib\Job\JobManager.cs" />
     <Compile Include="Lib\Job\JobRepository.cs" />
     <Compile Include="Lib\Job\JobShop.cs" />
+    <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Order\IOrderRepository.cs" />
     <Compile Include="Lib\Order\OrderRepository.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />

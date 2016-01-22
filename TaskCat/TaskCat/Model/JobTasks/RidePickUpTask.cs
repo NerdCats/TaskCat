@@ -14,6 +14,22 @@
         public Location ToLocation { get; set; }
         public Ride SelectedRide { get; set; }
 
+        //FIXME: Im really not sure what Im doing here, this doesnt look right
+        private bool _ridePickedUp;
+        public bool RidePickedUp
+        {
+            get { return _ridePickedUp; }
+            set
+            {
+                _ridePickedUp = value;
+                if (value)
+                {
+                    IsReadytoMoveToNextTask = true;
+                    UpdateTask();
+                }
+            }
+        }
+
         public RidePickUpTask() : base("RidePickUp")
         {
             
@@ -52,6 +68,11 @@
                 }
             }
 
+        }
+
+        public override void UpdateTask()
+        {
+            MoveToNextState();
         }
     }
 }

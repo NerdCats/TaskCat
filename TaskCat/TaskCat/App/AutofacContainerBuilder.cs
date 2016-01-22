@@ -11,14 +11,20 @@
     using Lib.Asset;
     using TaskCat.Lib.Job;
     using Data.Entity.Assets;
-
+    using Lib.Db;
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
 
-            switch(ConfigurationManager.AppSettings["ENV"])
+            builder.RegisterType<DbContext>().SingleInstance();
+            builder.RegisterType<DbContext>().AsImplementedInterfaces<IDbContext, ConcreteReflectionActivatorData>();
+
+            builder.RegisterType<JobStore>().SingleInstance();
+            builder.RegisterType<JobManager>().SingleInstance();
+
+            switch (ConfigurationManager.AppSettings["ENV"])
             {
                 case "mock":
                     builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
@@ -30,6 +36,7 @@
 
             }
             
+
             builder.RegisterApiControllers(typeof(Startup).Assembly);
 
             return builder.Build();

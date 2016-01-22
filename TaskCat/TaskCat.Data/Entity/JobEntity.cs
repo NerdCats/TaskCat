@@ -27,7 +27,23 @@
         public DateTime? ModifiedTime { get; set; }
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> UserLocation { get; set; }
         public DateTime? PreferredDeliveryTime { get; set; }
-        public JobTask TerminalTask { get; set; }
+
+        private JobTask _terminalTask;
+        public JobTask TerminalTask
+        {
+            get { return _terminalTask; }
+            set
+            {
+                _terminalTask = value;
+                _terminalTask.IsTerminatingTask = true;
+                _terminalTask.JobTaskCompleted += _terminalTask_JobTaskCompleted;
+            }
+        }
+
+        private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
+        {
+            State = JobState.COMPLETED;
+        }
 
         public JobEntity()
         {

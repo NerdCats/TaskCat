@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Lib.Db
 {
+    using Data.Entity;
     using MongoDB.Driver;
     using NLog;
     using System;
@@ -13,11 +14,27 @@
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private MongoClient mongoClient;
 
+
         public IMongoDatabase Database { get; private set; }
+
+        private IMongoCollection<JobEntity> _jobs;
+        public IMongoCollection<JobEntity> Jobs
+        {
+            get
+            {
+                return _jobs;
+            }
+        }
 
         public DbContext()
         {
             InitiateDatabase();
+            InitiateCollections();
+        }
+
+        private void InitiateCollections()
+        {
+            _jobs = Database.GetCollection<JobEntity>(CollectionNames.JobsCollectionName);
         }
 
         private void InitiateDatabase()

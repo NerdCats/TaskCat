@@ -13,23 +13,27 @@
 
     public class OrderRepository : IOrderRepository
     {
-        public OrderRepository()
+        JobManager _manager;
+        public OrderRepository(JobManager manager)
         {
-            
+            _manager = manager;
         }
-        public Task<JobEntity> PostOrder(OrderModel model)
+        public async Task<JobEntity> PostOrder(OrderModel model)
         {
+            JobShop jobShop = new JobShop();
+            JobEntity createdJob;
             switch (model.Type)
             {
                 case "Ride":
                     JobBuilder builder = new RideJobBuilder(model as RideOrder);
+                    createdJob = jobShop.Construct(builder);
                     break;
-                    
+                default:
+                    throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
                        
             }
 
-            throw new NotImplementedException();
-
+            return await _manager.RegisterJob(createdJob);
             
         }
     }

@@ -12,6 +12,8 @@
 
     public abstract class JobTask
     {
+        public Guid id { get; protected set; }
+
         [BsonIgnore]
         protected JobTask Predecessor;
 
@@ -54,7 +56,7 @@
 
         public JobTask()
         {
-            
+            id = Guid.NewGuid();
         }
 
         public JobTask(string type) : this()

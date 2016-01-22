@@ -10,7 +10,12 @@ namespace TaskCat.Lib.Asset
 {
     public class FakeNearestRideProvider : INearestAssetProvider<Ride>
     {
-        public async Task<List<Ride>> FindAssets(Location loc)
+        public Task<List<Ride>> FindAssets(Location loc)
+        {
+            return null;
+        }
+
+        public async Task<Ride> FindNearestEligibleAssets(Location from)
         {
             return null;
         }
