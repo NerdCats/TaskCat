@@ -10,7 +10,8 @@
     using System.Web.Http;
     using Data.Model.Api;
     using TaskCat.Lib.Job;
-
+    using Newtonsoft.Json.Linq;
+    using Data.Model;
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -53,6 +54,12 @@
             {
                 return InternalServerError();
             }
+        }
+
+        [HttpPut]
+        public async Task<IHttpActionResult> Update([FromUri]string id, [FromBody] JobTask task)
+        {
+            throw new NotImplementedException();
         }
 
     }

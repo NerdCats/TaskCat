@@ -28,5 +28,6 @@
             var orderResult = await _repository.PostOrder(model);
             return Json(orderResult);
         }
+
     }
 }

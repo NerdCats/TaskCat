@@ -148,6 +148,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ClassDiagram.cd" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -187,6 +188,7 @@
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Order\IOrderRepository.cs" />
     <Compile Include="Lib\Order\OrderRepository.cs" />
+    <Compile Include="Lib\Utility\Converter\JobTaskConverter.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
