@@ -15,7 +15,7 @@
             get
             {
                 if (string.IsNullOrWhiteSpace(_name))
-                    return string.Concat(Type, " Request for ", _user);
+                    return string.Concat(Type, " Request for ", _user, " at ", DateTime.Now.ToString());
                 return _name;
             }
 
@@ -54,7 +54,8 @@
             }
             set {
                 _ETAMinutes = value;
-                ETA = DateTime.Now.Add(TimeSpan.FromMinutes(value.Value));
+                if(value!=null)
+                    ETA = DateTime.Now.Add(TimeSpan.FromMinutes(value.Value));
             }
         }
 

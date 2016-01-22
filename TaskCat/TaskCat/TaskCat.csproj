@@ -189,6 +189,7 @@
     <Compile Include="Lib\Order\OrderRepository.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
+    <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

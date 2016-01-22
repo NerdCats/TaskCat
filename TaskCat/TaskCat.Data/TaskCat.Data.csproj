@@ -65,17 +65,18 @@
     <Compile Include="Model\GeoJson\LineString.cs" />
     <Compile Include="Model\GeoJson\Point.cs" />
     <Compile Include="Model\GeoJson\Polygon.cs" />
-    <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
     <Compile Include="Entity\Assets\Ride.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonInitialization.cs" />
     <Compile Include="Utility\GeoJson\LocationUtility.cs" />
+    <Compile Include="Utility\StateStringGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

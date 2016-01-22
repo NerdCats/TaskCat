@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Lib.Order
 {
-    using Data.Model.Order;
     using Job;
     using Job.Builders;
     using System;
@@ -10,7 +9,7 @@
     using System.Web;
     using TaskCat.Data.Entity;
     using TaskCat.Data.Model;
-
+    using Data.Model.Order;
     public class OrderRepository : IOrderRepository
     {
         JobManager _manager;

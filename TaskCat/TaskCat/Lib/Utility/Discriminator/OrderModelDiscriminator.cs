@@ -7,8 +7,9 @@
     using System.Web;
     using MongoDB.Bson;
     using MongoDB.Bson.IO;
-    using Data.Model;
-    public class JobTaskDiscriminator : IDiscriminatorConvention 
+    using TaskCat.Data.Model;
+
+    public class OrderModelDiscriminator : IDiscriminatorConvention
     {
         public string ElementName
         {
@@ -17,7 +18,8 @@
 
         public Type GetActualType(IBsonReader bsonReader, Type nominalType)
         {
-            if (nominalType == typeof(JobTask))
+            
+            if (nominalType == typeof(OrderModel))
             {
                 var ret = nominalType;
 
@@ -32,8 +34,8 @@
                     if (ret == null)
                         throw new Exception("Could not find type " + value);
 
-                    if (!ret.IsSubclassOf(typeof(JobTask)))
-                        throw new Exception("Database type does not inherit from JobTask.");
+                    if (!ret.IsSubclassOf(typeof(OrderModel)))
+                        throw new Exception("Database type does not inherit from OrderModel.");
                 }
 
                 bsonReader.ReturnToBookmark(bookmark);
@@ -48,8 +50,8 @@
 
         public BsonValue GetDiscriminator(Type nominalType, Type actualType)
         {
-            if (nominalType != typeof(JobTask))
-                throw new Exception("Cannot use JobTaskDiscriminator for type " + nominalType);
+            if (nominalType != typeof(OrderModel))
+                throw new Exception("Cannot use OrderDiscriminator for type " + nominalType);
 
             return actualType.AssemblyQualifiedName;
         }

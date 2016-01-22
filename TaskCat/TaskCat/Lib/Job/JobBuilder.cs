@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Lib.Job
 {
+    using Data.Model;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,5 +17,11 @@
         {
             _job = new JobEntity(name);
         }
+
+        public JobBuilder(OrderModel order)
+        {
+            _job = new JobEntity(order);
+        }
+
     }
 }
