@@ -22,6 +22,11 @@
             return await _manager.GetJob(id);
         }
 
+        public async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        {
+            return await _manager.GetJobs(type, start, limit);
+        }
+
         public Task<JobEntity> PostJob(JobModel model)
         {
             throw new NotImplementedException();

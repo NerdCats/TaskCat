@@ -22,6 +22,11 @@
             return await task;
         }
 
+        public Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<JobEntity> PostJob(JobModel model)
         {
             var task = Task.Run(() =>

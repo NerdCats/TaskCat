@@ -36,6 +36,22 @@
             if (job == null) return NotFound();
             return Json(job);
         }
+        
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetJobs(string type="", int start=0, int limit = 25)
+        {
+            if (limit > 25) limit = 25;
+            try
+            {
+                return Json(await _repository.GetJobs(type, start, limit));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
         /// <summary>

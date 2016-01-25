@@ -26,12 +26,19 @@
             for(int count = JobPayload.Tasks.Count-1; count>0; count--)
             {
                 JobPayload.Tasks[count].SetPredecessor(JobPayload.Tasks[count - 1], false);
-                if (JobPayload.Tasks[count].IsTerminatingTask) TerminalTask = JobPayload.Tasks[count];
+                if (JobPayload.Tasks[count].IsTerminatingTask)
+                    TerminalTask = JobPayload.Tasks[count];
             }
 
             TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
 
             return JobPayload;
+        }
+
+        internal async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        {
+            var jobs = await _store.FindJobs(type, start, limit);
+            return jobs;
         }
 
         internal async Task<JobEntity> RegisterJob(JobEntity createdJob)
