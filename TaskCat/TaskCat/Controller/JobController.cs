@@ -39,7 +39,7 @@
         
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetJobs(string type="", int start=0, int limit = 25)
+        public async Task<IHttpActionResult> List(string type="", int start=0, int limit = 25)
         {
             if (limit > 25) limit = 25;
             try
