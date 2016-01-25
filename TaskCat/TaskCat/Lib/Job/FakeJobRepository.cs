@@ -22,7 +22,7 @@
             return await task;
         }
 
-        public Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        public Task<IEnumerable<JobEntity>> GetJobs(int start, int limit)
         {
             throw new NotImplementedException();
         }

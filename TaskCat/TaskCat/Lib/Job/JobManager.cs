@@ -35,9 +35,9 @@
             return JobPayload;
         }
 
-        internal async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        internal async Task<IEnumerable<JobEntity>> GetJobs(int start, int limit)
         {
-            var jobs = await _store.FindJobs(type, start, limit);
+            var jobs = await _store.FindJobs(start, limit);
             return jobs;
         }
 

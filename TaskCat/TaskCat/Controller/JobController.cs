@@ -27,30 +27,45 @@
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IHttpActionResult> Get(string id)
+        public async Task<IHttpActionResult> Get(string id=null, int start = 0, int limit = 25)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
+            if (id==null)
+            {
+                if (limit > 25) limit = 25;
+                try
+                {
+                    return Json(await _repository.GetJobs(start, limit));
+                }                
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(id))
+                        return BadRequest();
 
-            JobEntity job = await _repository.GetJob(id);
-            if (job == null) return NotFound();
-            return Json(job);
+                    JobEntity job = await _repository.GetJob(id);
+                    if (job == null) return NotFound();
+                    return Json(job);
+                }
+
+                catch (FormatException ex)
+                {
+                    return BadRequest("You did not send me a valid 24 digit hex string ;)");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+                
         }
         
-
-        [HttpGet]
-        public async Task<IHttpActionResult> GetJobs(string type="", int start=0, int limit = 25)
-        {
-            if (limit > 25) limit = 25;
-            try
-            {
-                return Json(await _repository.GetJobs(type, start, limit));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+ 
 
 
 
