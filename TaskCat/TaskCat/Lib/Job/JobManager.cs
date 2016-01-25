@@ -20,6 +20,8 @@
         internal async Task<JobEntity> GetJob(string id)
         {
             var JobPayload = await _store.FindOne(id);
+            if (JobPayload == null)
+                return null;
             JobTask TerminalTask=null;
             // Hooking up JobTask Predecessors, 
             // validation is skipped due to this is already been recorded in DB
