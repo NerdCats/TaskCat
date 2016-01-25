@@ -12,5 +12,6 @@
     {
         Task<JobEntity> GetJob(string id);
         Task<JobEntity> PostJob(JobModel model);
+        Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit);
     }
 }

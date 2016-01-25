@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Db;
@@ -23,6 +24,13 @@ namespace TaskCat.Lib.Job
         {
             var job = await _context.Jobs.Find(x => x._id == id).FirstOrDefaultAsync();
             return job;
+        }
+
+        internal async Task<IEnumerable<JobEntity>> FindJobs(string orderType, int start, int limit)
+        {
+            var FindContext = string.IsNullOrWhiteSpace(orderType) ? 
+                _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);
+            return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
     }
 }
