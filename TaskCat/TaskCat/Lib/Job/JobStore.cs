@@ -26,9 +26,11 @@ namespace TaskCat.Lib.Job
             return job;
         }
 
-        internal async Task<IEnumerable<JobEntity>> FindJobs(string type, int start, int limit)
+        internal async Task<IEnumerable<JobEntity>> FindJobs(string orderType, int start, int limit)
         {
-            return await this._context.Jobs.Find(x => true).SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
+            var FindContext = string.IsNullOrWhiteSpace(orderType) ? 
+                _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);
+            return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
     }
 }
