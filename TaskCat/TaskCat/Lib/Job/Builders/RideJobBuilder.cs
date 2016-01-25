@@ -30,6 +30,7 @@
             //FIXME: I really dont know now how would I trigger that would tell which vechicle 
             //got selected or not
             RidePickUpTask pickupRideTask = new RidePickUpTask();
+            pickupRideTask.SetPredecessor(fetchRideTask);
             //FIXME: Umm.. this is actually exposing the business logic in a builder.
             _job.Tasks.Add(pickupRideTask);
 

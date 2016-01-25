@@ -30,6 +30,7 @@
             }
 
             TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
+            JobPayload.TerminalTask = TerminalTask;
 
             return JobPayload;
         }
