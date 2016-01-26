@@ -88,6 +88,14 @@
       <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=2.2.2.10, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.2.2\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -180,11 +188,14 @@
     <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
+    <Compile Include="Lib\Auth\AuthRepository.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
+    <Compile Include="Lib\Identity\SimpleAuthorizationServerProvider.cs" />
+    <Compile Include="Lib\Identity\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
     <Compile Include="Lib\Interfaces\IFetchable.cs" />
     <Compile Include="Lib\Job\FakeJobRepository.cs" />
@@ -200,6 +211,7 @@
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
+    <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
