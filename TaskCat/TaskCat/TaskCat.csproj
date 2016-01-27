@@ -184,6 +184,8 @@
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controller\Auth\AccountController.cs" />
+    <Compile Include="Controller\Auth\RefreshTokensController.cs" />
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />

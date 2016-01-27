@@ -8,8 +8,14 @@
     using Microsoft.AspNet.Identity;
     using Data.Entity.Identity;
 
-    public class UserManager
+    public class UserManager : UserManager<User>
     {
+        private IUserStore<User> _store; 
+        public UserManager(IUserStore<User> store) : base(store)
+        {
+            this._store = store;
+        }
+
         internal Task<IdentityResult> CreateAsync(User user, string password)
         {
             throw new NotImplementedException();

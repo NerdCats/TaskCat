@@ -11,6 +11,7 @@
     public class RefreshToken
     {
         [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
 
         [Required]
