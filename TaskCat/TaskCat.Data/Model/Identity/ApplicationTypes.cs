@@ -8,8 +8,9 @@ namespace TaskCat.Data.Model.Identity
 {
     public enum ApplicationTypes
     {
-        Web = 0,
-        Android = 1,
-        IOS = 2
+        JavaScript = 0,
+        NativeConfidential = 1,
+        Android = 2,
+        IOS = 3
     }
 }

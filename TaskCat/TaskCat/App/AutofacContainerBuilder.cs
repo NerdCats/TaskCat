@@ -13,6 +13,14 @@
     using Data.Entity.Assets;
     using Lib.Db;
     using Lib.Order;
+    using Data.Entity.Identity;
+    using AspNet.Identity.MongoDB;
+    using Microsoft.AspNet.Identity;
+    using Lib.Identity;
+    using Microsoft.Owin.Security.OAuth;
+    using Microsoft.Owin.Security.Infrastructure;
+    using Lib.Auth;
+
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
@@ -27,6 +35,19 @@
 
             builder.RegisterType<OrderRepository>().SingleInstance();
             builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
+
+
+            builder.RegisterType<UserManager>()
+                .SingleInstance();
+
+            builder.RegisterType<RoleManager>()
+                .SingleInstance();
+
+            builder.RegisterType<SimpleAuthorizationServerProvider>()
+                .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
+
+            builder.RegisterType<SimpleRefreshTokenProvider>()
+                .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
             switch (ConfigurationManager.AppSettings["ENV"])
             {

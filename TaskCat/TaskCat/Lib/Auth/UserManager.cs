@@ -7,23 +7,16 @@
     using System.Web;
     using Microsoft.AspNet.Identity;
     using Data.Entity.Identity;
+    using AspNet.Identity.MongoDB;
+    using Db;
 
     public class UserManager : UserManager<User>
     {
-        private IUserStore<User> _store; 
-        public UserManager(IUserStore<User> store) : base(store)
-        {
-            this._store = store;
-        }
+        private IDbContext dbContext;
 
-        internal Task<IdentityResult> CreateAsync(User user, string password)
+        public UserManager(IDbContext dbContext) : base(new UserStore<User>(dbContext.Users))
         {
-            throw new NotImplementedException();
-        }
-
-        internal Task<User> FindAsync(string userName, string password)
-        {
-            throw new NotImplementedException();
+            this.dbContext = dbContext;
         }
     }
 }

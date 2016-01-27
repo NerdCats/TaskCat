@@ -6,15 +6,16 @@
     using System.Web;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
+    using Db;
+    using AspNet.Identity.MongoDB;
 
     public class RoleManager : RoleManager<Role>
     {
-        private IRoleStore<Role, string> _store;
+        private IDbContext dbContext;
 
-        public RoleManager(IRoleStore<Role, string> store)
-            : base(store)
+        public RoleManager(IDbContext dbContext) : base(new RoleStore<Role>(dbContext.Roles))
         {
-            this._store = store;
+            this.dbContext = dbContext;
         }
     }
 }
