@@ -8,6 +8,10 @@
     using System.Configuration;
     using System.Linq;
     using System.Web;
+    using Data.Entity.Identity;
+    using MongoDB.Bson.Serialization.Conventions;
+    using MongoDB.Bson;
+    using AspNet.Identity.MongoDB;
 
     public class DbContext : IDbContext
     {
@@ -17,24 +21,74 @@
 
         public IMongoDatabase Database { get; private set; }
 
+        #region Auth
+
+        private IMongoCollection<User> _users;
+        public IMongoCollection<User> Users
+        {
+            get { return _users; }
+        }
+
+        private IMongoCollection<Role> _roles;
+        public IMongoCollection<Role> Roles
+        {
+            get { return _roles; }
+        }
+
+        private IMongoCollection<Client> _clients;
+        public IMongoCollection<Client> Clients
+        {
+            get { return _clients; }
+        }
+
+        private IMongoCollection<RefreshToken> _refreshTokens;
+        public IMongoCollection<RefreshToken> RefreshTokens
+        {
+            get { return _refreshTokens; }
+        }
+
+        #endregion
+
+
         private IMongoCollection<JobEntity> _jobs;
         public IMongoCollection<JobEntity> Jobs
         {
-            get
-            {
-                return _jobs;
-            }
+            get { return _jobs; }
         }
+
 
         public DbContext()
         {
+            var pack = new ConventionPack()
+            {
+                new EnumRepresentationConvention(BsonType.String)
+            };
+
+            ConventionRegistry.Register("EnumConvensions", pack, t => true);
+
             InitiateDatabase();
             InitiateCollections();
+            EnsureIndexes();
+        }
+
+        private void EnsureIndexes()
+        {
+            IndexChecks.EnsureUniqueIndexOnUserName(_users);
+            IndexChecks.EnsureUniqueIndexOnEmail(_users);
+
+            IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
         }
 
         private void InitiateCollections()
         {
+            _users = Database.GetCollection<User>(CollectionNames.UsersCollectionName);
+            _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
+            _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
+            _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
+
+
             _jobs = Database.GetCollection<JobEntity>(CollectionNames.JobsCollectionName);
+
         }
 
         private void InitiateDatabase()

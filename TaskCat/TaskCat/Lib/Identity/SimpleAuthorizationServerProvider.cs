@@ -22,7 +22,7 @@
             this.authRepository = authRepository;
         }
 
-        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
             var clientId = default(string);
             var clientSecret = default(string);
@@ -40,16 +40,16 @@
                 // context.Validated();
 
                 context.SetError("invalid_clientId", "ClientId not present");
-                return Task.FromResult<object>(null);
+                return;
             }
 
-            client = authRepository.FindClient(context.ClientId);
+            client = await authRepository.FindClient(context.ClientId);
 
             if (client == null)
             {
                 context.SetError("invalid_clientId", string.Format("Client '{0}' is not registered in the system.", context.ClientId));
 
-                return Task.FromResult<object>(null);
+                return;
             }
 
             if (client.ApplicationType == ApplicationTypes.Android || client.ApplicationType==ApplicationTypes.IOS)
@@ -58,7 +58,7 @@
                 {
                     context.SetError("invalid_clientId", "Client secret should be sent.");
 
-                    return Task.FromResult<object>(null);
+                    return;
                 }
                 else
                 {
@@ -66,7 +66,7 @@
                     {
                         context.SetError("invalid_clientId", "Client secret is invalid.");
 
-                        return Task.FromResult<object>(null);
+                        return;
                     }
                 }
             }
@@ -75,7 +75,7 @@
             {
                 context.SetError("invalid_clientId", "Client is inactive.");
 
-                return Task.FromResult<object>(null);
+                return;
             }
 
             context.OwinContext.Set<string>("as:clientAllowedOrigin", client.AllowedOrigin);
@@ -83,7 +83,7 @@
 
             context.Validated();
 
-            return Task.FromResult<object>(null);
+            return;
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)

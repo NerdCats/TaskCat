@@ -189,6 +189,8 @@
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
     <Compile Include="Lib\Auth\AuthRepository.cs" />
+    <Compile Include="Lib\Auth\RoleManager.cs" />
+    <Compile Include="Lib\Auth\UserManager.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
