@@ -43,6 +43,9 @@
             builder.RegisterType<RoleManager>()
                 .SingleInstance();
 
+            builder.RegisterType<AuthRepository>()
+                .SingleInstance();
+
             builder.RegisterType<SimpleAuthorizationServerProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
