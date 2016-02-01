@@ -1,13 +1,18 @@
 export class Welcome {
-  heading = 'Welcome to Aurelia!';
-  firstName = 'John';
-  lastName = 'Doe';
+  heading = 'TaskCat Login';
+  username = '';
+  password = '';
 
   get fullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.username} ${this.password}`;
   }
 
   submit() {
-    alert(`Welcome, ${this.fullName}!`);
+    if(this.username && this.password){
+      alert(`Welcome, ${this.username}!`);
+    }
+    else {
+      alert("All the fields are required");
+    }
   }
 }
