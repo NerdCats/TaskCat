@@ -1,27 +1,33 @@
 <template>
   <require from="bootstrap/css/bootstrap.css"></require>
   <require from="font-awesome/css/font-awesome.css"></require>
+  <require from="../styles/styles.css"></require>
 
-  <section>
 
-    <div class="pen-title">
-      <h1>${heading}</h1>
+  <div class="container">
+    <div class="card"></div>
+    <div class="card">
+      <h1 class="title">${heading}</h1>
+      <form submit.trigger="submit()" class="pen-form">
+        <div class="input-container">
+          <input type="text" value.bind="username" id="Username" required="required"/>
+          <label for="Username">Username</label>
+          <div class="bar"></div>
+        </div>
+        <div class="input-container">
+          <input type="password" id="Password" value.bind="password" required="required"/>
+          <label for="Password">Password</label>
+          <div class="bar"></div>
+        </div>
+        <div class="button-container">
+          <button type="submit">
+            <span>Go</span>
+          </button>
+        </div>
+        <div class="footer"><a href="#">Forgot your password?</a></div>
+      </form>
     </div>
 
-    <form submit.trigger="submit()" class="pen-form">
-      <div>
-        <label>username</label>
-        <input type="text" value.bind="username">
-      </div>
-      <div>
-        <label>password</label>
-        <input type="text" value.bind="password">
-      </div>
-      <div>
-        <label>username</label>
-        <p>${username}</p>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-  </section>
+  </div>
+
 </template>
