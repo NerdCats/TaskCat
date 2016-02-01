@@ -1,8 +1,14 @@
 <template>
-  <section>
-    <h2>${heading}</h2>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/css/font-awesome.css"></require>
 
-    <form submit.trigger="submit()">
+  <section>
+
+    <div class="pen-title">
+      <h1>${heading}</h1>
+    </div>
+
+    <form submit.trigger="submit()" class="pen-form">
       <div>
         <label>username</label>
         <input type="text" value.bind="username">
