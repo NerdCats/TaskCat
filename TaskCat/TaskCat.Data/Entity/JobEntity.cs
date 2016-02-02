@@ -36,6 +36,7 @@
 
         private JobTask _terminalTask;
         [BsonIgnore]
+        [JsonIgnore]
         public JobTask TerminalTask
         {
             get { return _terminalTask; }
