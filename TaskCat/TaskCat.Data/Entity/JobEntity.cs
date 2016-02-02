@@ -23,6 +23,11 @@
         // We might have to support anonymous requests
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
+
+        private string _jobServedBy = "Anonymous";
+        public string JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
+
+
         public List<JobTask> Tasks { get; set; }
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof (StringEnumConverter))]
