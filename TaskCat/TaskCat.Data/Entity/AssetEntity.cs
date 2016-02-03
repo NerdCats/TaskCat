@@ -17,6 +17,7 @@
     {
         //FIXME: Need a simplified vehicleInfo class here 
         public string UserRef { get; set; }
+        public double AverageRating { get; set; }
 
         public AssetEntity(string userRef)
         {
