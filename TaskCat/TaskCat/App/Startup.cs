@@ -57,7 +57,10 @@ namespace TaskCat.App
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
+            // FIXME: Need to move these with other startups
+            // This is not ideal
             InitializeClients(container);
+            InitializeRoles(container);
 
             //FIXME: Can be a small middleware. No? Alright!
             app.Run(context =>
@@ -127,6 +130,28 @@ namespace TaskCat.App
                 });
             }
 
+        }
+
+
+        private void InitializeRoles(IContainer container)
+        {
+            var dbContext = container.Resolve<IDbContext>();
+
+            if (dbContext.Roles.Count(Builders<Role>.Filter.Empty) == 0)
+            {
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "User"
+                });
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "Administrator"
+                });
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "Asset"
+                });
+            }
         }
     }
 
