@@ -22,7 +22,6 @@
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [StringLength(20, MinimumLength = 6)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
