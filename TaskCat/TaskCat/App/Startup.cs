@@ -97,7 +97,7 @@ namespace TaskCat.App
                 {
                     Id = "GoFetchWebApp",
                     Secret = HashMaker.GetHash("GoFetchWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat",
+                    Name = "Go Fetch App powered by TaskCat, You are on Web",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = false,
                     RefreshTokenLifeTime = 7200,
@@ -108,7 +108,7 @@ namespace TaskCat.App
                 {
                     Id = "GoFetchDevWebApp",
                     Secret = HashMaker.GetHash("GoFetchDevWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat",
+                    Name = "Go Fetch App powered by TaskCat, You are one web and in development mode !",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
                     RefreshTokenLifeTime = 7200,

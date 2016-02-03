@@ -29,10 +29,10 @@
         [Required(ErrorMessage ="A valid email address must be provided")]        
         public string Email { get; set; }
 
-        [DataType(DataType.EmailAddress)]
-        [Display(Name ="Confirm Email address")]
-        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
-        public string EmailConfirmed { get; set; }
+        [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage ="Please provide a valid Bangladeshi Phone Number")]
+        [Display(Name ="PhoneNumber")]
+        [Required(ErrorMessage = "A valid email address must be provided")]
+        public string PhoneNumber { get; set; }
 
     }
 }

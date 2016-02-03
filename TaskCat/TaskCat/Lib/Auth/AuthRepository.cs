@@ -28,7 +28,8 @@
             var user = new User
             {
                 UserName = model.UserName,
-                Email = model.Email
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber
             };
 
             IdentityResult result = await userManager.CreateAsync(user, model.Password);
@@ -41,7 +42,7 @@
         {
             // FIXME: Im not sure whether we'd need a client manager or not, if there's no controller for it
             // I dont see a reason though
-            var client =await  dbContext.Clients.Find(x=>x.Id==clientId).FirstOrDefaultAsync();
+            var client = await  dbContext.Clients.Find(x=>x.Id==clientId).FirstOrDefaultAsync();
             return client;
         }
 
