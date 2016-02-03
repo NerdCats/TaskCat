@@ -40,6 +40,8 @@
             return Ok(result);
         }
 
+
+
         // FIXME: this definitely looks ugly, need to clean up here
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {

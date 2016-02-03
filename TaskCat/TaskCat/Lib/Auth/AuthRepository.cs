@@ -10,7 +10,8 @@
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
     using MongoDB.Driver;
-
+    using Data.Entity.Assets;
+    using Data.Entity;
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
@@ -25,15 +26,27 @@
 
         public async Task<IdentityResult> RegisterUser(UserModel model)
         {
-            var user = new User
+            IdentityResult result = null;
+           
+            switch (model.UserType)
             {
-                UserName = model.UserName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber
-            };
-
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
-
+                case SupportedUsers.User:
+                    var user = new User(model);
+                    result = await userManager.CreateAsync(user, model.Password);
+                    break;
+                case SupportedUsers.CNGDriver:
+                    var asset = new Ride(model);
+                    result = await userManager.CreateAsync(asset, model.Password);
+                    break;
+                case SupportedUsers.DeliveryMan:
+                    break;
+                case SupportedUsers.Plumber:
+                    break;
+                case SupportedUsers.Electrician:
+                    break;
+                default:
+                    break;
+            }
             return result;
         }
 

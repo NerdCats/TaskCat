@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\AssetEntity.cs" />
+    <Compile Include="Entity\SupportedUsers.cs" />
     <Compile Include="Entity\DbEntity.cs" />
     <Compile Include="Entity\Identity\Client.cs" />
     <Compile Include="Entity\Identity\RefreshToken.cs" />
