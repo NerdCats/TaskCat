@@ -143,10 +143,12 @@ namespace TaskCat.App
                 {
                     Name = "User"
                 });
+
                 dbContext.Roles.InsertOne(new Role()
                 {
                     Name = "Administrator"
                 });
+
                 dbContext.Roles.InsertOne(new Role()
                 {
                     Name = "Asset"
