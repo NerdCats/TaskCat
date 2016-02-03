@@ -80,6 +80,7 @@
     <Compile Include="Model\GeoJson\Polygon.cs" />
     <Compile Include="Model\Identity\ApplicationTypes.cs" />
     <Compile Include="Model\Identity\UserModel.cs" />
+    <Compile Include="Model\Identity\UserProfile.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
