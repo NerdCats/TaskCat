@@ -11,6 +11,7 @@
 
     public class User : IdentityUser
     {
+        // FIXME: this guy would need a JsonConverter when you'd deserialize him
         public UserProfile Profile { get; set; }
 
         public User(UserModel model)
@@ -28,8 +29,18 @@
 
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
+            switch (model.AssetType)
+            {
+                case AssetTypes.FETCHER:
+                    this.Profile = new UserProfile(model);
+                    break;
+                default:
+                    if (model.GetType() != typeof(AssetModel))
+                        throw new InvalidOperationException("AssetProfile type should be used to populate Users who are basically Assets thus need an AssetProfile");
 
-            this.Profile = new UserProfile(model);
+                    this.Profile = new AssetProfile(model as AssetModel);
+                    break;
+            }
 
         }
         

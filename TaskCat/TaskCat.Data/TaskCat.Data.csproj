@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\AssetEntity.cs" />
+    <Compile Include="Model\Identity\AssetModel.cs" />
+    <Compile Include="Model\Identity\AssetProfile.cs" />
     <Compile Include="Model\Identity\AssetTypes.cs" />
     <Compile Include="Entity\DbEntity.cs" />
     <Compile Include="Entity\Identity\Client.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
+    <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonInitialization.cs" />

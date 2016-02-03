@@ -10,6 +10,8 @@
 
     public class UserProfile
     {
+        //FIXME: None of these are mandatory by default for a user but we actually can make an attribute to make 
+        // it conditionally required, might be a good thought
         public string FirstName { get; set; }
         public string LastName { get; set; }
         [BsonIgnore]
