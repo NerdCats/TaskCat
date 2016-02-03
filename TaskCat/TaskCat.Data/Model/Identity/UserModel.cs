@@ -23,5 +23,16 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [Display(Name ="Email")]
+        [Required(ErrorMessage ="A valid email address must be provided")]        
+        public string Email { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [Display(Name ="Confirm Email address")]
+        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
+        public string EmailConfirmed { get; set; }
+
     }
 }

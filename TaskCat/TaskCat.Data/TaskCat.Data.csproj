@@ -73,6 +73,7 @@
     <Compile Include="Entity\Identity\User.cs" />
     <Compile Include="Entity\JobEntity.cs" />
     <Compile Include="Model\Api\JobModel.cs" />
+    <Compile Include="Model\AssetProfile.cs" />
     <Compile Include="Model\GeoJson\IGeoJsonEntity.cs" />
     <Compile Include="Model\GeoJson\LineString.cs" />
     <Compile Include="Model\GeoJson\Point.cs" />

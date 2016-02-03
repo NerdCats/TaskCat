@@ -27,7 +27,8 @@
         {
             var user = new User
             {
-                UserName = model.UserName
+                UserName = model.UserName,
+                Email = model.Email
             };
 
             IdentityResult result = await userManager.CreateAsync(user, model.Password);

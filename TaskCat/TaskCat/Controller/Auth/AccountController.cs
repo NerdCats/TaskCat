@@ -37,7 +37,7 @@
                 return errorResult;
             }
 
-            return Ok();
+            return Ok(result);
         }
 
         // FIXME: this definitely looks ugly, need to clean up here
