@@ -22,19 +22,19 @@
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
+        [StringLength(20, MinimumLength = 6)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [DataType(DataType.EmailAddress)]
-        [Display(Name ="Email")]
-        [Required(ErrorMessage ="A valid email address must be provided")]        
+        [EmailAddress]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "A valid email address must be provided")]
         public string Email { get; set; }
 
-        [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage ="Please provide a valid Bangladeshi Phone Number")]
-        [Display(Name ="PhoneNumber")]
-        [Required(ErrorMessage = "A valid email address must be provided")]
+        [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage = @"Please provide a valid Bangladeshi Phone Number, ex(+)")]
+        [Display(Name = "PhoneNumber")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "A valid email address must be provided")]
         public string PhoneNumber { get; set; }
-
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
