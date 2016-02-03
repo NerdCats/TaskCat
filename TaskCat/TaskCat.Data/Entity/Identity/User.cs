@@ -11,7 +11,8 @@
 
     public class User : IdentityUser
     {
-        public UserProfile profile { get; set; }
+        public UserProfile Profile { get; set; }
+
         public User(UserModel model)
         {
             this.UserName = model.UserName;
@@ -28,7 +29,7 @@
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
 
-
+            this.Profile = new UserProfile(model);
 
         }
         

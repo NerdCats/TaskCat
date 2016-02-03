@@ -1,7 +1,6 @@
 ﻿namespace TaskCat.Model.JobTasks
 {
     using Data.Entity;
-    using Data.Entity.Assets;
     using Lib.Exceptions;
     using System;
     using System.Collections.Generic;
@@ -12,7 +11,7 @@
     {
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
-        public Ride SelectedRide { get; set; }
+        public AssetEntity SelectedRide { get; set; }
 
         //FIXME: Im really not sure what Im doing here, this doesnt look right
         private bool _ridePickedUp;

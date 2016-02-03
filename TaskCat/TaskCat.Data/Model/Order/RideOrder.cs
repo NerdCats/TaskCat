@@ -7,8 +7,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity.Assets;
-
+    using Entity;
 
     public class RideOrder : OrderModel
     {
@@ -32,7 +31,7 @@
         //FIXME: Im still not sure whether Id want the system to have
         //capability to allow users to interact with the app to select vehicles around them or not
         [BsonIgnoreIfNull]
-        public Ride ProposedRide { get; set; }
+        public AssetEntity ProposedRide { get; set; }
     }
 
     //FIXME: This really shouldnt be done this way man, 

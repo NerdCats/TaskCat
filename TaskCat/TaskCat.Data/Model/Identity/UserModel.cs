@@ -1,6 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Identity
 {
     using Entity;
+    using MongoDB.Bson.Serialization.Attributes;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -41,7 +44,8 @@
         public string Gender { get; set; }
         public string Address { get; set; }
 
-
-        public SupportedUsers UserType { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public AssetTypes AssetType { get; set; }
     }
 }

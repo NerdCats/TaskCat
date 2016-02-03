@@ -10,7 +10,6 @@
     using System.Web;
     using Lib.Asset;
     using TaskCat.Lib.Job;
-    using Data.Entity.Assets;
     using Lib.Db;
     using Lib.Order;
     using Data.Entity.Identity;
@@ -20,6 +19,7 @@
     using Microsoft.Owin.Security.OAuth;
     using Microsoft.Owin.Security.Infrastructure;
     using Lib.Auth;
+    using Data.Entity;
 
     public class AutofacContainerBuilder
     {
@@ -56,7 +56,7 @@
             {
                 case "mock":
                     builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<Ride>, ConcreteReflectionActivatorData>();
+                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<AssetEntity>, ConcreteReflectionActivatorData>();
                     break;
                 default:
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();

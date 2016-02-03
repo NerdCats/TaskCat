@@ -10,8 +10,8 @@
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
     using MongoDB.Driver;
-    using Data.Entity.Assets;
     using Data.Entity;
+
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
@@ -26,28 +26,14 @@
 
         public async Task<IdentityResult> RegisterUser(UserModel model)
         {
-            IdentityResult result = null;
-           
-            switch (model.UserType)
-            {
-                case SupportedUsers.User:
-                    var user = new User(model);
-                    result = await userManager.CreateAsync(user, model.Password);
-                    break;
-                case SupportedUsers.CNGDriver:
-                    var asset = new Ride(model);
-                    result = await userManager.CreateAsync(asset, model.Password);
-                    break;
-                case SupportedUsers.DeliveryMan:
-                    break;
-                case SupportedUsers.Plumber:
-                    break;
-                case SupportedUsers.Electrician:
-                    break;
-                default:
-                    break;
-            }
-            return result;
+            var result = await userManager.CreateAsync(new User(model), model.Password);
+
+            if (model.AssetType == AssetTypes.FETCHER || !result.Succeeded)
+                return result;
+
+            // FIXME: Her should go the damn Asset insertion
+
+            throw new NotImplementedException(string.Concat("Resgitering ", model.AssetType, " is not supported yet"));
         }
 
 
@@ -55,7 +41,7 @@
         {
             // FIXME: Im not sure whether we'd need a client manager or not, if there's no controller for it
             // I dont see a reason though
-            var client = await  dbContext.Clients.Find(x=>x.Id==clientId).FirstOrDefaultAsync();
+            var client = await dbContext.Clients.Find(x => x.Id == clientId).FirstOrDefaultAsync();
             return client;
         }
 
