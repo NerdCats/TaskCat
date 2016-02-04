@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Converters
+﻿namespace TaskCat.Lib.Utility.Converter
 {
     using Data.Model.Identity;
     using Newtonsoft.Json;
@@ -12,7 +12,7 @@
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(UserModelConverter);
+            return objectType == typeof(UserModel);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -23,7 +23,7 @@
             var type = obj["AssetType"];
             if (type == null)
             {
-                throw new ArgumentNullException("AssetType", "Asset type is null");
+                obj["AssetType"] = ((AssetTypes)0).ToString();
             }
 
             string modelType = type.Value<string>();
@@ -47,7 +47,7 @@
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            serializer.Serialize(writer, value);
         }
     }
 }

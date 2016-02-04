@@ -14,7 +14,7 @@
         // FIXME: this guy would need a JsonConverter when you'd deserialize him
         public UserProfile Profile { get; set; }
 
-        public User(UserModel model)
+        public User(UserModel model, UserProfile profile)
         {
             this.UserName = model.UserName;
             this.Email = model.Email;
@@ -29,7 +29,7 @@
 
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
-            this.Profile = new UserProfile(model);            
+            this.Profile = profile;          
         }
         
     }

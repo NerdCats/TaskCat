@@ -29,6 +29,7 @@
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserModelConverter());
             config.Formatters.JsonFormatter.Indent = true;
         }
     }

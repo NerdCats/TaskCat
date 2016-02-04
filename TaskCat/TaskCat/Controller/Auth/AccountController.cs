@@ -11,6 +11,9 @@
     using Data.Model.Identity;
     using Microsoft.AspNet.Identity;
     using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
+    using Lib.Utility.Converter;
+
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -23,7 +26,7 @@
 
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(JObject userModel)
+        public async Task<IHttpActionResult> Register(UserModel userModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

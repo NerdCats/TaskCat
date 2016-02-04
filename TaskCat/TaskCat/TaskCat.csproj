@@ -210,6 +210,7 @@
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\UserManager.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
+    <Compile Include="Lib\Utility\Converter\UserModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
@@ -244,7 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Lib\Converters\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
