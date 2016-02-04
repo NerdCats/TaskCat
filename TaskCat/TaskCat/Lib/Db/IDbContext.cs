@@ -14,6 +14,8 @@
         IMongoCollection<RefreshToken> RefreshTokens { get; }
 
         IMongoCollection<JobEntity> Jobs { get; }
-        
+
+        IMongoCollection<AssetEntity> Assets { get; }
+
     }
 }

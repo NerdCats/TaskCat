@@ -57,7 +57,10 @@ namespace TaskCat.App
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
+            // FIXME: Need to move these with other startups
+            // This is not ideal
             InitializeClients(container);
+            InitializeRoles(container);
 
             //FIXME: Can be a small middleware. No? Alright!
             app.Run(context =>
@@ -97,7 +100,7 @@ namespace TaskCat.App
                 {
                     Id = "GoFetchWebApp",
                     Secret = HashMaker.GetHash("GoFetchWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat",
+                    Name = "Go Fetch App powered by TaskCat, You are on Web",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = false,
                     RefreshTokenLifeTime = 7200,
@@ -108,7 +111,7 @@ namespace TaskCat.App
                 {
                     Id = "GoFetchDevWebApp",
                     Secret = HashMaker.GetHash("GoFetchDevWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat",
+                    Name = "Go Fetch App powered by TaskCat, You are one web and in development mode !",
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
                     RefreshTokenLifeTime = 7200,
@@ -127,6 +130,35 @@ namespace TaskCat.App
                 });
             }
 
+        }
+
+
+        private void InitializeRoles(IContainer container)
+        {
+            var dbContext = container.Resolve<IDbContext>();
+
+            if (dbContext.Roles.Count(Builders<Role>.Filter.Empty) == 0)
+            {
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "User"
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "Administrator"
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "Asset"
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "BackOfficeAdmin"
+                });
+            }
         }
     }
 

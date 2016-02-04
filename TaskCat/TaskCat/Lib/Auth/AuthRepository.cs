@@ -10,29 +10,47 @@
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
     using MongoDB.Driver;
-
+    using Data.Entity;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
+    using Asset;
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly UserManager userManager;
+        private readonly AssetManager assetManager;
 
-        public AuthRepository(IDbContext dbContext, UserManager userManager)
+        public AuthRepository(IDbContext dbContext, UserManager userManager, AssetManager assetManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
+            this.assetManager = assetManager;
         }
 
+        // Register is always used for someone not in the database, only first time User or first time Asset use this method
         public async Task<IdentityResult> RegisterUser(UserModel model)
         {
-            var user = new User
+            IdentityResult identityResult = null;
+            UserProfile profile;
+            switch(model.AssetType)
             {
-                UserName = model.UserName
-            };
+                case AssetTypes.FETCHER:
+                    profile = new UserProfile(model);
+                    break;
+                default:
+                    profile = new AssetProfile(model as AssetModel);
+                    break;
+            }
+            User user = new User(model, profile);
+            identityResult = await userManager.CreateAsync(user, model.Password);
 
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
+            if (model.AssetType == AssetTypes.FETCHER || !identityResult.Succeeded)
+                return identityResult;
 
-            return result;
+            var assetEntity = new AssetEntity(user.Id);
+            await  assetManager.CreateAsync(assetEntity);
+            return identityResult;            
         }
 
 
@@ -40,7 +58,7 @@
         {
             // FIXME: Im not sure whether we'd need a client manager or not, if there's no controller for it
             // I dont see a reason though
-            var client =await  dbContext.Clients.Find(x=>x.Id==clientId).FirstOrDefaultAsync();
+            var client = await dbContext.Clients.Find(x => x.Id == clientId).FirstOrDefaultAsync();
             return client;
         }
 

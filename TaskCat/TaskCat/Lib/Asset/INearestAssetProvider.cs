@@ -8,7 +8,6 @@ namespace TaskCat.Lib.Asset
     using System.Text;
     using System.Threading.Tasks;
     using Data.Model;
-    using Data.Entity.Assets;
 
     public interface INearestAssetProvider<T> where T : AssetEntity
     {

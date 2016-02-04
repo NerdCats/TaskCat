@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Lib.Job.Builders
 {
-    using Data.Entity.Assets;
     using Data.Model;
     using Data.Model.Order;
     using Model.JobTasks;
@@ -25,7 +24,7 @@
             //FIXME: I need to check the ride preference and then give a FetchRideTask 
             //according to that
             //Right now just pushing Ryde class as the rest is still not built yet
-            FetchRideTask<Ride> fetchRideTask = new FetchRideTask<Ride>(_order.From, _order.To,_order.ProposedRide);
+            FetchRideTask<AssetEntity> fetchRideTask = new FetchRideTask<AssetEntity>(_order.From, _order.To,_order.ProposedRide);
             _job.Tasks.Add(fetchRideTask);
             //FIXME: I really dont know now how would I trigger that would tell which vechicle 
             //got selected or not

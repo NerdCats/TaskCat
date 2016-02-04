@@ -15,8 +15,9 @@
         private IDbContext dbContext;
 
         public UserManager(IDbContext dbContext) : base(new UserStore<User>(dbContext.Users))
-        {
+        {           
             this.dbContext = dbContext;
         }
+
     }
 }

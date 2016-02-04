@@ -7,13 +7,12 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Data.Entity.Assets;
     using TaskCat.Data.Model;
     using Lib.Asset;
     using Data.Entity;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
-    public class FetchRideTask<T> : JobTask, IFetchable<T> where T : Ride // FIXME: RIDE should be categorized as an asset
+    public class FetchRideTask<T> : JobTask, IFetchable<T> where T : AssetEntity // FIXME: RIDE should be categorized as an asset
     {      
         public Location From { get; set; }
         public Location To { get; set; }

@@ -1,5 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Identity
 {
+    using Entity;
+    using MongoDB.Bson.Serialization.Attributes;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -23,5 +27,25 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [EmailAddress]
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "A valid email address must be provided")]
+        public string Email { get; set; }
+
+        [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage = @"Please provide a valid Bangladeshi Phone Number, ex(+)")]
+        [Display(Name = "PhoneNumber")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "A valid email address must be provided")]
+        public string PhoneNumber { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Age { get; set; }
+        public string Gender { get; set; }
+        public string Address { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public AssetTypes AssetType { get; set; }
     }
 }

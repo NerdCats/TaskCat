@@ -10,6 +10,9 @@
     using System.Threading.Tasks;
     using Data.Model.Identity;
     using Microsoft.AspNet.Identity;
+    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
+    using Lib.Utility.Converter;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -25,20 +28,30 @@
         [Route("Register")]
         public async Task<IHttpActionResult> Register(UserModel userModel)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await authRepository.RegisterUser(userModel);
-
-            var errorResult = GetErrorResult(result);
-
-            if (errorResult != null)
+            try
             {
-                return errorResult;
-            }
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Ok();
+                var result = await authRepository.RegisterUser(userModel);
+
+                var errorResult = GetErrorResult(result);
+
+                if (errorResult != null)
+                {
+                    return errorResult;
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                //FIXME: Need to log these
+                return InternalServerError(ex);
+            }
         }
+
+
 
         // FIXME: this definitely looks ugly, need to clean up here
         private IHttpActionResult GetErrorResult(IdentityResult result)
