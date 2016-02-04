@@ -153,6 +153,11 @@ namespace TaskCat.App
                 {
                     Name = "Asset"
                 });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = "Redwan"
+                });
             }
         }
     }
