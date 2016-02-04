@@ -28,19 +28,27 @@
         [Route("Register")]
         public async Task<IHttpActionResult> Register(UserModel userModel)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await authRepository.RegisterUser(userModel);
-
-            var errorResult = GetErrorResult(result);
-
-            if (errorResult != null)
+            try
             {
-                return errorResult;
-            }
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            return Ok(result);
+                var result = await authRepository.RegisterUser(userModel);
+
+                var errorResult = GetErrorResult(result);
+
+                if (errorResult != null)
+                {
+                    return errorResult;
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                //FIXME: Need to log these
+                return InternalServerError(ex);
+            }
         }
 
 

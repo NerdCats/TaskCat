@@ -14,17 +14,15 @@
     using TaskCat.Data.Model;
     using TaskCat.Data.Model.Identity;
 
-    public class AssetEntity : IdentityUser
+    public class AssetEntity
     {
         //FIXME: Need a simplified vehicleInfo class here 
         public string UserRef { get; set; }
         public double AverageRating { get; set; }
-        public AssetProfile Profile { get; set; }
 
-        public AssetEntity(string userRef, AssetModel model)
+        public AssetEntity(string userRef)
         {
             this.UserRef = userRef;
-            this.Profile = new AssetProfile(model);
         }
     }
 }

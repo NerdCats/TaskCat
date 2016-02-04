@@ -31,7 +31,7 @@
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
         public async Task<IdentityResult> RegisterUser(UserModel model)
         {
-            IdentityResult result = null;
+            IdentityResult identityResult = null;
             UserProfile profile;
             switch(model.AssetType)
             {
@@ -43,20 +43,14 @@
                     break;
             }
             User user = new User(model, profile);
-            result = await userManager.CreateAsync(user, model.Password);
-            
-            //var result = await userManager.CreateAsync(new User(model), model.Password);
+            identityResult = await userManager.CreateAsync(user, model.Password);
 
-            //if (model.AssetType!= AssetTypes.USER)
-            //{
-            //    if (model.AssetType == AssetTypes.FETCHER || !result.Succeeded)
-            //        return result;
+            if (model.AssetType == AssetTypes.FETCHER || !identityResult.Succeeded)
+                return identityResult;
 
-            //    // FIXME: Her should go the damn Asset insertion
-
-            //    throw new NotImplementedException(string.Concat("Resgitering ", model.AssetType, " is not supported yet"));
-            //}
-            return result;            
+            var assetEntity = new AssetEntity(user.Id);
+            await  assetManager.CreateAsync(assetEntity);
+            return identityResult;            
         }
 
 

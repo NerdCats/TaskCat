@@ -11,18 +11,16 @@ using System.Threading.Tasks;
 namespace TaskCat.Lib.Asset
 {
     public class AssetManager
-    {
-        
-
-        private AssetStore _assetStore;
+    {   
+        private AssetStore _store;
         public AssetManager(AssetStore store)
         {
-            this._assetStore = store;
+            this._store = store;
         }
 
         internal async Task<AssetEntity> CreateAsync(AssetEntity assetEntity)
         {
-            await _assetStore.CreateOneAsync(assetEntity);
+            await _store.CreateOneAsync(assetEntity);
             return assetEntity;
         }
     }

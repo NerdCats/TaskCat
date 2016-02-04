@@ -2,6 +2,7 @@
 {
     using AspNet.Identity.MongoDB;
     using Model.Identity;
+    using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

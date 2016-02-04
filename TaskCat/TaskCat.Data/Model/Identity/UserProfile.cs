@@ -8,6 +8,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    [BsonDiscriminator(Required = true)]
+    [BsonKnownTypes(typeof(AssetProfile))]
     public class UserProfile
     {
         //FIXME: None of these are mandatory by default for a user but we actually can make an attribute to make 
