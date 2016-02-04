@@ -8,6 +8,7 @@
     using System.Web;
     using TaskCat.Data.Entity;
     using Data.Model.Api;
+    using Data.Model.Pagination;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -23,6 +24,11 @@
         }
 
         public Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PageEnvelope<JobEntity>> GetJobsEnveloped(string type, int start, int limit)
         {
             throw new NotImplementedException();
         }

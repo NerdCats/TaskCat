@@ -50,11 +50,13 @@
         
 
         [HttpGet]
-        public async Task<IHttpActionResult> List(string type="", int start=0, int limit = 25)
+        public async Task<IHttpActionResult> List(string type="", int start=0, int limit = 25, bool envelope=false)
         {
             if (limit > 25) limit = 25;
             try
             {
+                if (envelope)
+                    return Json(await _repository.GetJobsEnveloped(type, start, limit));
                 return Json(await _repository.GetJobs(type, start, limit));
             }
             catch (Exception ex)

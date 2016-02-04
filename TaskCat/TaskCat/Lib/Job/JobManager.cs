@@ -38,6 +38,11 @@
             return JobPayload;
         }
 
+        internal async Task<long> GetTotalJobCount()
+        {
+            return await _store.CountJobs();
+        }
+
         internal async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
         {
             var jobs = await _store.FindJobs(type, start, limit);

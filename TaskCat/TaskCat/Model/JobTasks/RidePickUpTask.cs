@@ -4,6 +4,7 @@
     using Lib.Exceptions;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using TaskCat.Data.Model;
@@ -43,20 +44,21 @@
                 //FIXME: All of these has to be cached and refactored
                 try
                 {
+                    
                     var fromData = type.GetProperty("From");
-                    if (fromData.GetType() != typeof(Location))
+                    if (fromData.PropertyType != typeof(Location))
                         throw new InvalidCastException("Type Verification From Field Failed");
 
                     FromLocation = fromData.GetValue(task.Result,null) as Location;
 
                     var toData = type.GetProperty("To");
-                    if (toData.GetType() != typeof(Location))
+                    if (toData.PropertyType != typeof(Location))
                         throw new InvalidCastException("Type Verification To Field Failed");
 
                     ToLocation = toData.GetValue(task.Result, null) as Location;
 
                     var rideType = type.GetProperty("Asset");
-                    if (rideType.GetType() != typeof(AssetEntity))
+                    if (rideType.PropertyType != typeof(AssetEntity))
                         throw new InvalidCastException("Type Verification Asset field failed");
 
                     IsDependencySatisfied = true;

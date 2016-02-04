@@ -32,5 +32,10 @@ namespace TaskCat.Lib.Job
                 _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
+
+        internal async Task<long> CountJobs()
+        {
+            return await _context.Jobs.CountAsync(x => true);
+        }
     }
 }
