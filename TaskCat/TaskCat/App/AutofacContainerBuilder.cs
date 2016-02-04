@@ -36,9 +36,13 @@
             builder.RegisterType<OrderRepository>().SingleInstance();
             builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
 
+            builder.RegisterType<AssetManager>().SingleInstance();
+            builder.RegisterType<AssetStore>().SingleInstance();
 
             builder.RegisterType<UserManager>()
                 .SingleInstance();
+
+            
 
             builder.RegisterType<RoleManager>()
                 .SingleInstance();

@@ -12,6 +12,7 @@
     {
         //FIXME: None of these are mandatory by default for a user but we actually can make an attribute to make 
         // it conditionally required, might be a good thought
+        // these fields can be populated if signed up through social media !
         public string FirstName { get; set; }
         public string LastName { get; set; }
         [BsonIgnore]
@@ -20,7 +21,7 @@
         public int Age { get; set; }
         public string Gender { get; set; }
         public string Address { get; set; }
-        public string PicUri { get; set; }
+        public string PicUri { get; set; } 
 
         public UserProfile()
         {

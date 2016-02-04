@@ -8,7 +8,7 @@
 
     // INFO: Keeping the Supported AssetTypes to Capital just to make it readable over JSON cients
     public enum AssetTypes
-    {
+    {        
         FETCHER,
         CNG_DRIVER,
         BIKE_MESSENGER

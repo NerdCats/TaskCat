@@ -202,8 +202,10 @@
     <Compile Include="Controller\Auth\RefreshTokensController.cs" />
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\OrderController.cs" />
+    <Compile Include="Lib\Asset\AssetStore.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
+    <Compile Include="Lib\Asset\AssetManager.cs" />
     <Compile Include="Lib\Auth\AuthRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\UserManager.cs" />

@@ -8,7 +8,7 @@ namespace TaskCat.Data.Model.Identity
 {
     public class AssetModel : UserModel
     {
-        public string NID { get; set; }
+        public string NationalId { get; set; }
         public string DrivingLicenceId { get; set; }
     }
 }

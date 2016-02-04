@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Entity
 {
+    using AspNet.Identity.MongoDB;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -13,15 +14,17 @@
     using TaskCat.Data.Model;
     using TaskCat.Data.Model.Identity;
 
-    public class AssetEntity
+    public class AssetEntity : IdentityUser
     {
         //FIXME: Need a simplified vehicleInfo class here 
         public string UserRef { get; set; }
         public double AverageRating { get; set; }
+        public AssetProfile Profile { get; set; }
 
-        public AssetEntity(string userRef)
+        public AssetEntity(string userRef, AssetModel model)
         {
             this.UserRef = userRef;
+            this.Profile = new AssetProfile(model);
         }
     }
 }

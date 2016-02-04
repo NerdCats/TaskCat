@@ -10,7 +10,7 @@
     {
         public AssetProfile(AssetModel userModel) : base(userModel as UserModel)
         {
-            this.NationalId = userModel.NID;
+            this.NationalId = userModel.NationalId;
             this.DriversLicenseId = userModel.DrivingLicenceId;
         }
 

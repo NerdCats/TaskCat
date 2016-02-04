@@ -10,7 +10,7 @@
     using System.Threading.Tasks;
     using Data.Model.Identity;
     using Microsoft.AspNet.Identity;
-
+    using Newtonsoft.Json.Linq;
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -23,7 +23,7 @@
 
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(UserModel userModel)
+        public async Task<IHttpActionResult> Register(JObject userModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

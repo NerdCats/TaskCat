@@ -29,19 +29,7 @@
 
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
-            switch (model.AssetType)
-            {
-                case AssetTypes.FETCHER:
-                    this.Profile = new UserProfile(model);
-                    break;
-                default:
-                    if (model.GetType() != typeof(AssetModel))
-                        throw new InvalidOperationException("AssetProfile type should be used to populate Users who are basically Assets thus need an AssetProfile");
-
-                    this.Profile = new AssetProfile(model as AssetModel);
-                    break;
-            }
-
+            this.Profile = new UserProfile(model);            
         }
         
     }

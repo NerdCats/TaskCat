@@ -156,7 +156,7 @@ namespace TaskCat.App
 
                 dbContext.Roles.InsertOne(new Role()
                 {
-                    Name = "Redwan"
+                    Name = "BackOfficeAdmin"
                 });
             }
         }
