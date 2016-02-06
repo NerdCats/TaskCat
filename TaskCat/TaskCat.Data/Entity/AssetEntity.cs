@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Data.Entity
 {
     using AspNet.Identity.MongoDB;
+    using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -16,6 +17,9 @@
 
     public class AssetEntity
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string id { get; set; }
         //FIXME: Need a simplified vehicleInfo class here 
         public string UserRef { get; set; }
         public double AverageRating { get; set; }

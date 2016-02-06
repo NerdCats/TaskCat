@@ -20,6 +20,7 @@
             this.UserName = model.UserName;
             this.Email = model.Email;
             this.PhoneNumber = model.PhoneNumber;
+            
             // FIXME: We need to do something about this
             // Emails need to be verified
             if (string.IsNullOrEmpty(Email))
