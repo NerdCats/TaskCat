@@ -8,10 +8,10 @@
 
     public class AssetProfile: UserProfile
     {
-        public AssetProfile(AssetModel userModel) : base(userModel as UserModel)
+        public AssetProfile(AssetModel assetModel) : base(assetModel as UserModel)
         {
-            this.NationalId = userModel.NationalId;
-            this.DriversLicenseId = userModel.DrivingLicenceId;
+            this.NationalId = assetModel.NationalId;
+            this.DriversLicenseId = assetModel.DrivingLicenceId;
         }
 
         public string NationalId { get; set; }

@@ -12,7 +12,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    public class JobEntity : DbEntity
+    public class Job : DbEntity
     {
         public string Name { get; set; }
 
@@ -58,19 +58,19 @@
             State = JobState.COMPLETED;
         }
 
-        public JobEntity()
+        public Job()
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
         }
 
-        public JobEntity(string name) : this()
+        public Job(string name) : this()
         {
             Name = name;
 
         }
 
-        public JobEntity(OrderModel order) : this()
+        public Job(OrderModel order) : this()
         {
             this.Name = order.Name;
             this.Order = order;

@@ -15,7 +15,7 @@
     using TaskCat.Data.Model;
     using TaskCat.Data.Model.Identity;
 
-    public class AssetEntity
+    public class Asset
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -24,7 +24,7 @@
         public string UserRef { get; set; }
         public double AverageRating { get; set; }
 
-        public AssetEntity(string userRef)
+        public Asset(string userRef)
         {
             this.UserRef = userRef;
         }

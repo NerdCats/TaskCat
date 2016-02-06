@@ -10,6 +10,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    [BsonDiscriminator(Required = true)]
+    [BsonKnownTypes(typeof(AssetProfile))]
     public class User : IdentityUser
     {
         // FIXME: this guy would need a JsonConverter when you'd deserialize him
