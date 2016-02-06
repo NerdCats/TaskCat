@@ -14,19 +14,19 @@ namespace TaskCat.Lib.Job
         {
             _context = context;
         }
-        internal async Task<JobEntity> CreateOne(JobEntity createdJob)
+        internal async Task<Data.Entity.Job> CreateOne(Data.Entity.Job createdJob)
         {
             await _context.Jobs.InsertOneAsync(createdJob);
             return createdJob;
         }
 
-        internal async Task<JobEntity> FindOne(string id)
+        internal async Task<Data.Entity.Job> FindOne(string id)
         {
             var job = await _context.Jobs.Find(x => x._id == id).FirstOrDefaultAsync();
             return job;
         }
 
-        internal async Task<IEnumerable<JobEntity>> FindJobs(string orderType, int start, int limit)
+        internal async Task<IEnumerable<Data.Entity.Job>> FindJobs(string orderType, int start, int limit)
         {
             var FindContext = string.IsNullOrWhiteSpace(orderType) ? 
                 _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);

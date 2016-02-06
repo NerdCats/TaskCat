@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Utility.GeoJson;
-    public class Polygon : IGeoJsonEntity
+    public class Polygon : IGeoJsonModel
     {
         public string type { get; set; }
 

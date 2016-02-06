@@ -9,6 +9,6 @@
     using TaskCat.Data.Model;
     public interface IOrderRepository
     {
-        Task<JobEntity> PostOrder(OrderModel model);
+        Task<Job> PostOrder(OrderModel model);
     }
 }

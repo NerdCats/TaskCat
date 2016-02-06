@@ -17,7 +17,7 @@
             _store = store;
         }
 
-        internal async Task<JobEntity> GetJob(string id)
+        internal async Task<Job> GetJob(string id)
         {
             var JobPayload = await _store.FindOne(id);
             if (JobPayload == null)
@@ -43,13 +43,13 @@
             return await _store.CountJobs();
         }
 
-        internal async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        internal async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             var jobs = await _store.FindJobs(type, start, limit);
             return jobs;
         }
 
-        internal async Task<JobEntity> RegisterJob(JobEntity createdJob)
+        internal async Task<Job> RegisterJob(Job createdJob)
         {
             var job = await _store.CreateOne(createdJob);
             return job;

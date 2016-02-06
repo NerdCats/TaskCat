@@ -14,19 +14,14 @@
     using TaskCat.Data.Entity.Identity;
     using TaskCat.Data.Model;
     using TaskCat.Data.Model.Identity;
+    using Model.Identity.Registration;
+    using Model.Identity.Profile;
 
-    public class Asset
+    public class Asset :User
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string id { get; set; }
-        //FIXME: Need a simplified vehicleInfo class here 
-        public string UserRef { get; set; }
-        public double AverageRating { get; set; }
-
-        public Asset(string userRef)
+        public double AverageRating { get; set; } = 0.0;
+        public Asset(AssetRegistrationModel model, AssetProfile profile) : base(model, profile)
         {
-            this.UserRef = userRef;
-        }
+        }     
     }
 }

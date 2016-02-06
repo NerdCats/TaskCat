@@ -9,7 +9,7 @@
     using TaskCat.Data.Entity;
     using Asset;
 
-    public interface IFetchable<T> where T : AssetEntity
+    public interface IFetchable<T> where T : Asset
     {
         Location From { get; set; }
         Location To { get; set; }

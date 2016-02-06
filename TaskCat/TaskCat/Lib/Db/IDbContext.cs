@@ -13,9 +13,6 @@
         IMongoCollection<Client> Clients { get; }
         IMongoCollection<RefreshToken> RefreshTokens { get; }
 
-        IMongoCollection<JobEntity> Jobs { get; }
-
-        IMongoCollection<AssetEntity> Assets { get; }
-
+        IMongoCollection<Job> Jobs { get; }
     }
 }

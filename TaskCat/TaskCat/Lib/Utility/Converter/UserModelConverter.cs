@@ -7,37 +7,38 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
+    using Data.Model.Identity.Registration;
 
     public class UserModelConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(UserModel);
+            return objectType == typeof(UserRegistrationModel);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var obj = JObject.Load(reader);
-            UserModel model;
+            UserRegistrationModel model;
 
             var type = obj["AssetType"];
             if (type == null)
             {
-                obj["AssetType"] = ((AssetTypes)0).ToString();
+                obj["AssetType"] = ((IdentityTypes)0).ToString();
             }
 
             string modelType = type.Value<string>();
-            AssetTypes actualType;
-            if (!Enum.TryParse<AssetTypes>(modelType, out actualType))
+            IdentityTypes actualType;
+            if (!Enum.TryParse<IdentityTypes>(modelType, out actualType))
                 throw new NotSupportedException("Invalid AssetType Provided");
 
             switch (actualType)
             {
-                case AssetTypes.FETCHER:
-                    model = new UserModel();
+                case IdentityTypes.FETCHER:
+                    model = new UserRegistrationModel();
                     break;
                 default:
-                    model = new AssetModel();
+                    model = new AssetRegistrationModel();
                     break;
             }
 

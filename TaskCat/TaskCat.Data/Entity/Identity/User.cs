@@ -9,19 +9,23 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Model.Identity.Profile;
+    using Model.Identity.Registration;
 
     [BsonDiscriminator(Required = true)]
-    [BsonKnownTypes(typeof(AssetProfile))]
+    [BsonKnownTypes(typeof(Asset))]
     public class User : IdentityUser
     {
         // FIXME: this guy would need a JsonConverter when you'd deserialize him
         public UserProfile Profile { get; set; }
+        public IdentityTypes Type { get; set; }
 
-        public User(UserModel model, UserProfile profile)
+        public User(UserRegistrationModel model, UserProfile profile)
         {
             this.UserName = model.UserName;
             this.Email = model.Email;
             this.PhoneNumber = model.PhoneNumber;
+            this.Type = model.Type;
             
             // FIXME: We need to do something about this
             // Emails need to be verified
@@ -33,7 +37,7 @@
 
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
-            this.Profile = profile;          
+            this.Profile = profile;
         }
         
     }

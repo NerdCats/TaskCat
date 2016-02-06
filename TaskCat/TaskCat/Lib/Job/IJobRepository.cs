@@ -11,9 +11,9 @@
 
     public interface IJobRepository
     {
-        Task<JobEntity> GetJob(string id);
-        Task<JobEntity> PostJob(JobModel model);
-        Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit);
-        Task<PageEnvelope<JobEntity>> GetJobsEnveloped(string type, int start, int limit);
+        Task<Job> GetJob(string id);
+        Task<Job> PostJob(JobModel model);
+        Task<IEnumerable<Job>> GetJobs(string type, int start, int limit);
+        Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit);
     }
 }

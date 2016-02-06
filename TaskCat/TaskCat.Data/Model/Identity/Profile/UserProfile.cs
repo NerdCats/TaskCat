@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Identity
+﻿namespace TaskCat.Data.Model.Identity.Profile
 {
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Registration;
 
     [BsonDiscriminator(Required = true)]
     [BsonKnownTypes(typeof(AssetProfile))]
@@ -31,7 +32,7 @@
         }
 
         //FIXME: This should be segregated, having the whole usermodel coming here is okay, but not good
-        public UserProfile(UserModel userModel)
+        public UserProfile(UserRegistrationModel userModel)
         {
             this.FirstName = userModel.FirstName;
             this.LastName = userModel.LastName;

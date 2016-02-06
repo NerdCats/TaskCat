@@ -12,7 +12,7 @@
     using Data.Entity;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
-    public class FetchRideTask<T> : JobTask, IFetchable<T> where T : AssetEntity // FIXME: RIDE should be categorized as an asset
+    public class FetchRideTask<T> : JobTask, IFetchable<T> where T : Asset // FIXME: RIDE should be categorized as an asset
     {      
         public Location From { get; set; }
         public Location To { get; set; }
@@ -64,7 +64,7 @@
         public Location To { get; set; }
         //FIXME: If asset is only person oriented we might have much
         //much simpler representation of an asset, up until that FetchRideTaskResult would be a bit complicated
-        public AssetEntity Asset { get; set; }
+        public Asset Asset { get; set; }
 
         public FetchRideTaskResult()
         {

@@ -13,6 +13,7 @@
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
     using Lib.Utility.Converter;
+    using Data.Model.Identity.Registration;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -26,7 +27,7 @@
 
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(UserModel userModel)
+        public async Task<IHttpActionResult> Register(UserRegistrationModel userModel)
         {
             try
             {
@@ -50,8 +51,6 @@
                 return InternalServerError(ex);
             }
         }
-
-
 
         // FIXME: this definitely looks ugly, need to clean up here
         private IHttpActionResult GetErrorResult(IdentityResult result)
@@ -83,5 +82,23 @@
 
             return null;
         }
+
+        [Authorize(Roles="Administrator, User")]
+        [Route("{userId}")]
+        public async Task<IHttpActionResult> Get(string userId)
+        {
+            if (this.User.IsInRole("Administrator"))
+            {
+                return Json(await authRepository.FindUser(userId));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            
+        }
+
+
     }
 }

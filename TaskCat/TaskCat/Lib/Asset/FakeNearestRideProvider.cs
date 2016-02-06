@@ -8,14 +8,14 @@ using TaskCat.Data.Model;
 
 namespace TaskCat.Lib.Asset
 {
-    public class FakeNearestRideProvider : INearestAssetProvider<AssetEntity>
+    public class FakeNearestRideProvider : INearestAssetProvider<Data.Entity.Asset>
     {
-        public Task<List<AssetEntity>> FindAssets(Location loc)
+        public Task<List<Data.Entity.Asset>> FindAssets(Location loc)
         {
             return null;
         }
 
-        public async Task<AssetEntity> FindNearestEligibleAssets(Location from)
+        public async Task<Data.Entity.Asset> FindNearestEligibleAssets(Location from)
         {
             return null;
         }

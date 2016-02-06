@@ -8,19 +8,19 @@
     using TaskCat.Data.Entity;
     public abstract class JobBuilder
     {
-        protected JobEntity _job;
-        public JobEntity Job { get { return _job; } }
+        protected Job _job;
+        public Job Job { get { return _job; } }
 
         public abstract void BuildTasks();
 
         public JobBuilder(string name)
         {
-            _job = new JobEntity(name);
+            _job = new Job(name);
         }
 
         public JobBuilder(OrderModel order)
         {
-            _job = new JobEntity(order);
+            _job = new Job(order);
         }
 
     }

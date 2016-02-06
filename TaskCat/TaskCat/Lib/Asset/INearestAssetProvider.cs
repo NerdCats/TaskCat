@@ -9,7 +9,7 @@ namespace TaskCat.Lib.Asset
     using System.Threading.Tasks;
     using Data.Model;
 
-    public interface INearestAssetProvider<T> where T : AssetEntity
+    public interface INearestAssetProvider<T> where T : Asset
     {
         Task<List<T>> FindAssets(Location loc);
         Task<T> FindNearestEligibleAssets(Location from);

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using TaskCat.Data.Entity;
-
-namespace TaskCat.Lib.Job
+﻿namespace TaskCat.Lib.Job
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using TaskCat.Data.Entity;
+
     public class JobShop
     {
-        public JobEntity Construct(JobBuilder jobBuilder)
+        public Job Construct(JobBuilder jobBuilder)
         {
             jobBuilder.BuildTasks();
             return jobBuilder.Job;

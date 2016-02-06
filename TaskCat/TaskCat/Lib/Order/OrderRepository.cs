@@ -17,10 +17,10 @@
         {
             _manager = manager;
         }
-        public async Task<JobEntity> PostOrder(OrderModel model)
+        public async Task<Job> PostOrder(OrderModel model)
         {
             JobShop jobShop = new JobShop();
-            JobEntity createdJob;
+            Job createdJob;
             switch (model.Type)
             {
                 case "Ride":

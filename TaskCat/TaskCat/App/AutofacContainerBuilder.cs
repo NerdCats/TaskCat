@@ -36,9 +36,6 @@
             builder.RegisterType<OrderRepository>().SingleInstance();
             builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
 
-            builder.RegisterType<AssetManager>().SingleInstance();
-            builder.RegisterType<AssetStore>().SingleInstance();
-
             builder.RegisterType<UserManager>()
                 .SingleInstance();
 
@@ -60,7 +57,7 @@
             {
                 case "mock":
                     builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<AssetEntity>, ConcreteReflectionActivatorData>();
+                    builder.RegisterType<FakeNearestRideProvider>().AsImplementedInterfaces<INearestAssetProvider<Asset>, ConcreteReflectionActivatorData>();
                     break;
                 default:
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskCat.Data.Model.GeoJson
 {
-    public interface IGeoJsonEntity
+    public interface IGeoJsonModel
     {
         string type { get; set; }
     }

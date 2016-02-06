@@ -14,43 +14,41 @@
     using Newtonsoft.Json.Linq;
     using Newtonsoft.Json;
     using Asset;
+    using System.Web.Http;
+    using Data.Model.Identity.Registration;
+    using Data.Model.Identity.Profile;
+
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly UserManager userManager;
-        private readonly AssetManager assetManager;
 
-        public AuthRepository(IDbContext dbContext, UserManager userManager, AssetManager assetManager)
+        public AuthRepository(IDbContext dbContext, UserManager userManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
-            this.assetManager = assetManager;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
-        public async Task<IdentityResult> RegisterUser(UserModel model)
+        public async Task<IdentityResult> RegisterUser(UserRegistrationModel model)
         {
-            IdentityResult identityResult = null;
             UserProfile profile;
-            switch(model.AssetType)
+            User user;
+
+            switch (model.Type)
             {
-                case AssetTypes.FETCHER:
+                case IdentityTypes.FETCHER:
                     profile = new UserProfile(model);
+                    user = new User(model, profile);
                     break;
                 default:
-                    profile = new AssetProfile(model as AssetModel);
+                    profile = new AssetProfile(model as AssetRegistrationModel);
+                    user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
                     break;
             }
-            User user = new User(model, profile);
-            identityResult = await userManager.CreateAsync(user, model.Password);
-
-            if (model.AssetType == AssetTypes.FETCHER || !identityResult.Succeeded)
-                return identityResult;
-
-            var assetEntity = new AssetEntity(user.Id);
-            await  assetManager.CreateAsync(assetEntity);
-            return identityResult;            
+           
+            return await userManager.CreateAsync(user, model.Password);
         }
 
 
@@ -80,6 +78,11 @@
 
             dbContext.RefreshTokens.InsertOne(token);
             return true;
+        }
+
+        internal async Task<User> FindUser(string userId)
+        {
+            return await userManager.FindByIdAsync(userId);
         }
 
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)

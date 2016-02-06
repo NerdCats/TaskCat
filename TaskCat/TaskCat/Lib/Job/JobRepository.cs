@@ -18,21 +18,21 @@
             _manager = manager;
         }
 
-        public async Task<JobEntity> GetJob(string id)
+        public async Task<Job> GetJob(string id)
         {
             return await _manager.GetJob(id);
         }
 
-        public async Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        public async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             return await _manager.GetJobs(type, start, limit);
         }
 
-        public async Task<PageEnvelope<JobEntity>> GetJobsEnveloped(string type, int start, int limit)
+        public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit)
         {
             var data = await GetJobs(type, start, limit);
             var total = await _manager.GetTotalJobCount();
-            return new PageEnvelope<JobEntity>(new PaginationHeader()
+            return new PageEnvelope<Job>(new PaginationHeader()
             {
                 Limit = limit,
                 Start = start,
@@ -41,7 +41,7 @@
             }, data);
         }
 
-        public Task<JobEntity> PostJob(JobModel model)
+        public Task<Job> PostJob(JobModel model)
         {
             throw new NotImplementedException();
         }

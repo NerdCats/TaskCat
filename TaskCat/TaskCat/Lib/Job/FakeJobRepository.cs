@@ -12,10 +12,10 @@
 
     public class FakeJobRepository : IJobRepository
     {
-        public async Task<JobEntity> GetJob(string id)
+        public async Task<Job> GetJob(string id)
         {
             var task =  Task.Run(()=> {
-                return new JobEntity() {
+                return new Job() {
                     _id = "a1b2c3d4e5f6",
                     Tasks = new List<JobTask>()
                 };
@@ -23,21 +23,21 @@
             return await task;
         }
 
-        public Task<IEnumerable<JobEntity>> GetJobs(string type, int start, int limit)
+        public Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PageEnvelope<JobEntity>> GetJobsEnveloped(string type, int start, int limit)
+        public Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<JobEntity> PostJob(JobModel model)
+        public async Task<Job> PostJob(JobModel model)
         {
             var task = Task.Run(() =>
             {
-                var job = new JobEntity();
+                var job = new Job();
                 job.Tasks = model.Tasks;
                 job.Name = model.Name;
                 return job;

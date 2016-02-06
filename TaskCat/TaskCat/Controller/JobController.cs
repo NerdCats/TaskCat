@@ -34,7 +34,7 @@
                 if (string.IsNullOrWhiteSpace(id))
                     return BadRequest();
 
-                JobEntity job = await _repository.GetJob(id);
+                Job job = await _repository.GetJob(id);
                 if (job == null) return NotFound();
                 return Json(job);
             }
@@ -76,7 +76,7 @@
         {
             try
             {
-                JobEntity job = await _repository.PostJob(model);
+                Job job = await _repository.PostJob(model);
                 return Json(job);
             }
             catch (Exception)

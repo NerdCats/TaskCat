@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
 
     // INFO: Keeping the Supported AssetTypes to Capital just to make it readable over JSON cients
-    public enum AssetTypes
+    public enum IdentityTypes
     {        
         FETCHER,
         CNG_DRIVER,

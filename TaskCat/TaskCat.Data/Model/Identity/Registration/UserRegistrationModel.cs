@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Identity
+﻿namespace TaskCat.Data.Model.Identity.Registration
 {
     using Entity;
     using MongoDB.Bson.Serialization.Attributes;
@@ -11,7 +11,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class UserModel
+    public class UserRegistrationModel
     {
         [Required]
         [Display(Name = "User name")]
@@ -43,9 +43,11 @@
         public int Age { get; set; }
         public string Gender { get; set; }
         public string Address { get; set; }
+        public string PicUri { get; internal set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public AssetTypes AssetType { get; set; }
+        public IdentityTypes Type { get; set; }
+        
     }
 }

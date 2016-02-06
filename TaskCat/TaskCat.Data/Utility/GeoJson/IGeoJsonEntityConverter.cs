@@ -13,7 +13,7 @@
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(IGeoJsonEntity);
+            return objectType == typeof(IGeoJsonModel);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -26,7 +26,7 @@
                 throw new ArgumentNullException("type", "GeoJson object type is provided null");
             }
 
-            IGeoJsonEntity baseGeoJson;
+            IGeoJsonModel baseGeoJson;
             string geoJsonType = type.Value<string>();
             switch (geoJsonType)
             {

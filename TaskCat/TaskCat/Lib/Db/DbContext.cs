@@ -50,16 +50,10 @@
         #endregion
 
 
-        private IMongoCollection<JobEntity> _jobs;
-        public IMongoCollection<JobEntity> Jobs
+        private IMongoCollection<Job> _jobs;
+        public IMongoCollection<Job> Jobs
         {
             get { return _jobs; }
-        }
-
-        private IMongoCollection<AssetEntity> _assets;
-        public IMongoCollection<AssetEntity> Assets
-        {
-            get { return _assets; }
         }
 
         public DbContext()
@@ -91,9 +85,7 @@
             _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
 
-            _assets = Database.GetCollection<AssetEntity>(CollectionNames.AssetCollectionName);
-
-            _jobs = Database.GetCollection<JobEntity>(CollectionNames.JobsCollectionName);
+            _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
 
         }
 

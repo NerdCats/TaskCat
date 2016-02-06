@@ -45,7 +45,7 @@
         [JsonConverter(typeof(StringEnumConverter))]
         public JobTaskStates State { get; set; }
         
-        public AssetEntity AssignedAsset { get; set; }
+        public Asset AssignedAsset { get; set; }
 
         [BsonIgnoreIfNull]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
