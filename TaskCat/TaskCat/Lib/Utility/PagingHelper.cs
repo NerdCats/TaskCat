@@ -15,36 +15,52 @@
             urlHelper = new UrlHelper(requestMessage);
         }
         //FIXME: We might need a url generator, this is plain ghetto
-        internal  string GenerateNextPageUrl(string absolutePath, string type, long start, long limit, long total)
+        internal string GenerateNextPageUrl(string absolutePath, long start, long limit, long total, Dictionary<string, object> otherParams = null)
         {
             if (start + limit == total || total == 0)
                 return string.Empty;
 
             limit = start + limit > total ? total : limit;
 
-            return urlHelper.Link(absolutePath, new
+            Dictionary<string, object> routeParams = new Dictionary<string, object>();
+            routeParams.Add("start", start + limit);
+            routeParams.Add("limit", limit);
+            routeParams.Add("envelope", true);
+
+            if (otherParams != null)
             {
-                type = type,
-                start = start + limit,
-                limit = limit,
-                envelope = true
-            });
+                foreach (var item in otherParams)
+                {
+                    routeParams.Add(item.Key, item.Value);
+                }
+            }
+
+            return urlHelper.Link(absolutePath, routeParams);
         }
 
-        internal  string GeneratePreviousPageUrl(string absolutePath, string type, long start, long limit, long total)
+        internal string GeneratePreviousPageUrl(string absolutePath, long start, long limit, long total, Dictionary<string, object> otherParams = null)
         {
             if (start == 0)
                 return string.Empty;
 
-            limit = start - 1 < 0 ? 0 : start-1;
+            limit = start - 1 < 0 ? 0 : start - 1;
             start = start - limit - 1 < 0 ? 0 : start - limit - 1;
-            return urlHelper.Link(absolutePath, new
+
+
+            Dictionary<string, object> routeParams = new Dictionary<string, object>();
+            routeParams.Add("start", start);
+            routeParams.Add("limit", limit);
+            routeParams.Add("envelope", true);
+
+            if (otherParams != null)
             {
-                type = type,
-                start = start,
-                limit = limit,
-                envelope = true
-            });
+                foreach (var item in otherParams)
+                {
+                    routeParams.Add(item.Key, item.Value);
+                } 
+            }
+
+            return urlHelper.Link(absolutePath, routeParams);
         }
     }
 }

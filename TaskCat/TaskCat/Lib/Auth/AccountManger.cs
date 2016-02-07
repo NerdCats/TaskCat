@@ -33,11 +33,14 @@
             return await accountStore.FindAll<T>();
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<List<User>> FindAll(int start, int limit)
         {
-            return await accountStore.FindAll();
+            return await accountStore.FindAll(start, limit);
         }
 
-
+        internal async Task<long> GetTotalUserCount()
+        {
+            return await accountStore.GetUserCountAsync();
+        }
     }
 }

@@ -100,9 +100,20 @@
         [HttpGet]
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, User")]
-        public async Task<IHttpActionResult> GetAll()
+        public async Task<IHttpActionResult> GetAll(int start = 0, int limit = 25, bool envelope = false)
         {
-            return Json(await authRepository.FindAll());
+            if (limit > 25) limit = 25;
+            try
+            {
+                if (envelope)
+                    return Json(await authRepository.FindAllEnveloped(start, limit, this.Request));
+                return Json(await authRepository.FindAll(start, limit));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+
         }
 
 

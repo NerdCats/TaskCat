@@ -34,7 +34,7 @@
             return await _manager.GetJobs(type, start, limit);
         }
 
-        public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit , HttpRequestMessage request)
+        public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage request)
         {
             _paginationHelper = new PagingHelper(request);
 
@@ -43,8 +43,8 @@
 
             return new PageEnvelope<Job>(new PaginationHeader(total, start, limit, data.Count())
             {
-                NextPage = _paginationHelper.GenerateNextPageUrl(AppConstants.DefaultApiRoute, type, start, limit, total),
-                PrevPage = _paginationHelper.GeneratePreviousPageUrl(AppConstants.DefaultApiRoute, type, start, limit, total)
+                NextPage = _paginationHelper.GenerateNextPageUrl(AppConstants.DefaultApiRoute, start, limit, total, new Dictionary<string, object>() {["type"] = type }),
+                PrevPage = _paginationHelper.GeneratePreviousPageUrl(AppConstants.DefaultApiRoute, start, limit, total, new Dictionary<string, object>() {["type"] = type })
             }, data);
         }
 

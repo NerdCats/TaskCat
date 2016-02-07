@@ -17,13 +17,18 @@
     using System.Web.Http;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
+    using Utility;
+    using System.Net.Http;
+    using Data.Model.Pagination;
+    using Constants;
 
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly AccountManger accountManager;
-        
+        private PagingHelper _paginationHelper;
+
 
         public AuthRepository(IDbContext dbContext, AccountManger accoutnManager)
         {
@@ -85,9 +90,23 @@
             return true;
         }
 
-        internal async Task<List<User>> FindAll()
+        internal async Task<List<User>> FindAll(int start, int limit)
         {
-            return await accountManager.FindAll();
+            return await accountManager.FindAll(start, limit);
+        }
+
+        internal async Task<PageEnvelope<User>> FindAllEnveloped(int start, int limit, HttpRequestMessage request)
+        {
+            _paginationHelper = new PagingHelper(request);
+
+            var data = await accountManager.FindAll(start, limit);
+            var total = await accountManager.GetTotalUserCount();
+
+            return new PageEnvelope<User>(new PaginationHeader(total, start, limit, data.Count())
+            {
+                NextPage = _paginationHelper.GenerateNextPageUrl(AppConstants.DefaultApiRoute, start, limit, total),
+                PrevPage = _paginationHelper.GeneratePreviousPageUrl(AppConstants.DefaultApiRoute, start, limit, total)
+            }, data);
         }
 
         internal async Task<User> FindUser(string userId)

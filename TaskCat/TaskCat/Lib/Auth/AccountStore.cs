@@ -19,9 +19,9 @@
             collection = users;
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<List<User>> FindAll(int start, int limit)
         {
-            return await collection.Find(x => true).ToListAsync();
+            return await collection.Find(x => true).Skip(start).Limit(limit).ToListAsync();
         }
 
         public async Task<List<T>> FindAll<T>() where T : User
@@ -46,6 +46,11 @@
                 return await collection.Find(x => (x.Type != IdentityTypes.FETCHER && x.PasswordHash == passwordHash && x.UserName == username)).FirstOrDefaultAsync() as T;
 
             throw new InvalidOperationException("Identity Type not supported yet");
+        }
+
+        internal async Task<long> GetUserCountAsync()
+        {
+            return await collection.CountAsync(Builders<User>.Filter.Empty);
         }
     }
 }
