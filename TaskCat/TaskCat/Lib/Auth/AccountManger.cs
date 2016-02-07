@@ -35,7 +35,7 @@
 
         public async Task<List<User>> FindAll()
         {
-            return await Task.Run(() => { return this.Users.ToList(); });
+            return await accountStore.FindAll();
         }
 
 
