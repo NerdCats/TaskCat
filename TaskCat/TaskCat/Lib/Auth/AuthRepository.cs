@@ -22,15 +22,13 @@
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
-        private readonly UserManager<User> userManager;
-        private readonly UserManager<Asset> assetManager;
+        private readonly AccountManger accountManager;
         
 
-        public AuthRepository(IDbContext dbContext, UserManager<User> userManager, UserManager<Asset> assetManager)
+        public AuthRepository(IDbContext dbContext, AccountManger accoutnManager)
         {
             this.dbContext = dbContext;
-            this.userManager = userManager;
-            this.assetManager = assetManager;
+            this.accountManager = accoutnManager;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
@@ -44,14 +42,14 @@
                 case IdentityTypes.FETCHER:
                     profile = new UserProfile(model);
                     user = new User(model, profile);
-                    return await userManager.CreateAsync(user, model.Password);
+                    break;
                 default:
                     profile = new AssetProfile(model as AssetRegistrationModel);
                     user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
-                    return await assetManager.CreateAsync(user as Asset, model.Password);
+                    break;     
             }
-           
-         
+
+            return await accountManager.CreateAsync(user, model.Password);
         }
 
 
@@ -63,10 +61,14 @@
             return client;
         }
 
-        internal async Task<User> FindUser(string userName, string password)
+        internal async Task<User> FindUser(string userName, string password) 
         {
-            User user = await userManager.FindAsync(userName, password);
-            return user;
+            return await accountManager.FindAsync(userName, password);
+        }
+
+        internal async Task<T> FindUser<T>(string userName, string password) where T : User
+        {
+            return await accountManager.FindAsByAsync<T>(userName, password);
         }
 
         internal async Task<bool> AddRefreshToken(RefreshToken token)
@@ -83,9 +85,14 @@
             return true;
         }
 
+        internal async Task<List<User>> FindAll()
+        {
+            return await accountManager.FindAll();
+        }
+
         internal async Task<User> FindUser(string userId)
         {
-            return await userManager.FindByIdAsync(userId);
+            return await accountManager.FindByIdAsync(userId);
         }
 
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)

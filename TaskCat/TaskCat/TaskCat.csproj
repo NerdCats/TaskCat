@@ -204,8 +204,10 @@
     <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
+    <Compile Include="Lib\Auth\AccountStore.cs" />
     <Compile Include="Lib\Auth\AuthRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
+    <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Utility\Converter\UserModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />

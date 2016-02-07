@@ -94,7 +94,7 @@
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
 
-            var user = await authRepository.FindUser(context.UserName, context.Password);
+            User user = await authRepository.FindUser(context.UserName, context.Password);
 
             if (user == null)
             {

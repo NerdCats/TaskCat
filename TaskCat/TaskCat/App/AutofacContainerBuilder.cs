@@ -41,8 +41,8 @@
             builder.RegisterType<RoleManager>()
                 .SingleInstance();
 
-            builder.Register(c => new UserManager<User>(new UserStore<User>(context.Users)));
-            builder.Register(c => new UserManager<Asset>(new UserStore<Asset>(context.Assets)));
+            builder.Register(c=> new AccountStore(context.Users)).As<IUserStore<User>>().SingleInstance();
+            builder.RegisterType<AccountManger>().SingleInstance();
 
             builder.RegisterType<AuthRepository>()
                 .SingleInstance();

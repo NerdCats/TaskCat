@@ -95,8 +95,14 @@
             {
                 throw new NotImplementedException();
             }
+        }
 
-            
+        [HttpGet]
+        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, User")]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            return Json(await authRepository.FindAll());
         }
 
 
