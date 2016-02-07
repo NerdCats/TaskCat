@@ -20,6 +20,7 @@
     using Microsoft.Owin.Security.Infrastructure;
     using Lib.Auth;
     using Data.Entity;
+    using MongoDB.Driver;
 
     public class AutofacContainerBuilder
     {
@@ -27,8 +28,9 @@
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<DbContext>().SingleInstance();
-            builder.RegisterType<DbContext>().AsImplementedInterfaces<IDbContext, ConcreteReflectionActivatorData>();
+            DbContext context = new DbContext();
+
+            builder.Register<DbContext>(c => context).As<IDbContext>().SingleInstance();
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();
@@ -36,13 +38,11 @@
             builder.RegisterType<OrderRepository>().SingleInstance();
             builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
 
-            builder.RegisterType<UserManager>()
-                .SingleInstance();
-
-            
-
             builder.RegisterType<RoleManager>()
                 .SingleInstance();
+
+            builder.Register(c => new UserManager<User>(new UserStore<User>(context.Users)));
+            builder.Register(c => new UserManager<Asset>(new UserStore<Asset>(context.Assets)));
 
             builder.RegisterType<AuthRepository>()
                 .SingleInstance();

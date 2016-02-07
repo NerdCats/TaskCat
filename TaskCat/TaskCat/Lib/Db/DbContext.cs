@@ -29,6 +29,12 @@
             get { return _users; }
         }
 
+        private IMongoCollection<Asset> _assets;
+        public IMongoCollection<Asset> Assets
+        {
+            get { return _assets; }
+        }
+
         private IMongoCollection<Role> _roles;
         public IMongoCollection<Role> Roles
         {
@@ -81,6 +87,7 @@
         private void InitiateCollections()
         {
             _users = Database.GetCollection<User>(CollectionNames.UsersCollectionName);
+            _assets = Database.GetCollection<Asset>(CollectionNames.UsersCollectionName);
             _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
             _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);

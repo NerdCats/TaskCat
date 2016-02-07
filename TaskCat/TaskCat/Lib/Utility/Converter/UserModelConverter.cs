@@ -21,10 +21,11 @@
             var obj = JObject.Load(reader);
             UserRegistrationModel model;
 
-            var type = obj["AssetType"];
+            var type = obj["Type"];
             if (type == null)
             {
-                obj["AssetType"] = ((IdentityTypes)0).ToString();
+                obj["Type"] = ((IdentityTypes)0).ToString();
+                type = obj["Type"];
             }
 
             string modelType = type.Value<string>();
