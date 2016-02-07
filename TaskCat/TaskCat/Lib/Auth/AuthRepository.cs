@@ -22,12 +22,15 @@
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
-        private readonly UserManager userManager;
+        private readonly UserManager<User> userManager;
+        private readonly UserManager<Asset> assetManager;
+        
 
-        public AuthRepository(IDbContext dbContext, UserManager userManager)
+        public AuthRepository(IDbContext dbContext, UserManager<User> userManager, UserManager<Asset> assetManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
+            this.assetManager = assetManager;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
@@ -41,14 +44,14 @@
                 case IdentityTypes.FETCHER:
                     profile = new UserProfile(model);
                     user = new User(model, profile);
-                    break;
+                    return await userManager.CreateAsync(user, model.Password);
                 default:
                     profile = new AssetProfile(model as AssetRegistrationModel);
                     user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
-                    break;
+                    return await assetManager.CreateAsync(user as Asset, model.Password);
             }
            
-            return await userManager.CreateAsync(user, model.Password);
+         
         }
 
 
