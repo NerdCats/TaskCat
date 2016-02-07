@@ -56,7 +56,7 @@
             try
             {
                 if (envelope)
-                    return Json(await _repository.GetJobsEnveloped(type, start, limit));
+                    return Json(await _repository.GetJobsEnveloped(type, start, limit, this.Request));
                 return Json(await _repository.GetJobs(type, start, limit));
             }
             catch (Exception ex)

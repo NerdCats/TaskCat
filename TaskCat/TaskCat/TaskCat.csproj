@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
+    <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -209,7 +210,7 @@
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
-    <Compile Include="Lib\Utility\Converter\UserModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
     <Compile Include="Lib\Utility\HashMaker.cs" />
+    <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\ModelFactory.cs" />

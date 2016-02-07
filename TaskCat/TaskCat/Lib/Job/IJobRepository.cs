@@ -8,12 +8,14 @@
     using TaskCat.Data.Entity;
     using Data.Model.Api;
     using Data.Model.Pagination;
+    using System.Web.Http.Controllers;
+    using System.Net.Http;
 
     public interface IJobRepository
     {
         Task<Job> GetJob(string id);
         Task<Job> PostJob(JobModel model);
         Task<IEnumerable<Job>> GetJobs(string type, int start, int limit);
-        Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit);
+        Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage context);
     }
 }
