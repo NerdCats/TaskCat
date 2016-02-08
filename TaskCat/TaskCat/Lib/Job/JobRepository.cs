@@ -8,10 +8,16 @@
     using Data.Entity;
     using Data.Model.Api;
     using Data.Model.Pagination;
+    using System.Web.Http.Controllers;
+    using Utility;
+    using System.Web.Http.Routing;
+    using System.Net.Http;
+    using Constants;
 
     public class JobRepository : IJobRepository
     {
         private JobManager _manager;
+        private PagingHelper _paginationHelper;
 
         public JobRepository(JobManager manager)
         {
@@ -28,16 +34,17 @@
             return await _manager.GetJobs(type, start, limit);
         }
 
-        public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit)
+        public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage request)
         {
+            _paginationHelper = new PagingHelper(request);
+
             var data = await GetJobs(type, start, limit);
             var total = await _manager.GetTotalJobCount();
-            return new PageEnvelope<Job>(new PaginationHeader()
+
+            return new PageEnvelope<Job>(new PaginationHeader(total, start, limit, data.Count())
             {
-                Limit = limit,
-                Start = start,
-                Returned = data.Count(),
-                Total = total
+                NextPage = _paginationHelper.GenerateNextPageUrl(AppConstants.DefaultApiRoute, start, limit, total, new Dictionary<string, object>() {["type"] = type }),
+                PrevPage = _paginationHelper.GeneratePreviousPageUrl(AppConstants.DefaultApiRoute, start, limit, total, new Dictionary<string, object>() {["type"] = type })
             }, data);
         }
 

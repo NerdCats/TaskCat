@@ -9,7 +9,7 @@
     using System.Web;
     using Data.Model.Identity.Registration;
 
-    public class UserModelConverter : JsonConverter
+    public class UserRegistrationModelConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

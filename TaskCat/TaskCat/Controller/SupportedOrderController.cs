@@ -18,13 +18,27 @@ namespace TaskCat.Controller
             this._repository = repository;
         }
 
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            try
+            {
+                var supportedOrderList = await _repository.GetAll();
+                return Json(supportedOrderList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<IHttpActionResult> Post(SupportedOrder supportedOrder)
         {
             try
             {
-
+                await _repository.PostSupportedOrder(supportedOrder);
+                return Json(supportedOrder);
             }
             catch (Exception ex)
             {

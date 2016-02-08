@@ -9,6 +9,8 @@
     using TaskCat.Data.Entity;
     using Data.Model.Api;
     using Data.Model.Pagination;
+    using System.Web.Http.Controllers;
+    using System.Net.Http;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -28,7 +30,7 @@
             throw new NotImplementedException();
         }
 
-        public Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit)
+        public Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage context)
         {
             throw new NotImplementedException();
         }
