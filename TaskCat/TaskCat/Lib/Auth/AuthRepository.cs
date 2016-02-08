@@ -70,9 +70,9 @@
             return await accountManager.FindAsync(userName, password);
         }
 
-        internal async Task<T> FindUser<T>(string userName, string password) where T : User
+        internal async Task<User> FindUserByEmail(string email, string password)
         {
-            return await accountManager.FindAsByAsync<T>(userName, password);
+            return await accountManager.FindByEmailAsync(email, password);
         }
 
         internal async Task<bool> AddRefreshToken(RefreshToken token)

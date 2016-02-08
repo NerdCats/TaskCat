@@ -58,18 +58,7 @@
             throw new InvalidOperationException("Identity Type not supported yet");
         }
 
-        public async Task<T> FindAsByAsync<T>(string username, string passwordHash) where T : User
-        {
-            Type type = typeof(T);
-
-            if (type == typeof(User))
-                return await collection.Find(x => (x.Type == IdentityTypes.FETCHER && x.PasswordHash == passwordHash && x.UserName == username)).FirstOrDefaultAsync() as T;
-
-            else if (type == typeof(Asset))
-                return await collection.Find(x => (x.Type != IdentityTypes.FETCHER && x.PasswordHash == passwordHash && x.UserName == username)).FirstOrDefaultAsync() as T;
-
-            throw new InvalidOperationException("Identity Type not supported yet");
-        }
+        
 
         internal async Task<long> GetUserCountAsync()
         {

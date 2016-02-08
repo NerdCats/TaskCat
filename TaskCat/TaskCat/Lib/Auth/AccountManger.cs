@@ -19,14 +19,27 @@
             accountStore = store as AccountStore;
         }
 
-        public async Task<T> FindAsByIdAsync<T>(string id) where T : User
+        public async Task<User> FindByEmailAsync(string email, string password)
         {
-            return await Store.FindByIdAsync(id) as T;
+            var user = await FindByEmailAsync(email);
+            if (user == null) return user;
+            
+            var verify = PasswordHasher.VerifyHashedPassword(user.PasswordHash, password);
+            if (verify.ToString()=="Success")
+                return user;
+            else return null;
         }
 
-        public async Task<T> FindAsByAsync<T>(string username, string password) where T : User
+        public async Task<T> FindAsByIdAsync<T>(string id) where T : User
         {
-            return await accountStore.FindAsByAsync<T>(username, PasswordHasher.HashPassword(password));
+            var user = await Store.FindByIdAsync(id);
+
+            Type type = typeof(T);
+
+            if ((type == typeof(User) && user.Type == IdentityTypes.FETCHER) 
+                || (type == typeof(Asset) && user.Type != IdentityTypes.FETCHER))
+                return user as T;
+            return null;
         }
 
         public async Task<List<T>> FindAll<T>() where T : User
