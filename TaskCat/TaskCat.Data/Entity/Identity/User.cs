@@ -26,7 +26,10 @@
             this.Email = model.Email;
             this.PhoneNumber = model.PhoneNumber;
             this.Type = model.Type;
-            
+
+            this.Roles = new List<string>();
+            Roles.Add(RoleNames.ROLE_USER);
+
             // FIXME: We need to do something about this
             // Emails need to be verified
             if (string.IsNullOrEmpty(Email))
@@ -38,6 +41,12 @@
             //FIXME: This has been done because UserModel is just the same here
             //If we decide to expose different models for different clients things would be a bit different
             this.Profile = profile;
+        }
+
+        protected User(UserRegistrationModel model, UserProfile profile, string role) : this(model, profile)
+        {
+            this.Roles = this.Roles ?? new List<string>();
+            Roles.Add(role);
         }
         
     }

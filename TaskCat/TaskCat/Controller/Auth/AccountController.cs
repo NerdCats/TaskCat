@@ -15,6 +15,7 @@
     using Lib.Utility.Converter;
     using Data.Model.Identity.Registration;
     using Lib.Constants;
+
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -72,7 +73,7 @@
 
                 if (ModelState.IsValid)
                 {
-                    // No ModelState errors are available to send, \
+                    // No ModelState errors are available to send, 
                     // so just return an empty BadRequest.
                     return BadRequest();
                 }

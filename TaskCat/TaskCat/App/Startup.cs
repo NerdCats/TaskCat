@@ -15,6 +15,7 @@ using TaskCat.Lib.Utility;
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model.Identity;
 using MongoDB.Driver;
+using TaskCat.Lib.Constants;
 
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
 
@@ -141,22 +142,22 @@ namespace TaskCat.App
             {
                 dbContext.Roles.InsertOne(new Role()
                 {
-                    Name = "User"
+                    Name = RoleNames.ROLE_USER
                 });
 
                 dbContext.Roles.InsertOne(new Role()
                 {
-                    Name = "Administrator"
+                    Name = RoleNames.ROLE_ADMINISTRATOR
                 });
 
                 dbContext.Roles.InsertOne(new Role()
                 {
-                    Name = "Asset"
+                    Name = RoleNames.ROLE_ASSET
                 });
 
                 dbContext.Roles.InsertOne(new Role()
                 {
-                    Name = "BackOfficeAdmin"
+                    Name = RoleNames.ROLE_BACKOFFICEADMIN
                 });
             }
         }

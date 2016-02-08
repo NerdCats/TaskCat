@@ -20,7 +20,7 @@
     public class Asset :User
     {
         public double AverageRating { get; set; } = 0.0;
-        public Asset(AssetRegistrationModel model, AssetProfile profile) : base(model, profile)
+        public Asset(AssetRegistrationModel model, AssetProfile profile) : base(model, profile, RoleNames.ROLE_ASSET)
         {
         }     
     }
