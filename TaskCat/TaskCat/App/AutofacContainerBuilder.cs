@@ -21,7 +21,7 @@
     using Lib.Auth;
     using Data.Entity;
     using MongoDB.Driver;
-
+    using Lib.SupportedOrder;
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
@@ -44,6 +44,11 @@
             builder.Register(c => new UserManager<User>(new UserStore<User>(context.Users)));
             builder.Register(c => new UserManager<Asset>(new UserStore<Asset>(context.Assets)));
 
+
+            builder.RegisterType<SupportedOrderRepository>().SingleInstance();
+            builder.RegisterType<SupportedOrderStore>().SingleInstance();
+
+
             builder.RegisterType<AuthRepository>()
                 .SingleInstance();
 
@@ -62,15 +67,9 @@
                 default:
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
                     break;
-
             }
-            
-
             builder.RegisterApiControllers(typeof(Startup).Assembly);
-
             return builder.Build();
         }
-    }
-
-    
+    }    
 }
