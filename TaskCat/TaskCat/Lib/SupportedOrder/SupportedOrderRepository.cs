@@ -27,5 +27,20 @@ namespace TaskCat.Lib.SupportedOrder
         {
             return await _store.GettAll();
         }
+
+        internal async Task<SupportedOrder> Get(string id)
+        {
+            return await _store.Get(id);
+        }
+
+        internal async Task<SupportedOrder> Update(SupportedOrder order)
+        {
+            return await _store.Replace(order);
+        }
+
+        internal async Task<SupportedOrder> Delete(string id)
+        {
+            return await _store.Delete(id);
+        }
     }
 }

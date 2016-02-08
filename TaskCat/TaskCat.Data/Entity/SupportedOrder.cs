@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,15 +24,7 @@ namespace TaskCat.Data.Entity
         public string OrderName { get; set; }
         public string ImageUrl { get; set; }
 
-        [Required(ErrorMessage ="You must provide the the supported order code, currently supported orders will be found in this URL: /api/supportedorder/get")]
-        public SupportedOrder OrderCode { get; set; }        
-    }
-
-    enum SupportedOrderCode
-    {
-        FOOD,
-        RIDE,
-        FETCH,
-        PLUMBER
-    }
+        [Required(ErrorMessage ="You must provide the the supported order code, currently supported orders will be found in this URL: /api/supportedorder/get")]        
+        public string OrderCode { get; set; }        
+    }       
 }

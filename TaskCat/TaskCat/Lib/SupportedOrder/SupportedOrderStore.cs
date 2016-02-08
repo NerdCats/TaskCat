@@ -8,6 +8,7 @@ using TaskCat.Lib.Db;
 
 namespace TaskCat.Lib.SupportedOrder
 {
+    using System.Web.Http;
     using MongoDB.Bson;
     using MongoDB.Driver;
     using TaskCat.Data.Entity;
@@ -15,7 +16,7 @@ namespace TaskCat.Lib.SupportedOrder
     {
         private IDbContext _context;
 
-        public SupportedOrderStore(DbContext context)
+        public SupportedOrderStore(IDbContext context)
         {
             this._context = context;
         }
@@ -29,6 +30,23 @@ namespace TaskCat.Lib.SupportedOrder
         internal async Task<List<SupportedOrder>> GettAll()
         {
             return await _context.SupportedOrders.Find(x=>true).ToListAsync();
+        }
+
+        internal async Task<SupportedOrder> Get(string id)
+        {
+            return await _context.SupportedOrders.Find(x => x._id == id).FirstOrDefaultAsync();
+        }
+
+        internal async Task<SupportedOrder> Replace(SupportedOrder order)
+        {
+            var filter = Builders<SupportedOrder>.Filter.Where(x => x._id == order._id);
+            return await _context.SupportedOrders.FindOneAndReplaceAsync(filter, order);
+        }
+
+        internal async Task<SupportedOrder> Delete(string id)
+        {
+            var filter = Builders<SupportedOrder>.Filter.Where(x => x._id == id);
+            return await _context.SupportedOrders.FindOneAndDeleteAsync(filter);
         }
     }
 }
