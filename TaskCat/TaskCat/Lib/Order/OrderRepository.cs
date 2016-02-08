@@ -10,19 +10,16 @@
     using TaskCat.Data.Entity;
     using TaskCat.Data.Model;
     using Data.Model.Order;
-    using System.Web.Http;
+    using Order;
 
     public class OrderRepository : IOrderRepository
     {
         JobManager _manager;
-        public OrderRepository(JobManager manager)
+        SupportedOrderStore _supportedOrderStore;
+        public OrderRepository(JobManager manager, SupportedOrderStore supportedOrderStore)
         {
             _manager = manager;
-        }
-
-        public Task<IHttpActionResult> Get(string id)
-        {
-            throw new NotImplementedException();
+            _supportedOrderStore = supportedOrderStore;
         }
 
         public async Task<Job> PostOrder(OrderModel model)
@@ -40,8 +37,33 @@
                        
             }
 
-            return await _manager.RegisterJob(createdJob);
-            
+            return await _manager.RegisterJob(createdJob);       
+        }
+
+        public async Task<SupportedOrder> PostSupportedOrder(SupportedOrder supportedOrder)
+        {
+            await _supportedOrderStore.Post(supportedOrder);
+            return supportedOrder;
+        }
+
+        public async Task<List<SupportedOrder>> GetAllSupportedOrder()
+        {
+            return await _supportedOrderStore.GettAll();
+        }
+
+        public async Task<SupportedOrder> GetSupportedOrder(string id)
+        {
+            return await _supportedOrderStore.Get(id);
+        }
+
+        public async Task<SupportedOrder> UpdateSupportedOrder(SupportedOrder order)
+        {
+            return await _supportedOrderStore.Replace(order);
+        }
+
+        public async Task<SupportedOrder> DeleteSupportedOrder(string id)
+        {
+            return await _supportedOrderStore.Delete(id);
         }
     }
 }

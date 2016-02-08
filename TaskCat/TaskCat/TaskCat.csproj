@@ -210,8 +210,7 @@
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
-    <Compile Include="Lib\SupportedOrder\SupportedOrderRepository.cs" />
-    <Compile Include="Lib\SupportedOrder\SupportedOrderStore.cs" />
+    <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />

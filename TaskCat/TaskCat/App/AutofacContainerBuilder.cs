@@ -21,7 +21,7 @@
     using Lib.Auth;
     using Data.Entity;
     using MongoDB.Driver;
-    using Lib.SupportedOrder;
+
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
@@ -44,8 +44,6 @@
             builder.Register(c=> new AccountStore(context.Users)).As<IUserStore<User>>().SingleInstance();
             builder.RegisterType<AccountManger>().SingleInstance();
 
-
-            builder.RegisterType<SupportedOrderRepository>().SingleInstance();
             builder.RegisterType<SupportedOrderStore>().SingleInstance();
 
 

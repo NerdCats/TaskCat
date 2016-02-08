@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using TaskCat.Data.Entity;
-using TaskCat.Lib.Db;
-
-namespace TaskCat.Lib.SupportedOrder
+﻿namespace TaskCat.Lib.Order
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using TaskCat.Data.Entity;
+    using TaskCat.Lib.Db;
     using System.Web.Http;
     using MongoDB.Bson;
     using MongoDB.Driver;
-    using TaskCat.Data.Entity;
+
     public class SupportedOrderStore
     {
         private IDbContext _context;

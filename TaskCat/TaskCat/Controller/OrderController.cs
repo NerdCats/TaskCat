@@ -1,7 +1,7 @@
 ﻿namespace TaskCat.Controller
 {
     using Data.Entity;
-    using Lib.SupportedOrder;
+    using Lib.Order;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,54 +10,27 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using TaskCat.Data.Model;
-    using TaskCat.Lib.Order;
 
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
     {
         private IOrderRepository _repository;
-        private SupportedOrderRepository _suportedOrderRepository;
 
-        public OrderController(IOrderRepository repository, SupportedOrderRepository supportedOrderRepository)
+        public OrderController(IOrderRepository repository)
         {
             _repository = repository;
-            _suportedOrderRepository = supportedOrderRepository;
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model)
         {
-            if (model == null) return BadRequest("No freaking payload man!");
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var orderResult = await _repository.PostOrder(model);
-            return Json(orderResult);
-        }
-
-        [AllowAnonymous]
-        [Route("SupportedOrder")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAllSupportedOrder()
-        {
             try
             {
-                var supportedOrderList = await _suportedOrderRepository.GetAll();
-                return Json(supportedOrderList);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+                if (model == null) return BadRequest("No freaking payload man!");
+                if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        [Route("SupportedOrder")]
-        [HttpPost]
-        public async Task<IHttpActionResult> PostSupportedOrder(SupportedOrder supportedOrder)
-        {
-            try
-            {
-                await _suportedOrderRepository.PostSupportedOrder(supportedOrder);
-                return Json(supportedOrder);
+                var orderResult = await _repository.PostOrder(model);
+                return Json(orderResult);
             }
             catch (Exception ex)
             {
@@ -68,16 +41,50 @@
         [AllowAnonymous]
         [Route("SupportedOrder")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetSupportedOrderList(string id)
+        public async Task<IHttpActionResult> GetAllSupportedOrder()
         {
             try
             {
-                var supportedOrder = await _suportedOrderRepository.Get(id);
+                var supportedOrderList = await _repository.GetAllSupportedOrder();
+                return Json(supportedOrderList);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [Route("SupportedOrder")]
+        [HttpPost]
+        public async Task<IHttpActionResult> PostSupportedOrder(SupportedOrder supportedOrder)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                await _repository.PostSupportedOrder(supportedOrder);
                 return Json(supportedOrder);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
+            }
+        }
+
+        [AllowAnonymous]
+        [Route("SupportedOrder/{id}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSupportedOrder(string id)
+        {
+            try
+            {
+                var supportedOrder = await _repository.GetSupportedOrder(id);
+                return Json(supportedOrder);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
             }
         }
 
@@ -87,27 +94,30 @@
         {
             try
             {
-                var updatedSupportedOrder = await _suportedOrderRepository.Update(order);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var updatedSupportedOrder = await _repository.UpdateSupportedOrder(order);
                 return Json(updatedSupportedOrder);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
             }
         }
 
-        [Route("SupportedOrder")]
+        [Route("SupportedOrder/{id}")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteSupportedOrder(string id)
         {
             try
             {
-                var deletedSupportedOrder = await _suportedOrderRepository.Delete(id);
+                var deletedSupportedOrder = await _repository.DeleteSupportedOrder(id);
                 return Json(deletedSupportedOrder);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
             }
         }
 
