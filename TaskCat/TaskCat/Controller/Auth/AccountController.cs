@@ -14,7 +14,7 @@
     using Newtonsoft.Json;
     using Lib.Utility.Converter;
     using Data.Model.Identity.Registration;
-
+    using Lib.Constants;
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -97,17 +97,24 @@
             }
         }
 
+
         [HttpGet]
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, User")]
-        public async Task<IHttpActionResult> GetAll(int start = 0, int limit = 25, bool envelope = false)
+        public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope=false)
         {
-            if (limit > 25) limit = 25;
+            if (pageSize == 0)
+                return BadRequest("Page size cant be 0");
+            if (page < 0)
+                return BadRequest("Page index less than 0 provided");
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+
             try
             {
                 if (envelope)
-                    return Json(await authRepository.FindAllEnveloped(start, limit, this.Request));
-                return Json(await authRepository.FindAll(start, limit));
+                    return Json(await authRepository.FindAllEnveloped(page, pageSize, this.Request));
+                return Json(await authRepository.FindAll(page, pageSize));
             }
             catch (Exception ex)
             {

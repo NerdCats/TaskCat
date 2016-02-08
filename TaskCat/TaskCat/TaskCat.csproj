@@ -203,7 +203,6 @@
     <Compile Include="Controller\Auth\RefreshTokensController.cs" />
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\OrderController.cs" />
-    <Compile Include="Controller\SupportedOrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
     <Compile Include="Lib\Auth\AccountStore.cs" />
@@ -240,6 +239,8 @@
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\ModelFactory.cs" />
+    <Compile Include="Model\Pagination\PageEnvelope.cs" />
+    <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

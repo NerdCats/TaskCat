@@ -12,6 +12,7 @@
     using TaskCat.Lib.Job;
     using Newtonsoft.Json.Linq;
     using Data.Model;
+    using Lib.Constants;
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -50,14 +51,20 @@
         
 
         [HttpGet]
-        public async Task<IHttpActionResult> List(string type="", int start=0, int limit = 25, bool envelope=false)
+        public async Task<IHttpActionResult> List(string type="", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
-            if (limit > 25) limit = 25;
+            if (pageSize == 0)
+                return BadRequest("Page size cant be 0");
+            if (page < 0)
+                return BadRequest("Page index less than 0 provided");
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+
             try
             {
                 if (envelope)
-                    return Json(await _repository.GetJobsEnveloped(type, start, limit, this.Request));
-                return Json(await _repository.GetJobs(type, start, limit));
+                    return Json(await _repository.GetJobsEnveloped(type, page, pageSize, this.Request));
+                return Json(await _repository.GetJobs(type, page, pageSize));
             }
             catch (Exception ex)
             {

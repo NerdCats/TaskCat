@@ -17,9 +17,8 @@
     using System.Web.Http;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
-    using Utility;
     using System.Net.Http;
-    using Data.Model.Pagination;
+    using TaskCat.Model.Pagination;
     using Constants;
 
     public class AuthRepository
@@ -27,7 +26,6 @@
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly AccountManger accountManager;
-        private PagingHelper _paginationHelper;
 
 
         public AuthRepository(IDbContext dbContext, AccountManger accoutnManager)
@@ -51,7 +49,7 @@
                 default:
                     profile = new AssetProfile(model as AssetRegistrationModel);
                     user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
-                    break;     
+                    break;
             }
 
             return await accountManager.CreateAsync(user, model.Password);
@@ -66,7 +64,7 @@
             return client;
         }
 
-        internal async Task<User> FindUser(string userName, string password) 
+        internal async Task<User> FindUser(string userName, string password)
         {
             return await accountManager.FindAsync(userName, password);
         }
@@ -90,23 +88,19 @@
             return true;
         }
 
-        internal async Task<List<User>> FindAll(int start, int limit)
+        internal async Task<List<User>> FindAll(int page, int pageSize)
         {
-            return await accountManager.FindAll(start, limit);
+            if (page < 0)
+                throw new ArgumentException("Invalid page index provided");
+            return await accountManager.FindAll(page * pageSize, pageSize);
         }
 
-        internal async Task<PageEnvelope<User>> FindAllEnveloped(int start, int limit, HttpRequestMessage request)
+        internal async Task<PageEnvelope<User>> FindAllEnveloped(int page, int pageSize, HttpRequestMessage request)
         {
-            _paginationHelper = new PagingHelper(request);
-
-            var data = await accountManager.FindAll(start, limit);
+            var data = await FindAll(page, pageSize);
             var total = await accountManager.GetTotalUserCount();
 
-            return new PageEnvelope<User>(new PaginationHeader(total, start, limit, data.Count())
-            {
-                NextPage = _paginationHelper.GenerateNextPageUrl(AppConstants.DefaultApiRoute, start, limit, total),
-                PrevPage = _paginationHelper.GeneratePreviousPageUrl(AppConstants.DefaultApiRoute, start, limit, total)
-            }, data);
+            return new PageEnvelope<User>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
         }
 
         internal async Task<User> FindUser(string userId)

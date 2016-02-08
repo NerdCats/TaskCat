@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using TaskCat.Data.Entity;
     using Data.Model.Api;
-    using Data.Model.Pagination;
+    using TaskCat.Model.Pagination;
     using System.Web.Http.Controllers;
     using System.Net.Http;
 
