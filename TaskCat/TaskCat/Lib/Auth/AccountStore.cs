@@ -10,6 +10,7 @@
     using System.Threading.Tasks;
     using Data.Model.Identity;
     using Data.Entity;
+    using Data.Model.Identity.Response;
 
     public class AccountStore : UserStore<User>
     {
@@ -22,6 +23,28 @@
         public async Task<List<User>> FindAll(int start, int limit)
         {
             return await collection.Find(x => true).Skip(start).Limit(limit).ToListAsync();
+        }
+
+        public async Task<List<UserModel>> FindAllAsModel(int start, int limit)
+        {
+            // INFO: For all the smart people who'd tell me to go for an IEnumerable here, 
+            // I would, definitely would when Id go for OData but in this case I have a pageSize limit
+            // And Id like to keep my performance over lines of code.
+            // Lining Select over Linq over an IEnumerable wasnt breathing well in benchmark
+
+            List<UserModel> returnList=new List<UserModel>();
+            using (var cursor = await collection.Find(x => true).Skip(start).Limit(limit).ToCursorAsync())
+            {             
+                await cursor.ForEachAsync(x =>
+                {
+                    if (x.Type == IdentityTypes.FETCHER)
+                        returnList.Add(new UserModel(x, true));
+                    else
+                        returnList.Add(new AssetModel(x as Asset, true));
+                }); 
+            }
+
+            return returnList;          
         }
 
         public async Task<List<T>> FindAll<T>() where T : User

@@ -9,6 +9,7 @@
     using TaskCat.Data.Entity.Identity;
     using TaskCat.Data.Entity;
     using Data.Model.Identity;
+    using Data.Model.Identity.Response;
 
     public class AccountManger : UserManager<User>
     {
@@ -36,6 +37,11 @@
         public async Task<List<User>> FindAll(int start, int limit)
         {
             return await accountStore.FindAll(start, limit);
+        }
+
+        public async Task<List<UserModel>> FindAllAsModel(int start, int limit)
+        {
+            return await accountStore.FindAllAsModel(start, limit);
         }
 
         internal async Task<long> GetTotalUserCount()

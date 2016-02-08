@@ -15,6 +15,7 @@
     using Lib.Utility.Converter;
     using Data.Model.Identity.Registration;
     using Lib.Constants;
+    using Data.Model.Identity.Response;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -72,11 +73,9 @@
                 }
 
                 if (ModelState.IsValid)
-                {
+                    return BadRequest();               
                     // No ModelState errors are available to send, 
                     // so just return an empty BadRequest.
-                    return BadRequest();
-                }
 
                 return BadRequest(ModelState);
             }
@@ -84,25 +83,21 @@
             return null;
         }
 
+        [AllowAnonymous]
         [Authorize(Roles="Administrator, User")]
         [Route("{userId}")]
         public async Task<IHttpActionResult> Get(string userId)
         {
-            if (this.User.IsInRole("Administrator"))
-            {
-                return Json(await authRepository.FindUser(userId));
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            var userModel = await authRepository.FindUserAsModel(userId);
+            if (userModel == null) return NotFound();
+
+            userModel.IsUserAuthenticated = this.User.IsInRole("Administrator");        
+            return Json(userModel);
         }
 
-
         [HttpGet]
-        [AllowAnonymous]
-        [Authorize(Roles = "Administrator, User")]
-        public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope=false)
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
@@ -114,16 +109,13 @@
             try
             {
                 if (envelope)
-                    return Json(await authRepository.FindAllEnveloped(page, pageSize, this.Request));
-                return Json(await authRepository.FindAll(page, pageSize));
+                    return Json(await authRepository.FindAllEnvelopedAsModel(page, pageSize, this.Request));
+                else
+                    return Json(await authRepository.FindAllAsModel(page, pageSize));
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-
+            catch (Exception ex) { return InternalServerError(ex); }
+                
+            
         }
-
-
     }
 }

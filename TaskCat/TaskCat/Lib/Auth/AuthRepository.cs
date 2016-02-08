@@ -20,6 +20,7 @@
     using System.Net.Http;
     using TaskCat.Model.Pagination;
     using Constants;
+    using Data.Model.Identity.Response;
 
     public class AuthRepository
     {
@@ -95,6 +96,13 @@
             return await accountManager.FindAll(page * pageSize, pageSize);
         }
 
+        internal async Task<List<UserModel>> FindAllAsModel(int page, int pageSize)
+        {
+            if (page < 0)
+                throw new ArgumentException("Invalid page index provided");
+            return await accountManager.FindAllAsModel(page * pageSize, pageSize);
+        }
+
         internal async Task<PageEnvelope<User>> FindAllEnveloped(int page, int pageSize, HttpRequestMessage request)
         {
             var data = await FindAll(page, pageSize);
@@ -103,9 +111,27 @@
             return new PageEnvelope<User>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
         }
 
+        internal async Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request)
+        {
+            var data = await FindAllAsModel(page, pageSize);
+            var total = await accountManager.GetTotalUserCount();
+
+            return new PageEnvelope<UserModel>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
+        }
+
         internal async Task<User> FindUser(string userId)
         {
             return await accountManager.FindByIdAsync(userId);
+        }
+
+        internal async Task<UserModel> FindUserAsModel(string userId)
+        {
+            var user = await FindUser(userId);
+
+            //FIXME: Someday I can use a factory here
+            if (user.Type == IdentityTypes.FETCHER)
+                return new UserModel(user);
+            else return new AssetModel(user as Asset);
         }
 
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
