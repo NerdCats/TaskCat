@@ -62,6 +62,15 @@
             get { return _jobs; }
         }
 
+        private IMongoCollection<SupportedOrder> _supportedOrders;
+        public IMongoCollection<SupportedOrder> SupportedOrders
+        {
+            get
+            {
+                return _supportedOrders;
+            }
+        }
+
         public DbContext()
         {
             var pack = new ConventionPack()
@@ -91,9 +100,8 @@
             _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
             _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
-
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
-
+            _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
         }
 
         private void InitiateDatabase()

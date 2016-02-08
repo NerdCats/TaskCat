@@ -203,6 +203,7 @@
     <Compile Include="Controller\Auth\RefreshTokensController.cs" />
     <Compile Include="Controller\JobController.cs" />
     <Compile Include="Controller\OrderController.cs" />
+    <Compile Include="Controller\SupportedOrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\INearestAssetProvider.cs" />
     <Compile Include="Lib\Auth\AccountStore.cs" />
@@ -210,6 +211,8 @@
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
+    <Compile Include="Lib\SupportedOrder\SupportedOrderRepository.cs" />
+    <Compile Include="Lib\SupportedOrder\SupportedOrderStore.cs" />
     <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />

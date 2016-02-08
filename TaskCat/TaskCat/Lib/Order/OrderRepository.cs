@@ -10,6 +10,8 @@
     using TaskCat.Data.Entity;
     using TaskCat.Data.Model;
     using Data.Model.Order;
+    using System.Web.Http;
+
     public class OrderRepository : IOrderRepository
     {
         JobManager _manager;
@@ -17,6 +19,12 @@
         {
             _manager = manager;
         }
+
+        public Task<IHttpActionResult> Get(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Job> PostOrder(OrderModel model)
         {
             JobShop jobShop = new JobShop();
