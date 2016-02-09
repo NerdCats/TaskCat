@@ -27,6 +27,7 @@
             {
                 RequiredLength = 6
             };
+            
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)

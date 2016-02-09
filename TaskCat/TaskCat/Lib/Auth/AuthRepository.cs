@@ -196,6 +196,15 @@
             return await accountManager.ChangePasswordAsync(user.Id, model.CurrentPassword, model.NewPassword);
         }
 
+        internal async Task<IdentityResult> UpdateContacts(ContactUpdateModel model, string userName)
+        {
+            var user = await accountManager.FindByNameAsync(userName);
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+
+            return await accountManager.UpdateAsync(user);
+        }
+
         internal async Task<User> FindUser(string userId)
         {
             return await accountManager.FindByIdAsync(userId);
@@ -229,6 +238,8 @@
             var refreshToken = await dbContext.RefreshTokens.Find(x => x.Id == refreshTokenId).FirstOrDefaultAsync();
             return refreshToken;
         }
+
+        
 
         // FIXME: This is literally a crime, like literally, no freaking paging or anything
         // But Im too tired to do this, Why the hell I ever saw OData

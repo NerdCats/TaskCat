@@ -198,10 +198,10 @@
             }
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [HttpPut]
         [Route("password")]
-        public async Task<IHttpActionResult> Update(PasswordUpdateModel model)
+        public async Task<IHttpActionResult> UpdatePassword(PasswordUpdateModel model)
         {
             try
             {
@@ -213,10 +213,10 @@
             }
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [HttpPut]
         [Route("username")]
-        public async Task<IHttpActionResult> Update([FromUri]string newUsername)
+        public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername)
         {
             try
             {
@@ -231,7 +231,7 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPut]
         [Route("username/{userId}")]
-        public async Task<IHttpActionResult> Update([FromUri]string newUsername, string userId)
+        public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername, string userId)
         {
             try
             {
@@ -247,7 +247,7 @@
         // Should I use HTTP Verbs here to determine result?
         [HttpGet]
         [Route("username")]
-        public async Task<IHttpActionResult> Suggest(string suggestedUserName)
+        public async Task<IHttpActionResult> SuggestUserName(string suggestedUserName)
         {
             try
             {
@@ -258,5 +258,21 @@
                 return InternalServerError(ex);
             }
         }
+
+        [HttpPut]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Route("contacts")]
+        public async Task<IHttpActionResult> UpdateContacts(ContactUpdateModel model)
+        {
+            try
+            {
+                return Json(await authRepository.UpdateContacts(model, this.User.Identity.Name));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
     }
 }
