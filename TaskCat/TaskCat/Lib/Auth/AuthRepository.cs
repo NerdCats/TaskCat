@@ -119,6 +119,17 @@
             return new PageEnvelope<UserModel>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
         }
 
+        internal async Task<IdentityResult> Update(UserProfile model, string userName)
+        {
+            var user = await accountManager.FindByNameAsync(userName);
+            // INFO: Not changing pic url this way. :)
+            // Would have a seperate update method, this shouldnt affect the PicUri
+            model.PicUri = user.Profile.PicUri;
+            user.Profile = model;
+
+            return await accountManager.UpdateAsync(user);
+        }
+
         internal async Task<User> FindUser(string userId)
         {
             return await accountManager.FindByIdAsync(userId);

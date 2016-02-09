@@ -16,6 +16,7 @@
     using Data.Model.Identity.Registration;
     using Lib.Constants;
     using Data.Model.Identity.Response;
+    using Data.Model.Identity.Profile;
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -84,7 +85,7 @@
         }
 
         [AllowAnonymous]
-        [Authorize(Roles="Administrator, User")]
+        [Authorize(Roles= "Administrator, BackOfficeAdmin, User")]
         [Route("{userId}")]
         public async Task<IHttpActionResult> Get(string userId)
         {
@@ -116,6 +117,21 @@
             catch (Exception ex) { return InternalServerError(ex); }
                 
             
+        }
+
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [HttpPut]
+        [Route("profile")]
+        public async Task<IHttpActionResult> Update(UserProfile model)
+        {
+            try
+            {
+                return Json(await authRepository.Update(model, this.User.Identity.Name));
+            }
+            catch(Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }

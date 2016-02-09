@@ -26,7 +26,7 @@
             _paginationHelper = new PagingHelper(request);
             var totalPages = (int)Math.Ceiling((double)total / pageSize);
             var nextPage = page < totalPages - 1 ? _paginationHelper.GeneratePageUrl(route, page + 1, pageSize, otherParams) : string.Empty;
-            var prevPage = page > 0 ? _paginationHelper.GeneratePageUrl(route, page, pageSize, otherParams) : string.Empty;
+            var prevPage = page > 0 ? _paginationHelper.GeneratePageUrl(route, page - 1, pageSize, otherParams) : string.Empty;
 
             this.pagination = new PaginationHeader(total, page, pageSize, data.Count(), nextPage, prevPage);
             this.data = data;
