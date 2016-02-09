@@ -5,8 +5,10 @@
     using Swashbuckle.Application;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net.Http.Headers;
+    using System.Reflection;
     using System.Web.Http;
     using TaskCat.Lib.Utility.Converter;
 
@@ -35,7 +37,16 @@
             config.Formatters.JsonFormatter.Indent = true;
 
             
-            config.EnableSwagger("docs/{apiVersion}/", c => c.SingleApiVersion("v1", "TaskCat Core Api")).EnableSwaggerUi();
+            config.EnableSwagger("docs/{apiVersion}/", c => {
+
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory + @"bin\";
+                var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
+                var commentsFile = Path.Combine(baseDirectory, commentsFileName);
+
+                c.IncludeXmlComments(commentsFile);
+
+                c.SingleApiVersion("v1", "TaskCat Core Api");
+            } ).EnableSwaggerUi();
 
         }
     }
