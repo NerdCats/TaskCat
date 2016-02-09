@@ -17,6 +17,16 @@
         public AccountManger(IUserStore<User> store) : base(store)
         {
             accountStore = store as AccountStore;
+            UserValidator = new UserValidator<User>(this)
+            {
+                AllowOnlyAlphanumericUserNames = true,
+                RequireUniqueEmail = true
+            };
+
+            PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 6
+            };
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)

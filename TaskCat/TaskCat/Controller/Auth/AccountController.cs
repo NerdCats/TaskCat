@@ -18,11 +18,20 @@
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
 
+    /// <summary>
+    /// Account (User And Asset related Controller)
+    /// </summary>
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private readonly AuthRepository authRepository = null;
 
+        /// <summary>
+        /// Account Controller Constructor
+        /// </summary>
+        /// <param name="authRepository">
+        /// AuthRepository is an Authentication Repository Instance
+        /// </param>
         public AccountController(AuthRepository authRepository)
         {
             this.authRepository = authRepository;
