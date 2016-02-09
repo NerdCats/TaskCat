@@ -84,20 +84,56 @@
             return null;
         }
 
+        /// <summary>
+        /// View Public Profile on any user or asset
+        /// </summary>
+        /// <param name="userId">
+        /// User Id for user or asset
+        /// </param>
+        /// <returns>
+        /// Public profile for given user id, some properties are masked if you log in as anonymous as User or Asset
+        /// </returns>
         [AllowAnonymous]
-        [Authorize(Roles= "Administrator, BackOfficeAdmin, User")]
-        [Route("{userId}")]
-        public async Task<IHttpActionResult> Get(string userId)
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Route("Profile/{userId?}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Profile(string userId = null)
         {
-            var userModel = await authRepository.FindUserAsModel(userId);
-            if (userModel == null) return NotFound();
+            try
+            {
+                if (!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userId))
+                    return BadRequest("To get a public profile, please provide a valid user Id");
 
-            userModel.IsUserAuthenticated = this.User.IsInRole("Administrator");        
-            return Json(userModel);
+                if (string.IsNullOrWhiteSpace(userId))
+                    userId = this.User.Identity.GetUserId();
+
+                var userModel = await authRepository.FindUserAsModel(userId);
+                if (userModel == null) return NotFound();
+
+                if (this.User.Identity.IsAuthenticated)
+                {
+                    if (this.User.IsInRole("Administrator") || this.User.IsInRole("BackOfficeAdmin"))
+                        userModel.IsUserAuthenticated = true;
+                    else if ((this.User.IsInRole("User") || this.User.IsInRole("Asset")) && (this.User.Identity.GetUserId() == userId))
+                        userModel.IsUserAuthenticated = true;
+                }
+
+                return Json(userModel);
+            }
+            catch(System.FormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Route("")]
         public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
             if (pageSize == 0)
@@ -115,11 +151,11 @@
                     return Json(await authRepository.FindAllAsModel(page, pageSize));
             }
             catch (Exception ex) { return InternalServerError(ex); }
-                
-            
+
+
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [HttpPut]
         [Route("profile")]
         public async Task<IHttpActionResult> Update(UserProfile model)
@@ -128,7 +164,22 @@
             {
                 return Json(await authRepository.Update(model, this.User.Identity.Name));
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPut]
+        [Route("profile/{id}")]
+        public async Task<IHttpActionResult> Update( [FromBody]UserProfile model, [FromUri]string id)
+        {
+            try
+            {
+                return Json(await authRepository.UpdateById(model, id));
+            }
+            catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
@@ -164,9 +215,23 @@
             }
         }
 
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [HttpPut]
+        [Route("username/{userId}")]
+        public async Task<IHttpActionResult> Update([FromUri]string newUsername, string userId)
+        {
+            try
+            {
+                return Json(await authRepository.UpdateUsernameById(userId, newUsername));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
         // FIXME: Im not sure how this would pan out though, may be would pan out fine or not
         // Should I use HTTP Verbs here to determine result?
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
         [HttpGet]
         [Route("username")]
         public async Task<IHttpActionResult> Suggest(string suggestedUserName)

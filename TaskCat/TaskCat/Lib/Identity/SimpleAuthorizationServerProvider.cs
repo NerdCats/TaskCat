@@ -105,13 +105,18 @@
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
-            identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim("sub", context.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+            identity.AddClaim(new Claim("sub", user.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
 
             // FIXME: I really dont know here, just adding a dummy role here, 
             // although this is a global login though, Im not sure whether Id use the other roles here
-
-            identity.AddClaim(new Claim("role", "user"));
+            foreach (var role in user.Roles)
+            {
+                identity.AddClaim(new Claim("role", role));
+            }
+           
 
             var props = new AuthenticationProperties(
                 new Dictionary<string, string>
@@ -125,7 +130,7 @@
                 });
 
             var ticket = new AuthenticationTicket(identity, props);
-
+            
             context.Validated(ticket);
         }
 

@@ -130,14 +130,25 @@
             return await accountManager.UpdateAsync(user);
         }
 
+        internal async Task<IdentityResult> UpdateById(UserProfile model, string userId)
+        {
+            var user = await accountManager.FindByIdAsync(userId);
+            // INFO: Not changing pic url this way. :)
+            // Would have a seperate update method, this shouldnt affect the PicUri
+            model.PicUri = user.Profile.PicUri;
+            user.Profile = model;
+
+            return await accountManager.UpdateAsync(user);
+        }
+
         internal async Task<bool> IsUsernameAvailable(string suggestedUsername)
         {
             try
             {
                 var user = await accountManager.FindByNameAsync(suggestedUsername);
                 if (user == null)
-                    return false;
-                return true;
+                    return true;
+                return false;
             }
             catch (Exception)
             {
@@ -145,7 +156,7 @@
             }
         }
 
-        internal async Task<IdentityResult> UpdateUsername(string oldUserName, string newUserName)
+        internal async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName )
         {
             var user = await accountManager.FindByNameAsync(oldUserName);
             if (await IsUsernameAvailable(newUserName))
@@ -158,6 +169,22 @@
                 return new IdentityResult(new string[] { "UserName " + newUserName + " is already taken" });
             }
         }
+
+        internal async Task<IdentityResult> UpdateUsernameById(string userId, string newUserName)
+        {
+            var user = await accountManager.FindByIdAsync(userId);
+            if (await IsUsernameAvailable(newUserName))
+            {
+                user.UserName = newUserName;
+                return await accountManager.UpdateAsync(user);
+            }
+            else
+            {
+                return new IdentityResult(new string[] { "UserName " + newUserName + " is already taken" });
+            }
+        }
+
+
 
         // FIXME: I can fix this I think, the route to userName search wont be necessary if I can
         // provide user id right away from authcontext;
@@ -186,6 +213,8 @@
         {
             return await RemoveRefreshToken(refreshToken.Id);
         }
+
+        
 
         internal async Task<bool> RemoveRefreshToken(string hashedTokenId)
         {
