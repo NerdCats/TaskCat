@@ -2,6 +2,7 @@
 {
     using Autofac.Integration.WebApi;
     using Newtonsoft.Json;
+    using Swashbuckle.Application;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -32,6 +33,10 @@
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserRegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
             config.Formatters.JsonFormatter.Indent = true;
+
+            
+            config.EnableSwagger("docs/{apiVersion}/", c => c.SingleApiVersion("v1", "TaskCat Core Api")).EnableSwaggerUi();
+
         }
     }
 }
