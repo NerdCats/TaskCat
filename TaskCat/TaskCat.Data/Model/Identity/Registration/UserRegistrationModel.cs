@@ -4,6 +4,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using Profile;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -41,7 +42,10 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
-        public string Gender { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public Gender Gender { get; set; }
         public string Address { get; set; }
         public string PicUri { get; internal set; }
 

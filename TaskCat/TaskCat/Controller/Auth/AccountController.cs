@@ -120,7 +120,11 @@
 
                 return Json(userModel);
             }
-            catch(System.FormatException ex)
+            catch (System.FormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
             }

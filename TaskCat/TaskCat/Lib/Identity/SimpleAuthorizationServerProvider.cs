@@ -114,7 +114,7 @@
             // although this is a global login though, Im not sure whether Id use the other roles here
             foreach (var role in user.Roles)
             {
-                identity.AddClaim(new Claim("role", role));
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
             }
            
 

@@ -9,6 +9,10 @@
 
     public class AssetProfile: UserProfile
     {
+        public AssetProfile()
+        {
+
+        }
         public AssetProfile(AssetRegistrationModel assetModel) : base(assetModel as UserRegistrationModel)
         {
             this.NationalId = assetModel.NationalId;

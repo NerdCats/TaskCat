@@ -223,6 +223,7 @@
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
+    <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />

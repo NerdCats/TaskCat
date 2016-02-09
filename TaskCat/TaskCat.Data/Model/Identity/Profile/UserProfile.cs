@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Registration;
-
+    using Newtonsoft.Json.Converters;
     [BsonDiscriminator(Required = true)]
     [BsonKnownTypes(typeof(AssetProfile))]
     public class UserProfile
@@ -22,7 +22,9 @@
         [JsonIgnore]
         public string FullName { get { return string.Concat(FirstName, " ", LastName); } }
         public int Age { get; set; }
-        public string Gender { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public Gender Gender { get; set; }
         public string Address { get; set; }
         public string PicUri { get; set; } 
 
