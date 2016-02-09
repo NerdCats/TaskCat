@@ -130,6 +130,43 @@
             return await accountManager.UpdateAsync(user);
         }
 
+        internal async Task<bool> IsUsernameAvailable(string suggestedUsername)
+        {
+            try
+            {
+                var user = await accountManager.FindByNameAsync(suggestedUsername);
+                if (user == null)
+                    return false;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        internal async Task<IdentityResult> UpdateUsername(string oldUserName, string newUserName)
+        {
+            var user = await accountManager.FindByNameAsync(oldUserName);
+            if (await IsUsernameAvailable(newUserName))
+            {
+                user.UserName = newUserName;
+                return await accountManager.UpdateAsync(user);
+            }
+            else
+            {
+                return new IdentityResult(new string[] { "UserName " + newUserName + " is already taken" });
+            }
+        }
+
+        // FIXME: I can fix this I think, the route to userName search wont be necessary if I can
+        // provide user id right away from authcontext;
+        internal async Task<IdentityResult> UpdatePassword(PasswordUpdateModel model, string userName)
+        {
+            var user = await accountManager.FindByNameAsync(userName);
+            return await accountManager.ChangePasswordAsync(user.Id, model.CurrentPassword, model.NewPassword);
+        }
+
         internal async Task<User> FindUser(string userId)
         {
             return await accountManager.FindByIdAsync(userId);

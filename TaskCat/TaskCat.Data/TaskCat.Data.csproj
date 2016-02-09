@@ -68,6 +68,7 @@
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Entity\SupportedOrder.cs" />
+    <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Registration\AssetRegistrationModel.cs" />
     <Compile Include="Model\Identity\Profile\AssetProfile.cs" />
     <Compile Include="Model\Identity\IdentityTypes.cs" />

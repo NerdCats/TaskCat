@@ -133,5 +133,52 @@
                 return InternalServerError(ex);
             }
         }
+
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [HttpPut]
+        [Route("password")]
+        public async Task<IHttpActionResult> Update(PasswordUpdateModel model)
+        {
+            try
+            {
+                return Json(await authRepository.UpdatePassword(model, this.User.Identity.Name));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [HttpPut]
+        [Route("username")]
+        public async Task<IHttpActionResult> Update([FromUri]string newUsername)
+        {
+            try
+            {
+                return Json(await authRepository.UpdateUsername(newUsername, this.User.Identity.Name));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        // FIXME: Im not sure how this would pan out though, may be would pan out fine or not
+        // Should I use HTTP Verbs here to determine result?
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [HttpGet]
+        [Route("username")]
+        public async Task<IHttpActionResult> Suggest(string suggestedUserName)
+        {
+            try
+            {
+                return Json(await authRepository.IsUsernameAvailable(suggestedUserName));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
     }
 }
