@@ -215,7 +215,7 @@
             }
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPut]
         [Route("username/{userId}")]
         public async Task<IHttpActionResult> Update([FromUri]string newUsername, string userId)
