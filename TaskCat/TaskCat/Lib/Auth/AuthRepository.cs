@@ -247,5 +247,10 @@
         {
             return await dbContext.RefreshTokens.Find(x => true).ToListAsync();
         }
+
+        internal Task<object> UploadAvatar(HttpContent content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

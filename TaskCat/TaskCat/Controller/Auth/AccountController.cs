@@ -274,5 +274,24 @@
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "User, Asset")]
+        [Route("avatar")]
+        public async Task<IHttpActionResult> UploadAvatar()
+        {
+            try
+            {
+                if (!Request.Content.IsMimeMultipartContent("form-data"))
+                {
+                    return StatusCode(HttpStatusCode.UnsupportedMediaType);
+                }
+
+                return Json(await authRepository.UploadAvatar(Request.Content));
+            }
+            catch(Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
     }
 }
