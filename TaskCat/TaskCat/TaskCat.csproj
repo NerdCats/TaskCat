@@ -244,6 +244,9 @@
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
+    <Compile Include="Lib\Storage\BlobHelper.cs" />
+    <Compile Include="Lib\Storage\BlobService.cs" />
+    <Compile Include="Lib\Storage\BlobStorageUploadProvider.cs" />
     <Compile Include="Lib\Storage\IBlobService.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
     <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />

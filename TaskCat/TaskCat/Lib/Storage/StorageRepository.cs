@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Web;
 
-    public class StorageRepository
+    internal class StorageRepository
     {
         private readonly IBlobService _service;
     }
