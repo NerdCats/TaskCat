@@ -43,7 +43,7 @@
 
             switch (model.Type)
             {
-                case IdentityTypes.FETCHER:
+                case IdentityTypes.USER:
                     profile = new UserProfile(model);
                     user = new User(model, profile);
                     break;
@@ -215,7 +215,7 @@
             var user = await FindUser(userId);
 
             //FIXME: Someday I can use a factory here
-            if (user.Type == IdentityTypes.FETCHER)
+            if (user.Type == IdentityTypes.USER)
                 return new UserModel(user);
             else return new AssetModel(user as Asset);
         }

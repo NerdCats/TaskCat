@@ -37,7 +37,7 @@
             {             
                 await cursor.ForEachAsync(x =>
                 {
-                    if (x.Type == IdentityTypes.FETCHER)
+                    if (x.Type == IdentityTypes.USER)
                         returnList.Add(new UserModel(x, true));
                     else
                         returnList.Add(new AssetModel(x as Asset, true));
@@ -51,7 +51,7 @@
         {
             Type type = typeof(T);
             if (type == typeof(User))
-                return await collection.Find(x => x.Type == IdentityTypes.FETCHER).ToListAsync() as List<T>;
+                return await collection.Find(x => x.Type == IdentityTypes.USER).ToListAsync() as List<T>;
             else if (type == typeof(Asset))
                 return await collection.Find(x => x.Type != IdentityTypes.FETCHER).ToListAsync() as List<T>;
 

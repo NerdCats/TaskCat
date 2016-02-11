@@ -40,7 +40,7 @@
 
             switch (actualType)
             {
-                case IdentityTypes.FETCHER:
+                case IdentityTypes.USER:
                     model = new UserProfile();
                     break;
                 default:

@@ -47,7 +47,7 @@
 
             Type type = typeof(T);
 
-            if ((type == typeof(User) && user.Type == IdentityTypes.FETCHER) 
+            if ((type == typeof(User) && user.Type == IdentityTypes.USER) 
                 || (type == typeof(Asset) && user.Type != IdentityTypes.FETCHER))
                 return user as T;
             return null;
