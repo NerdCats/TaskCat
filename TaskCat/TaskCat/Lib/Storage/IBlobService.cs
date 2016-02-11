@@ -13,7 +13,17 @@
     /// </summary>
     public interface IBlobService
     {
+        /// <summary>
+        /// Upload Blob data from HttpContent
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         Task<List<FileUploadModel>> UploadBlobs(HttpContent content);
+        /// <summary>
+        /// Download a file from Blob with a blob name
+        /// </summary>
+        /// <param name="blobName"></param>
+        /// <returns></returns>
         Task<FileDownloadModel> DownloadBlob(string blobName);
     }
 }
