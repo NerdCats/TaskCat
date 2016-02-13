@@ -11,6 +11,7 @@
     using Data.Model.Identity;
     using Data.Entity;
     using Data.Model.Identity.Response;
+    using Microsoft.AspNet.Identity;
 
     public class AccountStore : UserStore<User>
     {
@@ -64,5 +65,14 @@
         {
             return await collection.CountAsync(Builders<User>.Filter.Empty);
         }
+
+        internal async Task<UpdateResult> SetAvatarAsync(string userId, string picUrl)
+        {
+            UpdateDefinition<User> updateDefinition = Builders<User>.Update.Set(x => x.Profile.PicUri, picUrl);
+            var result = await collection.UpdateOneAsync(Builders<User>.Filter.Where(x=>x.Id == userId), updateDefinition);
+            return result;
+        }
+
+
     }
 }

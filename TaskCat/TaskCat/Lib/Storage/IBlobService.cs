@@ -34,5 +34,6 @@
         /// <param name="blobName"></param>
         /// <returns></returns>
         Task<FileDownloadModel> DownloadBlob(string blobName);
+        Task<bool> DeleteBlob(string fileName);
     }
 }

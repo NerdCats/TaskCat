@@ -18,6 +18,14 @@
 
         }
 
+        public async Task<bool> DeleteBlob(string blobName)
+        {
+            var container = BlobHelper.GetBlobContainer();
+            var blob = container.GetBlockBlobReference(blobName);
+
+            return await blob.DeleteIfExistsAsync();
+        }
+
         public async Task<FileDownloadModel> DownloadBlob(string blobName)
         {
             var container = BlobHelper.GetBlobContainer();

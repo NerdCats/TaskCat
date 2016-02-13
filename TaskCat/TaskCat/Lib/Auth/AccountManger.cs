@@ -10,6 +10,7 @@
     using TaskCat.Data.Entity;
     using Data.Model.Identity;
     using Data.Model.Identity.Response;
+    using MongoDB.Driver;
 
     public class AccountManger : UserManager<User>
     {
@@ -66,6 +67,11 @@
         public async Task<List<UserModel>> FindAllAsModel(int start, int limit)
         {
             return await accountStore.FindAllAsModel(start, limit);
+        }
+
+        public async Task<UpdateResult> ChangeAvatar(string userId, string avatarUrl)
+        {
+            return await accountStore.SetAvatarAsync(userId, avatarUrl);
         }
 
         internal async Task<long> GetTotalUserCount()

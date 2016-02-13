@@ -23,6 +23,7 @@
     using Data.Model.Identity.Response;
     using Storage;
     using Model.Storage;
+    using Exceptions;
 
     public class AuthRepository
     {
@@ -251,10 +252,24 @@
             return await dbContext.RefreshTokens.Find(x => true).ToListAsync();
         }
 
-        internal async Task<List<FileUploadModel>> UploadAvatar(HttpContent content)
+        internal async Task<FileUploadModel> UploadAvatar(HttpContent content, string userId)
         {
-            return await blobService.UploadBlobs(content);
-            
+            var fileUploadModel =  await blobService.UploadBlob(content, "avatar");
+            var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
+            if(result.ModifiedCount>0)
+                return fileUploadModel;
+            else
+            {
+                // INFO: Upload was alright but our update failed, we should delete the file we
+                // created on the blob storage or it will keep blocking stuff for us.
+
+                if (!await blobService.DeleteBlob(fileUploadModel.FileName))
+                {
+                    // TODO: We should log that we failed to delete this
+                }
+
+                throw new UpdateFailedException("User.Profile.PicUrl");
+            }
         }
     }
 }

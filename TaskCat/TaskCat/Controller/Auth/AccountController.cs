@@ -275,6 +275,12 @@
             }
         }
 
+        /// <summary>
+        /// Upload an avatar/profile picture for an account
+        /// </summary>
+        /// <returns>
+        /// return a FileUploadModel 
+        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [Authorize(Roles = "User, Asset")]
@@ -288,9 +294,9 @@
                     return StatusCode(HttpStatusCode.UnsupportedMediaType);
                 }
                 
-                var result = await authRepository.UploadAvatar(Request.Content);
+                var result = await authRepository.UploadAvatar(Request.Content, this.User.Identity.GetUserId());
 
-                if (result != null && result.Count > 0)
+                if (result != null)
                 {
                     return Ok(result);
                 }
