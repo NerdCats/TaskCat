@@ -126,7 +126,7 @@
         internal async Task<IdentityResult> Update(UserProfile model, string userName)
         {
             var user = await accountManager.FindByNameAsync(userName);
-            if (user.Type != IdentityTypes.FETCHER && model.GetType() != typeof(AssetProfile))
+            if (user.Type != IdentityTypes.USER && model.GetType() != typeof(AssetProfile))
                 throw new InvalidOperationException("Updating Asset with UserProfile payload");
             // INFO: Not changing pic url this way. :)
             // Would have a seperate update method, this shouldnt affect the PicUri

@@ -10,7 +10,6 @@
     public enum IdentityTypes
     {   
         USER,
-        FETCHER,
         CNG_DRIVER,
         BIKE_MESSENGER
     }

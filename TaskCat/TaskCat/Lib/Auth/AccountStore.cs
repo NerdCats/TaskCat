@@ -36,13 +36,13 @@
             List<UserModel> returnList=new List<UserModel>();
             using (var cursor = await collection.Find(x => true).Skip(start).Limit(limit).ToCursorAsync())
             {             
-                await cursor.ForEachAsync(x =>
+                await cursor.ForEachAsync((Action<User>)(x =>
                 {
                     if (x.Type == IdentityTypes.USER)
                         returnList.Add(new UserModel(x, true));
                     else
                         returnList.Add(new AssetModel(x as Asset, true));
-                }); 
+                })); 
             }
 
             return returnList;          
@@ -54,7 +54,7 @@
             if (type == typeof(User))
                 return await collection.Find(x => x.Type == IdentityTypes.USER).ToListAsync() as List<T>;
             else if (type == typeof(Asset))
-                return await collection.Find(x => x.Type != IdentityTypes.FETCHER).ToListAsync() as List<T>;
+                return await collection.Find(x => x.Type != IdentityTypes.USER).ToListAsync() as List<T>;
 
             throw new InvalidOperationException("Identity Type not supported yet");
         }

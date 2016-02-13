@@ -49,7 +49,7 @@
             Type type = typeof(T);
 
             if ((type == typeof(User) && user.Type == IdentityTypes.USER) 
-                || (type == typeof(Asset) && user.Type != IdentityTypes.FETCHER))
+                || (type == typeof(Asset) && user.Type != IdentityTypes.USER))
                 return user as T;
             return null;
         }
