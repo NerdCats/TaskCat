@@ -26,8 +26,6 @@
                 var blobContainer = BlobHelper.GetBlobContainer();
                 var blob = blobContainer.GetBlockBlobReference(fileName);
 
-
-
                 blob.Properties.ContentType = fileData.Headers.ContentType.MediaType;
 
                 using (var fs = File.OpenRead(fileData.LocalFileName))

@@ -14,10 +14,19 @@
     public interface IBlobService
     {
         /// <summary>
-        /// Upload Blob data from HttpContent
+        /// Upload single blob data from HttpContent
         /// </summary>
         /// <param name="content"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// FileUploadModel
+        /// </returns>
+        Task<FileUploadModel> UploadBlob(HttpContent content, string filterPropertyName);
+        /// <summary>
+        /// Upload Blobs data from HttpContent
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns>
+        /// </returns>
         Task<List<FileUploadModel>> UploadBlobs(HttpContent content);
         /// <summary>
         /// Download a file from Blob with a blob name
