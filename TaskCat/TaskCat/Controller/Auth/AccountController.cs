@@ -304,6 +304,10 @@
                 return BadRequest();
 
             }
+            catch(NotSupportedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch(Exception ex)
             {
                 return InternalServerError(ex);

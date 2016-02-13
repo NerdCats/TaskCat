@@ -254,7 +254,7 @@
 
         internal async Task<FileUploadModel> UploadAvatar(HttpContent content, string userId)
         {
-            var fileUploadModel =  await blobService.UploadBlob(content, "avatar");
+            var fileUploadModel =  await blobService.UploadBlob(content, "avatar", AppConstants.SupportedImageFormats);
             var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
             if(result.ModifiedCount>0)
                 return fileUploadModel;

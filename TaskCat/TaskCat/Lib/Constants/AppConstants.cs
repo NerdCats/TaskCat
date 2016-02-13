@@ -10,5 +10,7 @@ namespace TaskCat.Lib.Constants
         public const string DefaultApiRoute = "DefaultApi";
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 50;
+
+        public static readonly string[] SupportedImageFormats = { ".jpg", ".png" };
     }
 }

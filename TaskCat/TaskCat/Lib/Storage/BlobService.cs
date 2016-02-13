@@ -9,6 +9,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web;
+    using Utility;
     using TaskCat.Model.Storage;
 
     internal class BlobService : IBlobService
@@ -48,7 +49,7 @@
             return downloadFileModel;
         }
 
-        public async Task<FileUploadModel> UploadBlob(HttpContent httpContent, string filterPropertyName)
+        public async Task<FileUploadModel> UploadBlob(HttpContent httpContent, string filterPropertyName, IEnumerable<string> supportedFileTypes = null)
         { 
             var MultiPartProvider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             await httpContent.ReadAsMultipartAsync(MultiPartProvider).ContinueWith(task =>
@@ -59,13 +60,13 @@
                 }
             });
 
-            var fileData = MultiPartProvider.FileData.FirstOrDefault(x => x.Headers.ContentDisposition.Name == filterPropertyName);
+            var fileData = MultiPartProvider.FileData.FirstOrDefault(x => x.Headers.ContentDisposition.Name == string.Concat("\"", filterPropertyName, "\""));
 
             var blobContainer = BlobHelper.GetBlobContainer();
 
             if (fileData == null) return null;
 
-            return await UploadOneToBlob(blobContainer, fileData);
+            return await UploadOneToBlob(blobContainer, fileData, supportedFileTypes);
         }
 
         public async Task<List<FileUploadModel>> UploadBlobs(HttpContent httpContent)
@@ -92,9 +93,13 @@
             return Uploads;
         }
 
-        private async Task<FileUploadModel> UploadOneToBlob(CloudBlobContainer blobContainer, MultipartFileData fileData)
+        private async Task<FileUploadModel> UploadOneToBlob(CloudBlobContainer blobContainer, MultipartFileData fileData, IEnumerable<string> supportedFileTypes = null)
         {
             var fileName = Path.GetFileName(fileData.Headers.ContentDisposition.FileName.Trim('"'));
+
+            if (supportedFileTypes != null)
+                FileUtility.VerifyFileExtensionSupported(fileName, supportedFileTypes);
+
             var blob = blobContainer.GetBlockBlobReference(fileName);
 
             blob.Properties.ContentType = fileData.Headers.ContentType.MediaType;

@@ -273,6 +273,7 @@
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
+    <Compile Include="Lib\Utility\FileUtility.cs" />
     <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />

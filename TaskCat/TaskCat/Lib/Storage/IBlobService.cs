@@ -17,10 +17,10 @@
         /// Upload single blob data from HttpContent
         /// </summary>
         /// <param name="content"></param>
-        /// <returns>
-        /// FileUploadModel
-        /// </returns>
-        Task<FileUploadModel> UploadBlob(HttpContent content, string filterPropertyName);
+        /// <param name="filterPropertyName"></param>
+        /// <param name="supportedFileTypes"></param>
+        /// <returns></returns>              
+        Task<FileUploadModel> UploadBlob(HttpContent content, string filterPropertyName, IEnumerable<string> supportedFileTypes = null);
         /// <summary>
         /// Upload Blobs data from HttpContent
         /// </summary>
@@ -34,6 +34,11 @@
         /// <param name="blobName"></param>
         /// <returns></returns>
         Task<FileDownloadModel> DownloadBlob(string blobName);
+        /// <summary>
+        /// Deletes a blob/file from storage
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         Task<bool> DeleteBlob(string fileName);
     }
 }
