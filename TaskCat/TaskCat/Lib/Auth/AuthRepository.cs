@@ -21,22 +21,25 @@
     using TaskCat.Model.Pagination;
     using Constants;
     using Data.Model.Identity.Response;
+    using Storage;
+    using Model.Storage;
 
     public class AuthRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly AccountManger accountManager;
+        private readonly IBlobService blobService;
 
-
-        public AuthRepository(IDbContext dbContext, AccountManger accoutnManager)
+        public AuthRepository(IDbContext dbContext, AccountManger accoutnManager, IBlobService blobService)
         {
             this.dbContext = dbContext;
             this.accountManager = accoutnManager;
+            this.blobService = blobService;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
-        public async Task<IdentityResult> RegisterUser(UserRegistrationModel model)
+        internal async Task<IdentityResult> RegisterUser(UserRegistrationModel model)
         {
             UserProfile profile;
             User user;
@@ -243,14 +246,15 @@
 
         // FIXME: This is literally a crime, like literally, no freaking paging or anything
         // But Im too tired to do this, Why the hell I ever saw OData
-        public async Task<List<RefreshToken>> GetAllRefreshTokens()
+        internal async Task<List<RefreshToken>> GetAllRefreshTokens()
         {
             return await dbContext.RefreshTokens.Find(x => true).ToListAsync();
         }
 
-        internal Task<object> UploadAvatar(HttpContent content)
+        internal async Task<List<FileUploadModel>> UploadAvatar(HttpContent content)
         {
-            throw new NotImplementedException();
+            return await blobService.UploadBlobs(content);
+            
         }
     }
 }

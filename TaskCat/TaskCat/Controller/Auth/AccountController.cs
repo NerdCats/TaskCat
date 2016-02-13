@@ -17,6 +17,7 @@
     using Lib.Constants;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
+    using System.Net.Http.Formatting;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -275,6 +276,7 @@
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Authorize(Roles = "User, Asset")]
         [Route("avatar")]
         public async Task<IHttpActionResult> UploadAvatar()
@@ -285,8 +287,16 @@
                 {
                     return StatusCode(HttpStatusCode.UnsupportedMediaType);
                 }
+                
+                var result = await authRepository.UploadAvatar(Request.Content);
 
-                return Json(await authRepository.UploadAvatar(Request.Content));
+                if (result != null && result.Count > 0)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest();
+
             }
             catch(Exception ex)
             {
