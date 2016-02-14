@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Model.JobTasks
+﻿namespace TaskCat.Data.Model.JobTasks
 {
     using Data.Entity;
     using Lib.Exceptions;

@@ -68,6 +68,10 @@
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Entity\SupportedOrder.cs" />
+    <Compile Include="Lib\Constants\JobTaskTypes.cs" />
+    <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
+    <Compile Include="Lib\Interfaces\IFetchable.cs" />
+    <Compile Include="Lib\Interfaces\INearestAssetProvider.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\Gender.cs" />
@@ -93,11 +97,14 @@
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
+    <Compile Include="Model\JobTasks\FetchRideTask.cs" />
+    <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\Converter\JobTaskConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonInitialization.cs" />
     <Compile Include="Utility\GeoJson\LocationUtility.cs" />

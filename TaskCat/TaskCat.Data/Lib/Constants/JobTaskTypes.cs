@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace TaskCat.Lib.Constants
+namespace TaskCat.Data.Lib.Constants
 {
     public class JobTaskTypes
     {

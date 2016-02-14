@@ -9,7 +9,7 @@
     using System.Web;
     using TaskCat.Data.Model;
 
-    public class OrderModelConverter : JsonConverter
+    internal class OrderModelConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

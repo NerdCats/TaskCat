@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Model;
-
-namespace TaskCat.Lib.Asset
+﻿namespace TaskCat.Lib.Asset
 {
-    public class FakeNearestRideProvider : INearestAssetProvider<Data.Entity.Asset>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using TaskCat.Data.Entity;
+    using Data.Lib.Interfaces;
+    using TaskCat.Data.Model;
+
+    internal class FakeNearestRideProvider : INearestAssetProvider
     {
         public Task<List<Data.Entity.Asset>> FindAssets(Location loc)
         {

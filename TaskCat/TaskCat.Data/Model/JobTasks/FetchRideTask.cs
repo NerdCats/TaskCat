@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Model.JobTasks
+﻿namespace TaskCat.Data.Model.JobTasks
 {
     using Lib.Interfaces;
     using MongoDB.Driver.GeoJsonObjectModel;
@@ -8,7 +8,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using TaskCat.Data.Model;
-    using Lib.Asset;
     using Data.Entity;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
@@ -23,7 +22,7 @@
 
         [BsonIgnore]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public INearestAssetProvider<Asset> provider { get; set; }
+        public INearestAssetProvider provider { get; set; }
 
         public FetchRideTask() : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride")
         {

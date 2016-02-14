@@ -1,5 +1,5 @@
 ﻿
-namespace TaskCat.Lib.Asset
+namespace TaskCat.Data.Lib.Interfaces
 {
     using Data.Entity;
     using System;
@@ -9,9 +9,9 @@ namespace TaskCat.Lib.Asset
     using System.Threading.Tasks;
     using Data.Model;
 
-    public interface INearestAssetProvider<T> where T : Asset
+    public interface INearestAssetProvider
     {
-        Task<List<T>> FindAssets(Location loc);
-        Task<T> FindNearestEligibleAssets(Location from);
+        Task<List<Asset>> FindAssets(Location loc);
+        Task<Asset> FindNearestEligibleAssets(Location from);
     }
 }

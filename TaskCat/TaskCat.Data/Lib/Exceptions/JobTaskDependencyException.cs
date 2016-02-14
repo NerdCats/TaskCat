@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using TaskCat.Data.Model;
 
-namespace TaskCat.Lib.Exceptions
+namespace TaskCat.Data.Lib.Exceptions
 {
     public class JobTaskDependencyException : ArgumentException
     {

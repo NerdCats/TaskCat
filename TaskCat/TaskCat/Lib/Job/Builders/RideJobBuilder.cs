@@ -2,12 +2,12 @@
 {
     using Data.Model;
     using Data.Model.Order;
-    using Model.JobTasks;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
     using TaskCat.Data.Entity;
+    using Data.Model.JobTasks;
 
     internal class RideJobBuilder : JobBuilder
     {

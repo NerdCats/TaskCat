@@ -2,13 +2,13 @@
 {
     using Data.Model;
     using Lib.Utility.Discriminator;
-    using Model.JobTasks;
     using MongoDB.Bson.Serialization;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
     using Data.Entity;
+    using Data.Model.JobTasks;
 
     public class BsonSerializerConfig
     {

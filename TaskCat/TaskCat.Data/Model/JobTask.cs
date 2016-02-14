@@ -9,8 +9,10 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Lib.Utility.Converter;
     using Utility;
 
+    [JsonConverter(typeof(JobTaskConverter))]
     public abstract class JobTask
     {
         protected string Name;
