@@ -8,6 +8,8 @@
     using System.Linq;
     using System.Web;
     using TaskCat.Data.Model;
+    using Lib.Constants;
+
     public class RidePickUpTask : JobTask
     {
         public Location FromLocation { get; set; }
@@ -30,7 +32,7 @@
             }
         }
 
-        public RidePickUpTask() : base("RidePickUp", "Pick Up")
+        public RidePickUpTask() : base(JobTaskTypes.RIDE_PICKUP, "Pick Up")
         {
             
         }

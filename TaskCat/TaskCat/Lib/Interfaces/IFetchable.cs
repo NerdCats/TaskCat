@@ -9,12 +9,13 @@
     using TaskCat.Data.Entity;
     using Asset;
 
-    public interface IFetchable<T> where T : Asset
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    public interface IFetchable
     {
         Location From { get; set; }
         Location To { get; set; }
-        INearestAssetProvider<T> provider { get; set; }
-        Task<List<T>> FetchAvailableAssets();
+        INearestAssetProvider<Asset> provider { get; set; }
+        Task<List<Asset>> FetchAvailableAssets();
         Task SelectEligibleAsset();
     }
 }

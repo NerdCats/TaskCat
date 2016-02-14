@@ -15,7 +15,7 @@
         public static void Configure()
         {
             BsonSerializer.RegisterDiscriminatorConvention(typeof(OrderModel), new OrderModelDiscriminator());
-            BsonSerializer.RegisterDiscriminatorConvention(typeof(FetchRideTask<Asset>), new JobTaskDiscriminator()); 
+            BsonSerializer.RegisterDiscriminatorConvention(typeof(FetchRideTask), new JobTaskDiscriminator()); 
             BsonSerializer.RegisterDiscriminatorConvention(typeof(JobTask), new JobTaskDiscriminator());
         }
     }

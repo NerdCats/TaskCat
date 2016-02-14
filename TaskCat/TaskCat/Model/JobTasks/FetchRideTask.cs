@@ -12,33 +12,36 @@
     using Data.Entity;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
-    public class FetchRideTask<T> : JobTask, IFetchable<T> where T : Asset // FIXME: RIDE should be categorized as an asset
+    using Lib.Constants;
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    public class FetchRideTask : JobTask, IFetchable 
     {      
         public Location From { get; set; }
         public Location To { get; set; }
-        public T SelectedAsset { get; set; }
+        public Asset SelectedAsset { get; set; }
 
         [BsonIgnore]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public INearestAssetProvider<T> provider { get; set; }
+        public INearestAssetProvider<Asset> provider { get; set; }
 
-        public FetchRideTask() : base("FetchRide", "Fetching Ride")
+        public FetchRideTask() : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride")
         {
             this.Result = new FetchRideTaskResult();
             State = JobTaskStates.IN_PROGRESS;
         }
 
-        public FetchRideTask(Location from, Location to, T selectedAsset = null) : this()
+        public FetchRideTask(Location from, Location to, Asset selectedAsset = null) : this()
         {
             From = from;
             To = to;
             selectedAsset = null;
         }
     
-        public async Task<List<T>> FetchAvailableAssets()
+        public async Task<List<Asset>> FetchAvailableAssets()
         {
             var data = await provider.FindAssets(From);
-            return data as List<T>;
+            return data as List<Asset>;
         }
 
         public async Task SelectEligibleAsset()

@@ -10,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Utility;
+
     public abstract class JobTask
     {
         protected string Name;

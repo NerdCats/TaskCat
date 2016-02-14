@@ -64,6 +64,10 @@
       <HintPath>..\packages\Autofac.WebApi2.Owin.3.3.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Marvin.JsonPatch, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Marvin.JsonPatch.0.9.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -242,6 +246,7 @@
     <Compile Include="Lib\Auth\AuthRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
+    <Compile Include="Lib\Constants\JobTaskTypes.cs" />
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />

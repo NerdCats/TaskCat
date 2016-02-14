@@ -13,6 +13,8 @@
     using Newtonsoft.Json.Linq;
     using Data.Model;
     using Lib.Constants;
+    using Marvin.JsonPatch;
+
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -92,8 +94,9 @@
             }
         }
 
-        [HttpPut]
-        public async Task<IHttpActionResult> Update([FromUri]string id, [FromBody] JobTask task)
+
+        [HttpPatch]
+        public async Task<IHttpActionResult> Update([FromUri]string id, [FromBody] JsonPatchDocument<JobTask> task)
         {
             throw new NotImplementedException();
         }
