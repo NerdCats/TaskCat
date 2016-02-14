@@ -34,7 +34,7 @@
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
-                       
+
             }
 
             return await _manager.RegisterJob(createdJob);       

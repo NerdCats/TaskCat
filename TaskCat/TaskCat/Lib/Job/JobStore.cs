@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Db;
+using TaskCat.Data.Model;
 
 namespace TaskCat.Lib.Job
 {
@@ -36,6 +37,15 @@ namespace TaskCat.Lib.Job
         internal async Task<long> CountJobs()
         {
             return await _context.Jobs.CountAsync(x => true);
+        }
+
+        internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
+        {
+            var Filter = Builders<Data.Entity.Job>.Filter.Where(x => x._id == jobId);
+            var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks[taskIndex], task);
+
+            var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
+            return result;
         }
     }
 }

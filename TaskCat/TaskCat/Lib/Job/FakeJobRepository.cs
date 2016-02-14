@@ -11,6 +11,7 @@
     using TaskCat.Model.Pagination;
     using System.Web.Http.Controllers;
     using System.Net.Http;
+    using MongoDB.Driver;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -46,6 +47,11 @@
             });
 
             return await task;
+        }
+
+        public Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
+        {
+            throw new NotImplementedException();
         }
     }
 }

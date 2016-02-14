@@ -9,15 +9,15 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Lib.Utility.Converter;
     using Utility;
+    using System.ComponentModel.DataAnnotations;
 
-    [JsonConverter(typeof(JobTaskConverter))]
     public abstract class JobTask
     {
         protected string Name;
         public string id { get; protected set; }
 
+        [JsonIgnore]
         [BsonIgnore]
         protected JobTask Predecessor;
 

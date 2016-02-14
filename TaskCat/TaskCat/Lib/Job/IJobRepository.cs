@@ -10,6 +10,9 @@
     using TaskCat.Model.Pagination;
     using System.Web.Http.Controllers;
     using System.Net.Http;
+    using System.Web.Http;
+    using Data.Model;
+    using MongoDB.Driver;
 
     public interface IJobRepository
     {
@@ -17,5 +20,6 @@
         Task<Job> PostJob(JobModel model);
         Task<IEnumerable<Job>> GetJobs(string type, int start, int limit);
         Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage context);
+        Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask);
     }
 }

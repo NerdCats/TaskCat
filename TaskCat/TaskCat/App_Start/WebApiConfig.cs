@@ -12,6 +12,7 @@
     using System.Web.Http;
     using TaskCat.Lib.Utility.Converter;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config, AutofacWebApiDependencyResolver resolver)

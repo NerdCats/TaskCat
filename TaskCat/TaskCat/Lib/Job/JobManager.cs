@@ -7,6 +7,8 @@
     using System.Threading.Tasks;
     using System.Web;
     using TaskCat.Data.Entity;
+    using System.Web.Http;
+    using MongoDB.Driver;
 
     public class JobManager
     {
@@ -53,6 +55,11 @@
         {
             var job = await _store.CreateOne(createdJob);
             return job;
+        }
+
+        internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
+        {
+            return await _store.UpdateJobTask(jobId, taskIndex, task);
         }
     }
 }

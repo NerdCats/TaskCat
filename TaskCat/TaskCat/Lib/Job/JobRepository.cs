@@ -12,6 +12,9 @@
     using System.Web.Http.Routing;
     using System.Net.Http;
     using Constants;
+    using System.Web.Http;
+    using Data.Model;
+    using MongoDB.Driver;
 
     public class JobRepository : IJobRepository
     {
@@ -47,6 +50,12 @@
             throw new NotImplementedException();
         }
 
+        public async Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
+        {
 
+            return await _manager.UpdateJobTask(job._id, job.Tasks.IndexOf(selectedTask), selectedTask);
+        }
+
+        
     }
 }

@@ -14,6 +14,7 @@
     using Data.Model;
     using Lib.Constants;
     using Marvin.JsonPatch;
+    using System.ComponentModel.DataAnnotations;
 
     public class JobController : ApiController
     {
@@ -96,9 +97,17 @@
 
 
         [HttpPatch]
-        public async Task<IHttpActionResult> Update([FromUri]string id, [FromBody] JsonPatchDocument<JobTask> task)
+        public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
-            throw new NotImplementedException();
+            var job = await _repository.GetJob(jobId);
+            if (job == null) return BadRequest("Invalid Job Id provided");
+
+            var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
+            if (selectedTask == null) return BadRequest("Invalid JobTask Id provided");
+
+            taskPatch.ApplyTo(selectedTask);
+            var result = await _repository.UpdateJobTask(job, selectedTask);
+            return Json(result);
         }
 
     }
