@@ -38,6 +38,13 @@
             this.authRepository = authRepository;
         }
 
+        /// <summary>
+        /// Registers an User or Asset in the system
+        /// </summary>
+        /// <param name="userModel">
+        /// UserModel or AssetModel to register into system
+        /// </param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(UserRegistrationModel userModel)
@@ -144,7 +151,19 @@
             }
         }
 
-
+        /// <summary>
+        /// Get All Users
+        /// </summary>
+        /// <param name="pageSize">
+        /// Page size for the result, default is 10
+        /// </param>
+        /// <param name="page">
+        /// Page number of the result
+        /// </param>
+        /// <param name="envelope">
+        /// enveope in paged result, default is false, when enveloped, usually provide page number ,total and next and previous page links
+        /// </param>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("")]
