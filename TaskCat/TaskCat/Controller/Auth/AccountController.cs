@@ -18,11 +18,12 @@
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
     using System.Net.Http.Formatting;
-
+    using System.Web.OData;
     /// <summary>
     /// Account (User And Asset related Controller)
     /// </summary>
     [RoutePrefix("api/Account")]
+    
     public class AccountController : ApiController
     {
         private readonly AuthRepository authRepository = null;
@@ -165,6 +166,7 @@
         /// </param>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("")]
         public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
@@ -186,6 +188,20 @@
             catch (Exception ex) { return InternalServerError(ex); }
 
 
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Route("odata")]
+        [EnableQuery(PageSize =10)]
+        public async Task<IHttpActionResult> GetAll()
+        {
+            try
+            {
+                return Ok((await authRepository.FindAllAsModel()).AsQueryable());
+            }
+            catch (Exception ex) { return InternalServerError(ex); }
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]

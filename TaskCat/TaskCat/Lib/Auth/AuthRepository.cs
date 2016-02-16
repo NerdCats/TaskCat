@@ -100,6 +100,11 @@
             return await accountManager.FindAll(page * pageSize, pageSize);
         }
 
+        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        {
+            return await accountManager.FindAllAsModel();
+        }
+
         internal async Task<List<UserModel>> FindAllAsModel(int page, int pageSize)
         {
             if (page < 0)
@@ -189,6 +194,8 @@
                 return new IdentityResult(new string[] { "UserName " + newUserName + " is already taken" });
             }
         }
+
+       
 
 
 

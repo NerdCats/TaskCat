@@ -27,6 +27,23 @@
             return await collection.Find(x => true).Skip(start).Limit(limit).ToListAsync();
         }
 
+        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        {
+            List<UserModel> returnList = new List<UserModel>();
+            using (var cursor = await collection.Find(x => true).ToCursorAsync())
+            {
+                await cursor.ForEachAsync((Action<User>)(x =>
+                {
+                    if (x.Type == IdentityTypes.USER)
+                        returnList.Add(new UserModel(x, true));
+                    else
+                        returnList.Add(new AssetModel(x as Asset, true));
+                }));
+            }
+
+            return returnList;
+        }
+
         public async Task<List<UserModel>> FindAllAsModel(int start, int limit)
         {
             // INFO: For all the smart people who'd tell me to go for an IEnumerable here, 
@@ -60,7 +77,7 @@
             throw new InvalidOperationException("Identity Type not supported yet");
         }
 
-        
+       
 
         internal async Task<long> GetUserCountAsync()
         {

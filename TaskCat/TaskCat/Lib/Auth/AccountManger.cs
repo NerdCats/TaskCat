@@ -69,6 +69,11 @@
             return await accountStore.FindAllAsModel(start, limit);
         }
 
+        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        {
+            return await accountStore.FindAllAsModel();
+        }
+
         public async Task<UpdateResult> ChangeAvatar(string userId, string avatarUrl)
         {
             return await accountStore.SetAvatarAsync(userId, avatarUrl);
@@ -78,5 +83,7 @@
         {
             return await accountStore.GetUserCountAsync();
         }
+
+        
     }
 }
