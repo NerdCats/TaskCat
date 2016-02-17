@@ -41,6 +41,8 @@
             
         }
 
+      
+
         public async Task<List<UserModel>> FindAllAsModel(int start, int limit)
         {
             // INFO: For all the smart people who'd tell me to go for an IEnumerable here, 
@@ -63,6 +65,21 @@
             return returnList;          
         }
 
+        internal async Task<IQueryable<UserModel>> FindAllAsModelAsQueryable(int start, int limit)
+        {
+            return await Task.Run(() => {
+                return collection.Find(x => true).Skip(start).Limit(limit).ToEnumerable().Select(x =>
+                {
+                    if (x.Type == IdentityTypes.USER)
+                        return new UserModel(x, true);
+                    else
+                        return new AssetModel(x as Asset, true);
+                }).AsQueryable();
+            });
+        }
+
+
+
         public async Task<List<T>> FindAll<T>() where T : User
         {
             Type type = typeof(T);
@@ -74,7 +91,7 @@
             throw new InvalidOperationException("Identity Type not supported yet");
         }
 
-       
+        
 
         internal async Task<long> GetUserCountAsync()
         {

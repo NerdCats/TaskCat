@@ -19,11 +19,15 @@
     using Data.Model.Identity.Profile;
     using System.Net.Http.Formatting;
     using System.Web.OData;
-    using System.Web.OData.Query;    /// <summary>
-                                     /// Account (User And Asset related Controller)
-                                     /// </summary>
-    [RoutePrefix("api/Account")]
-    
+    using System.Web.OData.Query;
+    using Model.Pagination;
+
+    /// <summary>
+    /// Account (User And Asset related Controller)
+    /// </summary>
+    /// 
+
+    [RoutePrefix("api/Account")] 
     public class AccountController : ApiController
     {
         private readonly AuthRepository authRepository = null;
@@ -190,17 +194,42 @@
 
         }
 
+        /// <summary>
+        /// Odata powered query to get users
+        /// </summary>
+        /// <param name="query">
+        /// It would basically be a collection where all the odata queries are done with standard TaskCat Paging
+        /// Supported Odata query are $count, $filter, $orderBy, $skip, $top  
+        /// </param>
+        /// <param name="pageSize">
+        /// pageSize for a single page
+        /// </param>
+        /// <param name="page">
+        /// page number to be fetched
+        /// </param>
+        /// <returns>
+        /// A list of Users And Assets that complies with the query
+        /// </returns>
         [HttpGet]
-        [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata")]
-        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query)
+        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
             try
             {
-                var users = await authRepository.FindAllAsModel();
-                var queryResult = query.ApplyTo(users);
-                var data = users.ToList();
+                var settings = new ODataValidationSettings()
+                {
+                    // Initialize settings as needed.
+                    AllowedFunctions = AllowedFunctions.AllMathFunctions,
+                    AllowedQueryOptions=AllowedQueryOptions.Count|AllowedQueryOptions.Filter|AllowedQueryOptions.OrderBy|AllowedQueryOptions.Skip|AllowedQueryOptions.Top
+                };
+
+                query.Validate(settings);
+
+                var users = await authRepository.FindAllAsModelAsQueryable(page, pageSize);
+                
+                var queryResult = query.ApplyTo(users, AllowedQueryOptions.DeltaToken);
+                var data = new PageEnvelope<UserModel>(users.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, users.ToList(), this.Request);
                 return Json(data);
             }
             catch (Exception ex) { return InternalServerError(ex); }

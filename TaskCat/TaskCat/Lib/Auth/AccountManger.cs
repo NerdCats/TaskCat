@@ -74,6 +74,11 @@
             return await accountStore.FindAllAsModel();
         }
 
+        internal async Task<IQueryable<UserModel>> FindAllAsModelAsQueryable(int start, int limit)
+        {
+            return await accountStore.FindAllAsModelAsQueryable(start, limit);
+        }
+
         public async Task<UpdateResult> ChangeAvatar(string userId, string avatarUrl)
         {
             return await accountStore.SetAvatarAsync(userId, avatarUrl);

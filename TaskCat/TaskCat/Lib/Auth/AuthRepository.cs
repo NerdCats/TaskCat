@@ -105,6 +105,13 @@
             return await accountManager.FindAllAsModel();
         }
 
+        internal async Task<IQueryable<UserModel>> FindAllAsModelAsQueryable(int page, int pageSize)
+        {
+            if (page < 0)
+                throw new ArgumentException("Invalid page index provided");
+            return await accountManager.FindAllAsModelAsQueryable(page * pageSize, pageSize);
+        }
+
         internal async Task<List<UserModel>> FindAllAsModel(int page, int pageSize)
         {
             if (page < 0)
