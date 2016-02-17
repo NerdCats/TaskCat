@@ -18,7 +18,6 @@
     {      
         public Location From { get; set; }
         public Location To { get; set; }
-        public Asset SelectedAsset { get; set; }
 
         [BsonIgnore]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -45,14 +44,14 @@
 
         public async Task SelectEligibleAsset()
         {
-            SelectedAsset = await provider.FindNearestEligibleAssets(From);
+            Asset = await provider.FindNearestEligibleAssets(From);
         }
 
         public override void UpdateTask()
         {
             //FIXME: I really should use some attribute here to do this
             //this is just plain ghetto
-            IsReadytoMoveToNextTask = (From != null && To != null && SelectedAsset != null) ? true : false;
+            IsReadytoMoveToNextTask = (From != null && To != null && Asset != null) ? true : false;
 
             MoveToNextState();
         }

@@ -14,7 +14,6 @@
     {
         public Location FromLocation { get; set; }
         public Location ToLocation { get; set; }
-        public Asset SelectedRide { get; set; }
 
         //FIXME: Im really not sure what Im doing here, this doesnt look right
         private bool _ridePickedUp;
@@ -59,9 +58,11 @@
 
                     ToLocation = toData.GetValue(task.Result, null) as Location;
 
-                    var rideType = type.GetProperty("Asset");
-                    if (rideType.PropertyType != typeof(Asset))
+                    var ride = type.GetProperty("Asset");
+                    if (ride.PropertyType != typeof(Asset))
                         throw new InvalidCastException("Type Verification Asset field failed");
+
+                    Asset= ride.GetValue(task.Result, null) as Asset;
 
                     IsDependencySatisfied = true;
                 }
