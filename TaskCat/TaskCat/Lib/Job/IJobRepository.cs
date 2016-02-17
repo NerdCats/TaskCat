@@ -22,5 +22,6 @@
         Task<IQueryable<Job>> GetJobs(int page, int pageSize);
         Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage context);
         Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask);
+        Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks);
     }
 }

@@ -67,5 +67,10 @@
         {
             return await _store.UpdateJobTask(jobId, taskIndex, task);
         }
+
+        internal async Task<UpdateResult> UpdateJobTask(string _id, List<JobTask> tasks)
+        {
+            return await _store.UpdateJobTasks(_id, tasks);
+        }
     }
 }

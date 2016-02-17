@@ -88,7 +88,10 @@
         }
 
         public abstract void UpdateTask();
-        public abstract JobTaskResult SetResultToNextState();
+        public virtual JobTaskResult SetResultToNextState()
+        {
+            return this.Result;
+        }
 
         public virtual void SetPredecessor(JobTask task, bool validateDependency = true)
         {

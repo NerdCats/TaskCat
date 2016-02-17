@@ -58,5 +58,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

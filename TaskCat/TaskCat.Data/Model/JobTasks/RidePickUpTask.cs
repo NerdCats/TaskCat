@@ -31,11 +31,6 @@
             }
         }
 
-        public RidePickUpTask() : base(JobTaskTypes.RIDE_PICKUP, "Pick Up")
-        {
-            
-        }
-
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
             base.SetPredecessor(task, validateDependency);
@@ -54,7 +49,7 @@
                         throw new InvalidCastException("Type Verification To Field Failed");
 
                     var ride = type.GetProperty("Asset");
-                    if (ride.PropertyType != typeof(Asset))
+                    if (ride.PropertyType != typeof(AssetModel))
                         throw new InvalidCastException("Type Verification Asset field failed");
 
                     IsDependencySatisfied = true;
@@ -77,6 +72,16 @@
             try
             {
                 var type = jobTaskResult.ResultType;
+
+                var ride = type.GetProperty("Asset");
+                if (ride.PropertyType != typeof(AssetModel))
+                    throw new InvalidCastException("Type Verification Asset field failed");
+
+                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
+
+                // FIXME: This from and to relation should be actually 
+                // done based on Assets current location
+                
                 var fromData = type.GetProperty("From");
                 if (fromData.PropertyType != typeof(Location))
                     throw new InvalidCastException("Type Verification From Field Failed");
@@ -86,13 +91,7 @@
                 var toData = type.GetProperty("To");
                 if (toData.PropertyType != typeof(Location))
                     throw new InvalidCastException("Type Verification To Field Failed");
-                ToLocation = toData.GetValue(jobTaskResult, null) as Location;
-
-                var ride = type.GetProperty("Asset");
-                if (ride.PropertyType != typeof(Asset))
-                    throw new InvalidCastException("Type Verification Asset field failed");
-
-                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
+                ToLocation = toData.GetValue(jobTaskResult, null) as Location; 
             }
             catch (Exception)
             {
@@ -105,5 +104,6 @@
         {
             MoveToNextState();
         }
+
     }
 }

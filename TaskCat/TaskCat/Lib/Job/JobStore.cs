@@ -56,6 +56,13 @@ namespace TaskCat.Lib.Job
             return result;
         }
 
-       
+        internal async Task<UpdateResult> UpdateJobTasks(string jobId, List<JobTask> tasks)
+        {
+            var Filter = Builders<Data.Entity.Job>.Filter.Where(x => x._id == jobId);
+            var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks, tasks);
+
+            var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
+            return result;
+        }
     }
 }

@@ -63,6 +63,11 @@
             return await _manager.UpdateJobTask(job._id, job.Tasks.IndexOf(selectedTask), selectedTask);
         }
 
-        
+        public async Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks)
+        {
+            return await _manager.UpdateJobTask(job._id, tasks);
+        }
+
+
     }
 }

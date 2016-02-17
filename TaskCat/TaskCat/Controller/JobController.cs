@@ -166,7 +166,7 @@
             taskPatch.ApplyTo(selectedTask);
             selectedTask.UpdateTask();
 
-            var result = await _repository.UpdateJobTask(job, selectedTask);
+            var result = await _repository.UpdateJobTasks(job, job.Tasks);
             return Json(result);
         }
 
