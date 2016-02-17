@@ -44,25 +44,18 @@
                 var type = task.Result.ResultType;
                 //FIXME: All of these has to be cached and refactored
                 try
-                {
-                    
+                {    
                     var fromData = type.GetProperty("From");
                     if (fromData.PropertyType != typeof(Location))
                         throw new InvalidCastException("Type Verification From Field Failed");
-
-                    FromLocation = fromData.GetValue(task.Result,null) as Location;
 
                     var toData = type.GetProperty("To");
                     if (toData.PropertyType != typeof(Location))
                         throw new InvalidCastException("Type Verification To Field Failed");
 
-                    ToLocation = toData.GetValue(task.Result, null) as Location;
-
                     var ride = type.GetProperty("Asset");
                     if (ride.PropertyType != typeof(Asset))
                         throw new InvalidCastException("Type Verification Asset field failed");
-
-                    Asset= ride.GetValue(task.Result, null) as AssetModel;
 
                     IsDependencySatisfied = true;
                 }
@@ -70,6 +63,40 @@
                 {
                     throw new JobTaskDependencyException("Error occured on dependency assignment",this, ex);
                 }
+            }
+
+            Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;
+
+        }
+
+        private void Predecessor_JobTaskCompleted(JobTask sender, JobTaskResult jobTaskResult)
+        {
+            if(this.State==JobTaskStates.PENDING)
+                this.State = JobTaskStates.IN_PROGRESS;
+
+            try
+            {
+                var type = jobTaskResult.ResultType;
+                var fromData = type.GetProperty("From");
+                if (fromData.PropertyType != typeof(Location))
+                    throw new InvalidCastException("Type Verification From Field Failed");
+
+                FromLocation = fromData.GetValue(jobTaskResult, null) as Location;
+
+                var toData = type.GetProperty("To");
+                if (toData.PropertyType != typeof(Location))
+                    throw new InvalidCastException("Type Verification To Field Failed");
+                ToLocation = toData.GetValue(jobTaskResult, null) as Location;
+
+                var ride = type.GetProperty("Asset");
+                if (ride.PropertyType != typeof(Asset))
+                    throw new InvalidCastException("Type Verification Asset field failed");
+
+                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
         }

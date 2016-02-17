@@ -110,7 +110,7 @@
             if (State == JobTaskStates.IN_PROGRESS && !IsReadytoMoveToNextTask)
                 return;
 
-            if (State < JobTaskStates.IN_PROGRESS)
+            if (State <=JobTaskStates.IN_PROGRESS)
             {
                 State++;
                 if (JobTaskStateUpdated != null)
