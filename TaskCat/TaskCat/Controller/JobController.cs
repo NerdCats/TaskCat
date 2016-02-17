@@ -18,16 +18,20 @@
     using System.Web.OData.Query;
     using Data.Model.Identity.Response;
     using Model.Pagination;
-    using System.Collections;/// <summary>
-                             /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
-                             /// </summary>
+    using System.Collections;
+
+    /// <summary>
+    /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
+    /// </summary>
+    /// 
+
     public class JobController : ApiController
     {
         private IJobRepository _repository;
 
         public JobController(IJobRepository repository)
         {
-            _repository = repository;    
+            _repository = repository;
         }
 
         /// <summary>
@@ -58,7 +62,7 @@
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> List(string type="", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
+        public async Task<IHttpActionResult> List(string type = "", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
