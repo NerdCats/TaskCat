@@ -100,7 +100,7 @@
             return await accountManager.FindAll(page * pageSize, pageSize);
         }
 
-        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        internal async Task<IQueryable<UserModel>> FindAllAsModel()
         {
             return await accountManager.FindAllAsModel();
         }

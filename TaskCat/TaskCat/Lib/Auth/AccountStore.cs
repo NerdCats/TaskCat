@@ -27,21 +27,18 @@
             return await collection.Find(x => true).Skip(start).Limit(limit).ToListAsync();
         }
 
-        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        internal  async Task<IQueryable<UserModel>> FindAllAsModel()
         {
-            List<UserModel> returnList = new List<UserModel>();
-            using (var cursor = await collection.Find(x => true).ToCursorAsync())
-            {
-                await cursor.ForEachAsync((Action<User>)(x =>
+            return await Task.Run(() => {
+                return collection.Find(x => true).ToEnumerable().Select(x =>
                 {
                     if (x.Type == IdentityTypes.USER)
-                        returnList.Add(new UserModel(x, true));
+                        return new UserModel(x, true);
                     else
-                        returnList.Add(new AssetModel(x as Asset, true));
-                }));
-            }
-
-            return returnList;
+                        return new AssetModel(x as Asset, true);
+                }).AsQueryable();
+            });
+            
         }
 
         public async Task<List<UserModel>> FindAllAsModel(int start, int limit)

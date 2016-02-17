@@ -19,9 +19,9 @@
     using Data.Model.Identity.Profile;
     using System.Net.Http.Formatting;
     using System.Web.OData;
-    /// <summary>
-    /// Account (User And Asset related Controller)
-    /// </summary>
+    using System.Web.OData.Query;    /// <summary>
+                                     /// Account (User And Asset related Controller)
+                                     /// </summary>
     [RoutePrefix("api/Account")]
     
     public class AccountController : ApiController
@@ -194,12 +194,14 @@
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata")]
-        [EnableQuery(PageSize =10)]
-        public async Task<IHttpActionResult> GetAll()
+        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query)
         {
             try
             {
-                return Ok((await authRepository.FindAllAsModel()).AsQueryable());
+                var users = await authRepository.FindAllAsModel();
+                var queryResult = query.ApplyTo(users);
+                var data = users.ToList();
+                return Json(data);
             }
             catch (Exception ex) { return InternalServerError(ex); }
         }

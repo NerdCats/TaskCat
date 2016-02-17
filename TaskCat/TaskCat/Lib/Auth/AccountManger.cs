@@ -69,7 +69,7 @@
             return await accountStore.FindAllAsModel(start, limit);
         }
 
-        internal async Task<IEnumerable<UserModel>> FindAllAsModel()
+        internal async Task<IQueryable<UserModel>> FindAllAsModel()
         {
             return await accountStore.FindAllAsModel();
         }
