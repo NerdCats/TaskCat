@@ -116,11 +116,12 @@
                 if (JobTaskStateUpdated != null)
                     JobTaskStateUpdated(this, State);
             }
+
+            if (State == JobTaskStates.COMPLETED && Result != null && IsReadytoMoveToNextTask)
+                NotifyJobTaskCompleted();
             else
-                throw new InvalidOperationException(string.Concat("Cant move job state after ", State));
-            
-            if (State == JobTaskStates.COMPLETED && Result != null)
-                NotifyJobTaskCompleted();            
+                throw new InvalidOperationException("Job is not ready to move to next Task");
+                    
         }
 
 
