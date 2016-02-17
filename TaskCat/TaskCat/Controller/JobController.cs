@@ -103,13 +103,13 @@
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
+
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
-
             try
             {
                 var settings = new ODataValidationSettings()
@@ -123,8 +123,10 @@
 
                 var result = await _repository.GetJobs(page, pageSize);
                 var queryResult = (query.ApplyTo(result)) as IEnumerable<Job>;
-                var data = new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request);
-                return Json(data);
+
+                if (query.Count.Value)
+                    return Json( new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+                return Json(queryResult);
             }
             catch (Exception ex)
             {

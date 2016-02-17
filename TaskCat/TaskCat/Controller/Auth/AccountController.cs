@@ -236,8 +236,9 @@
                 var users = await authRepository.FindAllAsModelAsQueryable(page, pageSize);
                 
                 var queryResult = (query.ApplyTo(users)) as IEnumerable<UserModel>;
-                var data = new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request);
-                return Json(data);
+                if (query.Count.Value)
+                    return Json(new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+                return Json(queryResult);
             }
             catch (Exception ex) { return InternalServerError(ex); }
         }
