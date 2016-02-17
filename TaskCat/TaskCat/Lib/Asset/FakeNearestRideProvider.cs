@@ -8,15 +8,16 @@
     using TaskCat.Data.Entity;
     using Data.Lib.Interfaces;
     using TaskCat.Data.Model;
+    using Data.Model.Identity.Response;
 
     internal class FakeNearestRideProvider : INearestAssetProvider
     {
-        public Task<List<Data.Entity.Asset>> FindAssets(Location loc)
+        public Task<List<AssetModel>> FindAssets(Location loc)
         {
             return null;
         }
 
-        public async Task<Data.Entity.Asset> FindNearestEligibleAssets(Location from)
+        public async Task<AssetModel> FindNearestEligibleAssets(Location from)
         {
             return null;
         }

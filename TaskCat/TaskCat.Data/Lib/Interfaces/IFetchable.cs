@@ -7,14 +7,14 @@
     using System.Threading.Tasks;
     using TaskCat.Data.Model;
     using TaskCat.Data.Entity;
-
+    using Model.Identity.Response;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public interface IFetchable
     {
         Location From { get; set; }
         Location To { get; set; }
         INearestAssetProvider provider { get; set; }
-        Task<List<Asset>> FetchAvailableAssets();
+        Task<List<AssetModel>> FetchAvailableAssets();
         Task SelectEligibleAsset();
     }
 }

@@ -8,10 +8,10 @@ namespace TaskCat.Data.Lib.Interfaces
     using System.Text;
     using System.Threading.Tasks;
     using Data.Model;
-
+    using Model.Identity.Response;
     public interface INearestAssetProvider
     {
-        Task<List<Asset>> FindAssets(Location loc);
-        Task<Asset> FindNearestEligibleAssets(Location from);
+        Task<List<AssetModel>> FindAssets(Location loc);
+        Task<AssetModel> FindNearestEligibleAssets(Location from);
     }
 }

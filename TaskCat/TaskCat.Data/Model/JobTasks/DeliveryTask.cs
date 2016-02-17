@@ -6,12 +6,13 @@
     using System.Web;
     using Data.Entity;
     using TaskCat.Data.Model;
+    using Data.Model.Identity.Response;
 
     public class DeliveryTask : JobTask
     {
         public Location From { get; set; }
         public Location To { get; set; }
-        public AssetEntity Asset { get; set; }
+        public AssetModel Asset { get; set; }
 
 
         public DeliveryTask()

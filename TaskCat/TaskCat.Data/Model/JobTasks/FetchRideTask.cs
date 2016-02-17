@@ -12,7 +12,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Lib.Constants;
-
+    using Identity.Response;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class FetchRideTask : JobTask, IFetchable 
     {      
@@ -36,10 +36,10 @@
             selectedAsset = null;
         }
     
-        public async Task<List<Asset>> FetchAvailableAssets()
+        public async Task<List<AssetModel>> FetchAvailableAssets()
         {
             var data = await provider.FindAssets(From);
-            return data as List<Asset>;
+            return data as List<AssetModel>;
         }
 
         public async Task SelectEligibleAsset()

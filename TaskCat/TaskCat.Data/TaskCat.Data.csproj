@@ -97,6 +97,7 @@
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
+    <Compile Include="Model\JobTasks\DeliveryTask.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Location.cs" />
@@ -112,7 +113,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utility\Adaptors\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

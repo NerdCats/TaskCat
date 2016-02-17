@@ -11,7 +11,7 @@
     using System.Threading.Tasks;
     using Utility;
     using System.ComponentModel.DataAnnotations;
-
+    using Identity.Response;
     public abstract class JobTask
     {
         protected string Name;
@@ -48,7 +48,7 @@
         [JsonConverter(typeof(StringEnumConverter))]
         public JobTaskStates State { get; set; }
         
-        public Asset Asset { get; set; }
+        public AssetModel Asset { get; set; }
 
         [BsonIgnoreIfNull]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

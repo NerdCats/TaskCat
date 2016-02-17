@@ -9,7 +9,7 @@
     using System.Web;
     using TaskCat.Data.Model;
     using Lib.Constants;
-
+    using Identity.Response;
     public class RidePickUpTask : JobTask
     {
         public Location FromLocation { get; set; }
@@ -62,7 +62,7 @@
                     if (ride.PropertyType != typeof(Asset))
                         throw new InvalidCastException("Type Verification Asset field failed");
 
-                    Asset= ride.GetValue(task.Result, null) as Asset;
+                    Asset= ride.GetValue(task.Result, null) as AssetModel;
 
                     IsDependencySatisfied = true;
                 }
