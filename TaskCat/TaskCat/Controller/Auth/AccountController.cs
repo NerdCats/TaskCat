@@ -215,6 +215,13 @@
         [Route("odata")]
         public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
+            if (pageSize == 0)
+                return BadRequest("Page size cant be 0");
+            if (page < 0)
+                return BadRequest("Page index less than 0 provided");
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+
             try
             {
                 var settings = new ODataValidationSettings()
@@ -228,13 +235,20 @@
 
                 var users = await authRepository.FindAllAsModelAsQueryable(page, pageSize);
                 
-                var queryResult = query.ApplyTo(users, AllowedQueryOptions.DeltaToken);
-                var data = new PageEnvelope<UserModel>(users.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, users.ToList(), this.Request);
+                var queryResult = (query.ApplyTo(users)) as IEnumerable<UserModel>;
+                var data = new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request);
                 return Json(data);
             }
             catch (Exception ex) { return InternalServerError(ex); }
         }
 
+        /// <summary>
+        /// profile
+        /// </summary>
+        /// <param name="model">
+        /// 
+        /// </param>
+        /// <returns></returns>
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [HttpPut]
         [Route("profile")]

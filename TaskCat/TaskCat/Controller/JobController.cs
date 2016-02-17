@@ -15,7 +15,12 @@
     using Lib.Constants;
     using Marvin.JsonPatch;
     using System.ComponentModel.DataAnnotations;
-
+    using System.Web.OData.Query;
+    using Data.Model.Identity.Response;
+    using Model.Pagination;
+    using System.Collections;/// <summary>
+                             /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
+                             /// </summary>
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -51,7 +56,6 @@
                 return InternalServerError(ex);
             }
         }
-        
 
         [HttpGet]
         public async Task<IHttpActionResult> List(string type="", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
@@ -68,6 +72,55 @@
                 if (envelope)
                     return Json(await _repository.GetJobsEnveloped(type, page, pageSize, this.Request));
                 return Json(await _repository.GetJobs(type, page, pageSize));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+        /// <summary>
+        /// Odata powered query to get jobs
+        /// </summary>
+        /// <param name="query">
+        /// It would basically be a collection where all the odata queries are done with standard TaskCat Paging
+        /// Supported Odata query are $count, $filter, $orderBy, $skip, $top  
+        /// </param>
+        /// <param name="pageSize">
+        /// pageSize for a single page
+        /// </param>
+        /// <param name="page">
+        /// page number to be fetched
+        /// </param>
+        /// <returns>
+        /// A list of Jobs that complies with the query
+        /// </returns>
+
+        [Route("api/Job/odata")]
+        [HttpGet]
+        public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
+        {
+            if (pageSize == 0)
+                return BadRequest("Page size cant be 0");
+            if (page < 0)
+                return BadRequest("Page index less than 0 provided");
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+
+            try
+            {
+                var settings = new ODataValidationSettings()
+                {
+                    // Initialize settings as needed.
+                    AllowedFunctions = AllowedFunctions.AllMathFunctions,
+                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy | AllowedQueryOptions.Skip | AllowedQueryOptions.Top
+                };
+
+                query.Validate(settings);
+
+                var result = await _repository.GetJobs(page, pageSize);
+                var queryResult = (query.ApplyTo(result)) as IEnumerable<Job>;
+                var data = new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request);
+                return Json(data);
             }
             catch (Exception ex)
             {

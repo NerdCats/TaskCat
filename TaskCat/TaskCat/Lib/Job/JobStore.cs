@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Db;
 using TaskCat.Data.Model;
+using System.Linq;
 
 namespace TaskCat.Lib.Job
 {
@@ -34,6 +35,13 @@ namespace TaskCat.Lib.Job
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
 
+        internal async Task<IQueryable<Data.Entity.Job>> FindJobs(int start, int limit)
+        {
+            return await Task.Run(() => {
+                return _context.Jobs.AsQueryable();
+            });
+        }
+
         internal async Task<long> CountJobs()
         {
             return await _context.Jobs.CountAsync(x => true);
@@ -47,5 +55,7 @@ namespace TaskCat.Lib.Job
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
             return result;
         }
+
+       
     }
 }

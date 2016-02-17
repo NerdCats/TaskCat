@@ -37,6 +37,13 @@
             return await _manager.GetJobs(type, page * pageSize, pageSize);
         }
 
+        public async Task<IQueryable<Job>> GetJobs(int page, int pageSize)
+        {
+            if (page < 0)
+                throw new ArgumentException("Invalid page index provided");
+            return await _manager.GetJobs(page * pageSize, pageSize);
+        }
+
         public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int page, int pageSize, HttpRequestMessage request)
         {
             var data = await GetJobs(type, page, pageSize);

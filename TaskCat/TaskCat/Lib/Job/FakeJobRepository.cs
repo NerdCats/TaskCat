@@ -26,6 +26,11 @@
             return await task;
         }
 
+        public Task<IQueryable<Job>> GetJobs(int page, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             throw new NotImplementedException();

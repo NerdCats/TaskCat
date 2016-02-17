@@ -45,6 +45,12 @@
             return await _store.CountJobs();
         }
 
+        internal async Task<IQueryable<Job>> GetJobs(int start, int limit)
+        {
+            var jobs = await _store.FindJobs(start, limit);
+            return jobs;
+        }
+
         internal async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             var jobs = await _store.FindJobs(type, start, limit);
