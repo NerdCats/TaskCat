@@ -56,7 +56,19 @@
             MoveToNextState();
         }
 
-        
+        public override JobTaskResult SetResultToNextState()
+        {
+            var result = new FetchRideTaskResult();
+            result.ResultType = typeof(FetchRideTaskResult);
+            if (this.Asset == null)
+                throw new InvalidOperationException("Moving to next state when Asset is null.");
+            result.Asset = this.Asset;
+            result.From = this.From;
+            result.TaskCompletionTime = DateTime.UtcNow;
+            result.To = this.To;
+
+            return result;
+        }
     }
 
     public class FetchRideTaskResult : JobTaskResult
@@ -65,7 +77,7 @@
         public Location To { get; set; }
         //FIXME: If asset is only person oriented we might have much
         //much simpler representation of an asset, up until that FetchRideTaskResult would be a bit complicated
-        public Asset Asset { get; set; }
+        public AssetModel Asset { get; set; }
 
         public FetchRideTaskResult()
         {

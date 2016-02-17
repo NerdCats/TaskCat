@@ -88,6 +88,7 @@
         }
 
         public abstract void UpdateTask();
+        public abstract JobTaskResult SetResultToNextState();
 
         public virtual void SetPredecessor(JobTask task, bool validateDependency = true)
         {
@@ -102,8 +103,6 @@
             IsStartingTask = false;
            
         }
-
-        
 
         public virtual void MoveToNextState()
         {
@@ -124,8 +123,6 @@
                     
         }
 
-
-
         protected virtual void NotifyJobTaskCompleted()
         {
             if (Result.TaskCompletionTime == null)
@@ -136,7 +133,10 @@
 
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
+            {
+                Result = SetResultToNextState();
                 JobTaskCompleted(this, Result);
+            }
         }
 
     }
