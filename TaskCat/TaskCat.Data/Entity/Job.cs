@@ -63,6 +63,7 @@
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
+            this.Assets = new Dictionary<string, Asset>();
         }
 
         public Job(string name) : this()
@@ -76,5 +77,6 @@
             this.Name = order.Name;
             this.Order = order;
         }
+
     }
 }

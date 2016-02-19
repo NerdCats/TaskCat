@@ -28,6 +28,9 @@
         protected delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskStates updatedState);
         protected event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
 
+        public delegate void AssetUpdatedEventHandler(string AssetRef);
+        public event AssetUpdatedEventHandler AssetUpdated;
+
         //FIXME: I still dont know how Im going to implement this!
         //protected delegate void JobTaskUpdatedEventHandler(JobTask sender, string result);
         //protected event JobTaskUpdatedEventHandler JobTaskUpdated;
@@ -49,6 +52,24 @@
         public JobTaskStates State { get; set; }
         
         public AssetModel Asset { get; set; }
+
+        private string assetRef;
+        public string AssetRef
+        {
+            get
+            {
+                return assetRef;
+            }
+            set
+            {
+                if (value != assetRef)
+                {
+                    assetRef = value;
+                    if (AssetUpdated != null)
+                        AssetUpdated(assetRef);
+                }
+            }
+        }
 
         [BsonIgnoreIfNull]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
