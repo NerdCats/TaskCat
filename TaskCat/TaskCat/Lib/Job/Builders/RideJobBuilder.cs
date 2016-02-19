@@ -8,6 +8,7 @@
     using System.Web;
     using TaskCat.Data.Entity;
     using Data.Model.JobTasks;
+    using Data.Model.Identity.Response;
 
     internal class RideJobBuilder : JobBuilder
     {
@@ -43,10 +44,10 @@
         // virtual function if just nothing except assigning to the dictionary 
         // happens
 
-        private void JobTask_AssetUpdated(string AssetRef)
+        private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
         {
             if (!_job.Assets.ContainsKey(AssetRef))
-                _job.Assets[AssetRef] = null; // FIXME: I definitely need to fix it here, database fetch needed, dont know how this should work out
+                _job.Assets[AssetRef] = asset; // FIXME: I definitely need to fix it here, database fetch needed, dont know how this should work out
 
         }
     }

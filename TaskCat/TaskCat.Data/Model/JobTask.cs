@@ -76,7 +76,8 @@
                     assetRef = value;
                     if (AssetUpdated != null)
                     {
-                        if (Asset == null) throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
+                        if (Asset == null)
+                            throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
                         AssetUpdated(assetRef, Asset);
                     }
                 }

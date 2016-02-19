@@ -11,6 +11,7 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using Model.Identity.Response;
 
     public class Job : DbEntity
     {
@@ -27,7 +28,7 @@
         private string _jobServedBy = "Anonymous";
         public string JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
 
-        public Dictionary<string, Asset> Assets;
+        public Dictionary<string, AssetModel> Assets;
 
         public List<JobTask> Tasks { get; set; }
         [BsonRepresentation(BsonType.String)]
@@ -63,7 +64,7 @@
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
-            this.Assets = new Dictionary<string, Asset>();
+            this.Assets = new Dictionary<string, AssetModel>();
         }
 
         public Job(string name) : this()
