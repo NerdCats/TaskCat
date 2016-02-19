@@ -27,6 +27,7 @@
         private string _jobServedBy = "Anonymous";
         public string JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
 
+        public Dictionary<string, Asset> Assets;
 
         public List<JobTask> Tasks { get; set; }
         [BsonRepresentation(BsonType.String)]

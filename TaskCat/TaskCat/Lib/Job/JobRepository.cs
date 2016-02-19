@@ -59,7 +59,6 @@
 
         public async Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
         {
-
             return await _manager.UpdateJobTask(job._id, job.Tasks.IndexOf(selectedTask), selectedTask);
         }
 
