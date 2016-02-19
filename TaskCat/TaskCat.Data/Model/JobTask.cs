@@ -28,7 +28,7 @@
         protected delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskStates updatedState);
         protected event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
 
-        public delegate void AssetUpdatedEventHandler(string AssetRef);
+        public delegate void AssetUpdatedEventHandler(string AssetRef, AssetModel asset);
         public event AssetUpdatedEventHandler AssetUpdated;
 
         //FIXME: I still dont know how Im going to implement this!
@@ -51,7 +51,16 @@
         [JsonConverter(typeof(StringEnumConverter))]
         public JobTaskStates State { get; set; }
         
-        public AssetModel Asset { get; set; }
+        private AssetModel asset;
+        [BsonIgnore]
+        [JsonIgnore]
+        public AssetModel Asset {
+            get { return asset; }
+            set {
+                asset = value;
+                this.AssetRef = asset.Id;
+            }
+        }
 
         private string assetRef;
         public string AssetRef
@@ -66,7 +75,10 @@
                 {
                     assetRef = value;
                     if (AssetUpdated != null)
-                        AssetUpdated(assetRef);
+                    {
+                        if (Asset == null) throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
+                        AssetUpdated(assetRef, Asset);
+                    }
                 }
             }
         }
