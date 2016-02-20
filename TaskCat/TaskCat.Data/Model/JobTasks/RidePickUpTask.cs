@@ -31,6 +31,11 @@
             }
         }
 
+        public RidePickUpTask():base(JobTaskTypes.RIDE_PICKUP, "Picking up")
+        {
+            
+        }
+
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
             base.SetPredecessor(task, validateDependency);
