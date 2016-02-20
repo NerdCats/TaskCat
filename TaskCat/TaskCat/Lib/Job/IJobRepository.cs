@@ -13,6 +13,7 @@
     using System.Web.Http;
     using Data.Model;
     using MongoDB.Driver;
+    using Marvin.JsonPatch;
 
     public interface IJobRepository
     {
@@ -23,5 +24,6 @@
         Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage context);
         Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask);
         Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks);
+        Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch);
     }
 }

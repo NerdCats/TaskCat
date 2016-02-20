@@ -162,7 +162,14 @@
             if (job == null) return BadRequest("Invalid Job Id provided");
 
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
-            if (selectedTask == null) return BadRequest("Invalid JobTask Id provided");      
+            if (selectedTask == null) return BadRequest("Invalid JobTask Id provided");  
+            
+            // FIXME: Mind boggling hack here, the best thing here would be to write a ctAdapter derrivative
+            // or a BasicObjectAdaptor derivative just to make sure that this operation is contained or properly
+            // organized
+
+            await _repository.ResolveAssetRef(taskPatch);
+                
             taskPatch.ApplyTo(selectedTask);
             selectedTask.UpdateTask();
 

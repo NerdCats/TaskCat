@@ -15,14 +15,19 @@
     using System.Web.Http;
     using Data.Model;
     using MongoDB.Driver;
+    using Auth;
+    using Data.Model.Identity.Response;
+    using Marvin.JsonPatch;
 
     public class JobRepository : IJobRepository
     {
         private JobManager _manager;
+        private AccountManger _accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
 
-        public JobRepository(JobManager manager)
+        public JobRepository(JobManager manager, AccountManger accountManager)
         {
             _manager = manager;
+            _accountManager = accountManager;
         }
 
         public async Task<Job> GetJob(string id)
@@ -67,6 +72,24 @@
             return await _manager.UpdateJobTask(job._id, tasks);
         }
 
+        public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
+        {
+            var AssetRefReplaceOp = taskPatch.Operations.FirstOrDefault(x => x.op == "replace" && x.path == "/AssetRef");
+            if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType()== typeof(string))
+            {                
+                // INFO: Now we need to actually fetch the asset and get shit done
+                var asset = await _accountManager.FindAsByIdAsync<Asset>(AssetRefReplaceOp.value.ToString());
+                if (asset == null) return false;
+                var assetModel = new AssetModel(asset);
+                AssetRefReplaceOp.path = "/Asset";
+                AssetRefReplaceOp.value = assetModel;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+        }
     }
 }
