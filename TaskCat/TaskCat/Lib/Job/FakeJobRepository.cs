@@ -12,6 +12,7 @@
     using System.Web.Http.Controllers;
     using System.Net.Http;
     using MongoDB.Driver;
+    using Marvin.JsonPatch;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -52,6 +53,11 @@
             });
 
             return await task;
+        }
+
+        public Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
