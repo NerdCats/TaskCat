@@ -53,12 +53,12 @@
         
         private AssetModel asset;
         [BsonIgnore]
-        [JsonIgnore]
         public AssetModel Asset {
             get { return asset; }
             set {
                 asset = value;
-                this.AssetRef = asset.Id;
+                if(value!=null)
+                    this.AssetRef = asset.Id;
             }
         }
 

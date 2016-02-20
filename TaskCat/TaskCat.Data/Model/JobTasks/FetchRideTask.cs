@@ -18,7 +18,8 @@
     {      
         public Location From { get; set; }
         public Location To { get; set; }
-
+        public Asset ProposedRide { get; set; } //FIXME: It will definitely not be a hardburned Asset reference of course
+        
         [BsonIgnore]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public INearestAssetProvider provider { get; set; }
@@ -33,7 +34,7 @@
         {
             From = from;
             To = to;
-            selectedAsset = null;
+            ProposedRide = null;
         }
     
         public async Task<List<AssetModel>> FetchAvailableAssets()
