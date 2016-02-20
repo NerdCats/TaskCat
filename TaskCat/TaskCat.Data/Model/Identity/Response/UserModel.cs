@@ -9,6 +9,7 @@
     using TaskCat.Data.Model.Identity.Profile;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using Entity;
 
     public class UserModel
     {
@@ -39,7 +40,7 @@
             this.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             this.Email = user.Email;
             this.EmailConfirmed = user.EmailConfirmed;
-            this.Profile = user.Profile;
+            this.Profile = user.GetType() == typeof(Asset) ? user.Profile as AssetProfile : user.Profile;
 
             this.IsUserAuthenticated = isUserAuthenticated;
         }

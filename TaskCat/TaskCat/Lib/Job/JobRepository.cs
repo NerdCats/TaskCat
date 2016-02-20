@@ -18,6 +18,7 @@
     using Auth;
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
+    using Newtonsoft.Json;
 
     public class JobRepository : IJobRepository
     {
@@ -82,7 +83,7 @@
                 if (asset == null) return false;
                 var assetModel = new AssetModel(asset);
                 AssetRefReplaceOp.path = "/Asset";
-                AssetRefReplaceOp.value = assetModel;
+                AssetRefReplaceOp.value = assetModel as object;
                 return true;
             }
             else
