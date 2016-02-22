@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Data", "TaskCat.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Tests", "TaskCat.Tests\TaskCat.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvin.JsonPatch", "..\..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj", "{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvin.JsonPatch", "..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj", "{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

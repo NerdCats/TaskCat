@@ -281,7 +281,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj">
+    <ProjectReference Include="..\..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj">
       <Project>{82226e0c-a7b3-4bb7-8df5-7d53ec66b47a}</Project>
       <Name>Marvin.JsonPatch</Name>
     </ProjectReference>
