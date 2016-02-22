@@ -13,7 +13,7 @@
 
     public class UserModel
     {
-        [JsonIgnore]
+    
         public bool IsUserAuthenticated = false;
         // FIXME: Do I really need the id here? because I can find anyone by username in
         // public profile, and when Im logged in, I already know my profile
