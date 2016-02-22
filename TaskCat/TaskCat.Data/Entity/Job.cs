@@ -30,7 +30,21 @@
 
         public Dictionary<string, AssetModel> Assets;
 
-        public List<JobTask> Tasks { get; set; }
+        private List<JobTask> tasks;
+        public List<JobTask> Tasks { get { return tasks; }
+            set
+            {
+                if (value != tasks)
+                {
+                    tasks = value;
+                    foreach (var item in tasks)
+                    {
+                        item.AssetUpdated += Jtask_AssetUpdated;
+                    }
+                }
+                
+            }
+        }
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof (StringEnumConverter))]
         public JobState State { get; set; }
@@ -65,6 +79,21 @@
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
             this.Assets = new Dictionary<string, AssetModel>();
+
+        }
+
+        public void AddTask(JobTask jtask)
+        {
+            if (this.Tasks == null)
+                Tasks = new List<JobTask>();
+            this.Tasks.Add(jtask);
+            jtask.AssetUpdated += Jtask_AssetUpdated;
+        }
+
+        private void Jtask_AssetUpdated(string AssetRef, AssetModel asset)
+        {
+            if (!Assets.ContainsKey(AssetRef))
+                Assets[AssetRef] = asset;
         }
 
         public Job(string name) : this()

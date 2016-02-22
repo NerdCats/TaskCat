@@ -108,7 +108,7 @@
 
         public JobTask()
         {
-            
+
         }
 
         public JobTask(string type, string name) : this()
