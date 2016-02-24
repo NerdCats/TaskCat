@@ -1,14 +1,14 @@
-﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TaskCat.Data.Entity;
-using TaskCat.Lib.Db;
-using TaskCat.Data.Model;
-using System.Linq;
-
-namespace TaskCat.Lib.Job
+﻿namespace TaskCat.Lib.Job
 {
+    using MongoDB.Driver;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using TaskCat.Data.Entity;
+    using TaskCat.Lib.Db;
+    using TaskCat.Data.Model;
+    using System.Linq;
+    
     public class JobStore
     {
         private IDbContext _context;
@@ -49,6 +49,7 @@ namespace TaskCat.Lib.Job
 
         internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
+            task.ModifiedTime = DateTime.Now;
             var Filter = Builders<Data.Entity.Job>.Filter.Where(x => x._id == jobId);
             var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks[taskIndex], task);
 
@@ -62,6 +63,13 @@ namespace TaskCat.Lib.Job
             var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks, tasks);
 
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
+            return result;
+        }
+
+        internal async Task<ReplaceOneResult> ReplaceOne(Job job)
+        {
+            var Filter = Builders<Job>.Filter.Where(x => x._id == job._id);
+            var result = await _context.Jobs.ReplaceOneAsync(Filter, job);
             return result;
         }
     }

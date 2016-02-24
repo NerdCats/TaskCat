@@ -74,5 +74,10 @@
         {
             return await _store.UpdateJobTasks(_id, tasks);
         }
+
+        internal async Task<ReplaceOneResult> UpdateJob(Job job)
+        {
+            return await _store.ReplaceOne(job);
+        }
     }
 }

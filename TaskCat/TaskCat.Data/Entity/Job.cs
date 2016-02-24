@@ -33,7 +33,8 @@
 
         public Dictionary<string, AssetModel> Assets;
 
-        public List<JobTask> Tasks { get; set; }
+        private List<JobTask> tasks;
+        public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
 
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof (StringEnumConverter))]
@@ -69,7 +70,6 @@
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
             this.Assets = new Dictionary<string, AssetModel>();
-
         }
 
         public void EnsureTaskAssetEventsAssigned()

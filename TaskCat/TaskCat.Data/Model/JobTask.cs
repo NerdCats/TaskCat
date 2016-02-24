@@ -12,6 +12,7 @@
     using Utility;
     using System.ComponentModel.DataAnnotations;
     using Identity.Response;
+
     public abstract class JobTask
     {
         protected string Name;
@@ -71,16 +72,14 @@
             }
             set
             {
-                if (value != assetRef)
+                assetRef = value;
+                if (AssetUpdated != null)
                 {
-                    assetRef = value;
-                    if (AssetUpdated != null)
-                    {
-                        if (Asset == null)
-                            throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
-                        AssetUpdated(assetRef, Asset);
-                    }
+                    if (Asset == null)
+                        throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
+                    AssetUpdated(assetRef, Asset);
                 }
+
             }
         }
 

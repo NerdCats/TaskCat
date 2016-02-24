@@ -19,7 +19,7 @@
     using Data.Model.Identity.Response;
     using Model.Pagination;
     using System.Collections;
-
+    using MongoDB.Driver;
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -158,23 +158,20 @@
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
-            var job = await _repository.GetJob(jobId);
-            if (job == null) return BadRequest("Invalid Job Id provided");
-
-            var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
-            if (selectedTask == null) return BadRequest("Invalid JobTask Id provided");  
+            try
+            {
+                ReplaceOneResult result = await _repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
+                return Json(result);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
             
-            // FIXME: Mind boggling hack here, the best thing here would be to write a ctAdapter derrivative
-            // or a BasicObjectAdaptor derivative just to make sure that this operation is contained or properly
-            // organized
-
-            await _repository.ResolveAssetRef(taskPatch);
-                
-            taskPatch.ApplyTo(selectedTask);
-            selectedTask.UpdateTask();
-
-            var result = await _repository.UpdateJobTasks(job, job.Tasks);
-            return Json(result);
         }
 
     }

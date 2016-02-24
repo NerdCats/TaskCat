@@ -60,12 +60,12 @@
             throw new NotImplementedException();
         }
 
-        public Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
+        public Task<ReplaceOneResult> UpdateJob(Job job)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks)
+        public Task<ReplaceOneResult> UpdateJobWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
             throw new NotImplementedException();
         }

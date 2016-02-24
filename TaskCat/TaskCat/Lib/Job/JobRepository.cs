@@ -63,14 +63,29 @@
             throw new NotImplementedException();
         }
 
-        public async Task<UpdateResult> UpdateJobTask(Job job, JobTask selectedTask)
+        public async Task<ReplaceOneResult> UpdateJob(Job job)
         {
-            return await _manager.UpdateJobTask(job._id, job.Tasks.IndexOf(selectedTask), selectedTask);
+            return await _manager.UpdateJob(job);
         }
 
-        public async Task<UpdateResult> UpdateJobTasks(Job job, List<JobTask> tasks)
+        public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
         {
-            return await _manager.UpdateJobTask(job._id, tasks);
+            var job = await GetJob(jobId);
+            if (job == null) throw new ArgumentException("Invalid Job Id provided");
+
+            var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
+            if (selectedTask == null) throw new ArgumentException("Invalid JobTask Id provided");
+
+            await ResolveAssetRef(taskPatch);
+
+            taskPatch.ApplyTo(selectedTask);
+            selectedTask.UpdateTask();
+
+            selectedTask.ModifiedTime = DateTime.UtcNow;
+            job.ModifiedTime = selectedTask.ModifiedTime;
+
+            var result = await UpdateJob(job);
+            return result;
         }
 
         public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
@@ -92,5 +107,7 @@
             }
 
         }
+
+       
     }
 }
