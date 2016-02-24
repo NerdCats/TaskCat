@@ -9,6 +9,7 @@
     using TaskCat.Data.Entity;
     using System.Web.Http;
     using MongoDB.Driver;
+    using Data.Model.Identity.Response;
 
     public class JobManager
     {
@@ -79,5 +80,6 @@
         {
             return await _store.ReplaceOne(job);
         }
+
     }
 }

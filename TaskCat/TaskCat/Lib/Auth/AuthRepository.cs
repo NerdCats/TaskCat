@@ -24,6 +24,7 @@
     using Storage;
     using Model.Storage;
     using Exceptions;
+    using Job;
 
     public class AuthRepository
     {
@@ -32,7 +33,10 @@
         private readonly AccountManger accountManager;
         private readonly IBlobService blobService;
 
-        public AuthRepository(IDbContext dbContext, AccountManger accoutnManager, IBlobService blobService)
+        public AuthRepository(
+            IDbContext dbContext, 
+            AccountManger accoutnManager, 
+            IBlobService blobService)
         {
             this.dbContext = dbContext;
             this.accountManager = accoutnManager;
@@ -145,7 +149,15 @@
             model.PicUri = user.Profile.PicUri;
             user.Profile = model;
 
-            return await accountManager.UpdateAsync(user);
+            var result = await accountManager.UpdateAsync(user);
+            if (user.Type != IdentityTypes.USER)
+            {
+                var updateDef = Builders<Job>.Update.Set(x => x.Assets[user.Id], new AssetModel(user as Asset));
+                var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
+                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);                    
+            }
+            return result;
+
         }
 
         internal async Task<IdentityResult> UpdateById(UserProfile model, string userId)
