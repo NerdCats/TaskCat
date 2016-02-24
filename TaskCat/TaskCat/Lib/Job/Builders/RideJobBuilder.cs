@@ -38,6 +38,8 @@
 
             _job.TerminalTask = pickupRideTask;
 
+            _job.EnsureTaskAssetEventsAssigned();
+
         }
 
         // FIXME: I can definitely put this over in the job or at least put a

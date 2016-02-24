@@ -15,6 +15,9 @@
 
     public class Job : DbEntity
     {
+        [BsonIgnore]
+        public bool IsAssetEventsHooked = false;
+
         public string Name { get; set; }
 
         [BsonIgnoreIfNull]
@@ -30,21 +33,8 @@
 
         public Dictionary<string, AssetModel> Assets;
 
-        private List<JobTask> tasks;
-        public List<JobTask> Tasks { get { return tasks; }
-            set
-            {
-                if (value != tasks)
-                {
-                    tasks = value;
-                    foreach (var item in tasks)
-                    {
-                        item.AssetUpdated += Jtask_AssetUpdated;
-                    }
-                }
-                
-            }
-        }
+        public List<JobTask> Tasks { get; set; }
+
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof (StringEnumConverter))]
         public JobState State { get; set; }
@@ -80,6 +70,18 @@
             ModifiedTime = DateTime.UtcNow;
             this.Assets = new Dictionary<string, AssetModel>();
 
+        }
+
+        public void EnsureTaskAssetEventsAssigned()
+        {
+            if(this.Tasks!=null && this.Tasks.Count>0)
+            {
+                foreach (var task in Tasks)
+                {
+                    task.AssetUpdated += Jtask_AssetUpdated;
+                }
+                IsAssetEventsHooked = true;
+            }         
         }
 
         public void AddTask(JobTask jtask)
