@@ -61,7 +61,7 @@
         {
             var result = new FetchRideTaskResult();
             result.ResultType = typeof(FetchRideTaskResult);
-            if (this.Asset == null)
+            if (this.AssetRef == null)
                 throw new InvalidOperationException("Moving to next state when Asset is null.");
             result.Asset = this.Asset;
             result.From = this.From;
