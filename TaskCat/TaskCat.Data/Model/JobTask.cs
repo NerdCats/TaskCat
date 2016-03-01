@@ -53,13 +53,14 @@
         public JobTaskStates State { get; set; }
         
         private AssetModel asset;
+        [JsonIgnore]
         [BsonIgnore]
         public AssetModel Asset {
             get { return asset; }
             set {
                 asset = value;
                 if(value!=null)
-                    this.AssetRef = asset.Id;
+                    this.AssetRef = asset.UserId;
             }
         }
 

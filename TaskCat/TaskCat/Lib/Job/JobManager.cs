@@ -39,6 +39,7 @@
             JobPayload.TerminalTask = TerminalTask;
 
             JobPayload.EnsureTaskAssetEventsAssigned();
+            JobPayload.EnsureAssetModelsPropagated();
 
             return JobPayload;
         }

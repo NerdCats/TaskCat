@@ -39,6 +39,7 @@
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof (StringEnumConverter))]
         public JobState State { get; set; }
+
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> UserLocation { get; set; }
@@ -82,6 +83,21 @@
                 }
                 IsAssetEventsHooked = true;
             }         
+        }
+
+        public void EnsureAssetModelsPropagated()
+        {
+            if (this.Tasks != null && this.Tasks.Count > 0)
+            {
+                foreach (var task in Tasks)
+                {
+                    if (task.AssetRef != null)
+                    {
+                        var asset = Assets[task.AssetRef];
+                        task.Asset = Assets[task.AssetRef];
+                    }
+                }
+            }
         }
 
         public void AddTask(JobTask jtask)

@@ -17,7 +17,8 @@
         public bool IsUserAuthenticated = false;
         // FIXME: Do I really need the id here? because I can find anyone by username in
         // public profile, and when Im logged in, I already know my profile
-        public string Id { get; set; }
+        [JsonProperty(PropertyName = "Id")]
+        public string UserId { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public IdentityTypes Type { get; set; }     
         public string UserName { get; set; }
@@ -34,7 +35,7 @@
 
         public UserModel(User user, bool isUserAuthenticated = false)
         {
-            this.Id = user.Id;
+            this.UserId = user.Id;
             this.Type = user.Type;
             this.PhoneNumber = user.PhoneNumberConfirmed ? user.PhoneNumber : string.Empty;
             this.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
