@@ -107,6 +107,7 @@
 
         public override void UpdateTask()
         {
+            IsReadytoMoveToNextTask = (FromLocation != null && ToLocation != null && Asset != null) ? true : false;
             MoveToNextState();
         }
 

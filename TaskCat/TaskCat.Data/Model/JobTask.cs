@@ -153,7 +153,7 @@
                     JobTaskStateUpdated(this, State);
             }
 
-            if (State == JobTaskStates.COMPLETED && Result != null && IsReadytoMoveToNextTask)
+            if (State == JobTaskStates.COMPLETED && IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();
             else
                 throw new InvalidOperationException("Job is not ready to move to next Task");
@@ -162,9 +162,6 @@
 
         protected virtual void NotifyJobTaskCompleted()
         {
-            if (Result.TaskCompletionTime == null)
-                Result.TaskCompletionTime = DateTime.UtcNow;
-
             if (!IsReadytoMoveToNextTask)
                 throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
 
@@ -172,6 +169,8 @@
             if (JobTaskCompleted != null)
             {
                 Result = SetResultToNextState();
+                if (Result!=null && Result.TaskCompletionTime == null)
+                    Result.TaskCompletionTime = DateTime.UtcNow;
                 JobTaskCompleted(this, Result);
             }
         }
