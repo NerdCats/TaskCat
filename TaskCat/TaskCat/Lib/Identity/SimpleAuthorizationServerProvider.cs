@@ -28,6 +28,8 @@
             var clientSecret = default(string);
             var client = default(Client);
 
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+
             if (!context.TryGetBasicCredentials(out clientId, out clientSecret))
             {
                 context.TryGetFormCredentials(out clientId, out clientSecret);
