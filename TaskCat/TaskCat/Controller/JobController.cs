@@ -103,7 +103,7 @@
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
-
+            
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
             if (page < 0)

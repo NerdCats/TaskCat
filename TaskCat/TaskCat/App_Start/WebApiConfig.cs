@@ -4,12 +4,11 @@
     using Newtonsoft.Json;
     using Swashbuckle.Application;
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
+    using System.Web.OData.Extensions;
     using TaskCat.Lib.Utility.Converter;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -17,6 +16,7 @@
     {
         public static void Register(HttpConfiguration config, AutofacWebApiDependencyResolver resolver)
         {
+            config.EnableEnumPrefixFree(enumPrefixFree: true);
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
