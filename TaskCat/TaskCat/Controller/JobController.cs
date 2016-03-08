@@ -124,7 +124,7 @@
                 var result = await _repository.GetJobs(page, pageSize);
                 var queryResult = (query.ApplyTo(result)) as IEnumerable<Job>;
 
-                if (query.Count.Value)
+                if (query.Count!=null && query.Count.Value)
                     return Json( new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
                 return Json(queryResult);
             }

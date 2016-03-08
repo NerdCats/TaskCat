@@ -16,6 +16,7 @@
     public class Job : DbEntity
     {
         [BsonIgnore]
+        [JsonIgnore]
         public bool IsAssetEventsHooked = false;
 
         public string Name { get; set; }
