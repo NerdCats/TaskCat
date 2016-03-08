@@ -101,7 +101,7 @@
 
         [Route("api/Job/odata")]
         [HttpGet]
-        public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
+        public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             
             if (pageSize == 0)
@@ -124,7 +124,7 @@
                 var result = await _repository.GetJobs(page, pageSize);
                 var queryResult = (query.ApplyTo(result)) as IEnumerable<Job>;
 
-                if (query.Count!=null && query.Count.Value)
+                if (envelope)
                     return Json( new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
                 return Json(queryResult);
             }
