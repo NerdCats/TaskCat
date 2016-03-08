@@ -82,6 +82,7 @@
                 return InternalServerError(ex);
             }
         }
+
         /// <summary>
         /// Odata powered query to get jobs
         /// </summary>
@@ -94,6 +95,9 @@
         /// </param>
         /// <param name="page">
         /// page number to be fetched
+        /// </param>
+        /// <param name="envelope">
+        /// By default this is true, given false, the result comes as not paged
         /// </param>
         /// <returns>
         /// A list of Jobs that complies with the query
