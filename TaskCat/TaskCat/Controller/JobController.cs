@@ -69,7 +69,7 @@
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             try
             {
