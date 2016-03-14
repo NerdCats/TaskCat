@@ -20,11 +20,11 @@
     using Model.Pagination;
     using System.Collections;
     using MongoDB.Driver;
+
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
     /// 
-
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -103,7 +103,7 @@
         /// A list of Jobs that complies with the query
         /// </returns>
 
-        [Route("api/Job/odata")]
+        [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {

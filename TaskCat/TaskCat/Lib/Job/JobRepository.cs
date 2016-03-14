@@ -62,7 +62,7 @@
         public async Task<PageEnvelope<Job>> GetJobsEnveloped(ODataQueryOptions<Job> query, int page, int pageSize, HttpRequestMessage request)
         {
             var result = await GetJobs(query, page, pageSize);
-            return new PageEnvelope<Job>(result.Total, page, pageSize, AppConstants.DefaultApiRoute, result.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
+            return new PageEnvelope<Job>(result.Total, page, pageSize, AppConstants.DefaultOdataRoute, result.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
         }
 
         public Task<Job> PostJob(JobModel model)
