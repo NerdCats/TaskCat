@@ -19,7 +19,8 @@
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
     using Newtonsoft.Json;
-
+    using System.Web.OData.Query;
+    using Data.Model.Query;
     public class JobRepository : IJobRepository
     {
         private JobManager _manager;
@@ -43,11 +44,11 @@
             return await _manager.GetJobs(type, page * pageSize, pageSize);
         }
 
-        public async Task<IQueryable<Job>> GetJobs(int page, int pageSize)
+        public async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int page, int pageSize)
         {
             if (page < 0)
                 throw new ArgumentException("Invalid page index provided");
-            return await _manager.GetJobs(page * pageSize, pageSize);
+            return await _manager.GetJobs(query, page * pageSize, pageSize);
         }
 
         public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int page, int pageSize, HttpRequestMessage request)
@@ -55,7 +56,13 @@
             var data = await GetJobs(type, page, pageSize);
             var total = await _manager.GetTotalJobCount();
 
-            return new PageEnvelope<Job>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request, new Dictionary<string, object>() { ["type"] = type });
+            return new PageEnvelope<Job>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request, new Dictionary<string, string>() { ["type"] = type });
+        }
+
+        public async Task<PageEnvelope<Job>> GetJobsEnveloped(ODataQueryOptions<Job> query, int page, int pageSize, HttpRequestMessage request)
+        {
+            var result = await GetJobs(query, page, pageSize);
+            return new PageEnvelope<Job>(result.Total, page, pageSize, AppConstants.DefaultApiRoute, result.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
         }
 
         public Task<Job> PostJob(JobModel model)

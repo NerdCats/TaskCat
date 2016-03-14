@@ -15,7 +15,7 @@
             urlHelper = new UrlHelper(requestMessage);
         }
 
-        internal string GeneratePageUrl(string route, long page, long pageSize, Dictionary<string, object> otherParams = null)
+        internal string GeneratePageUrl(string route, long page, long pageSize, IDictionary<string, string> otherParams = null)
         {
             Dictionary<string, object> routeParams = new Dictionary<string, object>();
             routeParams.Add("page", page);
@@ -26,11 +26,13 @@
             {
                 foreach (var item in otherParams)
                 {
-                    routeParams.Add(item.Key, item.Value);
+                    if (!routeParams.ContainsKey(item.Key))
+                        routeParams.Add(item.Key, item.Value);
                 }
             }
 
             return urlHelper.Link(route, routeParams);
         }
+
     }
 }

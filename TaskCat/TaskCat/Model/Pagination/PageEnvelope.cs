@@ -21,7 +21,7 @@
             string route, 
             IEnumerable<T> data, 
             HttpRequestMessage request,
-            Dictionary<string, object> otherParams = null)
+            Dictionary<string, string> otherParams = null)
         {
             _paginationHelper = new PagingHelper(request);
             var totalPages = (int)Math.Ceiling((double)total / pageSize);

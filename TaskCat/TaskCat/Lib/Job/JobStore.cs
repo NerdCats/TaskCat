@@ -8,7 +8,9 @@
     using TaskCat.Lib.Db;
     using TaskCat.Data.Model;
     using System.Linq;
-    
+    using System.Web.OData.Query;
+    using Data.Model.Query;
+
     public class JobStore
     {
         private IDbContext _context;
@@ -35,10 +37,11 @@
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
 
-        internal async Task<IQueryable<Data.Entity.Job>> FindJobs(int start, int limit)
+        internal async Task<QueryResult<Job>> FindJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
             return await Task.Run(() => {
-                return _context.Jobs.AsQueryable();
+                var queryResult = query.ApplyTo(_context.Jobs.AsQueryable()) as IEnumerable<Job>;
+                return new QueryResult<Job>(queryResult.Skip(start).Take(limit), queryResult.LongCount());
             });
         }
 

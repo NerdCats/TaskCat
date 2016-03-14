@@ -113,7 +113,7 @@
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
             try
             {
                 var settings = new ODataValidationSettings()
@@ -125,12 +125,9 @@
 
                 query.Validate(settings);
 
-                var result = await _repository.GetJobs(page, pageSize);
-                var queryResult = (query.ApplyTo(result)) as IEnumerable<Job>;
-
                 if (envelope)
-                    return Json( new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-                return Json(queryResult);
+                    return Json( await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
+                return Json(await _repository.GetJobs(query, page, pageSize));
             }
             catch (Exception ex)
             {

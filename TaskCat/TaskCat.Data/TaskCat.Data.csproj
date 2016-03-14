@@ -103,6 +103,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
+    <Compile Include="Model\Query\QueryResult.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />

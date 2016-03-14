@@ -13,6 +13,8 @@
     using System.Net.Http;
     using MongoDB.Driver;
     using Marvin.JsonPatch;
+    using System.Web.OData.Query;
+    using Data.Model.Query;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -27,7 +29,12 @@
             return await task;
         }
 
-        public Task<IQueryable<Job>> GetJobs(int page, int pageSize)
+        public Task<PageEnvelope<Job>> GetJobsEnveloped(ODataQueryOptions<Job> query, int page, int pageSize, HttpRequestMessage request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int page, int pageSize)
         {
             throw new NotImplementedException();
         }

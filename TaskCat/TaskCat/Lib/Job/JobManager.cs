@@ -10,7 +10,8 @@
     using System.Web.Http;
     using MongoDB.Driver;
     using Data.Model.Identity.Response;
-
+    using System.Web.OData.Query;
+    using Data.Model.Query;
     public class JobManager
     {
         private JobStore _store;
@@ -49,10 +50,10 @@
             return await _store.CountJobs();
         }
 
-        internal async Task<IQueryable<Job>> GetJobs(int start, int limit)
+        internal async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
-            var jobs = await _store.FindJobs(start, limit);
-            return jobs;
+            var jobsResult = await _store.FindJobs(query, start, limit);
+            return jobsResult;
         }
 
         internal async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
