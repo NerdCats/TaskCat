@@ -9,12 +9,17 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.9.0",
-    "jspm": "^0.16.31"
+    "http-server": "^0.9.0"
   },
-  "dependencies": {},
-  "jspm": {
-    "dependencies": {},
-    "devDependencies": {}
+  "dependencies": {
+    "angular": "^1.5.2",
+    "angular-animate": "^1.5.2",
+    "angular-aria": "^1.5.2",
+    "angular-material": "^1.0.6",
+    "angular-messages": "^1.5.2"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "http-server -a 0.0.0.0 -p 8000 -c-1"
   }
 }
