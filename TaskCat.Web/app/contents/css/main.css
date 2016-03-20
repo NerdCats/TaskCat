@@ -1,3 +1,7 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
+
+md-sidenav md-toolbar p {
+  margin-left: 10px;
+}
