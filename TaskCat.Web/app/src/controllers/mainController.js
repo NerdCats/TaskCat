@@ -5,12 +5,13 @@
     .module('app')
     .controller('mainController', mainController);
 
-  mainController.$inject = ['$mdSidenav'];
+  mainController.$inject = ['$mdSidenav', 'orderService'];
 
   /* @ngInject */
-  function mainController($mdSidenav) {
+  function mainController($mdSidenav, orderService) {
     var vm = this;
     vm.toggleSideNav = toggleSideNav;
+    vm.orders = orderService.getSupportedOrders();
 
     activate();
 
