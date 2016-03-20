@@ -2,6 +2,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-md-sidenav md-toolbar p {
+md-sidenav md-toolbar h3 {
   margin-left: 10px;
+}
+
+h3 {
+  font-weight: normal;
 }
