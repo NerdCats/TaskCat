@@ -19,14 +19,16 @@
           "ActionName":"Get",
           "OrderName":"Food",
           "ImageUrl":"string",
-          "OrderCode":"GETFOOD"
+          "OrderCode":"GETFOOD",
+          "Background":"blue"
         },
         {
           "_id":"56e90879180373262cd72d1c",
           "ActionName":"Grab",
           "OrderName":"CNG",
           "ImageUrl":"string",
-          "OrderCode":"GRABCNG"
+          "OrderCode":"GRABCNG",
+          "Background":"blue"
         },
       ];
 

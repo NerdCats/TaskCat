@@ -64,8 +64,23 @@
         <h3>GO! Fetch</h3>
       </md-toolbar>
 
-    </div>
+      <div flex layout="column" layout-align="center">
+        <md-grid-list
+              md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6"
+              md-row-height-gt-md="1:1" md-row-height="4:3"
+              md-gutter="8px" md-gutter-gt-sm="4px" >
+          <md-grid-tile ng-repeat="order in main.orders"
+                        md-colspan-sm="1"
+                        style="background: #b9f6ca;" >
+            <md-icon md-svg-icon="{{order.icon}}"></md-icon>
+            <md-grid-tile-footer>
+              <h3>{{order.ActionName}}</h3>
+            </md-grid-tile-footer>
+          </md-grid-tile>
+        </md-grid-list>
+      </div>
 
+    </div>
 
   </body>
 </html>

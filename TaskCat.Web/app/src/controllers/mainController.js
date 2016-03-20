@@ -12,6 +12,7 @@
     var vm = this;
     vm.toggleSideNav = toggleSideNav;
     vm.orders = orderService.getSupportedOrders();
+    console.log(vm.orders);
 
     activate();
 
