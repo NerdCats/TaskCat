@@ -19,12 +19,24 @@
 
         }
 
-        public async Task<bool> DeleteBlob(string blobName)
+        public async Task<bool> TryDeleteBlob(string blobName)
         {
             var container = BlobHelper.GetBlobContainer();
             var blob = container.GetBlockBlobReference(blobName);
 
             return await blob.DeleteIfExistsAsync();
+        }
+
+        public async Task<FileDeleteModel> DeleteBlob(string blobName)
+        {
+            try
+            {
+                return new FileDeleteModel() { FileName = blobName, Status = await TryDeleteBlob(blobName) ? DeletionStatus.SUCCESSFUL : DeletionStatus.FILENOTFOUND };
+            }
+            catch
+            {
+                return new FileDeleteModel() { FileName = blobName, Status = DeletionStatus.FAILED };
+            }
         }
 
         public async Task<FileDownloadModel> DownloadBlob(string blobName)
@@ -50,7 +62,7 @@
         }
 
         public async Task<FileUploadModel> UploadBlob(HttpContent httpContent, string filterPropertyName, IEnumerable<string> supportedFileTypes = null)
-        { 
+        {
             var MultiPartProvider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             await httpContent.ReadAsMultipartAsync(MultiPartProvider).ContinueWith(task =>
             {

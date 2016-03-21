@@ -289,7 +289,7 @@
                 // INFO: Upload was alright but our update failed, we should delete the file we
                 // created on the blob storage or it will keep blocking stuff for us.
 
-                if (!await blobService.DeleteBlob(fileUploadModel.FileName))
+                if (!await blobService.TryDeleteBlob(fileUploadModel.FileName))
                 {
                     // TODO: We should log that we failed to delete this
                 }

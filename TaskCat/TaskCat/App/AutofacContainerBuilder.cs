@@ -47,10 +47,12 @@
 
             builder.RegisterType<SupportedOrderStore>().SingleInstance();
 
-            builder.Register<BlobService>(c=>new BlobService()).As<IBlobService>().SingleInstance();
+            builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
 
             builder.RegisterType<AuthRepository>()
                 .SingleInstance();
+
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<SimpleAuthorizationServerProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();

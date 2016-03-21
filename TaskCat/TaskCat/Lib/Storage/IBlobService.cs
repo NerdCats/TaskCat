@@ -35,10 +35,18 @@
         /// <returns></returns>
         Task<FileDownloadModel> DownloadBlob(string blobName);
         /// <summary>
-        /// Deletes a blob/file from storage
+        /// Tries to delete a blob/file from storage
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        Task<bool> DeleteBlob(string fileName);
+        Task<bool> TryDeleteBlob(string fileName);
+        /// <summary>
+        /// Deletes a blob/file from storage with proper status
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>
+        /// Returns a FileDeleteModel object with proper deletion status
+        /// </returns>
+        Task<FileDeleteModel> DeleteBlob(string fileName);
     }
 }
