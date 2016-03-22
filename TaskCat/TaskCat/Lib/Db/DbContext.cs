@@ -12,6 +12,7 @@
     using MongoDB.Bson.Serialization.Conventions;
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
+    using System.Threading.Tasks;
 
     public class DbContext : IDbContext
     {
@@ -89,8 +90,9 @@
         {
             IndexChecks.EnsureUniqueIndexOnUserName(_users);
             IndexChecks.EnsureUniqueIndexOnEmail(_users);
-
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
+
+            IndexFacade.EnsureJobIndexes(_jobs);
         }
 
         private void InitiateCollections()
