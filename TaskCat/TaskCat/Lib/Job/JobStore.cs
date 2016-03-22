@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Web.OData.Query;
     using Data.Model.Query;
+    using LinqToQuerystring;
 
     public class JobStore
     {
@@ -39,9 +40,10 @@
 
         internal async Task<QueryResult<Job>> FindJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
-            return await Task.Run(() => {
-                var queryResult = query.ApplyTo(_context.Jobs.AsQueryable()) as IEnumerable<Job>;
-                return new QueryResult<Job>(queryResult.Skip(start).Take(limit), queryResult.LongCount());
+            return await Task.Run(() => {            
+                var queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
+                var data = queryResult.LinqToQuerystring(typeof(Job), "$orderby="+query.OrderBy.RawValue) as IEnumerable<Job>;
+                return new QueryResult<Job>(data.Skip(start).Take(limit), data.LongCount());
             });
         }
 

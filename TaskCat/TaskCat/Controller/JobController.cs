@@ -120,7 +120,7 @@
                 {
                     // Initialize settings as needed.
                     AllowedFunctions = AllowedFunctions.AllMathFunctions,
-                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy | AllowedQueryOptions.Skip | AllowedQueryOptions.Top
+                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
                 };
 
                 query.Validate(settings);
