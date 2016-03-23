@@ -2,8 +2,8 @@
   'use strict';
 
   angular
-  .module('app')
-  .config(themeConfig);
+    .module('app')
+    .config(themeConfig);
 
   themeConfig.$inject = ['$mdThemingProvider', '$mdIconProvider'];
 
@@ -12,8 +12,8 @@
   }
 
   logConfig.$inject = ['$logProvider', 'appSettings'];
-  function logConfig($logProvider, appSettings)
-  {
+
+  function logConfig($logProvider, appSettings) {
     $logProvider.debugEnabled(appSettings.debugEnabled);
   }
 })();

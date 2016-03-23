@@ -1,9 +1,9 @@
 (function() {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('app', [
-          'ngRoute',
-          'ngMaterial'
-        ]);
+  angular
+    .module('app', [
+      'ngRoute',
+      'ngMaterial'
+    ]);
 })();
