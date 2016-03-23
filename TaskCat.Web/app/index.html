@@ -33,12 +33,15 @@
     <script type="text/javascript" src="./src/app.constant.js"></script>
     <script type="text/javascript" src="./src/app.config.js"></script>
 
-
     <!--controllers-->
     <script type="text/javascript" src="./src/controllers/mainController.js"></script>
 
     <!--services-->
     <script type="text/javascript" src="./src/services/orderService.js"></script>
+
+    <!--directives-->
+    <script type="text/javascript" src="./src/app.directives.js"></script>
+
   </head>
 
   <body ng-app="app" layout="row" ng-cloak>
@@ -72,7 +75,7 @@
               md-gutter="8px" md-gutter-gt-sm="4px" >
           <md-grid-tile ng-repeat="order in main.orders"
                         md-colspan-sm="1"
-                        style="background: #b9f6ca;" >
+                        nc-back-img="{{order.ImageUrl}}" >
             <md-icon md-svg-icon="{{order.icon}}"></md-icon>
             <md-grid-tile-footer>
               <h3>{{order.ActionName}}</h3>
