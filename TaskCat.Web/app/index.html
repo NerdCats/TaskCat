@@ -30,8 +30,9 @@
 
     <!--Angular modules go here -->
     <script type="text/javascript" src="./src/app.js"></script>
-    <script type="text/javascript" src="./src/app.theme-config.js"></script>
     <script type="text/javascript" src="./src/app.constant.js"></script>
+    <script type="text/javascript" src="./src/app.config.js"></script>
+
 
     <!--controllers-->
     <script type="text/javascript" src="./src/controllers/mainController.js"></script>
@@ -64,9 +65,9 @@
         <h3>GO! Fetch</h3>
       </md-toolbar>
 
-      <div flex layout="column" layout-align="center">
+      <div flex layout="column">
         <md-grid-list
-              md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6"
+              md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="3"
               md-row-height-gt-md="1:1" md-row-height="4:3"
               md-gutter="8px" md-gutter-gt-sm="4px" >
           <md-grid-tile ng-repeat="order in main.orders"

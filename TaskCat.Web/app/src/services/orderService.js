@@ -5,34 +5,17 @@
   .module('app')
   .service('orderService', orderService);
 
-  orderService.$inject = ['appSettings'];
+  orderService.$inject = ['appSettings', '$http', '$q'];
 
   /* @ngInject */
-  function orderService(appSettings) {
+  function orderService(appSettings, $http, $q) {
     this.getSupportedOrders = getSupportedOrders;
+    var serviceUrlExtension='order/';
 
-    function getSupportedOrders() {
-      //This is mock data of course
-      var data=[
-        {
-          "_id":"56e90879180373262cd72d1b",
-          "ActionName":"Get",
-          "OrderName":"Food",
-          "ImageUrl":"string",
-          "OrderCode":"GETFOOD",
-          "Background":"blue"
-        },
-        {
-          "_id":"56e90879180373262cd72d1c",
-          "ActionName":"Grab",
-          "OrderName":"CNG",
-          "ImageUrl":"string",
-          "OrderCode":"GRABCNG",
-          "Background":"blue"
-        },
-      ];
-
-      return data;
+    function getSupportedOrders()
+    {
+      var deferred = $q.defer();
+      return $http.get(appSettings.apiServiceBaseUri + serviceUrlExtension + 'supportedOrder');
     }
   }
 })();
