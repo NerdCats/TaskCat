@@ -42,17 +42,11 @@
         {
             return await Task.Run(() => {
                 IQueryable queryResult; 
-                IEnumerable<Job> data;
-                if (query.OrderBy==null)
-                {
-                    queryResult = query.ApplyTo(_context.Jobs.AsQueryable());
-                    data = queryResult as IEnumerable<Job>;
-                }
-                else
-                {                    
-                    queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
-                    data = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IEnumerable<Job>;
-                }                
+                queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
+                if (query.OrderBy!=null)
+                    queryResult = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IQueryable<Job>;
+                
+                var data = queryResult as IEnumerable<Job>;
                 return new QueryResult<Job>(data.Skip(start).Take(limit), data.LongCount());
             });
         }
