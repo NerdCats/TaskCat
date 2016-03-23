@@ -40,9 +40,19 @@
 
         internal async Task<QueryResult<Job>> FindJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
-            return await Task.Run(() => {            
-                var queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
-                var data = queryResult.LinqToQuerystring(typeof(Job), "$orderby="+query.OrderBy.RawValue) as IEnumerable<Job>;
+            return await Task.Run(() => {
+                IQueryable queryResult; 
+                IEnumerable<Job> data;
+                if (query.OrderBy==null)
+                {
+                    queryResult = query.ApplyTo(_context.Jobs.AsQueryable());
+                    data = queryResult as IEnumerable<Job>;
+                }
+                else
+                {                    
+                    queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
+                    data = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IEnumerable<Job>;
+                }                
                 return new QueryResult<Job>(data.Skip(start).Take(limit), data.LongCount());
             });
         }
