@@ -31,6 +31,7 @@
     <!--Angular modules go here -->
     <script type="text/javascript" src="./src/app.js"></script>
     <script type="text/javascript" src="./src/app.constant.js"></script>
+    <script type="text/javascript" src="./src/interceptors/XHRReqInterceptor.js"></script>
     <script type="text/javascript" src="./src/app.config.js"></script>
 
     <!--controllers-->
@@ -40,7 +41,8 @@
     <script type="text/javascript" src="./src/services/orderService.js"></script>
 
     <!--directives-->
-    <script type="text/javascript" src="./src/app.directives.js"></script>
+    <script type="text/javascript" src="./src/directives/NCBackImg.js"></script>
+    <script type="text/javascript" src="./src/directives/NCXHRLoader.js"></script>
 
   </head>
 
@@ -67,6 +69,9 @@
         </md-button>
         <h3>GO! Fetch</h3>
       </md-toolbar>
+
+
+        <md-progress-linear nc-xhr-loader md-mode="indeterminate"></md-progress-linear>
 
       <div flex layout="column">
         <md-grid-list

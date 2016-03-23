@@ -3,7 +3,9 @@
 
   angular
     .module('app')
-    .config(themeConfig);
+    .config(themeConfig)
+    .config(logConfig)
+    .config(httpProvidercConfig);
 
   themeConfig.$inject = ['$mdThemingProvider', '$mdIconProvider'];
 
@@ -18,4 +20,11 @@
   function logConfig($logProvider, appSettings) {
     $logProvider.debugEnabled(appSettings.debugEnabled);
   }
+
+  httpProvidercConfig.$inject = ['$httpProvider'];
+
+  function httpProvidercConfig($httpProvider) {
+    $httpProvider.interceptors.push('xhrReqInterceptor');
+  }
+
 })();
