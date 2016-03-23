@@ -9,6 +9,8 @@
 
   function themeConfig($mdThemingProvider, $mdIconProvider) {
     $mdIconProvider.icon("menu", "./contents/svg/menu.svg");
+    $mdThemingProvider.theme('default')
+    .primaryPalette('deep-purple');
   }
 
   logConfig.$inject = ['$logProvider', 'appSettings'];

@@ -77,10 +77,12 @@
                         md-colspan-sm="1"
                         nc-back-img="{{order.ImageUrl}}" >
             <md-icon md-svg-icon="{{order.icon}}"></md-icon>
-            <md-grid-tile-footer>
-              <h3>{{order.ActionName}}</h3>
-            </md-grid-tile-footer>
+            <md-grid-tile-header>
+              <h2 class="toUpperCase">{{order.ActionName}}</h2>
+              <h1 class="toUpperCase">{{order.OrderName}}</h1>
+            </md-grid-tile-header>
           </md-grid-tile>
+
         </md-grid-list>
       </div>
 
