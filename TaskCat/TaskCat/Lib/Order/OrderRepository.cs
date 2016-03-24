@@ -29,11 +29,11 @@
             Job createdJob;
             switch (model.Type)
             {
-                case "Ride":
+                case OrderTypes.Ride:
                     builder = new RideJobBuilder(model as RideOrder);
                     createdJob = jobShop.Construct(builder);
                     break;
-                case "Delivery":
+                case OrderTypes.Delivery:
                     builder = new DeliveryJobBuilder(model as DeliveryOrder);
                     createdJob = jobShop.Construct(builder);
                     break;

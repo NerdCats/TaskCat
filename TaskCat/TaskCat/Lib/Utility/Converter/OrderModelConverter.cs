@@ -30,8 +30,11 @@
             string orderType = type.Value<string>();
             switch (orderType)
             {
-                case "Ride":
+                case OrderTypes.Ride:
                     orderModel = new RideOrder();
+                    break;
+                case OrderTypes.Delivery:
+                    orderModel = new DeliveryOrder();
                     break;
                 default:
                     throw new NotSupportedException(string.Concat("Order Entry type invalid/no supported - ", orderType));

@@ -103,6 +103,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
+    <Compile Include="Model\Order\OrderTypes.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\Query\QueryResult.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
