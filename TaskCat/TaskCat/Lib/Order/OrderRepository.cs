@@ -25,11 +25,16 @@
         public async Task<Job> PostOrder(OrderModel model)
         {
             JobShop jobShop = new JobShop();
+            JobBuilder builder;
             Job createdJob;
             switch (model.Type)
             {
                 case "Ride":
-                    JobBuilder builder = new RideJobBuilder(model as RideOrder);
+                    builder = new RideJobBuilder(model as RideOrder);
+                    createdJob = jobShop.Construct(builder);
+                    break;
+                case "Delivery":
+                    builder = new DeliveryJobBuilder(model as DeliveryOrder);
                     createdJob = jobShop.Construct(builder);
                     break;
                 default:

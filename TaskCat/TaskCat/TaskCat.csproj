@@ -266,6 +266,7 @@
     <Compile Include="Lib\Constants\ModelExportTypes.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
+    <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Storage\BlobHelper.cs" />
     <Compile Include="Lib\Storage\BlobService.cs" />
