@@ -15,7 +15,7 @@
       state: 'index',
       config: {
         url: '',
-        templateUrl: 'src/layouts/partial-orders.html',
+        templateUrl: 'src/layouts/partial.orders.html',
         controller: 'orderController',
         controllerAs: 'vm'
       }

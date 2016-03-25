@@ -4,6 +4,7 @@
   angular
     .module('app')
     .config('orderPathSettings', {
-      "ride":"ride.layout"
+      "ride":"partial-ride",
+      "delivery":"partial-deliervy"
     });
 })();
