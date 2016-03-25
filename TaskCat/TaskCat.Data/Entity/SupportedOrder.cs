@@ -24,7 +24,7 @@ namespace TaskCat.Data.Entity
         public string OrderName { get; set; }
         public string ImageUrl { get; set; }
 
-        [Required(ErrorMessage ="You must provide the the supported order code, currently supported orders will be found in this URL: /api/supportedorder/get")]        
+        [Required(ErrorMessage ="You must provide the the supported order code. supportedorder/get")]        
         public string OrderCode { get; set; }        
     }       
 }

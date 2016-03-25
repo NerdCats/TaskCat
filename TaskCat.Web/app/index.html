@@ -1,98 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Go! Fetch</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
 
-    <!--Stylesheets goes here -->
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'/>
-    <link rel='stylesheet' href="../node_modules/angular-material/angular-material.css"/>
-    <link rel='stylesheet' href="./contents/css/main.css"></link>
+<head>
+  <title>Go! Fetch</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
 
-    <style type="text/css">
-      /**
+  <!--Stylesheets goes here -->
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic' />
+  <link rel='stylesheet' href="../node_modules/angular-material/angular-material.css" />
+  <link rel='stylesheet' href="./contents/css/main.css"></link>
+
+  <style type="text/css">
+    /**
        * Hide when Angular is not yet loaded and initialized
        */
-      [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-        display: none !important;
-      }
-    </style>
 
-    <!--Scripts go here-->
-    <script type="text/javascript" src="../node_modules/angular/angular.js"></script>
-    <script type="text/javascript" src="../node_modules/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="../node_modules/angular-animate/angular-animate.js"></script>
-    <script type="text/javascript" src="../node_modules/angular-aria/angular-aria.js"></script>
-    <script type="text/javascript" src="../node_modules/angular-material/angular-material.js"></script>
+    [ng\:cloak],
+    [ng-cloak],
+    [data-ng-cloak],
+    [x-ng-cloak],
+    .ng-cloak,
+    .x-ng-cloak {
+      display: none !important;
+    }
+  </style>
 
-    <!--Angular modules go here -->
-    <script type="text/javascript" src="./src/app.js"></script>
-    <script type="text/javascript" src="./src/app.constant.js"></script>
-    <script type="text/javascript" src="./src/interceptors/XHRReqInterceptor.js"></script>
-    <script type="text/javascript" src="./src/app.config.js"></script>
-
-    <!--controllers-->
-    <script type="text/javascript" src="./src/controllers/mainController.js"></script>
-
-    <!--services-->
-    <script type="text/javascript" src="./src/services/orderService.js"></script>
-
-    <!--directives-->
-    <script type="text/javascript" src="./src/directives/NCBackImg.js"></script>
-    <script type="text/javascript" src="./src/directives/NCXHRLoader.js"></script>
-
-  </head>
-
-  <body ng-app="app" layout="row" ng-cloak>
-    <!-- We can use MdMedia service to decide the flex value for this md-sidenav-->
-    <md-sidenav
-      flex="20"
-      class="site-sidenav md-sidenav-left md-whiteframe-z2"
-      md-component-id="left"
-      aria-label="Go! Fetch Side Menu"
-      >
-
-      <md-toolbar class="md-whiteframe-z1">
-        <h3>Fetch</h3>
-      </md-toolbar>
-
-    </md-sidenav>
-
-    <div ng-controller="mainController as main" flex layout="column" tabindex="-1" role="main" class="md-whiteframe-z2">
-
-      <md-toolbar layout="row" class="md-whiteframe-z1">
-        <md-button id="mainMenuToggle" class="menu" ng-click="main.toggleSideNav()" aria-label="Toggle Main Menu">
-          <md-icon md-svg-icon="menu"></md-icon>
-        </md-button>
-        <h3>GO! Fetch</h3>
-      </md-toolbar>
+  <!--Scripts go here-->
+  <script type="text/javascript" src="../node_modules/angular/angular.js"></script>
+  <script type="text/javascript" src="../node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+  <script type="text/javascript" src="../node_modules/angular-animate/angular-animate.js"></script>
+  <script type="text/javascript" src="../node_modules/angular-aria/angular-aria.js"></script>
+  <script type="text/javascript" src="../node_modules/angular-material/angular-material.js"></script>
 
 
-        <md-progress-linear nc-xhr-loader md-mode="indeterminate"></md-progress-linear>
+  <!--Angular modules go here -->
+  <script type="text/javascript" src="./src/app.js"></script>
+  <script type="text/javascript" src="./src/providers/routerHelperProvider.js"></script>
 
-      <div flex layout="column">
-        <md-grid-list
-              md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="3"
-              md-row-height-gt-md="16:10" md-row-height="16:9"
-              md-row-height-md="16:10"
-              md-gutter="8px" md-gutter-gt-sm="4px" >
-          <md-grid-tile ng-repeat="order in main.orders"
-                        md-colspan-sm="1"
-                        nc-back-img="{{order.ImageUrl}}" >
-            <md-icon md-svg-icon="{{order.icon}}"></md-icon>
-            <md-grid-tile-header>
-              <h2 class="toUpperCase">{{order.ActionName}}</h2>
-              <h1 class="toUpperCase">{{order.OrderName}}</h1>
-            </md-grid-tile-header>
-          </md-grid-tile>
+  <script type="text/javascript" src="./src/app.constant.js"></script>
+  <script type="text/javascript" src="./src/interceptors/XHRReqInterceptor.js"></script>
+  <script type="text/javascript" src="./src/app.config.js"></script>
 
-        </md-grid-list>
-      </div>
 
+
+  <!--controllers-->
+  <script type="text/javascript" src="./src/controllers/mainController.js"></script>
+  <script type="text/javascript" src="./src/controllers/orderController.js"></script>
+
+  <!--services-->
+  <script type="text/javascript" src="./src/services/orderService.js"></script>
+
+  <!--directives-->
+  <script type="text/javascript" src="./src/directives/NCBackImg.js"></script>
+  <script type="text/javascript" src="./src/directives/NCXHRLoader.js"></script>
+
+  <script type="text/javascript" src="./src/app.route.js"></script>
+
+</head>
+
+<body ng-controller="mainController as main" ng-app="app" layout="row" ng-cloak>
+  <!-- We can use MdMedia service to decide the flex value for this md-sidenav-->
+  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" aria-label="Go! Fetch Side Menu">
+
+    <md-toolbar class="md-whiteframe-z1">
+      <h3>Fetch</h3>
+    </md-toolbar>
+
+  </md-sidenav>
+
+  <div flex layout="column" tabindex="-1" role="main" class="md-whiteframe-z2">
+
+    <md-toolbar layout="row" class="md-whiteframe-z1">
+      <md-button id="mainMenuToggle" class="menu" ng-click="main.toggleSideNav()" aria-label="Toggle Main Menu">
+        <md-icon md-svg-icon="menu"></md-icon>
+      </md-button>
+      <h3>GO! Fetch</h3>
+    </md-toolbar>
+
+    <md-progress-linear nc-xhr-loader md-mode="indeterminate"></md-progress-linear>
+    <div ui-view>
     </div>
+  </div>
 
-  </body>
+</body>
+
 </html>
