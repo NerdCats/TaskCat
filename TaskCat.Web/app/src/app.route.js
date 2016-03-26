@@ -14,10 +14,16 @@
     return [{
       state: 'index',
       config: {
-        url: '',
+        url: '/',
         templateUrl: 'src/layouts/partial.orders.html',
         controller: 'orderController',
         controllerAs: 'vm'
+      }
+    }, {
+      state: 'test',
+      config: {
+        url: '/test',
+        template: 'src/layouts/partial.orders.html'
       }
     }];
   }
