@@ -9,7 +9,7 @@
     routerHelper.configureStates(getStates());
   }
 
-    /* @ngInject */
+  /* @ngInject */
   function getStates() {
     return [{
       state: 'index',
@@ -20,10 +20,16 @@
         controllerAs: 'vm'
       }
     }, {
-      state: 'test',
+      state: 'order',
       config: {
-        url: '/test',
-        template: 'src/layouts/partial.orders.html'
+        url: '/order/:orderCode',
+        templateUrl: function($stateParams) {
+          return 'src/layouts/partial.orders' + $stateParams.orderCode + '.html';
+        },
+        controller: function($stateParams) {
+          return $stateParams.orderCode + 'OrderController';
+        },
+        controllerAs: 'vm'
       }
     }];
   }
