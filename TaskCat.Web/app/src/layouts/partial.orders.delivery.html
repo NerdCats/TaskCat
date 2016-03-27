@@ -1,1 +1,18 @@
-<h3>Deliver page here<h3>
+<div layout="column" class="md-inline-form">
+  <form name="deliveryForm" layout-padding class="md-block">
+    <div layout="column">
+      <md-input-container class="md-block">
+        <label>From</label>
+        <input ng-model="vm.order.From">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>To</label>
+        <input ng-model="vm.order.To">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Asset</label>
+        <input ng-model="vm.order.Asset">
+      </md-input-container>
+    </div>
+  </form>
+</div>

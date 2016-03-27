@@ -3,14 +3,14 @@
     .module('app')
     .run(appRun);
 
-  appRun.$inject = ['routerHelper'];
+  appRun.$inject = ['routerHelper', '$log'];
   /* @ngInject */
-  function appRun(routerHelper) {
-    routerHelper.configureStates(getStates());
+  function appRun(routerHelper, $log) {
+    routerHelper.configureStates(getStates($log));
   }
 
   /* @ngInject */
-  function getStates() {
+  function getStates($log) {
     return [{
       state: 'index',
       config: {
@@ -26,8 +26,9 @@
         templateUrl: function($stateParams) {
           return 'src/layouts/partial.orders.' + $stateParams.orderCode + '.html';
         },
-        controller: function($stateParams) {
-          return $stateParams.orderCode + 'OrderController';
+        controllerProvider: function($stateParams) {
+          $log.debug("Selected Controller is " + $stateParams.orderCode.toLowerCase() + 'OrderController');
+          return $stateParams.orderCode.toLowerCase() + 'OrderController';
         },
         controllerAs: 'vm'
       }

@@ -5,6 +5,6 @@
     .module('app')
     .constant('appSettings', {
       apiServiceBaseUri: "http://taskcatdev.azurewebsites.net/api/",
-      debugEnabled: false
+      debugEnabled: true
     });
 })();

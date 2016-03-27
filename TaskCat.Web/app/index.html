@@ -50,7 +50,7 @@
   <!--controllers-->
   <script type="text/javascript" src="./src/controllers/mainController.js"></script>
   <script type="text/javascript" src="./src/controllers/orderController.js"></script>
-
+  <script type="text/javascript" src="./src/controllers/deliveryOrderController.js"></script>
   <!--services-->
   <script type="text/javascript" src="./src/services/orderService.js"></script>
 
@@ -78,7 +78,7 @@
       <md-button id="mainMenuToggle" class="menu" ng-click="main.toggleSideNav()" aria-label="Toggle Main Menu">
         <md-icon md-svg-icon="menu"></md-icon>
       </md-button>
-      <h3>GO! Fetch</h3>
+      <h3>{{main.MainMenuTitle}}</h3>
     </md-toolbar>
 
     <md-progress-linear nc-xhr-loader md-mode="indeterminate"></md-progress-linear>
