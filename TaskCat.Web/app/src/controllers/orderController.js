@@ -5,11 +5,13 @@
     .module('app')
     .controller('orderController', orderController);
 
-  orderController.$inject = ['orderService', '$log'];
+  orderController.$inject = ['orderService', '$log', '$state'];
 
   /* @ngInject */
-  function orderController(orderService, $log) {
+  function orderController(orderService, $log, $state) {
+    /* jshint validthis:true */
     var vm = this;
+    vm.putOrder = putOrder;
 
     activate();
 
@@ -22,6 +24,13 @@
       }, function(error) {
         $log.error('Unable to load customer data: ' + error.message);
         vm.status = 'Unable to load customer data: ' + error.message;
+      });
+    }
+
+    function putOrder(orderKey) {
+      $log.debug('order key selected is' + orderKey);
+      $state.go('order', {
+        orderCode: orderKey.toLowerCase()
       });
     }
   }

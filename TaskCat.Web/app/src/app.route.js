@@ -24,7 +24,7 @@
       config: {
         url: '/order/:orderCode',
         templateUrl: function($stateParams) {
-          return 'src/layouts/partial.orders' + $stateParams.orderCode + '.html';
+          return 'src/layouts/partial.orders.' + $stateParams.orderCode + '.html';
         },
         controller: function($stateParams) {
           return $stateParams.orderCode + 'OrderController';
