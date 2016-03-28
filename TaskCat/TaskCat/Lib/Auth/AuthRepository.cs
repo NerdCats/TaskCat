@@ -235,14 +235,14 @@
             return await accountManager.UpdateAsync(user);
         }
 
-        internal async Task<User> FindUser(string userId)
+        internal async Task<User> FindUser(string userName)
         {
-            return await accountManager.FindByIdAsync(userId);
+            return await accountManager.FindByNameAsync(userName);
         }
 
-        internal async Task<UserModel> FindUserAsModel(string userId)
+        internal async Task<UserModel> FindUserAsModel(string userName)
         {
-            var user = await FindUser(userId);
+            var user = await FindUser(userName);
 
             //FIXME: Someday I can use a factory here
             if (user.Type == IdentityTypes.USER)
