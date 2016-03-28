@@ -109,7 +109,7 @@
         /// <summary>
         /// View Public Profile on any user or asset
         /// </summary>
-        /// <param name="userId">
+        /// <param name="userName">
         /// User Id for user or asset
         /// </param>
         /// <returns>
@@ -117,26 +117,26 @@
         /// </returns>
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
-        [Route("Profile/{userId?}")]
+        [Route("Profile/{userName?}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Profile(string userId = null)
+        public async Task<IHttpActionResult> Profile(string userName = null)
         {
             try
             {
-                if (!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userId))
+                if (!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userName))
                     return BadRequest("To get a public profile, please provide a valid user Id");
 
-                if (string.IsNullOrWhiteSpace(userId))
-                    userId = this.User.Identity.GetUserId();
+                if (string.IsNullOrWhiteSpace(userName))
+                    userName = this.User.Identity.GetUserName();
 
-                var userModel = await authRepository.FindUserAsModel(userId);
+                var userModel = await authRepository.FindUserAsModel(userName);
                 if (userModel == null) return NotFound();
 
                 if (this.User.Identity.IsAuthenticated)
                 {
                     if (this.User.IsInRole("Administrator") || this.User.IsInRole("BackOfficeAdmin"))
                         userModel.IsUserAuthenticated = true;
-                    else if ((this.User.IsInRole("User") || this.User.IsInRole("Asset")) && (this.User.Identity.GetUserId() == userId))
+                    else if ((this.User.IsInRole("User") || this.User.IsInRole("Asset")) && (this.User.Identity.GetUserName() == userName))
                         userModel.IsUserAuthenticated = true;
                 }
 
