@@ -94,7 +94,8 @@ namespace TaskCat.App
             var dbContext = container.Resolve<IDbContext>();
 
             //FIXME: I know, utter stupidity here, need a script to do this
-            if (dbContext.Clients.Count(Builders<Client>.Filter.Empty) == 0)
+            var numberOfClients = dbContext.Clients.Count(Builders<Client>.Filter.Empty);            
+            if (numberOfClients == 0)
             {
                 // Inserting clients if they are not initialized
                 dbContext.Clients.InsertOne(new Client
@@ -112,8 +113,30 @@ namespace TaskCat.App
                 {
                     Id = "GoFetchDevWebApp",
                     Secret = HashMaker.GetHash("GoFetchDevWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat, You are one web and in development mode !",
+                    Name = "Go Fetch App powered by TaskCat, You are on web and in development mode !",
                     ApplicationType = ApplicationTypes.JavaScript,
+                    Active = true,
+                    RefreshTokenLifeTime = 7200,
+                    AllowedOrigin = "*"
+                });
+
+                dbContext.Clients.InsertOne(new Client
+                {
+                    Id = "GoFetchDevDroidApp",
+                    Secret = HashMaker.GetHash("GoFetchDevDroidApp@gobd"),
+                    Name = "Go Fetch App powered by TaskCat, You are one android and in development mode !",
+                    ApplicationType = ApplicationTypes.Android,
+                    Active = true,
+                    RefreshTokenLifeTime = 7200,
+                    AllowedOrigin = "*"
+                });
+
+                dbContext.Clients.InsertOne(new Client
+                {
+                    Id = "GoFetchDevDroidAssetApp",
+                    Secret = HashMaker.GetHash("GoFetchDevDroidAssetApp@gobd"),
+                    Name = "Go Fetch App powered by TaskCat, You are one android asset and in development mode !",
+                    ApplicationType = ApplicationTypes.Android,
                     Active = true,
                     RefreshTokenLifeTime = 7200,
                     AllowedOrigin = "*"
