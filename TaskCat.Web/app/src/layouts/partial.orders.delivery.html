@@ -3,7 +3,16 @@
     <div layout="column">
       <md-input-container class="md-block">
         <label>From</label>
-        <input ng-model="vm.order.From">
+        <md-autocomplete
+        nc-places-autocomplete
+        md-items="item in autovm.results"
+        md-selected-item="selectedItem"
+        md-item-text = "item.description"
+        md-search-text="searchText">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.description}}</span>
+        </md-item-template>
+      </md-autocomplete>
       </md-input-container>
       <md-input-container class="md-block">
         <label>To</label>

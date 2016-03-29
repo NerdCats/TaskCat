@@ -3,52 +3,59 @@
 
   angular
     .module('app')
-    .directive('NCPlacesAutocomplete', NCPlacesAutocomplete);
+    .directive('ncPlacesAutocomplete', NCPlacesAutocomplete);
 
   /* @ngInject */
   function NCPlacesAutocomplete() {
     var directive = {
       restrict: 'A',
-      link: linkFunc
+      require: '^mdAutocomplete',
+      link: linkFunc,
+      controller: Controller,
+      controllerAs: 'autovm',
+      bindToController: true
     };
 
     return directive;
 
     function linkFunc(scope, element, attrs, ctrl) {
-      var googleMapsService = new google.maps.places.AutocompleteService();
 
-      element.bind('md-search-text-change', function() {
-        var query = element.val();
-        if (query && query.length >= 3) {
-          fetch(query);
-        } else {
-          scope.$apply(function() {
-            attrs["md-items"] = [];
-          });
-        }
+
+      ctrl.scope.$watch('searchText', function(query) {
+
       });
 
+    }
+
+    /* @ngInject */
+    function Controller($scope, $element, $attrs) {
+      var vm = this;
+      vm.results = [];
+
+      $scope.$watch('searchText', function(query) {
+        console.log(query);
+        if(query && query.length>3)
+          fetch(query);
+      });
+      var googleMapsService = new google.maps.places.AutocompleteService();
+
       var fetch = function(query) {
+        console.log(query);
         googleMapsService.getPlacePredictions({
           input: query
         }, fetchCallback);
       };
 
       var fetchCallback = function(predictions, status) {
+        console.log(status);
         if (status !== google.maps.places.PlacesServiceStatus.OK) {
-          scope.$apply(function() {
-            attrs["md-items"] = [];
-          });
-          return;
+          vm.results = [];
         } else {
-          scope.$apply(function() {
-            attrs["md-items"] = predictions;
-            attrs["md-item-text"] = 
-          });
+          console.log(predictions);
+          vm.results = predictions;
         }
       };
-
-
     }
+
   }
 })();
