@@ -10,33 +10,24 @@
     var directive = {
       restrict: 'A',
       require: '^mdAutocomplete',
-      link: linkFunc,
       controller: Controller,
-      controllerAs: 'autovm',
+      controllerAs: 'placesvm',
       bindToController: true
     };
 
     return directive;
-
-    function linkFunc(scope, element, attrs, ctrl) {
-
-
-      ctrl.scope.$watch('searchText', function(query) {
-
-      });
-
-    }
 
     /* @ngInject */
     function Controller($scope, $element, $attrs) {
       var vm = this;
       vm.results = [];
 
-      $scope.$watch('searchText', function(query) {
-        console.log(query);
-        if(query && query.length>3)
-          fetch(query);
-      });
+       $element.on('input', function(query) {
+           query =  $scope.$eval($attrs.mdSearchText);
+           if(query)
+             fetch(query);
+       });
+
       var googleMapsService = new google.maps.places.AutocompleteService();
 
       var fetch = function(query) {
