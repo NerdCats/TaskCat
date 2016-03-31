@@ -31,18 +31,15 @@
       var googleMapsService = new google.maps.places.AutocompleteService();
 
       var fetch = function(query) {
-        console.log(query);
         googleMapsService.getPlacePredictions({
           input: query
         }, fetchCallback);
       };
 
       var fetchCallback = function(predictions, status) {
-        console.log(status);
         if (status !== google.maps.places.PlacesServiceStatus.OK) {
           vm.results = [];
         } else {
-          console.log(predictions);
           vm.results = predictions;
         }
       };
