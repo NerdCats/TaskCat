@@ -51,7 +51,6 @@
         if (status !== google.maps.places.PlacesServiceStatus.OK) {
           vm.rootVM.placesResults = [];
         } else {
-          console.log(predictions);
           vm.rootVM.placesResults = predictions;
         }
       };
