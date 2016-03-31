@@ -22,11 +22,14 @@
       var vm = this;
       vm.results = [];
 
-       $element.on('input', function(query) {
-           query =  $scope.$eval($attrs.mdSearchText);
-           if(query)
-             fetch(query);
-       });
+      $element.on('input', function(query) {
+        query = $scope.$eval($attrs.mdSearchText);
+        if (query) {
+          fetch(query);
+        } else {
+          vm.results = [];
+        }
+      });
 
       var googleMapsService = new google.maps.places.AutocompleteService();
 
