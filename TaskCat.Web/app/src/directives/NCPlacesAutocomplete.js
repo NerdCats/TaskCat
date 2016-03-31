@@ -20,14 +20,22 @@
     /* @ngInject */
     function Controller($scope, $element, $attrs) {
       var vm = this;
-      vm.results = [];
+      vm.rootVM = {};
+
+      activate();
+
+      function activate() {
+        if ($attrs.ncRootVm) {
+          vm.rootVM = $scope.$eval($attrs.ncRootVm);
+        }
+      }
 
       $element.on('input', function(query) {
         query = $scope.$eval($attrs.mdSearchText);
         if (query) {
           fetch(query);
         } else {
-          vm.results = [];
+          vm.rootVM.placesResults = [];
         }
       });
 
@@ -41,9 +49,10 @@
 
       var fetchCallback = function(predictions, status) {
         if (status !== google.maps.places.PlacesServiceStatus.OK) {
-          vm.results = [];
+          vm.rootVM.placesResults = [];
         } else {
-          vm.results = predictions;
+          console.log(predictions);
+          vm.rootVM.placesResults = predictions;
         }
       };
     }

@@ -1,61 +1,52 @@
-<div layout="column" class="md-inline-form">
-  <form name="deliveryForm" layout-padding class="md-block">
-    <div layout="column">
-      <md-input-container class="md-block">
-        <md-autocomplete
-          required
+<div layout="column" layout-gt-sm="row">
+  <div layout="column" class="md-inline-form" flex flex-gt-sm="50">
+    <form name="deliveryForm" layout-padding class="md-block">
+      <div layout="column">
+        <md-input-container class="md-block">
+          <md-autocomplete required
           nc-places-autocomplete
+          nc-root-vm="vm"
           md-input-name="fromAutoComplete"
-          md-items="item in placesvm.results"
-          md-selected-item="vm.SelectedFrom"
-          md-item-text="item.description"
-          md-floating-label="From"
-          md-search-text="vm.fromSearchText"
-          >
-          <md-item-template>
-            <span md-highlight-text="vm.fromSearchText">{{item.description}}</span>
-          </md-item-template>
-          <md-not-found>
-            No matches found.
-          </md-not-found>
-          <div ng-messages="deliveryForm.fromAutoComplete.$error">
+          md-items="item in vm.placesResults" md-selected-item="vm.SelectedFrom" md-item-text="item.description" md-floating-label="From" md-search-text="vm.fromSearchText">
+            <md-item-template>
+              <span md-highlight-text="vm.fromSearchText">{{item.description}}</span>
+            </md-item-template>
+            <md-not-found>
+              No matches found.
+            </md-not-found>
+            <div ng-messages="deliveryForm.fromAutoComplete.$error">
+              <div ng-message="required">This field is required</div>
+            </div>
+          </md-autocomplete>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <md-autocomplete required nc-places-autocomplete nc-root-vm="vm" md-input-name="toAutoComplete"
+          md-items="item in vm.placesResults" md-selected-item="vm.SelectedTo" md-item-text="item.description" md-floating-label="To" md-search-text="vm.toSearchText">
+            <md-item-template>
+              <span md-highlight-text="vm.toSearchText">{{item.description}}</span>
+            </md-item-template>
+            <md-not-found>
+              No matches found.
+            </md-not-found>
+            <div ng-messages="deliveryForm.toAutoComplete.$error">
+              <div ng-message="required">This field is required</div>
+            </div>
+          </md-autocomplete>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Package Description</label>
+          <input name="packageDesc" ng-model="vm.order.PackageDescription" required>
+          <div ng-messages="deliveryForm.packageDesc.$error">
             <div ng-message="required">This field is required</div>
           </div>
-        </md-autocomplete>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <md-autocomplete
-          required
-          nc-places-autocomplete
-          md-input-name="toAutoComplete"
-          md-items="item in placesvm.results"
-          md-selected-item="vm.SelectedTo"
-          md-item-text="item.description"
-          md-floating-label="To"
-          md-search-text="vm.toSearchText"
-          >
-          <md-item-template>
-            <span md-highlight-text="vm.toSearchText">{{item.description}}</span>
-          </md-item-template>
-          <md-not-found>
-            No matches found.
-          </md-not-found>
-          <div ng-messages="deliveryForm.toAutoComplete.$error">
-            <div ng-message="required">This field is required</div>
-          </div>
-        </md-autocomplete>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Package Description</label>
-        <input name="packageDesc" ng-model="vm.order.PackageDescription" required>
-        <div ng-messages="deliveryForm.packageDesc.$error">
-          <div ng-message="required">This field is required</div>
-        </div>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Package Weight</label>
-        <input ng-model="vm.order.PackageWeight">
-      </md-input-container>
-    </div>
-  </form>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Package Weight</label>
+          <input ng-model="vm.order.PackageWeight">
+        </md-input-container>
+      </div>
+    </form>
+  </div>
+  <div flex flex-gt-sm="50">
+  </div>
 </div>
