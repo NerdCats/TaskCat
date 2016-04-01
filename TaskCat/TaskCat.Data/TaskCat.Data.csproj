@@ -67,6 +67,8 @@
   <ItemGroup>
     <Compile Include="Entity\Asset.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
+    <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
+    <Compile Include="Entity\ShadowCat\AssetLocation.cs" />
     <Compile Include="Entity\SupportedOrder.cs" />
     <Compile Include="Lib\Constants\JobTaskTypes.cs" />
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />

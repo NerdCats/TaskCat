@@ -8,7 +8,8 @@
     using MongoDB.Bson.Serialization.Conventions;
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
-
+    using Data.Entity.ShadowCat;
+    using System;
     public class DbContext : IDbContext
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -70,7 +71,16 @@
         #endregion
 
         #region AssetTracking
-        //private IMongoCollection<>
+
+        private IMongoCollection<AssetLocation> _assetLocations;
+        public IMongoCollection<AssetLocation> AssetLocations
+        {
+            get
+            {
+                return _assetLocations;
+            }
+        }
+
         #endregion
 
         public DbContext()
@@ -105,6 +115,8 @@
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
+
+            _assetLocations = Database.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }
 
         private void InitiateDatabase()

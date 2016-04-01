@@ -4,17 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
     using TaskCat.Data.Entity.Identity;
     using Db;
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
     using MongoDB.Driver;
     using Data.Entity;
-    using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
-    using Asset;
-    using System.Web.Http;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
     using System.Net.Http;
@@ -24,7 +19,6 @@
     using Storage;
     using Model.Storage;
     using Exceptions;
-    using Job;
 
     public class AuthRepository
     {

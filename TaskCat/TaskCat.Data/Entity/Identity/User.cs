@@ -3,12 +3,7 @@
     using AspNet.Identity.MongoDB;
     using Model.Identity;
     using MongoDB.Bson.Serialization.Attributes;
-    using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Model.Identity.Profile;
     using Model.Identity.Registration;
 
