@@ -14,15 +14,11 @@
     using Lib.Constants;
     using Identity.Response;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public class FetchRideTask : JobTask, IFetchable 
+    public class FetchRideTask : JobTask
     {      
         public Location From { get; set; }
         public Location To { get; set; }
         public Asset ProposedRide { get; set; } //FIXME: It will definitely not be a hardburned Asset reference of course
-        
-        [BsonIgnore]
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public INearestAssetProvider provider { get; set; }
 
         public FetchRideTask() : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride")
         {
@@ -37,17 +33,6 @@
             ProposedRide = null;
         }
     
-        public async Task<List<AssetModel>> FetchAvailableAssets()
-        {
-            var data = await provider.FindAssets(From);
-            return data as List<AssetModel>;
-        }
-
-        public async Task SelectEligibleAsset()
-        {
-            Asset = await provider.FindNearestEligibleAssets(From);
-        }
-
         public override void UpdateTask()
         {
             //FIXME: I really should use some attribute here to do this
