@@ -250,6 +250,8 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="Controller\StorageController.cs" />
+    <Compile Include="Lib\AssetProvider\DefaultAssetProvider.cs" />
+    <Compile Include="Lib\AssetProvider\INearestAssetProvider.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />

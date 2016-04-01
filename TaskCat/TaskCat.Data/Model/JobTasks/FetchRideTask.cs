@@ -32,7 +32,7 @@
             To = to;
             ProposedRide = null;
         }
-    
+           
         public override void UpdateTask()
         {
             //FIXME: I really should use some attribute here to do this
