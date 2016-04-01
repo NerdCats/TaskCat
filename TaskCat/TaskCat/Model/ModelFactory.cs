@@ -1,11 +1,6 @@
 ﻿namespace TaskCat.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Data.Entity.Identity;
-    using TaskCat.Data.Model.Identity;
     using Data.Model.Identity.Registration;
 
     public static class ModelFactory

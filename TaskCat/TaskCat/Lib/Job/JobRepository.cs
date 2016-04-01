@@ -4,21 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
     using Data.Entity;
     using Data.Model.Api;
     using TaskCat.Model.Pagination;
-    using System.Web.Http.Controllers;
-    using System.Web.Http.Routing;
     using System.Net.Http;
     using Constants;
-    using System.Web.Http;
     using Data.Model;
     using MongoDB.Driver;
     using Auth;
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
-    using Newtonsoft.Json;
     using System.Web.OData.Query;
     using Data.Model.Query;
     public class JobRepository : IJobRepository

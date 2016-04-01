@@ -1,16 +1,10 @@
 ﻿namespace TaskCat.Data.Model
 {
-    using Entity;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Utility;
-    using System.ComponentModel.DataAnnotations;
     using Identity.Response;
 
     public abstract class JobTask

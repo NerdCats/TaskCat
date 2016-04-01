@@ -1,9 +1,6 @@
 ﻿namespace TaskCat.Model.Storage
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
 
     /// <summary>
     /// Model to upload files to a Storage Service

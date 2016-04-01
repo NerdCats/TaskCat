@@ -1,15 +1,8 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
-    using MongoDB.Driver.GeoJsonObjectModel;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using TaskCat.Data.Model;
     using Data.Entity;
-    using MongoDB.Bson.Serialization.Attributes;
-    using Newtonsoft.Json;
     using Lib.Constants;
     using Identity.Response;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

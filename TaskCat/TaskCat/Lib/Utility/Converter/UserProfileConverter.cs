@@ -2,13 +2,9 @@
 {
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
-    using Data.Model.Identity.Registration;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
 
     public class UserProfileConverter : JsonConverter
     {

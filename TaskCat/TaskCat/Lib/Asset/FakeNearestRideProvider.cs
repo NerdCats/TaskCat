@@ -1,11 +1,7 @@
 ﻿namespace TaskCat.Lib.Asset
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
-    using TaskCat.Data.Entity;
     using TaskCat.Data.Model;
     using Data.Model.Identity.Response;
     using Data.Lib.Asset;

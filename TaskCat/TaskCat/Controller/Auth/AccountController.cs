@@ -10,15 +10,10 @@
     using System.Threading.Tasks;
     using Data.Model.Identity;
     using Microsoft.AspNet.Identity;
-    using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
-    using Lib.Utility.Converter;
     using Data.Model.Identity.Registration;
     using Lib.Constants;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
-    using System.Net.Http.Formatting;
-    using System.Web.OData;
     using System.Web.OData.Query;
     using Model.Pagination;
 

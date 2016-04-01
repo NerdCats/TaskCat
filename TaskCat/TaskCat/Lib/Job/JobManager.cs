@@ -1,15 +1,10 @@
 ﻿namespace TaskCat.Lib.Job
 {
     using Data.Model;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
     using TaskCat.Data.Entity;
-    using System.Web.Http;
     using MongoDB.Driver;
-    using Data.Model.Identity.Response;
     using System.Web.OData.Query;
     using Data.Model.Query;
     public class JobManager

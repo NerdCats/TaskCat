@@ -1,12 +1,7 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
-    using Data.Entity;
     using Lib.Exceptions;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Web;
     using TaskCat.Data.Model;
     using Lib.Constants;
     using Identity.Response;

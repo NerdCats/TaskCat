@@ -3,7 +3,6 @@
     using System;
     public class PaginationHeader
     {
-
         public long Total { get; set; }
         public long Page { get; set; }
         public long Start { get; set; }

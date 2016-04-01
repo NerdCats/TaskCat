@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using TaskCat.Data.Model;
-
-namespace TaskCat.Data.Lib.Exceptions
+﻿namespace TaskCat.Data.Lib.Exceptions
 {
+    using System;
+    using Model;
+
     public class JobTaskDependencyException : ArgumentException
     {
         public JobTask JobTask { get; set; }

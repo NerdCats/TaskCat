@@ -2,23 +2,14 @@
 {
     using Data.Entity;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
     using Data.Model.Api;
     using TaskCat.Lib.Job;
-    using Newtonsoft.Json.Linq;
     using Data.Model;
     using Lib.Constants;
     using Marvin.JsonPatch;
-    using System.ComponentModel.DataAnnotations;
     using System.Web.OData.Query;
-    using Data.Model.Identity.Response;
-    using Model.Pagination;
-    using System.Collections;
     using MongoDB.Driver;
 
     /// <summary>

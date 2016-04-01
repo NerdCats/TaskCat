@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskCat.Data.Model.GeoJson
+﻿namespace TaskCat.Data.Model.GeoJson
 {
+    using System.Collections.Generic;
+
     public class Point : IGeoJsonModel
     {
         public string type { get; set; }

@@ -1,10 +1,6 @@
 ﻿namespace TaskCat.Data.Model.Identity.Profile
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
-
 
     public class ContactUpdateModel
     {

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
-using Newtonsoft.Json;
 using System.Configuration;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
@@ -15,7 +13,6 @@ using TaskCat.Lib.Utility;
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model.Identity;
 using MongoDB.Driver;
-using TaskCat.Lib.Constants;
 
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
 

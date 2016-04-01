@@ -3,16 +3,11 @@
     using Data.Entity;
     using MongoDB.Driver;
     using NLog;
-    using System;
-    using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
-    using System.Web;
     using Data.Entity.Identity;
     using MongoDB.Bson.Serialization.Conventions;
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
-    using System.Threading.Tasks;
 
     public class DbContext : IDbContext
     {

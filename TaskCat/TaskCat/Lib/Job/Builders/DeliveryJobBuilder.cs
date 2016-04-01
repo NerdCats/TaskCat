@@ -3,10 +3,7 @@
     using Data.Model;
     using Data.Model.JobTasks;
     using Data.Model.Order;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using Data.Model.Identity.Response;
     using Model.JobTasks;
     internal class DeliveryJobBuilder : JobBuilder
