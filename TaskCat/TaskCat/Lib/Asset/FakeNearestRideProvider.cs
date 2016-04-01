@@ -6,9 +6,9 @@
     using System.Threading.Tasks;
     using System.Web;
     using TaskCat.Data.Entity;
-    using Data.Lib.Interfaces;
     using TaskCat.Data.Model;
     using Data.Model.Identity.Response;
+    using Data.Lib.Asset;
 
     internal class FakeNearestRideProvider : INearestAssetProvider
     {

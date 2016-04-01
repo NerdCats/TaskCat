@@ -1,5 +1,4 @@
-﻿
-namespace TaskCat.Data.Lib.AssetProvider
+﻿namespace TaskCat.Data.Lib.Asset
 {
     using Data.Entity;
     using System;

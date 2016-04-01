@@ -18,7 +18,7 @@
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private MongoClient mongoClient;
-
+        private MongoClient shadowCatMongoClient;
 
         public IMongoDatabase Database { get; private set; }
 
@@ -56,6 +56,7 @@
 
         #endregion
 
+        #region JobsAndOrders
 
         private IMongoCollection<Job> _jobs;
         public IMongoCollection<Job> Jobs
@@ -71,6 +72,11 @@
                 return _supportedOrders;
             }
         }
+        #endregion
+
+        #region AssetTracking
+        //private IMongoCollection<>
+        #endregion
 
         public DbContext()
         {
@@ -112,6 +118,11 @@
             var mongoUrlBuilder = new MongoUrlBuilder(connectionString);
             mongoClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
             Database = mongoClient.GetDatabase(mongoUrlBuilder.DatabaseName);
+
+            var shadowCatConnectionString = ConfigurationManager.ConnectionStrings["ShadowCat.ConnectionString"].ConnectionString;
+            var shadowCatUrlBuilder = new MongoUrlBuilder(shadowCatConnectionString);
+            shadowCatMongoClient = new MongoClient(shadowCatUrlBuilder.ToMongoUrl());
+            Database = shadowCatMongoClient.GetDatabase(shadowCatUrlBuilder.DatabaseName);
         }
     }
 }

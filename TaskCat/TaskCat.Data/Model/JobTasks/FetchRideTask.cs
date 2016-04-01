@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
-    using Lib.Interfaces;
     using MongoDB.Driver.GeoJsonObjectModel;
     using System;
     using System.Collections.Generic;

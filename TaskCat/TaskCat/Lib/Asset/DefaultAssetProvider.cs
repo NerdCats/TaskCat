@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.AssetProvider
 {
-    using Data.Lib.AssetProvider;
+    using Data.Lib.Asset;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,6 +16,11 @@
 
     public class DefaultAssetProvider : INearestAssetProvider
     {
+        public DefaultAssetProvider()
+        {
+
+        }
+
         public Task<List<AssetModel>> FindAssets(Location location)
         {
             throw new NotImplementedException();
