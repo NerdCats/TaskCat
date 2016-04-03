@@ -4,7 +4,7 @@
   angular
     .module('app')
     .constant('appSettings', {
-      apiServiceBaseUri: "http://taskcatdev.azurewebsites.net/api/",
+      apiServiceBaseUri: "http://localhost:23873/api/",
       debugEnabled: true
     });
 })();

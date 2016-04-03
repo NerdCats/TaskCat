@@ -9,7 +9,7 @@
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
     using Data.Entity.ShadowCat;
-    using System;
+
     public class DbContext : IDbContext
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -17,6 +17,7 @@
         private MongoClient shadowCatMongoClient;
 
         public IMongoDatabase Database { get; private set; }
+        public IMongoDatabase ShadowCatDatabase { get; private set; }
 
         #region Auth
 
@@ -124,12 +125,22 @@
             var connectionString = ConfigurationManager.ConnectionStrings["Mongo.ConnectionString"].ConnectionString;
             var mongoUrlBuilder = new MongoUrlBuilder(connectionString);
             mongoClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
-            Database = mongoClient.GetDatabase(mongoUrlBuilder.DatabaseName);
+            Database = mongoClient.GetDatabase(DatabaseNames.TASKCAT_DB);
+
 
             var shadowCatConnectionString = ConfigurationManager.ConnectionStrings["ShadowCat.ConnectionString"].ConnectionString;
-            var shadowCatUrlBuilder = new MongoUrlBuilder(shadowCatConnectionString);
-            shadowCatMongoClient = new MongoClient(shadowCatUrlBuilder.ToMongoUrl());
-            Database = shadowCatMongoClient.GetDatabase(shadowCatUrlBuilder.DatabaseName);
+            if (string.Equals(connectionString, shadowCatConnectionString))
+                ShadowCatDatabase = Database;
+            else
+            {
+                var shadowCatUrlBuilder = new MongoUrlBuilder(shadowCatConnectionString);
+                shadowCatMongoClient = new MongoClient(shadowCatUrlBuilder.ToMongoUrl());
+                if (shadowCatUrlBuilder.DatabaseName == "admin" || string.IsNullOrWhiteSpace(shadowCatUrlBuilder.DatabaseName))
+                    //Load default shadowcat database name
+                    ShadowCatDatabase = shadowCatMongoClient.GetDatabase(DatabaseNames.SHADOWCAT_DEFAULT_DB);
+                else
+                    ShadowCatDatabase = shadowCatMongoClient.GetDatabase(shadowCatUrlBuilder.DatabaseName);
+            }
         }
     }
 }

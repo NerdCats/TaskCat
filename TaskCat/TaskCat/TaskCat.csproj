@@ -265,6 +265,7 @@
     <Compile Include="Lib\Auth\AuthRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
+    <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
