@@ -7,6 +7,6 @@
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 50;
 
-        public static readonly string[] SupportedImageFormats = { ".jpg", ".png" };
+        public static readonly string[] SupportedImageFormats = { ".jpg", ".png", ".PNG", "JPG"};
     }
 }

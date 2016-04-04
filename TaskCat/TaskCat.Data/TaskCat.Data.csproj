@@ -97,8 +97,10 @@
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskStates.cs" />
+    <Compile Include="Model\JobTasks\AssignAssetTask.cs" />
     <Compile Include="Model\JobTasks\DeliveryTask.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
+    <Compile Include="Model\JobTasks\PickUpTask.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\OrderModel.cs" />
