@@ -2,7 +2,7 @@
 {
     using Lib.Exceptions;
     using System;
-    using TaskCat.Data.Model.Identity.Response;
+    using Identity.Response;
 
     public abstract class PickupTask : JobTask
     {

@@ -1,37 +1,20 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
     using System;
-    using TaskCat.Data.Model;
-    using Data.Entity;
+    using Model;
+    using Entity;
     using Lib.Constants;
     using Identity.Response;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public class FetchRideTask : JobTask
-    {      
-        public Location From { get; set; }
-        public Location To { get; set; }
+    public class FetchRideTask : AssignAssetTask
+    {
         public Asset ProposedRide { get; set; } //FIXME: It will definitely not be a hardburned Asset reference of course
 
-        public FetchRideTask() : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride")
+        public FetchRideTask(Location from, Location to, Asset proposedRide = null) : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride", from, to)
         {
             this.Result = new FetchRideTaskResult();
             State = JobTaskStates.IN_PROGRESS;
-        }
-
-        public FetchRideTask(Location from, Location to, Asset selectedAsset = null) : this()
-        {
-            From = from;
-            To = to;
-            ProposedRide = null;
-        }
-           
-        public override void UpdateTask()
-        {
-            //FIXME: I really should use some attribute here to do this
-            //this is just plain ghetto
-            IsReadytoMoveToNextTask = (From != null && To != null && Asset != null) ? true : false;
-            
-            MoveToNextState();
+            ProposedRide = proposedRide;
         }
 
         public override JobTaskResult SetResultToNextState()
