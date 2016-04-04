@@ -24,8 +24,13 @@
             _job.Tasks.Add(fetchRideTask);
             fetchRideTask.AssetUpdated += JobTask_AssetUpdated;
 
-            DeliveryTask deliveryTask = new DeliveryTask();
-            deliveryTask.SetPredecessor(fetchRideTask);
+            PickUpTask pickUpTask = new PickUpTask(_order.From);
+            pickUpTask.SetPredecessor(fetchRideTask);
+            _job.Tasks.Add(pickUpTask);
+            pickUpTask.AssetUpdated += JobTask_AssetUpdated;
+
+            DeliveryTask deliveryTask = new DeliveryTask(_order.To);
+            deliveryTask.SetPredecessor(pickUpTask);
             _job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
@@ -33,6 +38,8 @@
 
             _job.EnsureTaskAssetEventsAssigned();
         }
+
+   
 
         private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
         {
