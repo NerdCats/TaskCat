@@ -1,7 +1,10 @@
 ﻿namespace TaskCat.Lib.Job
 {
     using Data.Model;
-    using TaskCat.Data.Entity;
+    using System;
+    using Data.Entity;
+    using System.Linq;
+
     public abstract class JobBuilder
     {
         protected Job job;
@@ -18,6 +21,5 @@
         {
             job = new Job(order);
         }
-
     }
 }

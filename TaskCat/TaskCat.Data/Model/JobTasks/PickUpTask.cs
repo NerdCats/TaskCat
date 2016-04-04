@@ -48,8 +48,8 @@
 
         private void Predecessor_JobTaskCompleted(JobTask sender, JobTaskResult jobTaskResult)
         {
-            if (this.State == JobTaskStates.PENDING)
-                this.State = JobTaskStates.IN_PROGRESS;
+            if (this.State == JobTaskState.PENDING)
+                this.State = JobTaskState.IN_PROGRESS;
 
             try
             {

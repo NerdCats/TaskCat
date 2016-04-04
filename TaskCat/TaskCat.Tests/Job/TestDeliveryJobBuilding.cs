@@ -12,7 +12,7 @@
     public class TestDeliveryJobBuilding
     {
         [Test]
-        public void TestDeliverJobBuilderCreation()
+        public void Test_DeliverJobBuilder_Creation()
         {
             DeliveryOrder order = new DeliveryOrder();
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
@@ -28,10 +28,13 @@
             Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
             Assert.NotNull(builder.Job.ModifiedTime);
+            Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
+            Assert.False(builder.Job.IsAssetEventsHooked);
+            Assert.Null(builder.Job.TerminalTask);
         }
 
         [Test]
-        public void TestDeliverJobBuilderCreationWithTaskInitiation()
+        public void Test_DeliverJobBuilder_Creation_With_TaskInitiation()
         {
             string orderName = "Sample Delivery Order";
 
@@ -61,7 +64,14 @@
             Assert.True(builder.Job.IsAssetEventsHooked);
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
-            Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
+            Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
         }
+
+        [Test]
+        public void Test_DeliveryJob_State_Changes_To_InProgress_After_FirstTask_Passed_Or_Reached_InProgress()
+        {
+
+        }
+
     }
 }

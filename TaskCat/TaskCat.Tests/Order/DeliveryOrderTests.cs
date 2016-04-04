@@ -12,7 +12,7 @@
     {
 
         [Test]
-        public void TestDeliveryOrderCreationWithoutName()
+        public void Test_DeliveryOrder_Creation_Without_Name()
         {
             Location FromLocation = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
 
@@ -40,7 +40,7 @@
         }
 
         [Test]
-        public void TestDeliveryOrderCreationWithName()
+        public void Test_DeliveryOrder_Creation_With_Name()
         {
             Location FromLocation = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
 

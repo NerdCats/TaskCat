@@ -5,15 +5,15 @@
 
     public class StateStringGenerator
     {
-        public static string GenerateStateString(JobTaskStates state, string JobTaskName)
+        public static string GenerateStateString(JobTaskState state, string JobTaskName)
         {
             switch(state)
             {
-                case JobTaskStates.PENDING:
+                case JobTaskState.PENDING:
                     return string.Concat(JobTaskName, " is pending");
-                case JobTaskStates.IN_PROGRESS:
+                case JobTaskState.IN_PROGRESS:
                     return string.Concat(JobTaskName, " is in progress");
-                case JobTaskStates.COMPLETED:
+                case JobTaskState.COMPLETED:
                     return string.Concat(JobTaskName, " is completed");
                 default:
                     throw new InvalidOperationException("Invalid/Unsupported JobTask state provided");

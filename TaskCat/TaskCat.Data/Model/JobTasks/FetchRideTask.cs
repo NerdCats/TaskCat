@@ -12,7 +12,7 @@
         public FetchRideTask(Location from, Location to, Asset proposedRide = null) : base(JobTaskTypes.FETCH_RIDE, "Fetching Ride", from, to)
         {
             this.Result = new DefaultAssignAssetTaskResult();
-            State = JobTaskStates.IN_PROGRESS;
+            State = JobTaskState.IN_PROGRESS;
             ProposedRide = proposedRide;
         }
     }

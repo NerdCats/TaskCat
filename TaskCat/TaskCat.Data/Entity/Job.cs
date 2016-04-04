@@ -9,6 +9,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using Model.Identity.Response;
+    using System.Linq;
 
     public class Job : DbEntity
     {
@@ -35,7 +36,7 @@
         public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
 
         [BsonRepresentation(BsonType.String)]
-        [JsonConverter(typeof (StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public JobState State { get; set; }
 
         public DateTime? CreateTime { get; set; }
@@ -71,16 +72,36 @@
             this.Assets = new Dictionary<string, AssetModel>();
         }
 
+        public Job(string name) : this()
+        {
+            Name = name;
+
+        }
+
+        public Job(OrderModel order) : this()
+        {
+            this.Name = order.Name;
+            this.Order = order;
+        }
+
         public void EnsureTaskAssetEventsAssigned()
         {
-            if(this.Tasks!=null && this.Tasks.Count>0)
+            if (this.Tasks != null && this.Tasks.Count > 0)
             {
                 foreach (var task in Tasks)
                 {
                     task.AssetUpdated += Jtask_AssetUpdated;
                 }
                 IsAssetEventsHooked = true;
-            }         
+            }
+        }
+
+        public void EnsureInitialJobState()
+        {
+            if (Tasks.First().State == JobTaskState.COMPLETED)
+                throw new InvalidOperationException("Job Task initialized in COMPLETED state");
+            if (Tasks.First().State == JobTaskState.IN_PROGRESS)
+                State = JobState.IN_PROGRESS;
         }
 
         public void EnsureAssetModelsPropagated()
@@ -112,16 +133,21 @@
                 Assets[AssetRef] = asset;
         }
 
-        public Job(string name) : this()
+        public void SetupDefaultBehaviourForFirstJobTask()
         {
-            Name = name;
-
+            if (Tasks == null || Tasks.Count == 0)
+                throw new InvalidOperationException("Trying to set default behaviour for moving job state to in progress without the task building");
+            Tasks.First().JobTaskStateUpdated += Job_FirstJobTaskStateUpdated;
         }
 
-        public Job(OrderModel order) : this()
+        private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
         {
-            this.Name = order.Name;
-            this.Order = order;
+            if (updatedState > JobTaskState.PENDING && TerminalTask != sender)
+                State = JobState.IN_PROGRESS;
+            else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
+                State = JobState.IN_PROGRESS;
+            else if (updatedState == JobTaskState.COMPLETED && TerminalTask == sender)
+                State = JobState.COMPLETED;
         }
 
     }

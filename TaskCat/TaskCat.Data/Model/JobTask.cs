@@ -20,8 +20,8 @@
         public delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);
         public event JobTaskCompletedEventHandler JobTaskCompleted;
 
-        protected delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskStates updatedState);
-        protected event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
+        public delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskState updatedState);
+        public event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
 
         public delegate void AssetUpdatedEventHandler(string AssetRef, AssetModel asset);
         public event AssetUpdatedEventHandler AssetUpdated;
@@ -42,9 +42,25 @@
             get { return StateStringGenerator.GenerateStateString(State, Name); }
         }
 
+        private JobTaskState state;
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public JobTaskStates State { get; set; }
+        public JobTaskState State
+        {
+            get
+            {
+                return state;
+            }
+            set
+            {
+                if (value != state)
+                {
+                    state = value;
+                    if (JobTaskStateUpdated != null)
+                        JobTaskStateUpdated(this, State);
+                }
+            }
+        }
         
         private AssetModel asset;
         [JsonIgnore]
@@ -137,21 +153,16 @@
 
         public virtual void MoveToNextState()
         {
-            if (State == JobTaskStates.IN_PROGRESS && !IsReadytoMoveToNextTask)
+            if (State == JobTaskState.IN_PROGRESS && !IsReadytoMoveToNextTask)
                 return;
 
-            if (State <=JobTaskStates.IN_PROGRESS)
-            {
+            if (State <=JobTaskState.IN_PROGRESS)
                 State++;
-                if (JobTaskStateUpdated != null)
-                    JobTaskStateUpdated(this, State);
-            }
-
-            if (State == JobTaskStates.COMPLETED && IsReadytoMoveToNextTask)
+            
+            if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();
             else
-                throw new InvalidOperationException("Job is not ready to move to next Task");
-                    
+                throw new InvalidOperationException("Job is not ready to move to next Task");            
         }
 
         protected virtual void NotifyJobTaskCompleted()

@@ -98,7 +98,7 @@
     <Compile Include="Model\Identity\Response\UserModel.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
-    <Compile Include="Model\JobTaskStates.cs" />
+    <Compile Include="Model\JobTaskState.cs" />
     <Compile Include="Model\JobTasks\AssignAssetTask.cs" />
     <Compile Include="Model\JobTasks\DeliveryTask.cs" />
     <Compile Include="Model\JobTasks\FetchDeliveryManTask.cs" />

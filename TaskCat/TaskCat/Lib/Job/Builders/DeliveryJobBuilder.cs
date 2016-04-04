@@ -22,7 +22,7 @@
             job.Tasks = new List<JobTask>();
 
             FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(_order.From, _order.To);
-            job.Tasks.Add(fetchDeliveryManTask);
+            job.Tasks.Add(fetchDeliveryManTask);         
             fetchDeliveryManTask.AssetUpdated += JobTask_AssetUpdated;
 
             PackagePickUpTask pickUpTask = new PackagePickUpTask(_order.From);
@@ -38,9 +38,11 @@
             job.TerminalTask = deliveryTask;
 
             job.EnsureTaskAssetEventsAssigned();
+            job.EnsureInitialJobState();
+
+            job.SetupDefaultBehaviourForFirstJobTask();
         }
 
-   
 
         private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
         {
