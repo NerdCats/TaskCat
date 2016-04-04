@@ -7,8 +7,8 @@
     using Identity.Response;
     public class RidePickUpTask : JobTask
     {
-        public Location FromLocation { get; set; }
-        public Location ToLocation { get; set; }
+        public Location AssetLocation { get; set; }
+        public Location PickupLocation { get; set; }
 
         //FIXME: Im really not sure what Im doing here, this doesnt look right
         private bool _ridePickedUp;
@@ -26,9 +26,9 @@
             }
         }
 
-        public RidePickUpTask():base(JobTaskTypes.RIDE_PICKUP, "Picking up")
+        public RidePickUpTask(Location pickupLocation) :base(JobTaskTypes.RIDE_PICKUP, "Picking up")
         {
-            
+            this.PickupLocation = pickupLocation;
         }
 
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
@@ -78,20 +78,6 @@
                     throw new InvalidCastException("Type Verification Asset field failed");
 
                 Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
-
-                // FIXME: This from and to relation should be actually 
-                // done based on Assets current location
-                
-                var fromData = type.GetProperty("From");
-                if (fromData.PropertyType != typeof(Location))
-                    throw new InvalidCastException("Type Verification From Field Failed");
-
-                FromLocation = fromData.GetValue(jobTaskResult, null) as Location;
-
-                var toData = type.GetProperty("To");
-                if (toData.PropertyType != typeof(Location))
-                    throw new InvalidCastException("Type Verification To Field Failed");
-                ToLocation = toData.GetValue(jobTaskResult, null) as Location; 
             }
             catch (Exception)
             {
@@ -102,7 +88,7 @@
 
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (FromLocation != null && ToLocation != null && Asset != null) ? true : false;
+            IsReadytoMoveToNextTask = (AssetLocation != null && PickupLocation != null && Asset != null) ? true : false;
             MoveToNextState();
         }
 

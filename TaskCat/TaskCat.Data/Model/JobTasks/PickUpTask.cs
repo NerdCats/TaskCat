@@ -1,19 +1,16 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
+    using Lib.Exceptions;
     using System;
-    using Data.Model;
-    using Data.Model.Identity.Response;
-    using Data.Lib.Constants;
-    using Data.Lib.Exceptions;
+    using TaskCat.Data.Model.Identity.Response;
 
-    public class PackagePickUpTask : JobTask
+    public abstract class PickupTask : JobTask
     {
         public Location AssetLocation { get; set; }
         public Location PickupLocation { get; set; }
 
-        public PackagePickUpTask(Location pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package")
+        public PickupTask(string type, string name, Location pickupLocation) : base(type, name)
         {
-            this.Result = new PickUpTaskResult();
             this.PickupLocation = pickupLocation;
         }
 
@@ -26,7 +23,18 @@
                 //FIXME: All of these has to be cached and refactored
                 try
                 {
-                    VerifyPropertyTypesFromResult(type);
+                    var fromData = type.GetProperty("From");
+                    if (fromData.PropertyType != typeof(Location))
+                        throw new InvalidCastException("Type Verification From Field Failed");
+
+                    var toData = type.GetProperty("To");
+                    if (toData.PropertyType != typeof(Location))
+                        throw new InvalidCastException("Type Verification To Field Failed");
+
+                    var ride = type.GetProperty("Asset");
+                    if (ride.PropertyType != typeof(AssetModel))
+                        throw new InvalidCastException("Type Verification Asset field failed");
+
                     IsDependencySatisfied = true;
                 }
                 catch (Exception ex)
@@ -34,69 +42,35 @@
                     throw new JobTaskDependencyException("Error occured on dependency assignment", this, ex);
                 }
             }
+
             Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;
-        }
-
-        private static void VerifyPropertyTypesFromResult(Type type)
-        {
-            var fromData = type.GetProperty("From");
-            if (fromData.PropertyType != typeof(Location))
-                throw new InvalidCastException("Type Verification From Field Failed");
-
-            var toData = type.GetProperty("To");
-            if (toData.PropertyType != typeof(Location))
-                throw new InvalidCastException("Type Verification To Field Failed");
-
-            var ride = type.GetProperty("Asset");
-            if (ride.PropertyType != typeof(AssetModel))
-                throw new InvalidCastException("Type Verification Asset field failed");
         }
 
         private void Predecessor_JobTaskCompleted(JobTask sender, JobTaskResult jobTaskResult)
         {
             if (this.State == JobTaskStates.PENDING)
                 this.State = JobTaskStates.IN_PROGRESS;
+
             try
             {
                 var type = jobTaskResult.ResultType;
 
-                VerifyPropertyTypesFromResult(type);
+                var ride = type.GetProperty("Asset");
+                if (ride.PropertyType != typeof(AssetModel))
+                    throw new InvalidCastException("Type Verification Asset field failed");
 
-                var asset = type.GetProperty("Asset");
-                Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
-
-                var fromData = type.GetProperty("From");
-                PickupLocation = fromData.GetValue(jobTaskResult, null) as Location;
+                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (PickupLocation != null && Asset != null) ? true : false;
+            IsReadytoMoveToNextTask = (AssetLocation != null && PickupLocation != null && Asset != null) ? true : false;
             MoveToNextState();
-        }
-
-        public override JobTaskResult SetResultToNextState()
-        {
-            var result = new PickUpTaskResult();
-            result.ResultType = typeof(PickUpTaskResult);
-            if (this.Asset == null)
-                throw new InvalidOperationException("Moving to next state when Asset is null");
-            result.Asset = this.Asset;                        
-            result.TaskCompletionTime = DateTime.UtcNow;
-            return result;
-        }
-
-        public class PickUpTaskResult : JobTaskResult
-        {
-            public AssetModel Asset { get; set; }
-            public PickUpTaskResult()
-            {
-                this.ResultType = typeof(PickUpTaskResult);
-            }
         }
     }
 }

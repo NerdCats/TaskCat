@@ -29,7 +29,7 @@
             _job.Tasks.Add(pickUpTask);
             pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
-            DeliveryTask deliveryTask = new DeliveryTask(_order.To);
+            DeliveryTask deliveryTask = new DeliveryTask(_order.From, _order.To);
             deliveryTask.SetPredecessor(pickUpTask);
             _job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
