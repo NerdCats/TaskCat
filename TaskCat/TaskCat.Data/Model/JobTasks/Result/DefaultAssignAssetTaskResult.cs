@@ -1,5 +1,7 @@
 ﻿namespace TaskCat.Data.Model.JobTasks.Result
 {
+    using Identity.Response;
+
     public class DefaultAssignAssetTaskResult : JobTaskResult
     {
         public Location From { get; set; }

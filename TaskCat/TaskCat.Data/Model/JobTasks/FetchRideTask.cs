@@ -1,10 +1,8 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
-    using System;
     using Model;
     using Entity;
     using Lib.Constants;
-    using Identity.Response;
     using Result;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class FetchRideTask : AssignAssetTask
