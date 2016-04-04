@@ -1,6 +1,8 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
     using Model;
+    using System;
+    using Result;
 
     public abstract class AssignAssetTask : JobTask
     {
@@ -18,6 +20,20 @@
             //this is just plain ghetto
             IsReadytoMoveToNextTask = (From != null && To != null && Asset != null) ? true : false;
             MoveToNextState();
+        }
+
+        public override JobTaskResult SetResultToNextState()
+        {
+            var result = new DefaultAssignAssetTaskResult();
+            result.ResultType = typeof(DefaultAssignAssetTaskResult);
+            if (this.Asset == null)
+                throw new InvalidOperationException("Moving to next state when Asset is null.");
+            result.Asset = this.Asset;
+            result.From = this.From;
+            result.TaskCompletionTime = DateTime.UtcNow;
+            result.To = this.To;
+
+            return result;
         }
     }
 }
