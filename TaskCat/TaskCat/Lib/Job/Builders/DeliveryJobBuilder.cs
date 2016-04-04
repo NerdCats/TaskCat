@@ -24,7 +24,7 @@
             _job.Tasks.Add(fetchRideTask);
             fetchRideTask.AssetUpdated += JobTask_AssetUpdated;
 
-            PickUpTask pickUpTask = new PickUpTask(_order.From);
+            PackagePickUpTask pickUpTask = new PackagePickUpTask(_order.From);
             pickUpTask.SetPredecessor(fetchRideTask);
             _job.Tasks.Add(pickUpTask);
             pickUpTask.AssetUpdated += JobTask_AssetUpdated;

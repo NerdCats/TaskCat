@@ -5,19 +5,15 @@
     using Data.Model.Identity.Response;
     using Data.Lib.Constants;
     using Data.Lib.Exceptions;
+
     public class DeliveryTask : JobTask
-    {       
+    {
+        public Location From { get; set; }
         public Location To { get; set; }
-        //public AssetModel Asset { get; set; }
 
-
-        public DeliveryTask() : base(JobTaskTypes.DELIVERY, "Deliverying Package")
+        public DeliveryTask(Location from, Location to) : base(JobTaskTypes.DELIVERY, "Deliverying Package")
         {
-
-        }
-
-        public DeliveryTask(Location to) : this()
-        {            
+            this.From = from;
             this.To = to;
         }
 
@@ -46,14 +42,6 @@
 
         private static void VerifyPropertyTypesFromResult(Type type)
         {
-            var fromData = type.GetProperty("From");
-            if (fromData.PropertyType != typeof(Location))
-                throw new InvalidCastException("Type Verification From Field Failed");
-
-            var toData = type.GetProperty("To");
-            if (toData.PropertyType != typeof(Location))
-                throw new InvalidCastException("Type Verification To Field Failed");
-
             var ride = type.GetProperty("Asset");
             if (ride.PropertyType != typeof(AssetModel))
                 throw new InvalidCastException("Type Verification Asset field failed");

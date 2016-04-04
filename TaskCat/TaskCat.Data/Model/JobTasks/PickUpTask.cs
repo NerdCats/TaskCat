@@ -5,17 +5,18 @@
     using Data.Model.Identity.Response;
     using Data.Lib.Constants;
     using Data.Lib.Exceptions;
-    public class PickUpTask : JobTask
+
+    public class PackagePickUpTask : JobTask
     {
-        public Location From { get; set; }
-        public PickUpTask() : base(JobTaskTypes.PICKUP, "Picking up Package")
+        public Location AssetLocation { get; set; }
+        public Location PickupLocation { get; set; }
+
+        public PackagePickUpTask(Location pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package")
         {
             this.Result = new PickUpTaskResult();
+            this.PickupLocation = pickupLocation;
         }
-        public PickUpTask(Location from) : this()
-        {
-            this.From = from;
-        }
+
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
             base.SetPredecessor(task, validateDependency);
@@ -26,16 +27,13 @@
                 try
                 {
                     VerifyPropertyTypesFromResult(type);
-
                     IsDependencySatisfied = true;
                 }
                 catch (Exception ex)
                 {
                     throw new JobTaskDependencyException("Error occured on dependency assignment", this, ex);
                 }
-
             }
-
             Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;
         }
 
@@ -68,7 +66,7 @@
                 Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
 
                 var fromData = type.GetProperty("From");
-                From = fromData.GetValue(jobTaskResult, null) as Location;
+                PickupLocation = fromData.GetValue(jobTaskResult, null) as Location;
             }
             catch (Exception)
             {
@@ -77,7 +75,7 @@
         }
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (From != null && Asset != null) ? true : false;
+            IsReadytoMoveToNextTask = (PickupLocation != null && Asset != null) ? true : false;
             MoveToNextState();
         }
 
@@ -94,11 +92,6 @@
 
         public class PickUpTaskResult : JobTaskResult
         {
-            public Location From { get; set; }
-            public Location To { get; set; }
-            // Tareq Copied and pasted this from FetchRideTask.cs
-            //FIXME: If asset is only person oriented we might have much
-            //much simpler representation of an asset, up until that FetchRideTaskResult would be a bit complicated
             public AssetModel Asset { get; set; }
             public PickUpTaskResult()
             {
