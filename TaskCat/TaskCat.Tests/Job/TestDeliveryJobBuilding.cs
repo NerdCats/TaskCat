@@ -70,7 +70,25 @@
         [Test]
         public void Test_DeliveryJob_State_Changes_To_InProgress_After_FirstTask_Passed_Or_Reached_InProgress()
         {
+            string orderName = "Sample Delivery Order";
 
+            DeliveryOrder order = new DeliveryOrder();
+            order.Name = orderName;
+            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
+            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+
+            var builder = new DeliveryJobBuilder(order);
+            builder.BuildTasks();
+
+            //First the job would be in progress because the FetchDeliveryTask initiates that way
+            Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
+            //Moving it to Enqueued state
+            builder.Job.State = JobState.ENQUEUED;
+            //Moving first task state to pending
+            builder.Job.Tasks.First().State = JobTaskState.PENDING;
+            //Changing that back to IN PROGRESS
+            builder.Job.Tasks.First().State = JobTaskState.IN_PROGRESS;
+            Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
         }
 
     }
