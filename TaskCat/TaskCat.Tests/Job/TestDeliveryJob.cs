@@ -65,7 +65,7 @@
             Assert.True(builder.Job.IsAssetEventsHooked);
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
-            Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
+            Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
         }
 
         [Test]
@@ -81,12 +81,6 @@
             var builder = new DeliveryJobBuilder(order);
             builder.BuildTasks();
 
-            //First the job would be in progress because the FetchDeliveryTask initiates that way
-            Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
-            //Moving it to Enqueued state
-            builder.Job.State = JobState.ENQUEUED;
-            //Moving first task state to pending
-            builder.Job.Tasks.First().State = JobTaskState.PENDING;
             //Changing that back to IN PROGRESS
             builder.Job.Tasks.First().State = JobTaskState.IN_PROGRESS;
             Assert.AreEqual(JobState.IN_PROGRESS, builder.Job.State);
@@ -126,6 +120,7 @@
                 UserName = "SampleUserName"
             };
 
+            builder.Job.Tasks.First().State = JobTaskState.IN_PROGRESS;
             builder.Job.Tasks.First().Asset = SampleAssetModel;
             builder.Job.Tasks.First().UpdateTask();
 

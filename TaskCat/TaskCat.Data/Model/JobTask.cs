@@ -156,8 +156,14 @@
             if (State == JobTaskState.IN_PROGRESS && !IsReadytoMoveToNextTask)
                 return;
 
-            if (State <=JobTaskState.IN_PROGRESS)
+            if (State <JobTaskState.IN_PROGRESS)
+            {
                 State++;
+                return;
+            }
+
+            if (State == JobTaskState.IN_PROGRESS)
+                state++;
             
             if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();
