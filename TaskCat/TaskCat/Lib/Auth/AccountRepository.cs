@@ -255,6 +255,12 @@
             return new PageEnvelope<Job>(data.Total, page, pageSize, AppConstants.DefaultApiRoute, data.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
         }
 
+        internal async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, HttpRequestMessage request)
+        {
+            var user = await accountManager.FindByNameAsync(userName);
+            return await FindAssignedJobs(user.Id, page, pageSize, request);
+        }
+
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
         {
             return await RemoveRefreshToken(refreshToken.Id);
