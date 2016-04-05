@@ -49,7 +49,7 @@
 
             builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
 
-            builder.RegisterType<AuthRepository>()
+            builder.RegisterType<AccountRepository>()
                 .SingleInstance();
 
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>();

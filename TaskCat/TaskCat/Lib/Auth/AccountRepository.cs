@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity.Identity;
+    using Data.Entity.Identity;
     using Db;
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
@@ -13,28 +13,33 @@
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
     using System.Net.Http;
-    using TaskCat.Model.Pagination;
+    using Model.Pagination;
     using Constants;
     using Data.Model.Identity.Response;
     using Storage;
     using Model.Storage;
     using Exceptions;
+    using Job;
+    using Data.Model.Query;
 
-    public class AuthRepository
+    public class AccountRepository
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly AccountManger accountManager;
         private readonly IBlobService blobService;
+        private readonly JobManager jobManager;
 
-        public AuthRepository(
+        public AccountRepository(
             IDbContext dbContext, 
             AccountManger accoutnManager, 
-            IBlobService blobService)
+            IBlobService blobService,
+            JobManager jobManager)
         {
             this.dbContext = dbContext;
             this.accountManager = accoutnManager;
             this.blobService = blobService;
+            this.jobManager = jobManager;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
@@ -244,12 +249,16 @@
             else return new AssetModel(user as Asset);
         }
 
+        internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, HttpRequestMessage request)
+        {
+            QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page, pageSize);
+            return new PageEnvelope<Job>(data.Total, page, pageSize, AppConstants.DefaultApiRoute, data.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
+        }
+
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
         {
             return await RemoveRefreshToken(refreshToken.Id);
         }
-
-        
 
         internal async Task<bool> RemoveRefreshToken(string hashedTokenId)
         {

@@ -12,9 +12,9 @@
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController
     {
-        private readonly AuthRepository authRepository = null;
+        private readonly AccountRepository authRepository = null;
 
-        public RefreshTokensController(AuthRepository authRepository)
+        public RefreshTokensController(AccountRepository authRepository)
         {
             this.authRepository = authRepository;
         }

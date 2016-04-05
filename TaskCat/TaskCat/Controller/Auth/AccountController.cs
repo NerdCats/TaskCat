@@ -25,7 +25,7 @@
     [RoutePrefix("api/Account")] 
     public class AccountController : ApiController
     {
-        private readonly AuthRepository authRepository = null;
+        private readonly AccountRepository authRepository = null;
 
         /// <summary>
         /// Account Controller Constructor
@@ -33,7 +33,7 @@
         /// <param name="authRepository">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AuthRepository authRepository)
+        public AccountController(AccountRepository authRepository)
         {
             this.authRepository = authRepository;
         }
@@ -150,6 +150,35 @@
                 return InternalServerError(ex);
             }
         }
+
+
+        //[HttpGet]
+        //[Route("Jobs/{userId?}")]
+        //public async Task<IHttpActionResult> GetAssignedJobs(string userId = null)
+        //{
+        //    try
+        //    {
+        //        if(!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userId))
+        //            return BadRequest("To get a public profile, please provide a valid user Id");
+
+        //        if (string.IsNullOrWhiteSpace(userId))
+        //            userId = this.User.Identity.GetUserId();
+
+        //        var userModel = await authRepository.FindUserAsModel(userId);
+        //        if (userModel == null) return NotFound();
+
+        //        if (this.User.Identity.IsAuthenticated)
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
 
         /// <summary>
         /// Get All Users

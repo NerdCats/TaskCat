@@ -264,7 +264,7 @@
     <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Auth\AccountStore.cs" />
-    <Compile Include="Lib\Auth\AuthRepository.cs" />
+    <Compile Include="Lib\Auth\AccountRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />

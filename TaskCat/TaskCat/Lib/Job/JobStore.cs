@@ -4,9 +4,9 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity;
-    using TaskCat.Lib.Db;
-    using TaskCat.Data.Model;
+    using Data.Entity;
+    using Db;
+    using Data.Model;
     using System.Linq;
     using System.Web.OData.Query;
     using Data.Model.Query;
@@ -19,23 +19,34 @@
         {
             _context = context;
         }
-        internal async Task<Data.Entity.Job> CreateOne(Data.Entity.Job createdJob)
+        internal async Task<Job> CreateOne(Job createdJob)
         {
             await _context.Jobs.InsertOneAsync(createdJob);
             return createdJob;
         }
 
-        internal async Task<Data.Entity.Job> FindOne(string id)
+        internal async Task<Job> FindOne(string id)
         {
             var job = await _context.Jobs.Find(x => x._id == id).FirstOrDefaultAsync();
             return job;
         }
 
-        internal async Task<IEnumerable<Data.Entity.Job>> FindJobs(string orderType, int start, int limit)
+        internal async Task<IEnumerable<Job>> FindJobs(string orderType, int start, int limit)
         {
             var FindContext = string.IsNullOrWhiteSpace(orderType) ? 
                 _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
+        }
+
+        internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
+        {
+            var FindContext = _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo);
+            var orderContext = sortByCreateTimeDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
+            return new QueryResult<Job>()
+            {
+                Result = await orderContext.Skip(start).Limit(limit).ToListAsync(),
+                Total = await orderContext.CountAsync()
+            };
         }
 
         internal async Task<QueryResult<Job>> FindJobs(ODataQueryOptions<Job> query, int start, int limit)
@@ -59,8 +70,8 @@
         internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
             task.ModifiedTime = DateTime.Now;
-            var Filter = Builders<Data.Entity.Job>.Filter.Where(x => x._id == jobId);
-            var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks[taskIndex], task);
+            var Filter = Builders<Job>.Filter.Where(x => x._id == jobId);
+            var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks[taskIndex], task);
 
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
             return result;
@@ -68,8 +79,8 @@
 
         internal async Task<UpdateResult> UpdateJobTasks(string jobId, List<JobTask> tasks)
         {
-            var Filter = Builders<Data.Entity.Job>.Filter.Where(x => x._id == jobId);
-            var UpdateDefinition = Builders<Data.Entity.Job>.Update.Set(x => x.Tasks, tasks);
+            var Filter = Builders<Job>.Filter.Where(x => x._id == jobId);
+            var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks, tasks);
 
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
             return result;

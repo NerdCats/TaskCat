@@ -8,9 +8,9 @@
     using Utility;
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
-        private readonly AuthRepository authRepository;
+        private readonly AccountRepository authRepository;
 
-        public SimpleRefreshTokenProvider(AuthRepository authRepository)
+        public SimpleRefreshTokenProvider(AccountRepository authRepository)
         {
             this.authRepository = authRepository;
         }
