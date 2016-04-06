@@ -165,6 +165,49 @@
             builder.Job.Tasks.First().Asset = SampleAssetModel;
             builder.Job.Tasks.First().UpdateTask();
 
+            Assert.That(builder.Job.State == JobState.IN_PROGRESS);
+            Assert.That(builder.Job.Tasks.First().State == JobTaskState.COMPLETED);
+            Assert.That(builder.Job.Tasks[1].State == JobTaskState.IN_PROGRESS);
+        }
+
+        [Test]
+        public void Test_NextTask_State_Progress_After_Asset_Assignment_In_First_Task_Without_MOVING_TO_IN_PROGRESS()
+        {
+            string orderName = "Sample Delivery Order";
+
+            DeliveryOrder order = new DeliveryOrder();
+            order.Name = orderName;
+            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
+            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+
+            var builder = new DeliveryJobBuilder(order);
+            builder.BuildTasks();
+
+            var SampleAssetModel = new AssetModel()
+            {
+                AverageRating = 0.0,
+                Email = "someone@someone.com",
+                EmailConfirmed = false,
+                PhoneNumber = "+8801711111111",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Some place in somewhere",
+                    Age = 20,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.BIKE_MESSENGER,
+                UserId = "12345678",
+                UserName = "SampleUserName"
+            };
+
+            builder.Job.Tasks.First().Asset = SampleAssetModel;
+            builder.Job.Tasks.First().UpdateTask();
+
+            Assert.That(builder.Job.State == JobState.IN_PROGRESS);
             Assert.That(builder.Job.Tasks.First().State == JobTaskState.COMPLETED);
             Assert.That(builder.Job.Tasks[1].State == JobTaskState.IN_PROGRESS);
         }

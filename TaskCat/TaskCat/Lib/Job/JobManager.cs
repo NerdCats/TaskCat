@@ -38,6 +38,7 @@
 
             JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
+            JobPayload.SetupDefaultBehaviourForFirstJobTask();
 
             return JobPayload;
         }
@@ -59,9 +60,12 @@
             return jobs;
         }
 
-        internal async Task<QueryResult<Job>> GetJobsAssignedToUser(string userId, int start, int limit, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
+        internal async Task<QueryResult<Job>> GetJobsAssignedToUser(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
         {
-            var jobs = await _store.FindJobs(userId, start, limit, jobStateToFetchUpTo, sortByCreateTimeDirection);
+            if (fromDateTime == null)
+                fromDateTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(5));
+
+            var jobs = await _store.FindJobs(userId, start, limit, fromDateTime, jobStateToFetchUpTo, sortByCreateTimeDirection);
             return jobs;
         }
 

@@ -21,6 +21,7 @@
     using Exceptions;
     using Job;
     using Data.Model.Query;
+    using Data.Model;
 
     public class AccountRepository
     {
@@ -31,8 +32,8 @@
         private readonly JobManager jobManager;
 
         public AccountRepository(
-            IDbContext dbContext, 
-            AccountManger accoutnManager, 
+            IDbContext dbContext,
+            AccountManger accoutnManager,
             IBlobService blobService,
             JobManager jobManager)
         {
@@ -153,7 +154,7 @@
             {
                 var updateDef = Builders<Job>.Update.Set(x => x.Assets[user.Id], new AssetModel(user as Asset));
                 var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);                    
+                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
             return result;
 
@@ -185,7 +186,7 @@
             }
         }
 
-        internal async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName )
+        internal async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName)
         {
             var user = await accountManager.FindByNameAsync(oldUserName);
             if (await IsUsernameAvailable(newUserName))
@@ -213,7 +214,7 @@
             }
         }
 
-       
+
 
 
 
@@ -249,16 +250,16 @@
             else return new AssetModel(user as Asset);
         }
 
-        internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, HttpRequestMessage request)
+        internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
         {
-            QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page, pageSize);
+            QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page * pageSize, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection);
             return new PageEnvelope<Job>(data.Total, page, pageSize, AppConstants.DefaultApiRoute, data.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
         }
 
-        internal async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, HttpRequestMessage request)
+        internal async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
         {
             var user = await accountManager.FindByNameAsync(userName);
-            return await FindAssignedJobs(user.Id, page, pageSize, request);
+            return await FindAssignedJobs(user.Id, page, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection, request);
         }
 
         internal async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
@@ -278,7 +279,7 @@
             return refreshToken;
         }
 
-        
+
 
         // FIXME: This is literally a crime, like literally, no freaking paging or anything
         // But Im too tired to do this, Why the hell I ever saw OData
@@ -289,9 +290,9 @@
 
         internal async Task<FileUploadModel> UploadAvatar(HttpContent content, string userId)
         {
-            var fileUploadModel =  await blobService.UploadBlob(content, "avatar", AppConstants.SupportedImageFormats);
+            var fileUploadModel = await blobService.UploadBlob(content, "avatar", AppConstants.SupportedImageFormats);
             var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
-            if(result.ModifiedCount>0)
+            if (result.ModifiedCount > 0)
                 return fileUploadModel;
             else
             {

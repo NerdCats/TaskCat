@@ -69,7 +69,9 @@
 
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (AssetLocation != null && PickupLocation != null && Asset != null) ? true : false;
+            // INFO: The dependency for AssetLocation is taken off because right now we
+            // dont have locations ensured
+            IsReadytoMoveToNextTask = (PickupLocation != null && Asset != null) ? true : false;
             MoveToNextState();
         }
     }

@@ -38,9 +38,9 @@
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
 
-        internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
+        internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo , SortDirection sortByCreateTimeDirection)
         {
-            var FindContext = _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo);
+            var FindContext = _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo && x.CreateTime >= fromDateTime);
             var orderContext = sortByCreateTimeDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
             return new QueryResult<Job>()
             {

@@ -55,10 +55,10 @@
             {
                 if (value != state)
                 {
-                    state = value;
+                    state = (JobTaskState)value;
                     if (JobTaskStateUpdated != null)
                         JobTaskStateUpdated(this, State);
-                }
+                }                
             }
         }
         
@@ -156,18 +156,15 @@
             if (State == JobTaskState.IN_PROGRESS && !IsReadytoMoveToNextTask)
                 return;
 
-            if (State <JobTaskState.IN_PROGRESS)
-            {
+            if(state < JobTaskState.COMPLETED)
                 State++;
-                return;
-            }
 
-            if (State == JobTaskState.IN_PROGRESS)
-                state++;
+            while (IsReadytoMoveToNextTask && state<JobTaskState.COMPLETED)
+                State++;
             
             if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();
-            else
+            else if(State == JobTaskState.COMPLETED && !IsReadytoMoveToNextTask)
                 throw new InvalidOperationException("Job is not ready to move to next Task");            
         }
 

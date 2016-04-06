@@ -155,6 +155,10 @@
                 ReplaceOneResult result = await _repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
                 return Json(result);
             }
+            catch(InvalidOperationException ex)
+            {
+                return Content(System.Net.HttpStatusCode.Forbidden, ex);
+            }
             catch(ArgumentException ex)
             {
                 return BadRequest(ex.Message);

@@ -16,6 +16,8 @@
     using Data.Model.Identity.Profile;
     using System.Web.OData.Query;
     using Model.Pagination;
+    using Data.Model;
+    using MongoDB.Driver;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -25,7 +27,7 @@
     [RoutePrefix("api/Account")] 
     public class AccountController : ApiController
     {
-        private readonly AccountRepository authRepository = null;
+        private readonly AccountRepository accountRepository = null;
 
         /// <summary>
         /// Account Controller Constructor
@@ -35,7 +37,7 @@
         /// </param>
         public AccountController(AccountRepository authRepository)
         {
-            this.authRepository = authRepository;
+            this.accountRepository = authRepository;
         }
 
         /// <summary>
@@ -54,7 +56,7 @@
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await authRepository.RegisterUser(userModel);
+                var result = await accountRepository.RegisterUser(userModel);
 
                 var errorResult = GetErrorResult(result);
 
@@ -124,7 +126,7 @@
                 if (string.IsNullOrWhiteSpace(userId))
                     userId = this.User.Identity.GetUserId();
 
-                var userModel = await authRepository.FindUserAsModel(userId);
+                var userModel = await accountRepository.FindUserAsModel(userId);
                 if (userModel == null) return NotFound();
 
                 if (this.User.Identity.IsAuthenticated)
@@ -137,7 +139,7 @@
 
                 return Json(userModel);
             }
-            catch (System.FormatException ex)
+            catch (FormatException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -151,33 +153,64 @@
             }
         }
 
+        /// <summary>
+        /// Gets Assigned Jobs to an Asset sorted by CreatedTime
+        /// </summary>
+        /// <param name="userId">
+        /// userId for the Asset to find assigned jobs, would only work for Administrator and BackendAdministrator roles
+        /// </param>
+        /// <param name="pageSize">
+        /// PageSize of the request, default is 10
+        /// </param>
+        /// <param name="page">
+        /// Desired page number
+        /// </param>
+        /// <param name="dateTimeUpto">
+        /// Results should be fetched from this date, usually results for last 5 days are sent back
+        /// </param>
+        /// <param name="jobStateUpto">
+        /// Highest Job State to be fetched, default is IN_PROGRESS, that means by default ENQUEUED and IN_PROGRESS jobs would be fetched
+        /// </param>
+        /// <param name="sortDirection">
+        /// default sort by CreatedTime direction, usually set at descending
+        /// </param>
+        /// <returns>
+        /// A paginated set of results for Assigned job against an user id
+        /// </returns>
+        
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
+        [HttpGet]
+        [Route("Jobs/{userId?}")]
+        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, DateTime? dateTimeUpto = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    if (this.User.IsInRole("Asset") && (this.User.Identity.GetUserId() != userId))
+                        return Content(HttpStatusCode.Forbidden, "Accessing Assigned jobs of other Assets is not supported unless you're an admin");
+                }
+                else
+                {
+                    userId = this.User.Identity.GetUserId();
+                }
 
-        //[HttpGet]
-        //[Route("Jobs/{userId?}")]
-        //public async Task<IHttpActionResult> GetAssignedJobs(string userId = null)
-        //{
-        //    try
-        //    {
-        //        if(!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userId))
-        //            return BadRequest("To get a public profile, please provide a valid user Id");
-
-        //        if (string.IsNullOrWhiteSpace(userId))
-        //            userId = this.User.Identity.GetUserId();
-
-        //        var userModel = await authRepository.FindUserAsModel(userId);
-        //        if (userModel == null) return NotFound();
-
-        //        if (this.User.Identity.IsAuthenticated)
-        //        {
-
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
+                var result = await accountRepository.FindAssignedJobs(userId, page, pageSize, dateTimeUpto, jobStateUpto, sortDirection, this.Request);
+                return Json(result);
+            }
+            catch (FormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
 
 
         /// <summary>
@@ -209,9 +242,9 @@
             try
             {
                 if (envelope)
-                    return Json(await authRepository.FindAllEnvelopedAsModel(page, pageSize, this.Request));
+                    return Json(await accountRepository.FindAllEnvelopedAsModel(page, pageSize, this.Request));
                 else
-                    return Json(await authRepository.FindAllAsModel(page, pageSize));
+                    return Json(await accountRepository.FindAllAsModel(page, pageSize));
             }
             catch (Exception ex) { return InternalServerError(ex); }
 
@@ -257,7 +290,7 @@
 
                 query.Validate(settings);
 
-                var users = await authRepository.FindAllAsModelAsQueryable(page, pageSize);
+                var users = await accountRepository.FindAllAsModelAsQueryable(page, pageSize);
                 
                 var queryResult = (query.ApplyTo(users)) as IEnumerable<UserModel>;
                 if (query.Count.Value)
@@ -281,7 +314,7 @@
         {
             try
             {
-                return Json(await authRepository.Update(model, this.User.Identity.Name));
+                return Json(await accountRepository.Update(model, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -296,7 +329,7 @@
         {
             try
             {
-                return Json(await authRepository.UpdateById(model, id));
+                return Json(await accountRepository.UpdateById(model, id));
             }
             catch (Exception ex)
             {
@@ -311,7 +344,7 @@
         {
             try
             {
-                return Json(await authRepository.UpdatePassword(model, this.User.Identity.Name));
+                return Json(await accountRepository.UpdatePassword(model, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -326,7 +359,7 @@
         {
             try
             {
-                return Json(await authRepository.UpdateUsername(newUsername, this.User.Identity.Name));
+                return Json(await accountRepository.UpdateUsername(newUsername, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -341,7 +374,7 @@
         {
             try
             {
-                return Json(await authRepository.UpdateUsernameById(userId, newUsername));
+                return Json(await accountRepository.UpdateUsernameById(userId, newUsername));
             }
             catch (Exception ex)
             {
@@ -357,7 +390,7 @@
         {
             try
             {
-                return Json(await authRepository.IsUsernameAvailable(suggestedUserName));
+                return Json(await accountRepository.IsUsernameAvailable(suggestedUserName));
             }
             catch (Exception ex)
             {
@@ -372,7 +405,7 @@
         {
             try
             {
-                return Json(await authRepository.UpdateContacts(model, this.User.Identity.Name));
+                return Json(await accountRepository.UpdateContacts(model, this.User.Identity.Name));
             }
             catch (Exception ex)
             {
@@ -399,7 +432,7 @@
                     return StatusCode(HttpStatusCode.UnsupportedMediaType);
                 }
                 
-                var result = await authRepository.UploadAvatar(Request.Content, this.User.Identity.GetUserId());
+                var result = await accountRepository.UploadAvatar(Request.Content, this.User.Identity.GetUserId());
 
                 if (result != null)
                 {
