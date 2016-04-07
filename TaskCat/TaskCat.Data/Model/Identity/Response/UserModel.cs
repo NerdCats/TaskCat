@@ -37,6 +37,7 @@
             this.Email = user.Email;
             this.EmailConfirmed = user.EmailConfirmed;
             this.Profile = user.GetType() == typeof(Asset) ? user.Profile as AssetProfile : user.Profile;
+            this.UserName = user.UserName;
 
             this.IsUserAuthenticated = isUserAuthenticated;
         }
