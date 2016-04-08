@@ -12,6 +12,7 @@
     /* jshint validthis:true */
     var vm = this;
     vm.toggleSideNav = toggleSideNav;
+    vm.isLeftSideNavOpen = false;
 
     activate();
 
@@ -24,7 +25,7 @@
     }
 
     function toggleSideNav() {
-      $mdSidenav('left').toggle();
+      vm.isLeftSideNavOpen = !vm.isLeftSideNavOpen;
     }
   }
 })();
