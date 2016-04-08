@@ -49,6 +49,7 @@
             FilterDefinitionBuilder<AssetLocation> builder = new FilterDefinitionBuilder<AssetLocation>();
             FilterDefinition<AssetLocation> Filter = builder.Near(x => x.Point, geoPoint, assetRequest.Radius);
 
+            
             return await _dbContext.AssetLocations.Find(Filter).ToListAsync();
         }
     }
