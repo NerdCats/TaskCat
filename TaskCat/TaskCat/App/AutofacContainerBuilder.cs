@@ -22,7 +22,7 @@
     using Data.Entity;
     using MongoDB.Driver;
     using Lib.Storage;
-
+    using Lib.AssetProvider;
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()
@@ -48,9 +48,12 @@
             builder.RegisterType<SupportedOrderStore>().SingleInstance();
 
             builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
+            
 
             builder.RegisterType<AccountRepository>()
                 .SingleInstance();
+
+            builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>();
 
@@ -59,6 +62,7 @@
 
             builder.RegisterType<SimpleRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
+
 
             switch (ConfigurationManager.AppSettings["ENV"])
             {

@@ -117,7 +117,7 @@
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
 
-            _assetLocations = Database.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
+            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);          
         }
 
         private void InitiateDatabase()

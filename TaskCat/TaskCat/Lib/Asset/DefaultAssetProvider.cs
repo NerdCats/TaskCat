@@ -47,7 +47,7 @@
             GeoJsonPoint<GeoJson2DGeographicCoordinates> geoPoint = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(geoLocation);
 
             FilterDefinitionBuilder<AssetLocation> builder = new FilterDefinitionBuilder<AssetLocation>();
-            FilterDefinition<AssetLocation> Filter = builder.NearSphere(x => x.Point, geoPoint, assetRequest.Radius);
+            FilterDefinition<AssetLocation> Filter = builder.Near(x => x.Point, geoPoint, assetRequest.Radius);
 
             return await _dbContext.AssetLocations.Find(Filter).ToListAsync();
         }

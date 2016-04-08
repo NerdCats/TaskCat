@@ -50,13 +50,14 @@ namespace TaskCat.App
             ConfigureOAuth(app, container);
 
             WebApiConfig.Register(config, webApiDependencyResolver);
+            config.Filters.Add(new ErrorDocumentFilter());
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
-            config.Filters.Add(new ErrorDocumentFilter());
+  
 
             // FIXME: Need to move these with other startups
             // This is not ideal
