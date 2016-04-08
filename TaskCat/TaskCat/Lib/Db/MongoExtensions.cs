@@ -12,7 +12,7 @@
 
     internal static class MongoExtensions
     {
-        public static async Task<List<MongoPopulateResult<FDocument, TDocument>>>
+        public static async Task<IEnumerable<MongoPopulateResult<FDocument, TDocument>>>
             Populate<FDocument, TDocument>(
             this IEnumerable<FDocument> collection,
             Expression<Func<FDocument, string>> fieldExpression,
@@ -25,7 +25,8 @@
             var collectionDict = collection.ToDictionary(x => funcToFetchField(x));
 
             int count = 0;
-            List<MongoPopulateResult<FDocument, TDocument>> result = new List<MongoPopulateResult<FDocument, TDocument>>();
+
+            Dictionary<string, MongoPopulateResult<FDocument, TDocument>> result = new Dictionary<string, MongoPopulateResult<FDocument, TDocument>>();
 
             FilterDefinition<TDocument> filter = Builders<TDocument>.Filter.In(x => x.Id, collectionDict.Keys);
             using (var cursor = await TDocumentCollection.FindAsync(filter))
@@ -33,7 +34,10 @@
                 while (await cursor.MoveNextAsync())
                 {
                     var batch = cursor.Current;
-                    result.AddRange(batch.Select(x => new MongoPopulateResult<FDocument, TDocument>(collectionDict[x.Id], x)));
+                    foreach (var item in batch)
+                    {
+                        result[item.Id] = new MongoPopulateResult<FDocument, TDocument>(collectionDict[item.Id], item);
+                    }
                     count += batch.Count();
                 }
             }
@@ -42,7 +46,7 @@
             //TODO: Throw exceptions if the collection is not distinct
             //TODO: Find ways to make it IEnumerable (deferrable)
 
-            return result;
+            return collection.Select(x=>result[x._id]);
         }
 
         public static IEnumerable<T> Populate<T>() where T : IdentityUser
