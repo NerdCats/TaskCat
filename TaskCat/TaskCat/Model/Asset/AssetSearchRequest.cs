@@ -15,7 +15,7 @@
         /// <summary>
         /// Radius in meters to limit search area
         /// </summary>
-        public double Radius { get; set; }
+        public double? Radius { get; set; }
         /// <summary>
         /// Limit results of search, default is 10
         /// </summary>

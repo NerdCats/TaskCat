@@ -95,6 +95,7 @@
     <Compile Include="Model\Identity\Registration\UserRegistrationModel.cs" />
     <Compile Include="Model\Identity\Profile\UserProfile.cs" />
     <Compile Include="Model\Identity\Response\AssetModel.cs" />
+    <Compile Include="Model\Identity\Response\AssetWithLocationModel.cs" />
     <Compile Include="Model\Identity\Response\UserModel.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
