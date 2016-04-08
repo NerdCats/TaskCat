@@ -32,13 +32,28 @@
 
         public async Task<User> FindByEmailAsync(string email, string password)
         {
+            return await FindByEmailAsync<User>(email, password); 
+        }
+
+        public async Task<T> FindByEmailAsync<T>(string email, string password) where T : User
+        {
             var user = await FindByEmailAsync(email);
-            if (user == null) return user;
-            
+            if (user == null) return null;
+
             var verify = PasswordHasher.VerifyHashedPassword(user.PasswordHash, password);
-            if (verify.ToString()=="Success")
-                return user;
-            else return null;
+            if (verify.ToString() == "Success")
+            {
+                Type type = typeof(T);
+
+                if ((type == typeof(User) && user.Type == IdentityTypes.USER)
+                    || (type == typeof(Asset) && user.Type != IdentityTypes.USER))
+                    return user as T;
+                return null;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<T> FindAsByIdAsync<T>(string id) where T : User
@@ -50,6 +65,7 @@
             if ((type == typeof(User) && user.Type == IdentityTypes.USER) 
                 || (type == typeof(Asset) && user.Type != IdentityTypes.USER))
                 return user as T;
+
             return null;
         }
 

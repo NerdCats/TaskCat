@@ -1,26 +1,30 @@
 ﻿namespace TaskCat.Lib.AssetProvider
 {
-    using Data.Lib.Asset;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Data.Model;
     using Data.Model.Identity.Response;
+    using Auth;
+    using Asset;
 
     /// <summary>
     /// Default implementation of asset provider, essentially provides assets
     /// for a job
     /// </summary>
 
-    public class DefaultAssetProvider : INearestAssetProvider
+    public class DefaultAssetProvider : IAssetProvider
     {
+        private readonly AccountManger accountManager;
         public DefaultAssetProvider()
         {
 
         }
 
-        public Task<List<AssetModel>> FindAssets(Location location)
+        public Task<List<AssetModel>> FindNearestAssets(Location location, double radius)
         {
+            //
+
             throw new NotImplementedException();
         }
 

@@ -4,7 +4,7 @@
   angular
     .module('app')
     .constant('appSettings', {
-      apiServiceBaseUri: "http://localhost:23873/api/",
+      apiServiceBaseUri: "http://gofetch.cloudapp.net/api/",
       debugEnabled: true
     });
 })();

@@ -1,13 +1,9 @@
-﻿namespace TaskCat.Data.Lib.Asset
+﻿namespace TaskCat.Lib.Asset
 {
-    using Data.Entity;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Data.Model;
-    using Model.Identity.Response;
+    using Data.Model.Identity.Response;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// INearestAssetProvider is the default interface for 
@@ -21,10 +17,14 @@
         /// <param name="location">
         /// Location you need assets around
         /// </param>
+        /// <param name="radius">
+        /// radius in meters to do the available asset search
+        /// </param>
         /// <returns>
         /// List of AssetModels around that location
         /// </returns>
-        Task<List<AssetModel>> FindAssets(Location location);
+        /// 
+        Task<List<AssetModel>> FindNearestAssets(Location location, double radius, int limit = 10);
         /// <summary>
         /// Find all nearest eligible assets around a location
         /// </summary>

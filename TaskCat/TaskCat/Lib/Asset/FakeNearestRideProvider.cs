@@ -4,18 +4,24 @@
     using System.Threading.Tasks;
     using TaskCat.Data.Model;
     using Data.Model.Identity.Response;
-    using Data.Lib.Asset;
+    using System;
 
-    internal class FakeNearestRideProvider : INearestAssetProvider
+    internal class FakeNearestRideProvider : IAssetProvider
     {
-        public Task<List<AssetModel>> FindAssets(Location loc)
+
+        public Task<List<AssetModel>> FindNearestAssets(Location location, double radius)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<AssetModel> FindNearestEligibleAssets(Location from)
+        public Task<List<AssetModel>> FindNearestAssets(Location location, double radius, int limit = 10)
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        public Task<AssetModel> FindNearestEligibleAssets(Location location)
+        {
+            throw new NotImplementedException();
         }
     }
 }

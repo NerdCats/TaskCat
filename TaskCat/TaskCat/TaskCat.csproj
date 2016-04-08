@@ -270,6 +270,7 @@
     <Compile Include="Lib\Auth\AccountManger.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
+    <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
@@ -279,6 +280,7 @@
     <Compile Include="Lib\Storage\IBlobService.cs" />
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
+    <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
     <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />

@@ -4,20 +4,21 @@ using Owin;
 using System.Configuration;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
-using TaskCat.App_Start;
 using Autofac;
 using Microsoft.Owin.Security.OAuth;
 using Microsoft.Owin.Security.Infrastructure;
-using TaskCat.Lib.Db;
-using TaskCat.Lib.Utility;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Model.Identity;
 using MongoDB.Driver;
 
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
-
 namespace TaskCat.App
 {
+    using TaskCat.App_Start;
+    using TaskCat.Lib.Db;
+    using TaskCat.Lib.Utility;
+    using TaskCat.Data.Entity.Identity;
+    using TaskCat.Data.Model.Identity;
+    using TaskCat.Lib.Utility.ActionFilter;
+
     public class Startup
     {
         public void Configuration(IAppBuilder app)
@@ -54,6 +55,8 @@ namespace TaskCat.App
 
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
+
+            config.Filters.Add(new ErrorDocumentFilter());
 
             // FIXME: Need to move these with other startups
             // This is not ideal
