@@ -1,7 +1,8 @@
 ﻿namespace TaskCat.Model.Asset
 {
     using Data.Model;
-    using Lib.Constants;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// Standard Asset Search Request based on location for a IAssetProvider 
@@ -19,11 +20,13 @@
         /// <summary>
         /// Limit results of search, default is 10
         /// </summary>
-        public int Limit { get; set; } = AppConstants.DefaultAssetSearchLimit;
+        public int Limit { get; set; } 
         /// <summary>
         /// Search Strategy, based on search strategy, asset provider should find out
         /// assets for a particular job
         /// </summary>
+        /// 
+        [JsonConverter(typeof(StringEnumConverter))]
         public SearchStrategy Strategy { get; set; }
     }
 

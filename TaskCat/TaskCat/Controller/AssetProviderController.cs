@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
+    using Lib.Constants;
 
     /// <summary>
     /// Asset Providers are responsible for fetching eligible assets 
@@ -20,15 +21,23 @@
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Search()
+        public async Task<IHttpActionResult> Search(
+            double lat, double lon, string address, double? radius,
+            int limit = AppConstants.DefaultAssetSearchLimit, SearchStrategy strategy = SearchStrategy.QUICK)
         {
-            var result = await provider.FindEligibleAssets(new AssetSearchRequest()
+            var request = new AssetSearchRequest()
             {
                 Location = new Location()
                 {
-                    Point = new Data.Model.GeoJson.Point(new double[] { 90.4075033, 23.796605 }.ToList())
-                }
-            });
+                    Address = address,
+                    Point = new Data.Model.GeoJson.Point(new double[] { lon, lat }.ToList())
+                },
+                Limit = limit,
+                Radius = radius,
+                Strategy = strategy
+            };
+
+            var result = await provider.FindEligibleAssets(request);
             return Json(result);
         }
     }
