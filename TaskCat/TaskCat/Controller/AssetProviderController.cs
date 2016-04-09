@@ -26,7 +26,7 @@
             {
                 Location = new Location()
                 {
-                    Point = new Data.Model.GeoJson.Point(new double[] { 90.40233, 23.7924116 }.ToList())
+                    Point = new Data.Model.GeoJson.Point(new double[] { 90.4075033, 23.796605 }.ToList())
                 }
             });
             return Json(result);

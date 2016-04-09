@@ -42,11 +42,13 @@
                 }
             }
 
+            
+
             //TODO: Throw exceptions if count match failes
             //TODO: Throw exceptions if the collection is not distinct
             //TODO: Find ways to make it IEnumerable (deferrable)
 
-            return collection.Select(x=>result[x._id]);
+            return collection.Select(x=>result[funcToFetchField(x)]);
         }
 
         public static IEnumerable<T> Populate<T>() where T : IdentityUser

@@ -249,7 +249,7 @@
                 return new UserModel(user);
             else return new AssetModel(user as Asset);
         }
-
+ 
         internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
         {
             QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page * pageSize, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection);

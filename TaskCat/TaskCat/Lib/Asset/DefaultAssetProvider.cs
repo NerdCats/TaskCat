@@ -12,6 +12,9 @@
     using MongoDB.Driver;
     using Data.Entity.ShadowCat;
     using System.Linq;
+    using MongoDB.Bson;
+    using Data.Model.ShadowCat;
+    using MongoDB.Bson.Serialization;
 
     /// <summary>
     /// Default implementation of asset provider, essentially provides assets
@@ -41,16 +44,33 @@
             return result.Select(x => new AssetWithLocationModel(x.TDoc, x.FDoc));
         }
 
-        private async Task<List<AssetLocation>> GetNearestAssetLocations(AssetSearchRequest assetRequest)
+        private async Task<IEnumerable<AssetLocation>> GetNearestAssetLocations(AssetSearchRequest assetRequest)
         {
-            GeoJson2DGeographicCoordinates geoLocation = new GeoJson2DGeographicCoordinates(assetRequest.Location.Point.coordinates[0], assetRequest.Location.Point.coordinates[1]);
-            GeoJsonPoint<GeoJson2DGeographicCoordinates> geoPoint = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(geoLocation);
+            var geoNearOptions = new BsonDocument {
+                { "near", new BsonDocument {
+                    { "type", "Point" },
+                    { "coordinates", new BsonArray(assetRequest.Location.Point.coordinates) },
+                } },
+                { "distanceField", "Distance" },
+                { "maxDistance", assetRequest.Radius },
+                { "limit" , assetRequest.Limit },
+                { "spherical" , true }
+            };
 
-            FilterDefinitionBuilder<AssetLocation> builder = new FilterDefinitionBuilder<AssetLocation>();
-            FilterDefinition<AssetLocation> Filter = builder.Near(x => x.Point, geoPoint, assetRequest.Radius);
+            var pipeline = new List<BsonDocument>();
+            pipeline.Add(new BsonDocument { { "$geoNear", geoNearOptions } });
 
-            
-            return await _dbContext.AssetLocations.Find(Filter).ToListAsync();
+            var result = new List<AssetLocationWithDistance>();
+
+            using (var cursor = await _dbContext.AssetLocations.AggregateAsync<BsonDocument>(pipeline))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    result.AddRange(cursor.Current.Select(x => BsonSerializer.Deserialize<AssetLocationWithDistance>(x)));
+                }
+            }
+
+            return result;
         }
     }
 }
