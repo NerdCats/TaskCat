@@ -78,6 +78,7 @@
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\Gender.cs" />
+    <Compile Include="Model\Identity\Profile\IdentityProfile.cs" />
     <Compile Include="Model\Identity\Registration\AssetRegistrationModel.cs" />
     <Compile Include="Model\Identity\Profile\AssetProfile.cs" />
     <Compile Include="Model\Identity\IdentityTypes.cs" />

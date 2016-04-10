@@ -6,7 +6,7 @@
     using Newtonsoft.Json.Converters;
     [BsonDiscriminator(Required = true)]
     [BsonKnownTypes(typeof(AssetProfile))]
-    public class UserProfile
+    public class UserProfile : IdentityProfile
     {
         //FIXME: None of these are mandatory by default for a user but we actually can make an attribute to make 
         // it conditionally required, might be a good thought
@@ -19,9 +19,7 @@
         public int Age { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public Gender Gender { get; set; }
-        public string Address { get; set; }
-        public string PicUri { get; set; } 
+        public Gender Gender { get; set; }             
 
         public UserProfile()
         {

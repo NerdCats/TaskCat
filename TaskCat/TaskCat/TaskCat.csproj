@@ -1214,7 +1214,6 @@
     <Compile Include="Lib\Utility\JsonPatch\JobTaskPatchAdapter.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
-    <Compile Include="Model\ModelFactory.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Model\Storage\FileDeleteModel.cs" />

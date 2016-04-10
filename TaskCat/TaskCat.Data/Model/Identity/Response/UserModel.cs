@@ -36,7 +36,8 @@
             this.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             this.Email = user.Email;
             this.EmailConfirmed = user.EmailConfirmed;
-            this.Profile = user.GetType() == typeof(Asset) ? user.Profile as AssetProfile : user.Profile;
+            // FIXME: Possible bug generation point
+            this.Profile = user.GetType() == typeof(Asset) ? user.Profile as AssetProfile : user.Profile as UserProfile;
             this.UserName = user.UserName;
 
             this.IsUserAuthenticated = isUserAuthenticated;
