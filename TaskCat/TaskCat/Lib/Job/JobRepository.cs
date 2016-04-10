@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using Data.Model.Api;
-    using TaskCat.Model.Pagination;
+    using Model.Pagination;
     using System.Net.Http;
     using Constants;
     using Data.Model;
@@ -96,7 +96,7 @@
             if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType()== typeof(string))
             {                
                 // INFO: Now we need to actually fetch the asset and get shit done
-                var asset = await _accountManager.FindAsByIdAsync<Asset>(AssetRefReplaceOp.value.ToString());
+                var asset = await _accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(AssetRefReplaceOp.value.ToString());
                 if (asset == null) return false;
                 var assetModel = new AssetModel(asset);
                 AssetRefReplaceOp.path = "/Asset";

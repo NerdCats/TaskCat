@@ -12,12 +12,12 @@ using MongoDB.Driver;
 [assembly: OwinStartup(typeof(TaskCat.App.Startup))]
 namespace TaskCat.App
 {
-    using TaskCat.App_Start;
-    using TaskCat.Lib.Db;
-    using TaskCat.Lib.Utility;
-    using TaskCat.Data.Entity.Identity;
-    using TaskCat.Data.Model.Identity;
-    using TaskCat.Lib.Utility.ActionFilter;
+    using App_Start;
+    using Lib.Db;
+    using Lib.Utility;
+    using Data.Entity.Identity;
+    using Data.Model.Identity;
+    using Lib.Utility.ActionFilter;
 
     public class Startup
     {
@@ -157,7 +157,6 @@ namespace TaskCat.App
 
         }
 
-
         private void InitializeRoles(IContainer container)
         {
             var dbContext = container.Resolve<IDbContext>();
@@ -167,6 +166,11 @@ namespace TaskCat.App
                 dbContext.Roles.InsertOne(new Role()
                 {
                     Name = RoleNames.ROLE_USER
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_ENTERPRISE
                 });
 
                 dbContext.Roles.InsertOne(new Role()

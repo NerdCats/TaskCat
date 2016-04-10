@@ -1,9 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Order
 {
-    using Data.Model;
+    using Model;
     using MongoDB.Bson.Serialization.Attributes;
     using System.Collections.Generic;
-    using Entity;
+    using Entity.Identity;
 
     public class RideOrder : OrderModel
     {

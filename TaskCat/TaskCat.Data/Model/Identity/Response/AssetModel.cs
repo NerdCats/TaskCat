@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Data.Model.Identity.Response
 {
-    using Entity;
+    using Entity.Identity;
 
     public class AssetModel : UserModel
     {

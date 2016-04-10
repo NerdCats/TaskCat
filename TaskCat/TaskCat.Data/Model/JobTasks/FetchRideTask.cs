@@ -4,6 +4,7 @@
     using Entity;
     using Lib.Constants;
     using Result;
+    using Entity.Identity;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class FetchRideTask : AssignAssetTask
     {

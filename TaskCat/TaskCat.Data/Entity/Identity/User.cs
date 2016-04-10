@@ -8,7 +8,7 @@
     using Model.Identity.Registration;
 
     [BsonDiscriminator(Required = true)]
-    [BsonKnownTypes(typeof(Asset))]
+    [BsonKnownTypes(typeof(Asset), typeof(EnterpriseUser))]
     public class User : IdentityUser
     {
         // FIXME: this guy would need a JsonConverter when you'd deserialize him

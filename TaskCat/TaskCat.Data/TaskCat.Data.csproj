@@ -67,7 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\Asset.cs" />
+    <Compile Include="Entity\Identity\Asset.cs" />
+    <Compile Include="Entity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
     <Compile Include="Entity\ShadowCat\AssetLocation.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Model\GeoJson\Point.cs" />
     <Compile Include="Model\GeoJson\Polygon.cs" />
     <Compile Include="Model\Identity\ApplicationTypes.cs" />
+    <Compile Include="Model\Identity\Registration\RegistrationModelBase.cs" />
     <Compile Include="Model\Identity\Registration\UserRegistrationModel.cs" />
     <Compile Include="Model\Identity\Profile\UserProfile.cs" />
     <Compile Include="Model\Identity\Response\AssetModel.cs" />

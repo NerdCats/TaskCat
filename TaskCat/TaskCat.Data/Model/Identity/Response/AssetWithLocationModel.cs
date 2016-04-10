@@ -1,7 +1,7 @@
 ﻿namespace TaskCat.Data.Model.Identity.Response
 {
     using Entity.ShadowCat;
-    using TaskCat.Data.Entity;
+    using Entity.Identity;
 
     public class AssetWithLocationModel : AssetModel
     {

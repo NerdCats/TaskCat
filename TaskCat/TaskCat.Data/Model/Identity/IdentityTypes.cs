@@ -5,6 +5,7 @@
     {   
         USER,
         CNG_DRIVER,
-        BIKE_MESSENGER
+        BIKE_MESSENGER,
+        ENTERPRISE
     }
 }

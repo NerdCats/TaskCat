@@ -126,7 +126,7 @@
             var mongoUrlBuilder = new MongoUrlBuilder(connectionString);
             mongoClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
 
-            var TaskCatDBName = ConfigurationManager.ConnectionStrings["TaskCat.DbName"].ConnectionString;
+            var TaskCatDBName = ConfigurationManager.AppSettings["TaskCat.DbName"];
             Database = mongoClient.GetDatabase(string.IsNullOrWhiteSpace(TaskCatDBName) ? DatabaseNames.TASKCAT_DB : TaskCatDBName);
 
 
