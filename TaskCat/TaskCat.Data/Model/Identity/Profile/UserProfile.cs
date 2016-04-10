@@ -4,6 +4,7 @@
     using Newtonsoft.Json;
     using Registration;
     using Newtonsoft.Json.Converters;
+
     [BsonDiscriminator(Required = true)]
     [BsonKnownTypes(typeof(AssetProfile))]
     public class UserProfile : IdentityProfile

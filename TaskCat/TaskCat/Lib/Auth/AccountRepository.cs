@@ -44,21 +44,27 @@
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
-        internal async Task<IdentityResult> RegisterUser(UserRegistrationModel model)
+        internal async Task<IdentityResult> RegisterUser(RegistrationModelBase model)
         {
             UserProfile profile;
-            User user;
+            User user = null;
 
             switch (model.Type)
             {
                 case IdentityTypes.USER:
-                    profile = new UserProfile(model);
-                    user = new User(model, profile);
+                    profile = new UserProfile(model as UserRegistrationModel);
+                    user = new User(model as UserRegistrationModel, profile);
                     break;
-                default:
+                case IdentityTypes.BIKE_MESSENGER:
+                case IdentityTypes.CNG_DRIVER:                
                     profile = new AssetProfile(model as AssetRegistrationModel);
                     user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
                     break;
+                case IdentityTypes.ENTERPRISE:
+                    var enterpriseProfile = new EnterpriseUserProfile(model as EnterpriseUserRegistrationModel);
+                    user = new EnterpriseUser(model as EnterpriseUserRegistrationModel, enterpriseProfile);
+                    break;
+
             }
 
             return await accountManager.CreateAsync(user, model.Password);

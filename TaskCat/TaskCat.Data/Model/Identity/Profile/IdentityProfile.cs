@@ -2,7 +2,7 @@
 {
     using MongoDB.Bson.Serialization.Attributes;
 
-    [BsonKnownTypes(typeof(UserProfile))]
+    [BsonKnownTypes(typeof(UserProfile), typeof(EnterpriseUserProfile))]
     public class IdentityProfile
     {
         public string Address { get; set; }

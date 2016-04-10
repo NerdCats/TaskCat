@@ -1,10 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Identity.Response
 {
     using Entity.Identity;
-    using TaskCat.Data.Model.Identity.Profile;
+    using Profile;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
-    using Entity;
 
     public class UserModel
     {
@@ -21,7 +20,7 @@
         public bool PhoneNumberConfirmed { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
-        public UserProfile Profile { get; set; }
+        public IdentityProfile Profile { get; set; }
 
         public UserModel()
         {
@@ -36,8 +35,7 @@
             this.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             this.Email = user.Email;
             this.EmailConfirmed = user.EmailConfirmed;
-            // FIXME: Possible bug generation point
-            this.Profile = user.GetType() == typeof(Asset) ? user.Profile as AssetProfile : user.Profile as UserProfile;
+            this.Profile = user.GetType() == typeof(User) ? user.Profile : null;
             this.UserName = user.UserName;
 
             this.IsUserAuthenticated = isUserAuthenticated;

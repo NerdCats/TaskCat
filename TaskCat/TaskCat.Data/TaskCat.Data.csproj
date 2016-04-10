@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Identity\Asset.cs" />
-    <Compile Include="Entity\EnterpriseUser.cs" />
+    <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
     <Compile Include="Entity\ShadowCat\AssetLocation.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
+    <Compile Include="Model\Identity\Profile\EnterpriseUserProfile.cs" />
     <Compile Include="Model\Identity\Profile\Gender.cs" />
     <Compile Include="Model\Identity\Profile\IdentityProfile.cs" />
     <Compile Include="Model\Identity\Registration\AssetRegistrationModel.cs" />
@@ -94,11 +95,13 @@
     <Compile Include="Model\GeoJson\Point.cs" />
     <Compile Include="Model\GeoJson\Polygon.cs" />
     <Compile Include="Model\Identity\ApplicationTypes.cs" />
+    <Compile Include="Model\Identity\Registration\EnterpriseUserRegistrationModel.cs" />
     <Compile Include="Model\Identity\Registration\RegistrationModelBase.cs" />
     <Compile Include="Model\Identity\Registration\UserRegistrationModel.cs" />
     <Compile Include="Model\Identity\Profile\UserProfile.cs" />
     <Compile Include="Model\Identity\Response\AssetModel.cs" />
     <Compile Include="Model\Identity\Response\AssetWithLocationModel.cs" />
+    <Compile Include="Model\Identity\Response\EnterpriseUserModel.cs" />
     <Compile Include="Model\Identity\Response\UserModel.cs" />
     <Compile Include="Entity\InvoiceBase.cs" />
     <Compile Include="Model\Invoice\InvoiceItem.cs" />
