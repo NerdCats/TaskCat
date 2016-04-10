@@ -38,7 +38,8 @@
                 Item = "Test Item 1",
                 Price = 100,
                 Quantity = 1,
-                VAT = 10
+                VAT = 10,
+                Weight = 5
             });
 
             invoiceItems.Add(new InvoiceItem()
@@ -46,7 +47,8 @@
                 Item = "Test Item 2",
                 Price = 100,
                 Quantity = 3,
-                VAT = 20
+                VAT = 20,
+                Weight = 2
             });
 
             InvoiceBase baseInvoice = new InvoiceBase(invoiceItems);
@@ -63,7 +65,7 @@
             Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.SubTotal);
             Assert.AreEqual(100 + invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.TotalToPay);
             Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT) - invoiceItems.Sum(i => i.Total), baseInvoice.VATAmount);
-
+            Assert.AreEqual(invoiceItems.Sum(x=>x.Weight), baseInvoice.Weight);
         }
     }
 }

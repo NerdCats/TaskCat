@@ -48,6 +48,9 @@
             }
         }
 
+        [Range(0.00, 100, ErrorMessage = "VAT must be a % between 0 and 100")]
+        public decimal Weight { get; set; }
+
         public InvoiceItem()
         {
         }

@@ -11,6 +11,7 @@
     using TaskCat.Data.Model;
     using Data.Model.Order;
     using Order;
+    using System.ComponentModel.DataAnnotations;
 
     public class OrderRepository : IOrderRepository
     {
@@ -30,17 +31,20 @@
             switch (model.Type)
             {
                 case OrderTypes.Ride:
-                    builder = new RideJobBuilder(model as RideOrder);
-                    createdJob = jobShop.Construct(builder);
+                    RideOrder rideOrderModel = model as RideOrder;
+                    Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
+                    builder = new RideJobBuilder(model as RideOrder); 
                     break;
                 case OrderTypes.Delivery:
-                    builder = new DeliveryJobBuilder(model as DeliveryOrder);
-                    createdJob = jobShop.Construct(builder);
+                    DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
+                    Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
+                    builder = new DeliveryJobBuilder(deliveryOrderModel);             
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
 
             }
+            createdJob = jobShop.Construct(builder);
 
             return await _manager.RegisterJob(createdJob);       
         }

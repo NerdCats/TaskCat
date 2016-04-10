@@ -3,6 +3,7 @@
     using Data.Entity;
     using Lib.Order;
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using System.Web.Http;
     using TaskCat.Data.Model;
@@ -27,6 +28,10 @@
 
                 var orderResult = await _repository.PostOrder(model);
                 return Json(orderResult);
+            }
+            catch(ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

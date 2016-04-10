@@ -1,8 +1,10 @@
 ﻿namespace TaskCat.Data.Model
 {
+    using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
         private string _name;
@@ -54,7 +56,6 @@
                     ETA = DateTime.Now.Add(TimeSpan.FromMinutes(value.Value));
             }
         }
-
 
         public OrderModel()
         {

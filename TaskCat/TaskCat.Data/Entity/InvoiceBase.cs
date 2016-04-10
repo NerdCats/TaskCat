@@ -27,7 +27,7 @@
         {
             get
             {
-                return this.SubTotal - this.NetTotal;
+                return SubTotal - NetTotal;
             }
         }
 
@@ -61,6 +61,19 @@
             }
         }
 
+        private decimal weight;
+        public decimal Weight
+        {
+            get
+            {
+                return weight;
+            }
+            set
+            {
+                weight = value;
+            }
+        }
+
         public virtual ICollection<InvoiceItem> InvoiceDetails { get; set; }
 
         public InvoiceBase()
@@ -71,6 +84,7 @@
         public InvoiceBase(ICollection<InvoiceItem> invoiceDetails)
         {
             InvoiceDetails = invoiceDetails;
+            weight = InvoiceDetails.Sum(x => x.Weight);
         }
     }
 }
