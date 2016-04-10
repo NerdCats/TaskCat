@@ -20,6 +20,32 @@
             provider = assetProvider;
         }
 
+        /// <summary>
+        /// Endpoint to search for assets available
+        /// </summary>
+        /// <param name="lat">
+        /// latitude of designated location to find asset around
+        /// </param>
+        /// <param name="lon">
+        /// longitude of designated location to find asset around
+        /// </param>
+        /// <param name="address">
+        /// address of designated location to find asset around
+        /// </param>
+        /// <param name="radius">
+        /// radius around designated location to find asset from
+        /// </param>
+        /// <param name="limit">
+        /// limit the numbers of results, default is 10
+        /// </param>
+        /// <param name="strategy">
+        /// search strategy to go for, default is QUICK
+        /// </param>
+        /// <returns>
+        /// A List of available assets with their locations
+        /// </returns>
+        /// 
+
         [HttpGet]
         public async Task<IHttpActionResult> Search(
             double lat, double lon, string address, double? radius,
