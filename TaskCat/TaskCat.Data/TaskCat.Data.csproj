@@ -97,6 +97,8 @@
     <Compile Include="Model\Identity\Response\AssetModel.cs" />
     <Compile Include="Model\Identity\Response\AssetWithLocationModel.cs" />
     <Compile Include="Model\Identity\Response\UserModel.cs" />
+    <Compile Include="Entity\InvoiceBase.cs" />
+    <Compile Include="Model\Invoice\InvoiceItem.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskState.cs" />
