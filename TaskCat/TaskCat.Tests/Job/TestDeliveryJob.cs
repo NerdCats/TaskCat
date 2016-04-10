@@ -9,7 +9,8 @@
     using Data.Model.JobTasks;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
-    [TestFixture]
+
+    [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJob
     {
         [Test]
@@ -124,7 +125,7 @@
             builder.Job.Tasks.First().UpdateTask();
 
             Assert.That(builder.Job.Tasks.First().State == JobTaskState.IN_PROGRESS);
-            Assert.That(builder.Job.State == JobState.IN_PROGRESS);    
+            Assert.That(builder.Job.State == JobState.IN_PROGRESS);
         }
 
         [Test]

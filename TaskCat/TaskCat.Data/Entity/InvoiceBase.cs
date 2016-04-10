@@ -10,12 +10,14 @@
     public class InvoiceBase : DbEntity
     {
         public int InvoiceNumber { get; set; }
+
+        [Required]
         public string VendorId { get; set; }
 
         [Required]
         public string Notes { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
+        public DateTime? DueDate { get; set; }
 
         public bool Paid { get; set; }
 

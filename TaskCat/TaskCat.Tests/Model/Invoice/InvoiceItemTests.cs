@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    [TestFixture]
+    [TestFixture(TestOf = typeof(InvoiceItem))]
     public class InvoiceItemTests
     {
         [Test]
