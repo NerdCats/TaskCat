@@ -239,6 +239,7 @@
     <None Include="Properties\PublishProfiles\AzureVM.pubxml" />
     <None Include="Properties\PublishProfiles\gofetch - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\gofetchtaskcat - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TaskCatDev - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\TaskCatDevApp - Web Deploy.pubxml" />
     <Content Include="TaskCat.Web\node_modules\.bin\hs" />
     <Content Include="TaskCat.Web\node_modules\.bin\hs.cmd" />
