@@ -1190,7 +1190,7 @@
     <Compile Include="Lib\Storage\StorageRepository.cs" />
     <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
     <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\UserRegistrationModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
@@ -1213,6 +1213,7 @@
     <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Lib\Utility\JsonPatch\JobTaskPatchAdapter.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
+    <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />

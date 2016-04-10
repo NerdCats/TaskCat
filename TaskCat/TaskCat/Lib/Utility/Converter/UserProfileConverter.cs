@@ -10,13 +10,13 @@
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(UserProfile);
+            return objectType == typeof(IdentityProfile);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var obj = JObject.Load(reader);
-            UserProfile model;
+            IdentityProfile model;
 
             var type = obj["Type"];
             if (type == null)
@@ -38,6 +38,9 @@
             {
                 case IdentityTypes.USER:
                     model = new UserProfile();
+                    break;
+                case IdentityTypes.ENTERPRISE:
+                    model = new EnterpriseUserProfile();
                     break;
                 default:
                     model = new AssetProfile();

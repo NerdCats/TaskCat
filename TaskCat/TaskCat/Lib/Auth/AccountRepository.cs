@@ -56,7 +56,7 @@
                     user = new User(model as UserRegistrationModel, profile);
                     break;
                 case IdentityTypes.BIKE_MESSENGER:
-                case IdentityTypes.CNG_DRIVER:                
+                case IdentityTypes.CNG_DRIVER:
                     profile = new AssetProfile(model as AssetRegistrationModel);
                     user = new Asset(model as AssetRegistrationModel, profile as AssetProfile);
                     break;
@@ -145,28 +145,33 @@
             return new PageEnvelope<UserModel>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
         }
 
-        internal async Task<IdentityResult> Update(UserProfile model, string userName)
+        internal async Task<IdentityResult> Update(IdentityProfile profile, string userName)
         {
             var user = await accountManager.FindByNameAsync(userName);
-            if (user.Type != IdentityTypes.USER && model.GetType() != typeof(AssetProfile))
-                throw new InvalidOperationException("Updating Asset with UserProfile payload");
-            // INFO: Not changing pic url this way. :)
-            // Would have a seperate update method, this shouldnt affect the PicUri
-            model.PicUri = user.Profile.PicUri;
-            user.Profile = model;
+            if (user.Type == IdentityTypes.USER && profile.GetType() != typeof(UserProfile))
+                throw new InvalidOperationException("Updating User with different payload");
+            else if (user.Type == IdentityTypes.ENTERPRISE && profile.GetType() != typeof(EnterpriseUserProfile))
+                throw new InvalidOperationException("Updating Enterprise user with different payload");
+            else if (user.Type != IdentityTypes.USER || user.Type != IdentityTypes.ENTERPRISE && profile.GetType() != typeof(AssetProfile))
+                // INFO: Not changing pic url this way. :)
+                // Would have a seperate update method, this shouldnt affect the PicUri
+                profile.PicUri = user.Profile.PicUri;
+            user.Profile = profile;
 
             var result = await accountManager.UpdateAsync(user);
-            if (user.Type != IdentityTypes.USER)
+            if (user.Type != IdentityTypes.USER && user.Type != IdentityTypes.ENTERPRISE)
             {
                 var updateDef = Builders<Job>.Update.Set(x => x.Assets[user.Id], new AssetModel(user as Asset));
                 var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
                 var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
+
+            //FIXME: might have to do the same propagation for enterprise users
             return result;
 
         }
 
-        internal async Task<IdentityResult> UpdateById(UserProfile model, string userId)
+        internal async Task<IdentityResult> UpdateById(IdentityProfile model, string userId)
         {
             var user = await accountManager.FindByIdAsync(userId);
             // INFO: Not changing pic url this way. :)
@@ -255,7 +260,7 @@
                 return new UserModel(user);
             else return new AssetModel(user as Asset);
         }
- 
+
         internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
         {
             QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page * pageSize, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection);

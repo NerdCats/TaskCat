@@ -49,7 +49,7 @@
         /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(UserRegistrationModel userModel)
+        public async Task<IHttpActionResult> Register(RegistrationModelBase userModel)
         {
             try
             {
@@ -310,7 +310,7 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [HttpPut]
         [Route("profile")]
-        public async Task<IHttpActionResult> Update(UserProfile model)
+        public async Task<IHttpActionResult> Update(IdentityProfile model)
         {
             try
             {
@@ -325,7 +325,7 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPut]
         [Route("profile/{id}")]
-        public async Task<IHttpActionResult> Update( [FromBody]UserProfile model, [FromUri]string id)
+        public async Task<IHttpActionResult> Update( [FromBody]IdentityProfile model, [FromUri]string id)
         {
             try
             {

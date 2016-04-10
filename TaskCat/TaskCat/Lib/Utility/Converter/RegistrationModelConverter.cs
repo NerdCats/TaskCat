@@ -6,17 +6,17 @@
     using System;
     using Data.Model.Identity.Registration;
 
-    public class UserRegistrationModelConverter : JsonConverter
+    public class RegistrationModelConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(UserRegistrationModel);
+            return objectType == typeof(RegistrationModelBase);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var obj = JObject.Load(reader);
-            UserRegistrationModel model;
+            RegistrationModelBase model;
 
             var type = obj["Type"];
             if (type == null)
@@ -34,6 +34,9 @@
             {
                 case IdentityTypes.USER:
                     model = new UserRegistrationModel();
+                    break;
+                case IdentityTypes.ENTERPRISE:
+                    model = new EnterpriseUserRegistrationModel();
                     break;
                 default:
                     model = new AssetRegistrationModel();

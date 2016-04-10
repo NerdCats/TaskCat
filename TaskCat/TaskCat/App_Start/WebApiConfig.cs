@@ -34,7 +34,7 @@
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserRegistrationModelConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
             config.Formatters.JsonFormatter.Indent = true;
 
