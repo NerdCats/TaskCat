@@ -18,6 +18,7 @@
             _repository = repository;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model)
         {
