@@ -4,7 +4,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
-    [BsonKnownTypes(typeof(UserModel), typeof(AssetModel), typeof(EnterpriseUserModel), typeof(GuestUserModel))]
+    [BsonKnownTypes(typeof(UserModel), typeof(AssetModel), typeof(EnterpriseUserModel))]
     public class UserModelBase
     {
         public bool IsUserAuthenticated { get; set; } = false;
