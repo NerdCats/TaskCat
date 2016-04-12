@@ -25,7 +25,7 @@
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
             Assert.AreEqual(order, builder.Job.Order);
-            Assert.AreEqual("Anonymous", builder.Job.User);
+            Assert.AreEqual(null, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
             Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
@@ -53,7 +53,7 @@
             Assert.IsNotNull(builder.Job.Name);
             Assert.AreEqual(orderName, builder.Job.Name);
             Assert.AreEqual(order, builder.Job.Order);
-            Assert.AreEqual("Anonymous", builder.Job.User);
+            Assert.AreEqual(null, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
             Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);

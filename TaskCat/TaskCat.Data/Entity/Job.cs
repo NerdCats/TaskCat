@@ -24,8 +24,15 @@
 
         // FIXME: Im still not sure how this would be actually done, because
         // We might have to support anonymous requests
-        private string _user = "Anonymous";
-        public string User { get { return _user; } set { _user = value; } }
+        private UserModel _user = null;
+        public UserModel User
+        {
+            get
+            {
+                return _user;
+            }
+            set { _user = value; }
+        }
 
         private string _jobServedBy = "Anonymous";
         public string JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }

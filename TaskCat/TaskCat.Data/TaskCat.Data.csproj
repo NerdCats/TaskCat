@@ -104,6 +104,7 @@
     <Compile Include="Model\Identity\Response\EnterpriseUserModel.cs" />
     <Compile Include="Model\Identity\Response\UserModel.cs" />
     <Compile Include="Entity\InvoiceBase.cs" />
+    <Compile Include="Model\Identity\Response\UserModelBase.cs" />
     <Compile Include="Model\Invoice\InvoiceItem.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />

@@ -6,6 +6,7 @@
         USER,
         CNG_DRIVER,
         BIKE_MESSENGER,
-        ENTERPRISE
+        ENTERPRISE,
+        GUEST_USER
     }
 }

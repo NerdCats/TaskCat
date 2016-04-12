@@ -34,6 +34,8 @@
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
 
+
+
         private DateTime? _eta;
         public DateTime? ETA
         {

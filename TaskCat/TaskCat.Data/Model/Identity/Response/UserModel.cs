@@ -2,23 +2,11 @@
 {
     using Entity.Identity;
     using Profile;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
-    public class UserModel
-    {
-    
-        public bool IsUserAuthenticated = false;
-        // FIXME: Do I really need the id here? because I can find anyone by username in
-        // public profile, and when Im logged in, I already know my profile
-        [JsonProperty(PropertyName = "Id")]
-        public string UserId { get; set; }
-        [JsonConverter(typeof(StringEnumConverter))]
-        public IdentityTypes Type { get; set; }     
+    public class UserModel : UserModelBase
+    {  
         public string UserName { get; set; }
-        public string PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
-        public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
         public IdentityProfile Profile { get; set; }
 
