@@ -43,7 +43,7 @@
                 .SingleInstance();
 
             builder.Register(c=> new AccountStore(context.Users)).As<IUserStore<User>>().SingleInstance();
-            builder.RegisterType<AccountManger>().SingleInstance();
+            builder.RegisterType<AccountManager>().SingleInstance();
 
             builder.RegisterType<SupportedOrderStore>().SingleInstance();
 

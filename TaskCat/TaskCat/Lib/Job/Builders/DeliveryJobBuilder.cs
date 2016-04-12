@@ -10,7 +10,7 @@
     public class DeliveryJobBuilder : JobBuilder
     {
         private DeliveryOrder _order;
-        public DeliveryJobBuilder(DeliveryOrder order) : base(order)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel) : base(order, userModel)
         {
             this._order = order;
         }

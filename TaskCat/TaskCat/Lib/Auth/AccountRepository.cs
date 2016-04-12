@@ -27,13 +27,13 @@
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
-        private readonly AccountManger accountManager;
+        private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
         private readonly JobManager jobManager;
 
         public AccountRepository(
             IDbContext dbContext,
-            AccountManger accoutnManager,
+            AccountManager accoutnManager,
             IBlobService blobService,
             JobManager jobManager)
         {

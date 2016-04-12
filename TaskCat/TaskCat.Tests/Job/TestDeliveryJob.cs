@@ -19,13 +19,31 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel() {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile() {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
             Assert.AreEqual(order, builder.Job.Order);
-            Assert.AreEqual(null, builder.Job.User);
+            Assert.AreEqual(userModel, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
             Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
@@ -44,8 +62,28 @@
             order.Name = orderName;
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
             builder.BuildTasks();
 
             Assert.IsNotNull(builder);
@@ -53,7 +91,7 @@
             Assert.IsNotNull(builder.Job.Name);
             Assert.AreEqual(orderName, builder.Job.Name);
             Assert.AreEqual(order, builder.Job.Order);
-            Assert.AreEqual(null, builder.Job.User);
+            Assert.AreEqual(userModel, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
             Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
@@ -78,8 +116,28 @@
             order.Name = orderName;
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
             builder.BuildTasks();
 
             //Changing that back to IN PROGRESS
@@ -96,8 +154,28 @@
             order.Name = orderName;
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -137,8 +215,28 @@
             order.Name = orderName;
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -180,8 +278,28 @@
             order.Name = orderName;
             order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
             order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            UserModel userModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
 
-            var builder = new DeliveryJobBuilder(order);
+            var builder = new DeliveryJobBuilder(order, userModel);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()

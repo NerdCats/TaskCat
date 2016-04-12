@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Model
 {
+    using GeoJson;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -34,7 +35,10 @@
         private string _user = "Anonymous";
         public string User { get { return _user; } set { _user = value; } }
 
-
+        /// <summary>
+        /// Location where the order was originated from
+        /// </summary>
+        public Point OrderLocation { get; set; }
 
         private DateTime? _eta;
         public DateTime? ETA

@@ -10,7 +10,7 @@
     public class RideJobBuilder : JobBuilder
     {
         private RideOrder _order;
-        public RideJobBuilder(RideOrder order) : base(order)
+        public RideJobBuilder(RideOrder order, UserModel userModel) : base(order, userModel)
         {
             this._order = order;
         }

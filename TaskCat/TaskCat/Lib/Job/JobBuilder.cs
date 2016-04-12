@@ -4,7 +4,7 @@
     using System;
     using Data.Entity;
     using System.Linq;
-
+    using Data.Model.Identity.Response;
     public abstract class JobBuilder
     {
         protected Job job;
@@ -17,9 +17,10 @@
             job = new Job(name);
         }
 
-        public JobBuilder(OrderModel order)
+        public JobBuilder(OrderModel order, UserModel userModel)
         {
             job = new Job(order);
+            job.User = userModel;
         }
     }
 }

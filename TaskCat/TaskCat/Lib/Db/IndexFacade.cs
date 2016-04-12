@@ -43,7 +43,7 @@
             geoIndexOptions.Background = true;
             geoIndexOptions.Sparse = true;
 
-            jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.UserLocation), geoIndexOptions);
+            jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
         }
     }
 }

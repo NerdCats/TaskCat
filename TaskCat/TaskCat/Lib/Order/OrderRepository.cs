@@ -4,27 +4,34 @@
     using Job.Builders;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using System.Web;
     using TaskCat.Data.Entity;
     using TaskCat.Data.Model;
     using Data.Model.Order;
-    using Order;
     using System.ComponentModel.DataAnnotations;
+    using Auth;
+    using Data.Model.Identity.Response;
 
     public class OrderRepository : IOrderRepository
     {
         JobManager _manager;
         SupportedOrderStore _supportedOrderStore;
-        public OrderRepository(JobManager manager, SupportedOrderStore supportedOrderStore)
+        AccountManager _accountManager;
+
+        public OrderRepository(JobManager manager, SupportedOrderStore supportedOrderStore, AccountManager accountManager)
         {
             _manager = manager;
             _supportedOrderStore = supportedOrderStore;
+            _accountManager = accountManager;
         }
 
         public async Task<Job> PostOrder(OrderModel model)
         {
+            if (model.User == "Anonymous" || string.IsNullOrWhiteSpace(model.User))
+                    throw new ArgumentException("User came off as Anonymous or null");
+
+            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.User));
+
             JobShop jobShop = new JobShop();
             JobBuilder builder;
             Job createdJob;
@@ -33,12 +40,12 @@
                 case OrderTypes.Ride:
                     RideOrder rideOrderModel = model as RideOrder;
                     Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(model as RideOrder); 
+                    builder = new RideJobBuilder(model as RideOrder, userModel); 
                     break;
                 case OrderTypes.Delivery:
                     DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                     Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel);             
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel);             
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");

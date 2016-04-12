@@ -19,9 +19,9 @@
     public class JobRepository : IJobRepository
     {
         private JobManager _manager;
-        private AccountManger _accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
+        private AccountManager _accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
 
-        public JobRepository(JobManager manager, AccountManger accountManager)
+        public JobRepository(JobManager manager, AccountManager accountManager)
         {
             _manager = manager;
             _accountManager = accountManager;

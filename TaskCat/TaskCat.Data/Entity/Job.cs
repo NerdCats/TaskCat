@@ -48,7 +48,6 @@
 
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
-        public GeoJsonPoint<GeoJson2DGeographicCoordinates> UserLocation { get; set; }
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }

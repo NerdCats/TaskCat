@@ -22,10 +22,10 @@
     /// </summary>
     internal class DefaultAssetProvider : IAssetProvider
     {
-        private readonly AccountManger _accountManager;
+        private readonly AccountManager _accountManager;
         private readonly IDbContext _dbContext;
 
-        public DefaultAssetProvider(AccountManger accountManager, IDbContext dbContext)
+        public DefaultAssetProvider(AccountManager accountManager, IDbContext dbContext)
         {
             this._accountManager = accountManager;
             this._dbContext = dbContext;

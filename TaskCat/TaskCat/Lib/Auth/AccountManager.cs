@@ -11,10 +11,10 @@
     using Data.Model.Identity.Response;
     using MongoDB.Driver;
 
-    public class AccountManger : UserManager<User>
+    public class AccountManager : UserManager<User>
     {
         AccountStore accountStore;
-        public AccountManger(IUserStore<User> store) : base(store)
+        public AccountManager(IUserStore<User> store) : base(store)
         {
             accountStore = store as AccountStore;
             UserValidator = new UserValidator<User>(this)

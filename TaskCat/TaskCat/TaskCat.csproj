@@ -1174,7 +1174,7 @@
     <Compile Include="Lib\Auth\AccountStore.cs" />
     <Compile Include="Lib\Auth\AccountRepository.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
-    <Compile Include="Lib\Auth\AccountManger.cs" />
+    <Compile Include="Lib\Auth\AccountManager.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
