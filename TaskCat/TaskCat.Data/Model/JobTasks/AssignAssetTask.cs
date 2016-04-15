@@ -3,12 +3,14 @@
     using Model;
     using System;
     using Result;
+    using Geocoding;
 
     public abstract class AssignAssetTask : JobTask
     {
-        public Location From { get; set; }
-        public Location To { get; set; }
-        public AssignAssetTask(string type, string name, Location from, Location to) : base(type, name)
+        public DefaultAddress From { get; set; }
+        public DefaultAddress To { get; set; }
+
+        public AssignAssetTask(string type, string name, DefaultAddress from, DefaultAddress to) : base(type, name)
         {
             From = from;
             To = to;

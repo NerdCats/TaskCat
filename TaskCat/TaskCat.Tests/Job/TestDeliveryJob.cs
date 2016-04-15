@@ -9,6 +9,7 @@
     using Data.Model.JobTasks;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
+    using Data.Model.Geocoding;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJob
@@ -17,8 +18,8 @@
         public void Test_DeliverJobBuilder_Creation()
         {
             DeliveryOrder order = new DeliveryOrder();
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel() {
                 Email = "someone@somewhere.com",
                 EmailConfirmed = false,
@@ -60,8 +61,8 @@
 
             DeliveryOrder order = new DeliveryOrder();
             order.Name = orderName;
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel()
             {
                 Email = "someone@somewhere.com",
@@ -114,8 +115,8 @@
 
             DeliveryOrder order = new DeliveryOrder();
             order.Name = orderName;
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel()
             {
                 Email = "someone@somewhere.com",
@@ -152,8 +153,8 @@
 
             DeliveryOrder order = new DeliveryOrder();
             order.Name = orderName;
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel()
             {
                 Email = "someone@somewhere.com",
@@ -213,8 +214,8 @@
 
             DeliveryOrder order = new DeliveryOrder();
             order.Name = orderName;
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel()
             {
                 Email = "someone@somewhere.com",
@@ -276,8 +277,8 @@
 
             DeliveryOrder order = new DeliveryOrder();
             order.Name = orderName;
-            order.From = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-            order.To = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             UserModel userModel = new UserModel()
             {
                 Email = "someone@somewhere.com",

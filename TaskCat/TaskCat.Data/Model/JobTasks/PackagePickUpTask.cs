@@ -4,10 +4,11 @@
     using Data.Model;
     using Data.Model.Identity.Response;
     using Data.Lib.Constants;
+    using Geocoding;
 
     public class PackagePickUpTask : PickupTask
     {
-        public PackagePickUpTask(Location pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package", pickupLocation)
+        public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package", pickupLocation)
         {
             this.Result = new PickUpTaskResult();
         }

@@ -8,6 +8,7 @@
     using System.Linq;
     using Data.Model.Invoice;
     using System.Collections.Generic;
+    using Data.Model.Geocoding;
 
     [TestFixture(TestOf = typeof(DeliveryOrder))]
     public class DeliveryOrderTests
@@ -16,9 +17,8 @@
         [Test]
         public void Test_DeliveryOrder_Creation_Without_Name()
         {
-            Location FromLocation = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-
-            Location ToLocation = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            DefaultAddress FromLocation = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            DefaultAddress ToLocation = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             string PackageDescription = "Sample Package Description";
 
             List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
@@ -62,9 +62,8 @@
         [Test]
         public void Test_DeliveryOrder_Creation_With_Name()
         {
-            Location FromLocation = new Location() { Address = "Test From Address", Point = new Point((new double[] { 1, 2 }).ToList()) };
-
-            Location ToLocation = new Location() { Address = "Test To Address", Point = new Point((new double[] { 2, 1 }).ToList()) };
+            DefaultAddress FromLocation = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            DefaultAddress ToLocation = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             string orderName = "Test Delivery Order";
             string PackageDescription = "Sample Package Description";
 

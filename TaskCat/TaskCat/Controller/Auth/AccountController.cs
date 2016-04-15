@@ -1,23 +1,23 @@
 ﻿namespace TaskCat.Controller.Auth
 {
+    using Data.Model;
+    using Data.Model.Identity;
+    using Data.Model.Identity.Profile;
+    using Data.Model.Identity.Registration;
+    using Data.Model.Identity.Response;
+    using Lib.Auth;
+    using Lib.Constants;
+    using Microsoft.AspNet.Identity;
+    using Model.Pagination;
+    using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Web.Http;
-    using Lib.Auth;
     using System.Threading.Tasks;
-    using Data.Model.Identity;
-    using Microsoft.AspNet.Identity;
-    using Data.Model.Identity.Registration;
-    using Lib.Constants;
-    using Data.Model.Identity.Response;
-    using Data.Model.Identity.Profile;
+    using System.Web.Http;
     using System.Web.OData.Query;
-    using Model.Pagination;
-    using Data.Model;
-    using MongoDB.Driver;
 
     /// <summary>
     /// Account (User And Asset related Controller)

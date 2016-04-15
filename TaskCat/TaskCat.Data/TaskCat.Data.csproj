@@ -75,6 +75,7 @@
     <Compile Include="Entity\SupportedOrder.cs" />
     <Compile Include="Lib\Constants\JobTaskTypes.cs" />
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
+    <Compile Include="Model\Geocoding\Address.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\EnterpriseUserProfile.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="Model\JobTasks\PickupTask.cs" />
     <Compile Include="Model\JobTasks\Result\DefaultAssignAssetTaskResult.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
-    <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />

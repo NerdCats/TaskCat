@@ -4,6 +4,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     using System.Collections.Generic;
     using Entity.Identity;
+    using Geocoding;
 
     public class RideOrder : OrderModel
     {
@@ -12,8 +13,8 @@
 
         }
 
-        public Location From { get; set; }
-        public Location To { get; set; }
+        public DefaultAddress From { get; set; }
+        public DefaultAddress To { get; set; }
 
         /// <summary>
         /// Basically a list of vehicles users want to avail and all of these options 

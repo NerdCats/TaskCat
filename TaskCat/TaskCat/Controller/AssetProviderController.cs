@@ -1,12 +1,12 @@
 ﻿namespace TaskCat.Controller
 {
-    using Data.Model;
     using Lib.Asset;
     using Model.Asset;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
     using Lib.Constants;
+    using Data.Model.Geocoding;
 
     /// <summary>
     /// Asset Providers are responsible for fetching eligible assets 
@@ -53,11 +53,7 @@
         {
             var request = new AssetSearchRequest()
             {
-                Location = new Location()
-                {
-                    Address = address,
-                    Point = new Data.Model.GeoJson.Point(new double[] { lon, lat }.ToList())
-                },
+                Location = new DefaultAddress(address, new Data.Model.GeoJson.Point(new double[] { lon, lat }.ToList())),
                 Limit = limit,
                 Radius = radius,
                 Strategy = strategy

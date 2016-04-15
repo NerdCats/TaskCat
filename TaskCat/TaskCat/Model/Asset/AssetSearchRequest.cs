@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Model.Asset
 {
     using Data.Model;
+    using Data.Model.Geocoding;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -12,7 +13,7 @@
         /// <summary>
         /// Location class to define searches around a place
         /// </summary>
-        public Location Location { get; set; }
+        public DefaultAddress Location { get; set; }
         /// <summary>
         /// Radius in meters to limit search area
         /// </summary>

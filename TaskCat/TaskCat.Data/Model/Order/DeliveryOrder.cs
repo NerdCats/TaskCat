@@ -4,13 +4,14 @@
     using Invoice;
     using System.Collections.Generic;
     using System.Linq;
+    using Geocoding;
 
     public class DeliveryOrder : OrderModel
     {
         [Required]
-        public Location From { get; set; }
+        public DefaultAddress From { get; set; }
         [Required]
-        public Location To { get; set; }
+        public DefaultAddress To { get; set; }
 
         public string PackageDescription { get; set; }
         public decimal PackageWeight

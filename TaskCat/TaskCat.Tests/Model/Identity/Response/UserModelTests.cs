@@ -1,14 +1,10 @@
 ﻿namespace TaskCat.Data.Model.Identity.Response.Tests
 {
     using NUnit.Framework;
-    using TaskCat.Data.Model.Identity.Response;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     [TestFixture()]
+    [Ignore("Incomplete Test Fixture")]
     public class UserModelTests
     {
         [Test()]

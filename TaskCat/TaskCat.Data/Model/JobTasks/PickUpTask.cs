@@ -3,13 +3,14 @@
     using Lib.Exceptions;
     using System;
     using Identity.Response;
+    using Geocoding;
 
     public abstract class PickupTask : JobTask
     {
-        public Location AssetLocation { get; set; }
-        public Location PickupLocation { get; set; }
+        public DefaultAddress AssetLocation { get; set; }
+        public DefaultAddress PickupLocation { get; set; }
 
-        public PickupTask(string type, string name, Location pickupLocation) : base(type, name)
+        public PickupTask(string type, string name, DefaultAddress pickupLocation) : base(type, name)
         {
             this.PickupLocation = pickupLocation;
         }
@@ -24,11 +25,11 @@
                 try
                 {
                     var fromData = type.GetProperty("From");
-                    if (fromData.PropertyType != typeof(Location))
+                    if (fromData.PropertyType != typeof(DefaultAddress))
                         throw new InvalidCastException("Type Verification From Field Failed");
 
                     var toData = type.GetProperty("To");
-                    if (toData.PropertyType != typeof(Location))
+                    if (toData.PropertyType != typeof(DefaultAddress))
                         throw new InvalidCastException("Type Verification To Field Failed");
 
                     var ride = type.GetProperty("Asset");

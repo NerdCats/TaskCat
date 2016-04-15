@@ -5,13 +5,14 @@
     using Data.Model.Identity.Response;
     using Data.Lib.Constants;
     using Data.Lib.Exceptions;
+    using Geocoding;
 
     public class DeliveryTask : JobTask
     {
-        public Location From { get; set; }
-        public Location To { get; set; }
+        public DefaultAddress From { get; set; }
+        public DefaultAddress To { get; set; }
 
-        public DeliveryTask(Location from, Location to) : base(JobTaskTypes.DELIVERY, "Deliverying Package")
+        public DeliveryTask(DefaultAddress from, DefaultAddress to) : base(JobTaskTypes.DELIVERY, "Deliverying Package")
         {
             this.From = from;
             this.To = to;

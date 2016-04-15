@@ -3,26 +3,20 @@
     using Autofac;
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
-    using System;
-    using System.Collections.Generic;
     using System.Configuration;
-    using System.Linq;
-    using System.Web;
     using Lib.Asset;
     using TaskCat.Lib.Job;
     using Lib.Db;
     using Lib.Order;
     using Data.Entity.Identity;
-    using AspNet.Identity.MongoDB;
     using Microsoft.AspNet.Identity;
     using Lib.Identity;
     using Microsoft.Owin.Security.OAuth;
     using Microsoft.Owin.Security.Infrastructure;
     using Lib.Auth;
-    using Data.Entity;
-    using MongoDB.Driver;
     using Lib.Storage;
     using Lib.AssetProvider;
+
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer()

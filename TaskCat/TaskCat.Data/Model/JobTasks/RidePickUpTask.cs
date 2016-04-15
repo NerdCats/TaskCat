@@ -1,7 +1,8 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
-    using TaskCat.Data.Model;
     using Lib.Constants;
+    using Geocoding;
+
     public class RidePickUpTask : PickupTask
     {
         //FIXME: Im really not sure what Im doing here, this doesnt look right
@@ -20,7 +21,7 @@
             }
         }
 
-        public RidePickUpTask(Location pickupLocation) :base(JobTaskTypes.RIDE_PICKUP, "Picking up", pickupLocation)
+        public RidePickUpTask(DefaultAddress pickupLocation) :base(JobTaskTypes.RIDE_PICKUP, "Picking up", pickupLocation)
         {
             this.PickupLocation = pickupLocation;
         }
