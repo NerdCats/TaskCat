@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class InvoiceItem
+    public class ItemDetails
     {
         [Required]
         public string Item { get; set; }
@@ -51,7 +51,7 @@
         [Range(0.00, 100, ErrorMessage = "VAT must be a % between 0 and 100")]
         public decimal Weight { get; set; }
 
-        public InvoiceItem()
+        public ItemDetails()
         {
         }
     }

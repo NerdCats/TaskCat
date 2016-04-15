@@ -20,7 +20,7 @@
         }
 
         [Required]
-        public List<InvoiceItem> PackageList { get; set; }
+        public List<ItemDetails> PackageList { get; set; }
 
         public string NoteToDeliveryMan { get; set; }
 

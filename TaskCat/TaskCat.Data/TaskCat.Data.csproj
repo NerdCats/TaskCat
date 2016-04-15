@@ -70,6 +70,7 @@
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
+    <Compile Include="Entity\Invoice\DeliveryInvoice.cs" />
     <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
     <Compile Include="Entity\ShadowCat\AssetLocation.cs" />
     <Compile Include="Entity\SupportedOrder.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="Model\Identity\Response\UserModel.cs" />
     <Compile Include="Entity\InvoiceBase.cs" />
     <Compile Include="Model\Identity\Response\UserModelBase.cs" />
-    <Compile Include="Model\Invoice\InvoiceItem.cs" />
+    <Compile Include="Model\Invoice\ItemDetails.cs" />
     <Compile Include="Model\JobState.cs" />
     <Compile Include="Model\JobTask.cs" />
     <Compile Include="Model\JobTaskState.cs" />

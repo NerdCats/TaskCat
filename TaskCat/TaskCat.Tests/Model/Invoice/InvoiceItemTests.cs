@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    [TestFixture(TestOf = typeof(InvoiceItem))]
+    [TestFixture(TestOf = typeof(ItemDetails))]
     public class InvoiceItemTests
     {
         [Test]
         public void Test_Create_InvoiceItem()
         {
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
 
             Assert.NotNull(invoiceItem);
         }
@@ -20,7 +20,7 @@
         {
             Assert.Throws(typeof(ValidationException), () =>
             {
-                InvoiceItem invoiceItem = new InvoiceItem();
+                ItemDetails invoiceItem = new ItemDetails();
 
                 Assert.NotNull(invoiceItem);
                 Validator.ValidateObject(invoiceItem, new ValidationContext(invoiceItem));
@@ -32,7 +32,7 @@
         {
             Assert.DoesNotThrow(() =>
             {
-                InvoiceItem invoiceItem = new InvoiceItem();
+                ItemDetails invoiceItem = new ItemDetails();
                 invoiceItem.Item = "Test Item";
 
                 Assert.NotNull(invoiceItem);
@@ -47,7 +47,7 @@
         public void Test_Create_InvoiceItem_Quantity_WrongRange()
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
             invoiceItem.Item = "Test Item";
             invoiceItem.Quantity = 0;
             invoiceItem.Price = 10;
@@ -64,7 +64,7 @@
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
 
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
             invoiceItem.Item = "Test Item";
             invoiceItem.Quantity = 1;
 
@@ -84,7 +84,7 @@
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
 
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
             invoiceItem.Item = "Test Item";
             invoiceItem.Quantity = 1;
             invoiceItem.Price = 0.2m;
@@ -102,7 +102,7 @@
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
 
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
             invoiceItem.Item = "Test Item";
             invoiceItem.Quantity = 1;
             invoiceItem.Price = 0.2m;
@@ -116,7 +116,7 @@
         {
             List<ValidationResult> validationResults = new List<ValidationResult>();
 
-            InvoiceItem invoiceItem = new InvoiceItem();
+            ItemDetails invoiceItem = new ItemDetails();
             invoiceItem.Item = "Test Item";
             invoiceItem.Quantity = 1;
             invoiceItem.Price = 0.2m;

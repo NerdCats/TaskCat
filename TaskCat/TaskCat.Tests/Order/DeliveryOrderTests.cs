@@ -21,8 +21,8 @@
             DefaultAddress ToLocation = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             string PackageDescription = "Sample Package Description";
 
-            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
-            invoiceItems.Add(new InvoiceItem()
+            List<ItemDetails> invoiceItems = new List<ItemDetails>();
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 1",
                 Price = 100,
@@ -31,7 +31,7 @@
                 Weight = 5
             });
 
-            invoiceItems.Add(new InvoiceItem()
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 2",
                 Price = 100,
@@ -67,8 +67,8 @@
             string orderName = "Test Delivery Order";
             string PackageDescription = "Sample Package Description";
 
-            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
-            invoiceItems.Add(new InvoiceItem()
+            List<ItemDetails> invoiceItems = new List<ItemDetails>();
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 1",
                 Price = 100,
@@ -77,7 +77,7 @@
                 Weight = 5
             });
 
-            invoiceItems.Add(new InvoiceItem()
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 2",
                 Price = 100,

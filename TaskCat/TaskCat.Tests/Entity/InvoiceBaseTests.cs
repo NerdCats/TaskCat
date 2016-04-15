@@ -7,6 +7,7 @@
     using Data.Model.Invoice;
     using System.Linq;
 
+    using Entity;
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {
@@ -24,7 +25,7 @@
             InvoiceBase baseInvoice = new InvoiceBase();
             Assert.IsFalse(Validator.TryValidateObject(baseInvoice, new ValidationContext(baseInvoice), new List<ValidationResult>(), true));
 
-            baseInvoice.VendorId = "TestVendorId";
+            baseInvoice.Vendor = "TestVendorId";
             baseInvoice.Notes = "Test Note";
             Assert.IsTrue(Validator.TryValidateObject(baseInvoice, new ValidationContext(baseInvoice), new List<ValidationResult>(), true));
         }
@@ -32,8 +33,8 @@
         [Test()]
         public void Test_InvoiceBase_Generated()
         {
-            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
-            invoiceItems.Add(new InvoiceItem()
+            List<ItemDetails> invoiceItems = new List<ItemDetails>();
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 1",
                 Price = 100,
@@ -42,7 +43,7 @@
                 Weight = 5
             });
 
-            invoiceItems.Add(new InvoiceItem()
+            invoiceItems.Add(new ItemDetails()
             {
                 Item = "Test Item 2",
                 Price = 100,
@@ -55,7 +56,7 @@
 
             DateTime dueDate = baseInvoice.CreatedTime.Value.AddDays(5);
 
-            baseInvoice.VendorId = "TestVendorId";
+            baseInvoice.Vendor = "TestVendorId";
             baseInvoice.Notes = "Test Note";
             baseInvoice.ServiceCharge = 100;
             baseInvoice.DueDate = dueDate;

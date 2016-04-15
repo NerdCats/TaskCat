@@ -1,18 +1,21 @@
-﻿namespace TaskCat.Data.Model
+﻿namespace TaskCat.Data.Entity
 {
     using System;
-    using Entity;
     using System.Collections.Generic;
-    using Invoice;
     using System.Linq;
     using System.ComponentModel.DataAnnotations;
+    using Model.Invoice;
+    using MongoDB.Bson.Serialization.Attributes;
+    using Invoice;
 
+    [BsonKnownTypes(typeof(DeliveryInvoice))]
     public class InvoiceBase : DbEntity
     {
         public int InvoiceNumber { get; set; }
 
+        // FIXME: Would be fixed after Vendor profile is introduced
         [Required]
-        public string VendorId { get; set; }
+        public string Vendor { get; set; }
 
         [Required]
         public string Notes { get; set; }
@@ -74,14 +77,14 @@
             }
         }
 
-        public virtual ICollection<InvoiceItem> InvoiceDetails { get; set; }
+        public virtual ICollection<ItemDetails> InvoiceDetails { get; set; }
 
         public InvoiceBase()
         {
-            InvoiceDetails = new List<InvoiceItem>();
+            InvoiceDetails = new List<ItemDetails>();
         }
 
-        public InvoiceBase(ICollection<InvoiceItem> invoiceDetails)
+        public InvoiceBase(ICollection<ItemDetails> invoiceDetails)
         {
             InvoiceDetails = invoiceDetails;
             weight = InvoiceDetails.Sum(x => x.Weight);

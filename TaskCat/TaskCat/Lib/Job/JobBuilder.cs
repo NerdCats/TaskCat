@@ -1,10 +1,9 @@
 ﻿namespace TaskCat.Lib.Job
 {
     using Data.Model;
-    using System;
     using Data.Entity;
-    using System.Linq;
     using Data.Model.Identity.Response;
+
     public abstract class JobBuilder
     {
         protected Job job;
