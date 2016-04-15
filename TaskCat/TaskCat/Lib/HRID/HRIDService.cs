@@ -28,9 +28,9 @@
         {
             lock (_padLock)
             {
-                var data = GenerateId();
-                data.Wait();
-                return string.Concat(prefix, "#", data.Result);             
+                var dataTask = GenerateId();
+                dataTask.Wait();
+                return string.Concat(prefix, "#", dataTask.Result);             
             }
         }
 
