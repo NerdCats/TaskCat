@@ -23,5 +23,6 @@
         Task<ReplaceOneResult> UpdateJob(Job job);
         Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> UpdateJobWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
+        Task<ReplaceOneResult> Claim(string jobId, string userId);
     }
 }

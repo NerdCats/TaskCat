@@ -15,6 +15,11 @@
             this._order = order;
         }
 
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel) : base(order, userModel, adminUserModel)
+        {
+            this._order = order;
+        }
+
         public override void BuildTasks()
         {
             //FIXME: Looks like I can definitely refactor this and work this out

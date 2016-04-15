@@ -73,5 +73,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<ReplaceOneResult> Claim(string jobId, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

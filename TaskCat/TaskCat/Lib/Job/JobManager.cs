@@ -8,6 +8,7 @@
     using System.Web.OData.Query;
     using Data.Model.Query;
     using System;
+    using Exceptions;
 
     public class JobManager
     {
@@ -22,7 +23,8 @@
         {
             var JobPayload = await _store.FindOne(id);
             if (JobPayload == null)
-                return null;
+                throw new EntityNotFoundException("Job", "id");
+
             JobTask TerminalTask = null;
             // Hooking up JobTask Predecessors, 
             // validation is skipped due to this is already been recorded in DB

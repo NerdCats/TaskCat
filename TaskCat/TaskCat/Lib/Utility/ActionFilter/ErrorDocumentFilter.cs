@@ -21,6 +21,12 @@
 
                 if (actionExecutedContext.Exception is NotImplementedException)
                     httpStatusCode = HttpStatusCode.NotImplemented;
+                else if (actionExecutedContext.Exception is EntityNotFoundException)
+                    httpStatusCode = HttpStatusCode.NotFound;
+                else if (actionExecutedContext.Exception is InvalidOperationException)
+                    httpStatusCode = HttpStatusCode.Forbidden;
+                else if (actionExecutedContext.Exception is ArgumentException)
+                    httpStatusCode = HttpStatusCode.BadRequest;
 
                 error = actionExecutedContext.Exception;
                 response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);

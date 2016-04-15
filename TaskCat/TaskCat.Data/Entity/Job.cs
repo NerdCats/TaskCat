@@ -34,8 +34,8 @@
             set { _user = value; }
         }
 
-        private string _jobServedBy = "Anonymous";
-        public string JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
+        private UserModel _jobServedBy;
+        public UserModel JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
 
         public Dictionary<string, AssetModel> Assets;
 
@@ -51,6 +51,8 @@
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }
+
+        public string InvoiceId { get; set; }
 
         private JobTask _terminalTask;
         [BsonIgnore]

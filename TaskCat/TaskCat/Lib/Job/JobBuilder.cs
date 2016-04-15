@@ -22,5 +22,10 @@
             job = new Job(order);
             job.User = userModel;
         }
+
+        public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel) : this(order, userModel)
+        {
+            job.JobServedBy = adminUserModel;
+        }
     }
 }

@@ -167,7 +167,10 @@
             }
             else if(user.Roles.Any(x=>x=="Administrator" || x== "BackOfficeAdmin"))
             {
-                // TODO: Need to update the servedby field here
+                var userModel = new UserModel(user);
+                var updateDef = Builders<Job>.Update.Set(x => x.JobServedBy, userModel);
+                var searchFilter = Builders<Job>.Filter.Where(x => x.JobServedBy.UserId == user.Id);
+                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
             else if(user.Type== IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
             {

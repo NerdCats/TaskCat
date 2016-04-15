@@ -11,7 +11,8 @@
     using Marvin.JsonPatch;
     using System.Web.OData.Query;
     using MongoDB.Driver;
-    using Data.Entity.Identity;
+    using Microsoft.AspNet.Identity;
+
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -98,7 +99,7 @@
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            
+
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
             if (page < 0)
@@ -117,7 +118,7 @@
                 query.Validate(settings);
 
                 if (envelope)
-                    return Json( await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
+                    return Json(await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
                 return Json(await _repository.GetJobs(query, page, pageSize));
             }
             catch (Exception ex)
@@ -146,6 +147,15 @@
             }
         }
 
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Route("api/Job/claim/{jobId}")]
+        [HttpPost]
+        public async Task<IHttpActionResult> Claim(string jobId)
+        {
+            ReplaceOneResult result = await _repository.Claim(jobId, this.User.Identity.GetUserId());
+            return Json(result);
+        }
+
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
@@ -153,23 +163,18 @@
         {
             try
             {
-                
                 ReplaceOneResult result = await _repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
                 return Json(result);
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 return Content(System.Net.HttpStatusCode.Forbidden, ex);
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-            
+
         }
 
     }

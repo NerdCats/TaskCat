@@ -20,6 +20,7 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+
             UserModel userModel = new UserModel() {
                 Email = "someone@somewhere.com",
                 EmailConfirmed = false,
@@ -39,14 +40,35 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            UserModel backendAdminModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
+
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel);
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
             Assert.AreEqual(order, builder.Job.Order);
             Assert.AreEqual(userModel, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
-            Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
+            Assert.AreEqual(backendAdminModel, builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
             Assert.NotNull(builder.Job.ModifiedTime);
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
@@ -84,7 +106,28 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            UserModel backendAdminModel = new UserModel()
+            {
+                Email = "someone@somewhere.com",
+                EmailConfirmed = false,
+                IsUserAuthenticated = false,
+                PhoneNumber = "+8801684512833",
+                PhoneNumberConfirmed = true,
+                Profile = new UserProfile()
+                {
+                    Address = "Somewhere User belong",
+                    Age = 26,
+                    FirstName = "Gabul",
+                    LastName = "Habul",
+                    Gender = Gender.MALE,
+                    PicUri = null
+                },
+                Type = Data.Model.Identity.IdentityTypes.USER,
+                UserId = "123456789",
+                UserName = "GabulTheAwesome"
+            };
+
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel);
             builder.BuildTasks();
 
             Assert.IsNotNull(builder);
@@ -94,7 +137,7 @@
             Assert.AreEqual(order, builder.Job.Order);
             Assert.AreEqual(userModel, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
-            Assert.AreEqual("Anonymous", builder.Job.JobServedBy);
+            Assert.AreEqual(backendAdminModel, builder.Job.JobServedBy);
             Assert.NotNull(builder.Job.CreateTime);
             Assert.NotNull(builder.Job.ModifiedTime);
             Assert.IsNotNull(builder.Job.Tasks);

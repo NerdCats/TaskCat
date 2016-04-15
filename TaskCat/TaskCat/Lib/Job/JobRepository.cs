@@ -73,7 +73,6 @@
         public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
         {
             var job = await GetJob(jobId);
-            if (job == null) throw new ArgumentException("Invalid Job Id provided");
 
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
             if (selectedTask == null) throw new ArgumentException("Invalid JobTask Id provided");
@@ -110,6 +109,14 @@
 
         }
 
-       
+        public async Task<ReplaceOneResult> Claim(string jobId, string userId)
+        {
+            var job = await GetJob(jobId);
+            var adminUser = await _accountManager.FindByIdAsync(userId);
+            var userModel = new UserModel(adminUser);
+            job.JobServedBy = userModel;
+
+            return await UpdateJob(job);
+        }
     }
 }
