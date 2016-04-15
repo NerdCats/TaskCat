@@ -5,17 +5,18 @@
     using Data.Model.Order;
     using System.Collections.Generic;
     using Data.Model.Identity.Response;
+    using HRID;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class DeliveryJobBuilder : JobBuilder
     {
         private DeliveryOrder _order;
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel) : base(order, userModel)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel,hridService)
         {
             this._order = order;
         }
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel) : base(order, userModel, adminUserModel)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService)
         {
             this._order = order;
         }

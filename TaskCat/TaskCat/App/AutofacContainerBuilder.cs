@@ -16,6 +16,7 @@
     using Lib.Auth;
     using Lib.Storage;
     using Lib.AssetProvider;
+    using Lib.HRID;
 
     public class AutofacContainerBuilder
     {
@@ -26,6 +27,8 @@
             DbContext context = new DbContext();
 
             builder.Register<DbContext>(c => context).As<IDbContext>().SingleInstance();
+
+            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();

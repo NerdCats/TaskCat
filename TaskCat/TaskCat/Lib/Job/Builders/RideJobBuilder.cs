@@ -5,29 +5,30 @@
     using System.Collections.Generic;
     using Data.Model.JobTasks;
     using Data.Model.Identity.Response;
+    using HRID;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class RideJobBuilder : JobBuilder
     {
         private RideOrder _order;
-        public RideJobBuilder(RideOrder order, UserModel userModel) : base(order, userModel)
+        public RideJobBuilder(RideOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel, hridService)
         {
             this._order = order;
         }
 
-        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel) : base(order, userModel, adminUserModel)
+        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService)
         {
             this._order = order;
         }
 
         public override void BuildTasks()
-        { 
+        {
             job.Tasks = new List<JobTask>();
 
             //FIXME: I need to check the ride preference and then give a FetchRideTask 
             //according to that
             //Right now just pushing Ryde class as the rest is still not built yet
-            FetchRideTask fetchRideTask = new FetchRideTask(_order.From, _order.To,_order.ProposedRide);
+            FetchRideTask fetchRideTask = new FetchRideTask(_order.From, _order.To, _order.ProposedRide);
             job.Tasks.Add(fetchRideTask);
             fetchRideTask.AssetUpdated += JobTask_AssetUpdated;
             //FIXME: I really dont know now how would I trigger that would tell which vechicle 

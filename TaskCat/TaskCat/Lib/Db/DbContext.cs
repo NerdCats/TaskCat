@@ -82,6 +82,15 @@
             }
         }
 
+        private IMongoCollection<string> _hrids;
+        public IMongoCollection<string> HRIDs
+        {
+            get
+            {
+                return _hrids;
+            }
+        }
+
         #endregion
 
         public DbContext()
@@ -105,6 +114,7 @@
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
 
             IndexFacade.EnsureJobIndexes(_jobs);
+            IndexFacade.EnsureHRIDIndex(_hrids);
         }
 
         private void InitiateCollections()
@@ -116,6 +126,7 @@
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
+            _hrids = Database.GetCollection<string>(CollectionNames.HRIDCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);          
         }

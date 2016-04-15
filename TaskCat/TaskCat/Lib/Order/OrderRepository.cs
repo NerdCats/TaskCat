@@ -11,18 +11,26 @@
     using System.ComponentModel.DataAnnotations;
     using Auth;
     using Data.Model.Identity.Response;
+    using HRID;
 
     public class OrderRepository : IOrderRepository
     {
         JobManager _manager;
         SupportedOrderStore _supportedOrderStore;
         AccountManager _accountManager;
+        IHRIDService _hridService;
 
-        public OrderRepository(JobManager manager, SupportedOrderStore supportedOrderStore, AccountManager accountManager)
+        public OrderRepository(
+            JobManager manager, 
+            SupportedOrderStore supportedOrderStore, 
+            AccountManager accountManager,
+            IHRIDService hridService 
+            )
         {
             _manager = manager;
             _supportedOrderStore = supportedOrderStore;
             _accountManager = accountManager;
+            _hridService = hridService;
         }
 
         public async Task<Job> PostOrder(OrderModel model)
@@ -37,12 +45,12 @@
                 case OrderTypes.Ride:
                     RideOrder rideOrderModel = model as RideOrder;
                     Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(rideOrderModel, userModel);
+                    builder = new RideJobBuilder(rideOrderModel, userModel, _hridService);
                     break;
                 case OrderTypes.Delivery:
                     DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                     Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel);
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, _hridService);
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
@@ -64,12 +72,12 @@
                 case OrderTypes.Ride:
                     RideOrder rideOrderModel = model as RideOrder;
                     Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel);
+                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, _hridService);
                     break;
                 case OrderTypes.Delivery:
                     DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                     Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel);
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, _hridService);
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");

@@ -10,7 +10,7 @@
     using Model.Identity.Response;
     using System.Linq;
 
-    public class Job : DbEntity
+    public class Job : HRIDEntity
     {
         [BsonIgnore]
         [JsonIgnore]
@@ -95,10 +95,15 @@
 
         }
 
-        public Job(OrderModel order) : this()
+        public Job(OrderModel order, string hrid) : this()
         {
             this.Name = order.Name;
+            if (order == null)
+                throw new ArgumentNullException("order is provided null");
             this.Order = order;
+            if (string.IsNullOrEmpty(hrid))
+                throw new ArgumentException("hrid is provided null");
+            this.HRID = hrid;
         }
 
         public void EnsureTaskAssetEventsAssigned()

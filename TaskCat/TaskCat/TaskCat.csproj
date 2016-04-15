@@ -1182,6 +1182,8 @@
     <Compile Include="Lib\Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
+    <Compile Include="Lib\HRID\HRIDService.cs" />
+    <Compile Include="Lib\HRID\IHRIDService.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Storage\BlobHelper.cs" />

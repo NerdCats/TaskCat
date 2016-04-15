@@ -3,6 +3,7 @@
     using Data.Model;
     using Data.Entity;
     using Data.Model.Identity.Response;
+    using HRID;
 
     public abstract class JobBuilder
     {
@@ -16,13 +17,13 @@
             job = new Job(name);
         }
 
-        public JobBuilder(OrderModel order, UserModel userModel)
+        public JobBuilder(OrderModel order, UserModel userModel, IHRIDService hridService)
         {
-            job = new Job(order);
+            job = new Job(order, hridService.NextId("Job"));
             job.User = userModel;
         }
 
-        public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel) : this(order, userModel)
+        public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : this(order, userModel, hridService)
         {
             job.JobServedBy = adminUserModel;
         }

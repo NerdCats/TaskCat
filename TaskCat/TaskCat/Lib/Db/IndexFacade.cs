@@ -45,5 +45,14 @@
 
             jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
         }
+
+        public static void EnsureHRIDIndex(IMongoCollection<string> hridCollection)
+        {
+            var hridIndexOptions = new CreateIndexOptions();
+            hridIndexOptions.Unique = true;
+
+            hridCollection.Indexes.CreateOne(Builders<string>.IndexKeys.Ascending(x => x));
+            hridCollection.Indexes.CreateOne(Builders<string>.IndexKeys.Descending(x => x));
+        }
     }
 }

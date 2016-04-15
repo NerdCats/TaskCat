@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\HRIDEntity.cs" />
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />

@@ -10,10 +10,25 @@
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
     using Data.Model.Geocoding;
+    using Moq;
+    using Lib.HRID;
+    using System;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJob
     {
+        IHRIDService hridService;
+        string MockedHrid = "Job#123456";
+
+        [SetUp]
+        public void Setup()
+        {
+            Mock<IHRIDService> hridServiceMock = new Mock<IHRIDService>();
+            hridServiceMock.Setup<string>(x => x.NextId(It.IsAny<string>())).Returns(MockedHrid);
+            hridService = hridServiceMock.Object;
+        }
+
+
         [Test]
         public void Test_DeliverJobBuilder_Creation()
         {
@@ -61,11 +76,12 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel);
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService);
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
             Assert.AreEqual(order, builder.Job.Order);
+            Assert.AreEqual(MockedHrid, builder.Job.HRID);
             Assert.AreEqual(userModel, builder.Job.User);
             Assert.That(builder.Job.Assets != null && builder.Job.Assets.Count == 0);
             Assert.AreEqual(backendAdminModel, builder.Job.JobServedBy);
@@ -127,12 +143,13 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel);
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService);
             builder.BuildTasks();
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
             Assert.IsNotNull(builder.Job.Name);
+            Assert.AreEqual(MockedHrid, builder.Job.HRID);
             Assert.AreEqual(orderName, builder.Job.Name);
             Assert.AreEqual(order, builder.Job.Order);
             Assert.AreEqual(userModel, builder.Job.User);
@@ -181,7 +198,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService);
             builder.BuildTasks();
 
             //Changing that back to IN PROGRESS
@@ -219,7 +236,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -280,7 +297,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -343,7 +360,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()

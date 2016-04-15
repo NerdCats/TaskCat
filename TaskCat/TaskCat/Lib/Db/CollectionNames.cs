@@ -7,6 +7,7 @@
         public const string RefreshTokensCollectionName = "RefreshTokens";
         public const string RolesCollectionName = "Roles";
         public const string UsersCollectionName = "Users";
-        public const string SupportedOrderCollectionName = "SupportedOrders"; 
+        public const string SupportedOrderCollectionName = "SupportedOrders";
+        public const string HRIDCollectionName = "HRIDs";
     }
 }
