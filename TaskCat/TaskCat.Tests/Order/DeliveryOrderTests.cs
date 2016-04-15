@@ -45,18 +45,19 @@
             order.To = ToLocation;
             order.PackageDescription = PackageDescription;
             order.PackageList = invoiceItems;
+            order.UserId = "12345678";
 
             Assert.IsNotNull(order);
             Assert.AreEqual(FromLocation, order.From);
             Assert.AreEqual(ToLocation, order.To);
-            Assert.IsTrue(order.Name.StartsWith(string.Concat(JobTaskTypes.DELIVERY, " Request for ", "Anonymous", " at ")));
+            Assert.AreEqual(null, order.Name);
             Assert.AreEqual(PackageDescription, order.PackageDescription);
             Assert.AreEqual(invoiceItems.Sum(x => x.Weight), order.PackageWeight);
             Assert.AreEqual("default", order.PayloadType);
             Assert.AreEqual(JobTaskTypes.DELIVERY, order.Type);
             Assert.Null(order.ETA);
             Assert.Null(order.ETAMinutes);
-            Assert.AreEqual("Anonymous", order.User);
+            Assert.AreEqual("12345678", order.UserId);
         }
 
         [Test]
@@ -91,6 +92,7 @@
             order.To = ToLocation;
             order.PackageDescription = PackageDescription;
             order.PackageList = invoiceItems;
+            order.UserId = "12345678";
 
             Assert.IsNotNull(order);
             Assert.AreEqual(FromLocation, order.From);
@@ -102,7 +104,7 @@
             Assert.AreEqual(JobTaskTypes.DELIVERY, order.Type);
             Assert.Null(order.ETA);
             Assert.Null(order.ETAMinutes);
-            Assert.AreEqual("Anonymous", order.User);
+            Assert.AreEqual("12345678", order.UserId);
         }
 
 

@@ -1,9 +1,11 @@
 ﻿namespace TaskCat.Data.Model
 {
     using GeoJson;
+    using Microsoft.AspNet.Identity;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Security.Principal;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
@@ -13,8 +15,6 @@
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_name))
-                    return string.Concat(Type, " Request for ", _user, " at ", DateTime.Now.ToString());
                 return _name;
             }
 
@@ -32,8 +32,8 @@
         private string _payloadType = "default";
         public string PayloadType { get { return _payloadType; } set { _payloadType = value; } }
 
-        private string _user = "Anonymous";
-        public string User { get { return _user; } set { _user = value; } }
+        private string _userId;
+        public string UserId { get { return _userId; } set { _userId = value; } }
 
         /// <summary>
         /// Location where the order was originated from
@@ -73,6 +73,5 @@
             this.Name = name;
             this.Type = type;
         }
-
     }
 }

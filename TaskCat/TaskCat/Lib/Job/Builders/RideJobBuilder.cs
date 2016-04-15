@@ -15,6 +15,11 @@
             this._order = order;
         }
 
+        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel) : base(order, userModel, adminUserModel)
+        {
+            this._order = order;
+        }
+
         public override void BuildTasks()
         { 
             job.Tasks = new List<JobTask>();

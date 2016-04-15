@@ -1214,6 +1214,7 @@
     <Compile Include="Lib\Utility\FileUtility.cs" />
     <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Lib\Utility\JsonPatch\JobTaskPatchAdapter.cs" />
+    <Compile Include="Lib\Utility\OrderModelExtensions.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
@@ -1236,6 +1237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Lib\Invoice\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

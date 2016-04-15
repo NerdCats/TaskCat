@@ -3,7 +3,6 @@
     using Model;
     using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Attributes;
-    using MongoDB.Driver.GeoJsonObjectModel;
     using System;
     using System.Collections.Generic;
     using Newtonsoft.Json;
@@ -17,7 +16,17 @@
         [JsonIgnore]
         public bool IsAssetEventsHooked = false;
 
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(_name) ?
+                    GenerateDefaultJobName()
+                    : _name;
+            }
+            set { _name = value; }
+        }
 
         [BsonIgnoreIfNull]
         public OrderModel Order { get; set; }
@@ -135,6 +144,11 @@
             jtask.AssetUpdated += Jtask_AssetUpdated;
         }
 
+        private string GenerateDefaultJobName()
+        {
+            return string.Format("{0} Job for {1}", this.Order.Type, string.IsNullOrWhiteSpace(User.UserName) ? User.UserId : User.UserName);
+        }
+
         private void Jtask_AssetUpdated(string AssetRef, AssetModel asset)
         {
             if (!Assets.ContainsKey(AssetRef))
@@ -157,6 +171,5 @@
             else if (updatedState == JobTaskState.COMPLETED && TerminalTask == sender)
                 State = JobState.COMPLETED;
         }
-
     }
 }

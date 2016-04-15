@@ -5,8 +5,8 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity;
-    using TaskCat.Data.Model;
+    using Data.Entity;
+    using Data.Model;
     using Data.Model.Order;
     using System.ComponentModel.DataAnnotations;
     using Auth;
@@ -27,33 +27,61 @@
 
         public async Task<Job> PostOrder(OrderModel model)
         {
-            if (model.User == "Anonymous" || string.IsNullOrWhiteSpace(model.User))
-                    throw new ArgumentException("User came off as Anonymous or null");
-
-            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.User));
+            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.UserId));
 
             JobShop jobShop = new JobShop();
             JobBuilder builder;
-            Job createdJob;
+
             switch (model.Type)
             {
                 case OrderTypes.Ride:
                     RideOrder rideOrderModel = model as RideOrder;
                     Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(model as RideOrder, userModel); 
+                    builder = new RideJobBuilder(rideOrderModel, userModel);
                     break;
                 case OrderTypes.Delivery:
                     DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                     Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel);             
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel);
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
 
             }
-            createdJob = jobShop.Construct(builder);
+            return await ConstructAndRegister(jobShop, builder);
+        }
 
-            return await _manager.RegisterJob(createdJob);       
+        public async Task<Job> PostOrder(OrderModel model, string adminUserId)
+        {
+            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.UserId));
+            UserModel adminUserModel = new UserModel(await _accountManager.FindByIdAsync(adminUserId));
+
+            JobShop jobShop = new JobShop();
+            JobBuilder builder;
+
+            switch (model.Type)
+            {
+                case OrderTypes.Ride:
+                    RideOrder rideOrderModel = model as RideOrder;
+                    Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
+                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel);
+                    break;
+                case OrderTypes.Delivery:
+                    DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
+                    Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel);
+                    break;
+                default:
+                    throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
+
+            }
+            return await ConstructAndRegister(jobShop, builder);
+        }
+
+        private async Task<Job> ConstructAndRegister(JobShop jobShop, JobBuilder builder)
+        {
+            var createdJob = jobShop.Construct(builder);
+            return await _manager.RegisterJob(createdJob);
         }
 
         public async Task<SupportedOrder> PostSupportedOrder(SupportedOrder supportedOrder)

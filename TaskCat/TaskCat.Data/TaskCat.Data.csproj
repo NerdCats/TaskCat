@@ -122,6 +122,7 @@
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
+    <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\Query\QueryResult.cs" />
