@@ -11,7 +11,7 @@
     using Marvin.JsonPatch;
     using System.Web.OData.Query;
     using MongoDB.Driver;
-
+    using Data.Entity.Identity;
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -146,12 +146,14 @@
             }
         }
 
+        [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
             try
             {
+                
                 ReplaceOneResult result = await _repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
                 return Json(result);
             }
