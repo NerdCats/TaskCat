@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using TaskCat.Data.Model.Identity.Profile;
-using TaskCat.Data.Model.Identity.Registration;
-
-namespace TaskCat.Data.Entity.Identity
+﻿namespace TaskCat.Data.Entity.Identity
 {
+    using System.Collections.Generic;
+    using TaskCat.Data.Model.Identity.Profile;
+    using TaskCat.Data.Model.Identity.Registration;
+
     public class EnterpriseUser : User
     {
         public EnterpriseUser(EnterpriseUserRegistrationModel model, EnterpriseUserProfile profile) 

@@ -165,6 +165,20 @@
                 var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
                 var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
+            else if(user.Roles.Any(x=>x=="Administrator" || x== "BackOfficeAdmin"))
+            {
+                // TODO: Need to update the servedby field here
+            }
+            else if(user.Type== IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
+            {
+                var userModel = user.Type == IdentityTypes.USER ? new UserModel(user) : new EnterpriseUserModel(user as EnterpriseUser);
+                var updateDef = Builders<Job>.Update.Set(x => x.User, userModel);
+                var searchFilter = Builders<Job>.Filter.Where(x => x.User.UserId == user.Id);
+                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
+            }
+
+            //TODO: Need to do something with this propagation results man
+
 
             //FIXME: might have to do the same propagation for enterprise users
             return result;
