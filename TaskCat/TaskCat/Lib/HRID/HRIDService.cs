@@ -3,7 +3,6 @@
     using System;
     using System.Text;
     using Db;
-    using System.Threading.Tasks;
     using MongoDB.Driver;
     using Exceptions;
 

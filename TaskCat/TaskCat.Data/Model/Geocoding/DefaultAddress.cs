@@ -4,20 +4,27 @@
     using Newtonsoft.Json;
     using System;
     using System.Text;
+    using Utility.Attributes;
+
     public class DefaultAddress : AddressBase
     {
+        [RequiredIf("AddressLine1", null)]
         public override string Address
         {
             get
             {
                 return GenerateAddress();
             }
+            set
+            {
+                base.Address = value;
+            }
         }
 
         [JsonConstructor]
-        public DefaultAddress()
+        public DefaultAddress() 
         {
-
+            Provider = "Default";
         }
 
         public DefaultAddress(string formattedAddress, Point point) : base(formattedAddress, "Default", point)
@@ -41,6 +48,7 @@
         public string PostalCode { get; set; }
         public string Floor { get; set; }
         public string HouseNumber { get; set; }
+        [RequiredIf("Address", null)]
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string Country { get; set; }
