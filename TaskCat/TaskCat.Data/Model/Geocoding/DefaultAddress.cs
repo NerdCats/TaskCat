@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Data.Model.Geocoding
 {
     using GeoJson;
+    using Newtonsoft.Json;
     using System;
     using System.Text;
     public class DefaultAddress : AddressBase
@@ -11,6 +12,12 @@
             {
                 return GenerateAddress();
             }
+        }
+
+        [JsonConstructor]
+        public DefaultAddress()
+        {
+
         }
 
         public DefaultAddress(string formattedAddress, Point point) : base(formattedAddress, "Default", point)

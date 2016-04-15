@@ -28,13 +28,12 @@
         {
             lock (_padLock)
             {
-                var dataTask = GenerateId();
-                dataTask.Wait();
-                return string.Concat(prefix, "#", dataTask.Result);             
+                var data = GenerateId();
+                return string.Concat(prefix, "#", data);
             }
         }
 
-        private async Task<string> GenerateId()
+        private string GenerateId()
         {
             int count = 0;
             var sb = new StringBuilder(length);
@@ -46,10 +45,10 @@
                     sb.Append(_base62chars[_random.Next(36)]);
 
                 generatedId = sb.ToString();
-                var existingIdCount = await GetExistingIdCount(generatedId);
+                var existingIdCount = GetExistingIdCount(generatedId);
                 if (existingIdCount == 0)
                 {
-                    await InsertNewHRID(generatedId);
+                    InsertNewHRID(generatedId);
                     return generatedId;
                 }
 
@@ -59,14 +58,14 @@
             throw new ServerErrorException("Unique HRID generation failed");
         }
 
-        public virtual async Task InsertNewHRID(string generatedId)
+        public virtual void InsertNewHRID(string generatedId)
         {
-            await _context.HRIDs.InsertOneAsync(new Data.Entity.HRIDEntity() { HRID = generatedId });
+            _context.HRIDs.InsertOne(new Data.Entity.HRIDEntity() { HRID = generatedId });
         }
 
-        public virtual async Task<long> GetExistingIdCount(string generatedId)
+        public virtual long GetExistingIdCount(string generatedId)
         {
-            return (await _context.HRIDs.Find(x => x.HRID == generatedId).CountAsync());
+            return _context.HRIDs.Count(x => x.HRID == generatedId);
         }
     }
 }

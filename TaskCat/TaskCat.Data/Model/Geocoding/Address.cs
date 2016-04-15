@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Data.Model.Geocoding
 {
     using GeoJson;
+    using Newtonsoft.Json;
     using System;
 
     /// <summary>
@@ -12,6 +13,11 @@
         string formattedAddress = string.Empty;
         string provider = string.Empty;
 
+        [JsonConstructor]
+        protected AddressBase()
+        {
+
+        }
         public AddressBase(string formattedAddress, string provider, Point point)
         {
             Address = formattedAddress;

@@ -23,8 +23,8 @@
         public void Test_NextId_Without_ExistingCount()
         {
             Mock<HRIDService> HRIDServiceMock = new Mock<HRIDService>(IDbContextMock.Object);
-            HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns(Task.FromResult((long)0));
-            HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Returns(Task.FromResult(false));
+            HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns((long)0);
+            HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Verifiable();
 
             HRIDService service = HRIDServiceMock.Object;
             var id = service.NextId("JOB");
@@ -35,10 +35,10 @@
         [Test()]
         public void Test_NextId_With_ExistingCount()
         {
-            Assert.Throws<AggregateException>(()=>{
+            Assert.Throws<ServerErrorException>(()=>{
                 Mock<HRIDService> HRIDServiceMock = new Mock<HRIDService>(IDbContextMock.Object);
-                HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns(Task.FromResult((long)1));
-                HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Returns(Task.FromResult(false));
+                HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns((long)1);
+                HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Verifiable();
 
                 HRIDService service = HRIDServiceMock.Object;
                 var id = service.NextId("JOB");
@@ -51,8 +51,8 @@
         public void Test_NextId_Multiple_Request()
         {
             Mock<HRIDService> HRIDServiceMock = new Mock<HRIDService>(IDbContextMock.Object);
-            HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns(Task.FromResult((long)0));
-            HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Returns(Task.FromResult(false));
+            HRIDServiceMock.Setup(x => x.GetExistingIdCount(It.IsAny<string>())).Returns((long)0);
+            HRIDServiceMock.Setup(x => x.InsertNewHRID(It.IsAny<string>())).Verifiable();
 
             HRIDService service = HRIDServiceMock.Object;
 
