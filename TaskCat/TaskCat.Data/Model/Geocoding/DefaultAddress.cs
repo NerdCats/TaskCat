@@ -9,12 +9,7 @@
         {
             get
             {
-                return string.IsNullOrEmpty(base.Address) ? GenerateAddress() : base.Address;
-            }
-
-            set
-            {
-                base.Address = value;
+                return GenerateAddress();
             }
         }
 
@@ -23,7 +18,7 @@
             
         }
 
-        public DefaultAddress(string addressLine1, string addressLine2, string country, string city, Point point) : base(string.Empty, "Default", point)
+        public DefaultAddress(string addressLine1, string addressLine2,  string city, string postcode, string country, Point point) : this(addressLine1, point)
         {
             if (string.IsNullOrWhiteSpace(addressLine1))
                 throw new ArgumentNullException("address line 1 is blank or empty");
@@ -32,6 +27,8 @@
             this.AddressLine2 = addressLine2;
             this.Country = country;
             this.City = city;
+            this.PostalCode = postcode;
+            
         }
 
         public string PostalCode { get; set; }
@@ -43,28 +40,34 @@
         public string City { get; set; }
         public string State { get; set; }
 
-        private string GenerateAddress()
+        public string GenerateAddress()
         {
-            StringBuilder sb = new StringBuilder();
-            if(string.IsNullOrWhiteSpace(AddressLine1))
-                throw new ArgumentNullException("address line 1 is blank or empty");
+            if (AddressLine1 != null)
+            {
+                StringBuilder sb = new StringBuilder();
 
-            if (!string.IsNullOrWhiteSpace(HouseNumber)) sb.AppendFormat("House = {0}", HouseNumber);
-            if (!string.IsNullOrWhiteSpace(Floor)) sb.AppendFormat(", {0} Floor, ", Floor);
+                if (!string.IsNullOrWhiteSpace(HouseNumber)) sb.AppendFormat("House = {0}", HouseNumber);
+                if (!string.IsNullOrWhiteSpace(Floor)) sb.AppendFormat(", {0} Floor, ", Floor);
 
-            sb.AppendFormat("{0}", AddressLine1);
+                sb.AppendFormat("{0}", AddressLine1);
 
-            if (!string.IsNullOrWhiteSpace(City)) sb.AppendFormat(", {0}", City);
-            if (!string.IsNullOrWhiteSpace(City) && string.IsNullOrWhiteSpace(PostalCode)) sb.AppendFormat("-{0}", PostalCode);
-            if (!string.IsNullOrWhiteSpace(State)) sb.AppendFormat(", {0}", State);
-            if (!string.IsNullOrWhiteSpace(Country)) sb.AppendFormat(", {0}", Country);
+                if (!string.IsNullOrWhiteSpace(AddressLine2)) sb.AppendFormat(", {0}", AddressLine2);
+                if (!string.IsNullOrWhiteSpace(City)) sb.AppendFormat(", {0}", City);
+                if (!string.IsNullOrWhiteSpace(City) && !string.IsNullOrWhiteSpace(PostalCode)) sb.AppendFormat("-{0}", PostalCode);
+                if (!string.IsNullOrWhiteSpace(State)) sb.AppendFormat(", {0}", State);
+                if (!string.IsNullOrWhiteSpace(Country)) sb.AppendFormat(", {0}", Country);
 
-            return sb.ToString();
+                return sb.ToString();
+            }
+            else
+            {
+                return base.Address;
+            }
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return GenerateAddress();
         }
     }
 }
