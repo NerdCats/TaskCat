@@ -61,12 +61,12 @@
 
         public virtual async Task InsertNewHRID(string generatedId)
         {
-            await _context.HRIDs.InsertOneAsync(generatedId);
+            await _context.HRIDs.InsertOneAsync(new Data.Entity.HRIDEntity() { HRID = generatedId });
         }
 
         public virtual async Task<long> GetExistingIdCount(string generatedId)
         {
-            return (await _context.HRIDs.Find(x => x == generatedId).CountAsync());
+            return (await _context.HRIDs.Find(x => x.HRID == generatedId).CountAsync());
         }
     }
 }

@@ -82,8 +82,8 @@
             }
         }
 
-        private IMongoCollection<string> _hrids;
-        public IMongoCollection<string> HRIDs
+        private IMongoCollection<HRIDEntity> _hrids;
+        public IMongoCollection<HRIDEntity> HRIDs
         {
             get
             {
@@ -126,7 +126,7 @@
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
-            _hrids = Database.GetCollection<string>(CollectionNames.HRIDCollectionName);
+            _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);          
         }

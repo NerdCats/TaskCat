@@ -20,7 +20,7 @@
         IMongoCollection<SupportedOrder> SupportedOrders { get; }
 
         IMongoCollection<AssetLocation> AssetLocations { get; }
-        IMongoCollection<string> HRIDs { get; }
+        IMongoCollection<HRIDEntity> HRIDs { get; }
 
     }
 }

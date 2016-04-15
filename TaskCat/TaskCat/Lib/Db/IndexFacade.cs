@@ -3,6 +3,7 @@
     using MongoDB.Driver;
     using Job = Data.Entity.Job;
     using System.Collections.Generic;
+    using Data.Entity;
 
     public class IndexFacade
     {
@@ -46,13 +47,13 @@
             jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
         }
 
-        public static void EnsureHRIDIndex(IMongoCollection<string> hridCollection)
+        public static void EnsureHRIDIndex(IMongoCollection<HRIDEntity> hridCollection)
         {
             var hridIndexOptions = new CreateIndexOptions();
             hridIndexOptions.Unique = true;
 
-            hridCollection.Indexes.CreateOne(Builders<string>.IndexKeys.Ascending(x => x));
-            hridCollection.Indexes.CreateOne(Builders<string>.IndexKeys.Descending(x => x));
+            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID));
+            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID));
         }
     }
 }
