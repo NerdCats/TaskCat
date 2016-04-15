@@ -41,15 +41,15 @@
             string generatedId;
 
             while (count < maxRetry)
-            {               
+            {
                 for (int i = 0; i < length; i++)
                     sb.Append(_base62chars[_random.Next(36)]);
 
                 generatedId = sb.ToString();
-                var existingIdCount = (await _context.HRIDs.Find(x => x == generatedId).CountAsync());
+                var existingIdCount = await GetExistingIdCount(generatedId);
                 if (existingIdCount == 0)
                 {
-                    await _context.HRIDs.InsertOneAsync(generatedId);
+                    await InsertNewHRID(generatedId);
                     return generatedId;
                 }
 
@@ -57,6 +57,16 @@
             }
 
             throw new ServerErrorException("Unique HRID generation failed");
+        }
+
+        public virtual async Task InsertNewHRID(string generatedId)
+        {
+            await _context.HRIDs.InsertOneAsync(generatedId);
+        }
+
+        public virtual async Task<long> GetExistingIdCount(string generatedId)
+        {
+            return (await _context.HRIDs.Find(x => x == generatedId).CountAsync());
         }
     }
 }
