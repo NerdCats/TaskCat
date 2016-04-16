@@ -32,6 +32,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         /// 
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
@@ -52,6 +53,13 @@
             {
                 return InternalServerError(ex);
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetByHrid(string hrid)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]
