@@ -78,5 +78,15 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<Job> GetJobByHrid(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Job> GetJobByHridOrJobId(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

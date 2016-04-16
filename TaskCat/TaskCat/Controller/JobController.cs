@@ -27,40 +27,44 @@
         }
 
         /// <summary>
-        /// Returns A specific job request based on id
+        /// Returns A specific job request based on id or human readable id
+        /// This endpoint can be accessed being authorized or non-authorized
+        /// If you are authorized as a Administrator or BackOfficeAdmin,
+        /// You'd be able to search by id and hrid
+        /// If you're accessing the non-authorized endpoint, you can only search 
+        /// by hrid 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         /// 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [AllowAnonymous]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            try
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+            if (User.Identity.IsAuthenticated)
             {
-                if (string.IsNullOrWhiteSpace(id))
-                    return BadRequest();
+                //FIXME: In this way an asset can see every job he is assigned or
+                //not assigned to. Need to fix that
 
-                Job job = await _repository.GetJob(id);
-                if (job == null) return NotFound();
+                Job job = null;
+                if (id.Length == 24)
+                    job = await _repository.GetJobByHridOrJobId(id);
+                else
+                    job = await _repository.GetJobByHrid(id);
+
                 return Json(job);
             }
-            catch (FormatException ex)
+            else
             {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
+                Job job = null;
+                job = await _repository.GetJobByHrid(id);
+                return Json(job);
             }
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetByHrid(string hrid)
-        {
-            throw new NotImplementedException();
-        }
 
         [HttpGet]
         public async Task<IHttpActionResult> List(string type = "", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)

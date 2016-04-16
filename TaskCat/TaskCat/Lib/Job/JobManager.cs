@@ -3,7 +3,7 @@
     using Data.Model;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity;
+    using Data.Entity;
     using MongoDB.Driver;
     using System.Web.OData.Query;
     using Data.Model.Query;
@@ -23,8 +23,28 @@
         {
             var JobPayload = await _store.FindOne(id);
             if (JobPayload == null)
-                throw new EntityNotFoundException("Job", "id");
+                throw new EntityNotFoundException("Job", id);
+            return ArrangeJobHooks(JobPayload);
+        }
 
+        internal async Task<Job> GetJobByHRID(string hrid)
+        {
+            var JobPayload = await _store.FindOneByHRID(hrid);
+            if (JobPayload == null)
+                throw new EntityNotFoundException("Job", hrid);
+            return ArrangeJobHooks(JobPayload);
+        }
+
+        internal async Task<Job> GetJobByHridOrId(string id)
+        {
+            var JobPayload = await _store.FindOneByHridOrId(id);
+            if (JobPayload == null)
+                throw new EntityNotFoundException("Job", id);
+            return ArrangeJobHooks(JobPayload);
+        }
+
+        private Job ArrangeJobHooks(Job JobPayload)
+        {
             JobTask TerminalTask = null;
             // Hooking up JobTask Predecessors, 
             // validation is skipped due to this is already been recorded in DB
@@ -43,7 +63,7 @@
             JobPayload.SetupDefaultBehaviourForFirstJobTask();
 
             return JobPayload;
-        }
+        }      
 
         internal async Task<long> GetTotalJobCount()
         {

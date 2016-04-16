@@ -31,6 +31,18 @@
             return job;
         }
 
+        internal async Task<Job> FindOneByHRID(string hrid)
+        {
+            var job = await _context.Jobs.Find(x => x.HRID == hrid).FirstOrDefaultAsync();
+            return job;
+        }
+
+        internal async Task<Job> FindOneByHridOrId(string id)
+        {
+            var job = await _context.Jobs.Find(x => x._id == id || x.HRID == id).FirstOrDefaultAsync();
+            return job;
+        }
+
         internal async Task<IEnumerable<Job>> FindJobs(string orderType, int start, int limit)
         {
             var FindContext = string.IsNullOrWhiteSpace(orderType) ? 

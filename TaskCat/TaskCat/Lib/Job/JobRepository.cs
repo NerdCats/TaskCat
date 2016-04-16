@@ -32,6 +32,16 @@
             return await _manager.GetJob(id);
         }
 
+        public async Task<Job> GetJobByHrid(string hrid)
+        {
+            return await _manager.GetJobByHRID(hrid);
+        }
+
+        public async Task<Job> GetJobByHridOrJobId(string id)
+        {
+            return await _manager.GetJobByHridOrId(id);
+        }
+
         public async Task<IEnumerable<Job>> GetJobs(string type, int page, int pageSize)
         {
             if (page < 0)

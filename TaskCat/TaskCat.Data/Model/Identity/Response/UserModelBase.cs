@@ -7,7 +7,8 @@
     [BsonKnownTypes(typeof(UserModel), typeof(AssetModel), typeof(EnterpriseUserModel))]
     public class UserModelBase
     {
-        
+        [BsonIgnore]
+        [JsonIgnore]
         public bool IsUserAuthenticated { get; set; } = false;
         [JsonProperty(PropertyName = "Id")]
         public virtual string UserId { get; set; }

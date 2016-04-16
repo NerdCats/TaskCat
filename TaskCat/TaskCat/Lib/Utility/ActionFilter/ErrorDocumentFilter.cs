@@ -27,9 +27,11 @@
                     httpStatusCode = HttpStatusCode.Forbidden;
                 else if (actionExecutedContext.Exception is ArgumentException)
                     httpStatusCode = HttpStatusCode.BadRequest;
+                else if(actionExecutedContext.Exception is FormatException)
+                    httpStatusCode = HttpStatusCode.BadRequest;
 
                 error = actionExecutedContext.Exception;
-                response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);
+                response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error, "application/json");
                 actionExecutedContext.Response = response;
             }
         }

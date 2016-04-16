@@ -180,7 +180,7 @@
         
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
-        [Route("Jobs/{userId?}")]
+        [Route("{userId?}/jobs")]
         public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, DateTime? dateTimeUpto = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
         {
             try
