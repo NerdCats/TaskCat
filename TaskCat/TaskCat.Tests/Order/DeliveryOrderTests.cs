@@ -2,7 +2,6 @@
 {
     using NUnit.Framework;
     using Data.Model.Order;
-    using Data.Model;
     using Data.Model.GeoJson;
     using Data.Lib.Constants;
     using System.Linq;

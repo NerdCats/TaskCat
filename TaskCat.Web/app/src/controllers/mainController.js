@@ -12,7 +12,7 @@
     /* jshint validthis:true */
     var vm = this;
     vm.toggleSideNav = toggleSideNav;
-    vm.isLeftSideNavOpen = false;
+    vm.isLeftSideNavOpen = true;
 
     activate();
 

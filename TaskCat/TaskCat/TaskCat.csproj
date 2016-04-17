@@ -1184,6 +1184,10 @@
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
+    <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
+    <Compile Include="Lib\Invoice\IInvoiceService.cs" />
+    <Compile Include="Lib\Invoice\InvoiceRequestBase.cs" />
+    <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Storage\BlobHelper.cs" />
@@ -1239,7 +1243,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Lib\Invoice\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

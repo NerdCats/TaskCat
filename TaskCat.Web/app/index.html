@@ -66,11 +66,12 @@
 
 <body ng-controller="mainController as main" ng-app="app" layout="row" ng-cloak>
   <!-- We can use MdMedia service to decide the flex value for this md-sidenav-->
-  <md-sidenav class="md-sidenav-left"
+  <md-sidenav
+  class="md-sidenav-left"
   md-component-id="left"
-  md-is-locked-open="main.isLeftSideNavOpen"
   md-disable-backdrop="false"
   md-whiteframe="4"
+  md-is-locked-open="main.isLeftSideNavOpen"
   aria-label="Go! Fetch Side Menu">
 
     <md-toolbar class="md-whiteframe-z1">
