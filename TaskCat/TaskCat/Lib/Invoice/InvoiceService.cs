@@ -3,6 +3,8 @@
     using Db;
     using System;
     using System.Threading.Tasks;
+    using Data.Lib.Invoice;
+    using Data.Entity;
 
     internal class InvoiceService : IInvoiceService
     {
@@ -12,9 +14,9 @@
             _dbContext = dbcontext;
         }
 
-        public async Task<TResponse> Generate<TRequest, TResponse>()
+        public Task<TResponse> Generate<TRequest, TResponse>()
             where TRequest : InvoiceRequestBase
-            where TResponse : IInvoiceFor<TRequest>, new()
+            where TResponse : InvoiceBase, IInvoiceFor<TRequest>, new()
         {
             throw new NotImplementedException();
         }

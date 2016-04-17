@@ -119,25 +119,19 @@
                 return BadRequest("Page index less than 0 provided");
 
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
-            try
-            {
-                var settings = new ODataValidationSettings()
-                {
-                    // Initialize settings as needed.
-                    AllowedFunctions = AllowedFunctions.AllMathFunctions,
-                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
-                };
 
-                query.Validate(settings);
-
-                if (envelope)
-                    return Json(await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
-                return Json(await _repository.GetJobs(query, page, pageSize));
-            }
-            catch (Exception ex)
+            var settings = new ODataValidationSettings()
             {
-                return InternalServerError(ex);
-            }
+                // Initialize settings as needed.
+                AllowedFunctions = AllowedFunctions.AllMathFunctions,
+                AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
+            };
+
+            query.Validate(settings);
+
+            if (envelope)
+                return Json(await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
+            return Json(await _repository.GetJobs(query, page, pageSize));
         }
 
 

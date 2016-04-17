@@ -71,7 +71,11 @@
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
-    <Compile Include="Entity\Invoice\DeliveryInvoice.cs" />
+    <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
+    <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
+    <Compile Include="Lib\Invoice\IInvoiceService.cs" />
+    <Compile Include="Lib\Invoice\InvoiceRequestBase.cs" />
+    <Compile Include="Lib\Invoice\Request\ItemDetailsInvoiceRequest.cs" />
     <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
     <Compile Include="Entity\ShadowCat\AssetLocation.cs" />
     <Compile Include="Entity\SupportedOrder.cs" />

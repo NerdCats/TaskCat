@@ -1155,7 +1155,9 @@
     <Content Include="TaskCat.Web\node_modules\http-server\screenshots\public.png" />
     <Content Include="TaskCat.Web\node_modules\http-server\screenshots\start.png" />
     <Content Include="TaskCat.Web\node_modules\http-server\test\http-server-test.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
@@ -1184,9 +1186,7 @@
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
-    <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />
-    <Compile Include="Lib\Invoice\InvoiceRequestBase.cs" />
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />

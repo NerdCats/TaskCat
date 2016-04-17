@@ -5,7 +5,7 @@
     using Autofac.Integration.WebApi;
     using System.Configuration;
     using Lib.Asset;
-    using TaskCat.Lib.Job;
+    using Lib.Job;
     using Lib.Db;
     using Lib.Order;
     using Data.Entity.Identity;

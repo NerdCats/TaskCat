@@ -1,9 +1,11 @@
 ﻿namespace TaskCat.Lib.Utility.ActionFilter
 {
     using Exceptions;
+    using Newtonsoft.Json;
     using System;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Web.Http.Filters;
 
     internal class ErrorDocumentFilter : ActionFilterAttribute
@@ -31,7 +33,8 @@
                     httpStatusCode = HttpStatusCode.BadRequest;
 
                 error = actionExecutedContext.Exception;
-                response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error, "application/json");
+                response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 actionExecutedContext.Response = response;
             }
         }

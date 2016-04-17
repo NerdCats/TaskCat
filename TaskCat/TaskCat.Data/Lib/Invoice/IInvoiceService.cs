@@ -1,10 +1,10 @@
-﻿namespace TaskCat.Lib.Invoice
+﻿namespace TaskCat.Data.Lib.Invoice
 {
     using System.Threading.Tasks;
-    using Data.Entity;
-    using Data.Lib.Invoice;
+    using Entity;
+    using TaskCat.Lib.Invoice;
 
-    internal interface IInvoiceService
+    public interface IInvoiceService
     {
         Task<TResponse> Generate<TRequest, TResponse>()
             where TRequest : InvoiceRequestBase

@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.Invoice
 {
-    internal class InvoiceRequestBase
+    public class InvoiceRequestBase
     {
     }
 }

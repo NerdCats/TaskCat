@@ -11,6 +11,9 @@
         [Range(1, 100000, ErrorMessage = "Quantity must be between 1 and 100000")]
         public int Quantity { get; set; }
 
+        // TODO: Need to put a Unit Enum here
+        // public string Unit { get; set; }
+
         [Range(0.1, 999999999, ErrorMessage = "Price must be between 0.01 and 999999999")]
         public decimal Price
         {
