@@ -1,10 +1,10 @@
 ﻿namespace TaskCat.Data.Lib.Invoice.Response
 {
     using System.Collections.Generic;
-    using Model.Invoice;
     using Model.Geocoding;
     using Entity;
     using TaskCat.Lib.Invoice.Request;
+    using Model.Inventory;
 
     public class DeliveryInvoice : InvoiceBase, IInvoiceFor<ItemDetailsInvoiceRequest>
     {

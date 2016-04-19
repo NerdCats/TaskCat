@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Model.Invoice.Tests.Model.Invoice
 {
+    using Inventory;
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

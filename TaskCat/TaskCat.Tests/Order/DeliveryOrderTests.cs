@@ -5,9 +5,9 @@
     using Data.Model.GeoJson;
     using Data.Lib.Constants;
     using System.Linq;
-    using Data.Model.Invoice;
     using System.Collections.Generic;
     using Data.Model.Geocoding;
+    using Data.Model.Inventory;
 
     [TestFixture(TestOf = typeof(DeliveryOrder))]
     public class DeliveryOrderTests

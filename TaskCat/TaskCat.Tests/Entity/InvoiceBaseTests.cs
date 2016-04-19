@@ -8,6 +8,7 @@
     using System.Linq;
 
     using Entity;
+    using Inventory;
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {
