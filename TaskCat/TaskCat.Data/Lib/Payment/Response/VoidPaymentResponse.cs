@@ -6,14 +6,14 @@
     /// <summary>
     /// Represents a VoidPaymentResult
     /// </summary>
-    public partial class VoidPaymentResult
+    public partial class VoidPaymentResponse
     {
         private PaymentStatus _newPaymentStatus = PaymentStatus.Pending;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public VoidPaymentResult()
+        public VoidPaymentResponse()
         {
             this.Errors = new List<string>();
         }

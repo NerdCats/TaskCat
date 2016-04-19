@@ -18,13 +18,7 @@
         /// </summary>
         /// <param name="processPaymentRequest">Payment info required for an order processing</param>
         /// <returns>Process payment result</returns>
-        ProcessPaymentResult ProcessPayment(ProcessPaymentRequest processPaymentRequest);
-
-        /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        void PostProcessPayment(PostProcessPaymentRequest postProcessPaymentRequest);
+        ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest processPaymentRequest);
 
         /// <summary>
         /// Returns a value indicating whether payment method should be hidden during checkout
@@ -45,35 +39,28 @@
         /// </summary>
         /// <param name="capturePaymentRequest">Capture payment request</param>
         /// <returns>Capture payment result</returns>
-        CapturePaymentResult Capture(CapturePaymentRequest capturePaymentRequest);
+        CapturePaymentResponse Capture(CapturePaymentRequest capturePaymentRequest);
 
         /// <summary>
         /// Refunds a payment
         /// </summary>
         /// <param name="refundPaymentRequest">Request</param>
         /// <returns>Result</returns>
-        RefundPaymentResult Refund(RefundPaymentRequest refundPaymentRequest);
+        RefundPaymentResponse Refund(RefundPaymentRequest refundPaymentRequest);
 
         /// <summary>
         /// Voids a payment
         /// </summary>
         /// <param name="voidPaymentRequest">Request</param>
         /// <returns>Result</returns>
-        VoidPaymentResult Void(VoidPaymentRequest voidPaymentRequest);
+        VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest);
 
         /// <summary>
         /// Process recurring payment
         /// </summary>
         /// <param name="processPaymentRequest">Payment info required for an order processing</param>
         /// <returns>Process payment result</returns>
-        ProcessPaymentResult ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest);
-
-        /// <summary>
-        /// Cancels a recurring payment
-        /// </summary>
-        /// <param name="cancelPaymentRequest">Request</param>
-        /// <returns>Result</returns>
-        CancelRecurringPaymentResult CancelRecurringPayment(CancelRecurringPaymentRequest cancelPaymentRequest);
+        ProcessPaymentResponse ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest);
 
         /// <summary>
         /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
