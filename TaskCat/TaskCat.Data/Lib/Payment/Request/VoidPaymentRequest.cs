@@ -1,6 +1,15 @@
 ﻿namespace TaskCat.Data.Lib.Payment.Request
 {
-    public class VoidPaymentRequest
+    using TaskCat.Data.Model;
+    /// <summary>
+    /// Represents a VoidPaymentResult
+    /// </summary>
+    public partial class VoidPaymentRequest
     {
+        /// <summary>
+        /// Gets or sets an order
+        /// </summary>
+        public OrderModel Order { get; set; }
     }
+
 }

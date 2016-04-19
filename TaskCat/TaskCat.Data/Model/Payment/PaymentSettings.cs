@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace TaskCat.Data.Model.Payment
+﻿namespace TaskCat.Data.Model.Payment
 {
+    using System.Collections.Generic;
     public class PaymentSettings
     {
         public PaymentSettings()
