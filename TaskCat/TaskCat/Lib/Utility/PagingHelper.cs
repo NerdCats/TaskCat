@@ -4,7 +4,7 @@
     using System.Net.Http;
     using System.Web.Http.Routing;
 
-    public class PagingHelper
+    public class PagingHelper : IPagingHelper
     {
         UrlHelper urlHelper;
         public PagingHelper(HttpRequestMessage requestMessage)
@@ -12,7 +12,7 @@
             urlHelper = new UrlHelper(requestMessage);
         }
 
-        internal string GeneratePageUrl(string route, long page, long pageSize, IDictionary<string, string> otherParams = null)
+        public virtual string GeneratePageUrl(string route, long page, long pageSize, IDictionary<string, string> otherParams = null)
         {
             Dictionary<string, object> routeParams = new Dictionary<string, object>();
             routeParams.Add("page", page);

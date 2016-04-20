@@ -4,6 +4,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
+    [BsonIgnoreExtraElements(Inherited =true)]
     [BsonKnownTypes(typeof(UserModel), typeof(AssetModel), typeof(EnterpriseUserModel))]
     public class UserModelBase
     {

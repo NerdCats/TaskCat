@@ -5,8 +5,8 @@
     using System.Linq;
     using System.ComponentModel.DataAnnotations;
     using MongoDB.Bson.Serialization.Attributes;
-    using Model.Inventory;
     using Lib.Invoice.Response;
+    using Model.Inventory;
 
     [BsonKnownTypes(typeof(DeliveryInvoice))]
     public class InvoiceBase : DbEntity
