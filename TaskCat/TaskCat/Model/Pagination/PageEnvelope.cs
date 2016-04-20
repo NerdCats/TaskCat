@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Model.Pagination
 {
     using Lib.Utility;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,6 +11,8 @@
     {
         private PagingHelper _paginationHelper; 
         public PaginationHeader pagination { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<T> data { get; set; }
 
         public PageEnvelope(
@@ -26,7 +29,7 @@
             var nextPage = page < totalPages - 1 ? _paginationHelper.GeneratePageUrl(route, page + 1, pageSize, otherParams) : string.Empty;
             var prevPage = page > 0 ? _paginationHelper.GeneratePageUrl(route, page - 1, pageSize, otherParams) : string.Empty;
 
-            this.pagination = new PaginationHeader(total, page, pageSize, data.Count(), nextPage, prevPage);
+            this.pagination = new PaginationHeader(total, page, pageSize, data != null ? data.Count() : 0, nextPage, prevPage);
             this.data = data;
         }
     }
