@@ -9,6 +9,7 @@
     using Newtonsoft.Json.Converters;
     using Model.Identity.Response;
     using System.Linq;
+    using Model.Payment;
 
     public class Job : HRIDEntity
     {
@@ -77,6 +78,7 @@
 
         public string PaymentMethod { get; set; }
         public bool Deleted { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {

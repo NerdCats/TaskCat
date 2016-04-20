@@ -5,7 +5,6 @@
     using Data.Lib.Payment;
     using Data.Lib.Payment.Request;
     using Data.Lib.Payment.Response;
-    using Data.Model;
     using Data.Model.Inventory;
     using Data.Model.Payment;
     using Data.Entity;
