@@ -31,8 +31,6 @@
         [BsonIgnoreIfNull]
         public OrderModel Order { get; set; }
 
-        // FIXME: Im still not sure how this would be actually done, because
-        // We might have to support anonymous requests
         private UserModel _user = null;
         public UserModel User
         {
