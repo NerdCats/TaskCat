@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations;
     using Model.Invoice;
     using MongoDB.Bson.Serialization.Attributes;
-    using Invoice;
+    using Lib.Invoice.Response;
 
     [BsonKnownTypes(typeof(DeliveryInvoice))]
     public class InvoiceBase : DbEntity
