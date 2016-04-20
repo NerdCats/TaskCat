@@ -83,7 +83,6 @@
     <Compile Include="Lib\Exceptions\JobTaskDependencyException.cs" />
     <Compile Include="Lib\Payment\IPaymentService.cs" />
     <Compile Include="Lib\Payment\PaymentMethodType.cs" />
-    <Compile Include="Lib\Payment\RecurringPaymentType.cs" />
     <Compile Include="Lib\Payment\Request\CapturePaymentRequest.cs" />
     <Compile Include="Lib\Payment\Response\CapturePaymentResponse.cs" />
     <Compile Include="Lib\Payment\IPaymentMethod.cs" />

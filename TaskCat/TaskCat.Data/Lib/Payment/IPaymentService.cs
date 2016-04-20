@@ -128,15 +128,6 @@
         /// <returns>Result</returns>
         VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest);
 
-
-
-        /// <summary>
-        /// Gets a recurring payment type of payment method
-        /// </summary>
-        /// <param name="paymentMethodSystemName">Payment method system name</param>
-        /// <returns>A recurring payment type of payment method</returns>
-        RecurringPaymentType GetRecurringPaymentType(string paymentMethodSystemName);
-
         /// <summary>
         /// Process recurring payment
         /// </summary>

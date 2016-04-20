@@ -56,13 +56,6 @@
         VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest);
 
         /// <summary>
-        /// Process recurring payment
-        /// </summary>
-        /// <param name="processPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>Process payment result</returns>
-        ProcessPaymentResponse ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest);
-
-        /// <summary>
         /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
         /// </summary>
         /// <param name="order">Order</param>
@@ -94,19 +87,9 @@
         bool SupportVoid { get; }
 
         /// <summary>
-        /// Gets a recurring payment type of payment method
-        /// </summary>
-        RecurringPaymentType RecurringPaymentType { get; }
-
-        /// <summary>
         /// Gets a payment method type
         /// </summary>
         PaymentMethodType PaymentMethodType { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether we should display a payment information page for this plugin
-        /// </summary>
-        bool SkipPaymentInfo { get; }
 
         #endregion
     }
