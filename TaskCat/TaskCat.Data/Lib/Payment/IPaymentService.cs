@@ -5,6 +5,7 @@
     using Request;
     using Response;
     using System.Collections.Generic;
+    using Entity;
 
     /// <summary>
     /// Payment service interface
@@ -13,19 +14,9 @@
     {
         /// <summary>
         /// Load active payment methods
-        /// </summary>
-        /// <param name="filterByCustomerId">Filter payment methods by customer; null to load all records</param>
-        /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
-        /// <param name="filterByCountryId">Load records allowed only in a specified country; pass 0 to load all records</param>
+        /// </summary>      
         /// <returns>Payment methods</returns>
-        IList<IPaymentMethod> LoadActivePaymentMethods(int? filterByCustomerId = null, int storeId = 0, int filterByCountryId = 0);
-
-        /// <summary>
-        /// Load payment provider by system name
-        /// </summary>
-        /// <param name="systemName">System name</param>
-        /// <returns>Found payment provider</returns>
-        IPaymentMethod LoadPaymentMethodBySystemName(string systemName);
+        IList<IPaymentMethod> LoadActivePaymentMethods();
 
         /// <summary>
         /// Load all payment providers
@@ -34,6 +25,13 @@
         /// <param name="filterByCountryId">Load records allowed only in a specified country; pass 0 to load all records</param>
         /// <returns>Payment providers</returns>
         IList<IPaymentMethod> LoadAllPaymentMethods(int storeId = 0, int filterByCountryId = 0);
+
+        /// <summary>
+        /// Get a payment method by its name
+        /// </summary>
+        /// <param name="name">payment method name</param>
+        /// <returns></returns>
+        IPaymentMethod GetPaymentMethodByName(string name);
 
         /// <summary>
         /// Gets a list of coutnry identifiers in which a certain payment method is now allowed
@@ -60,18 +58,18 @@
         /// <summary>
         /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
         /// </summary>
-        /// <param name="order">Order</param>
+        /// <param name="job">Job that is associated with the payment method</param>
         /// <returns>Result</returns>
-        bool CanRePostProcessPayment(OrderModel order);
+        bool CanRePostProcessPayment(Job job);
 
 
         /// <summary>
         /// Gets an additional handling fee of a payment method
         /// </summary>
         /// <param name="cart">Shoping cart</param>
-        /// <param name="paymentMethodSystemName">Payment method system name</param>
+        /// <param name="paymentMethodName">Payment method name</param>
         /// <returns>Additional handling fee</returns>
-        decimal GetAdditionalHandlingFee(IList<ShoppingCartItem> cart, string paymentMethodSystemName);
+        decimal GetAdditionalHandlingFee(IList<ShoppingCartItem> cart, string paymentMethodName);
 
 
 

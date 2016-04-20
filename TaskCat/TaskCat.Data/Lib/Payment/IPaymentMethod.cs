@@ -1,10 +1,10 @@
 ﻿namespace TaskCat.Data.Lib.Payment
 {
-    using Model;
     using Model.Inventory;
     using Request;
     using Response;
     using System.Collections.Generic;
+    using Entity;
 
     /// <summary>
     /// Provides an interface for creating payment gateways & methods
@@ -58,9 +58,9 @@
         /// <summary>
         /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
         /// </summary>
-        /// <param name="order">Order</param>
+        /// <param name="job">Job</param>
         /// <returns>Result</returns>
-        bool CanRePostProcessPayment(OrderModel order);
+        bool CanRePostProcessPayment(Job job);
 
         #endregion
 
@@ -90,6 +90,11 @@
         /// Gets a payment method type
         /// </summary>
         PaymentMethodType PaymentMethodType { get; }
+
+        /// <summary>
+        /// Gets a IPaymentMethod Name
+        /// </summary>
+        string Name { get;}
 
         #endregion
     }

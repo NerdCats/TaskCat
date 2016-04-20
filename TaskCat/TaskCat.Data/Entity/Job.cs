@@ -75,6 +75,9 @@
             }
         }
 
+        public string PaymentMethod { get; set; }
+        public bool Deleted { get; set; }
+
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
             State = JobState.COMPLETED;

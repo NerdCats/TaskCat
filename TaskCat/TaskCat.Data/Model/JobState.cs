@@ -4,6 +4,7 @@
     {
         ENQUEUED,
         IN_PROGRESS,
-        COMPLETED
+        COMPLETED,
+        CANCELLED
     }
 }

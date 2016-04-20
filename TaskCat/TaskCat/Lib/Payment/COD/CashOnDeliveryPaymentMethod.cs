@@ -8,18 +8,27 @@
     using Data.Model;
     using Data.Model.Inventory;
     using Data.Model.Payment;
+    using Data.Entity;
 
     /// <summary>
     /// Manual payment processor for cash when delivery processes
     /// </summary>
-    public class CashOnDeliveryPaymentProcessor : IPaymentMethod
+    public class CashOnDeliveryPaymentMethod : IPaymentMethod
     {
 
-        private readonly CashOnDeliveryPaymentSettings _manualPaymentSettings;
+        private readonly CashOnDeliveryPaymentSettings _codPaymentSettings;
 
-        public CashOnDeliveryPaymentProcessor(CashOnDeliveryPaymentSettings manualPaymentSettings)
+        public CashOnDeliveryPaymentMethod(CashOnDeliveryPaymentSettings codPaymentSettings)
         {
-            this._manualPaymentSettings = manualPaymentSettings;
+            this._codPaymentSettings = codPaymentSettings;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "CashOnDelivery";
+            }
         }
 
         public PaymentMethodType PaymentMethodType
@@ -62,10 +71,10 @@
             }
         }
 
-        public bool CanRePostProcessPayment(OrderModel order)
+        public bool CanRePostProcessPayment(Job job)
         {
-            if (order == null)
-                throw new ArgumentNullException("order");
+            if (job == null)
+                throw new ArgumentNullException("job");
 
             //it's not a redirection payment method. So we always return false
             return false;
@@ -80,7 +89,7 @@
 
         public decimal GetAdditionalHandlingFee(IList<ShoppingCartItem> cart)
         {
-            return _manualPaymentSettings.AdditionalFee;
+            return _codPaymentSettings.AdditionalFee;
         }
 
         public bool HidePaymentMethod(IList<ShoppingCartItem> cart)
@@ -93,7 +102,7 @@
             var result = new ProcessPaymentResponse();
 
             result.AllowStoringCreditCardNumber = false;
-            switch (_manualPaymentSettings.TransactMode)
+            switch (_codPaymentSettings.TransactMode)
             {
                 case TransactMode.Pending:
                     result.NewPaymentStatus = PaymentStatus.Pending;

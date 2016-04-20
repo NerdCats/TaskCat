@@ -1190,9 +1190,9 @@
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
-    <Compile Include="Lib\Payment\Manual\ManualPaymentProcessor.cs" />
-    <Compile Include="Lib\Payment\Manual\ManualPaymentSettings.cs" />
-    <Compile Include="Lib\Payment\Manual\TransactMode.cs" />
+    <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentProcessor.cs" />
+    <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentSettings.cs" />
+    <Compile Include="Lib\Payment\COD\TransactMode.cs" />
     <Compile Include="Lib\Storage\BlobHelper.cs" />
     <Compile Include="Lib\Storage\BlobService.cs" />
     <Compile Include="Lib\Storage\BlobStorageUploadProvider.cs" />
