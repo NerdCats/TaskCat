@@ -28,7 +28,7 @@
             lock (_padLock)
             {
                 var data = GenerateId();
-                return string.Concat(prefix, "#", data);
+                return string.Concat(prefix, "-", data);
             }
         }
 
