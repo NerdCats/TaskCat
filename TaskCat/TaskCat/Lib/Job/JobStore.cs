@@ -70,7 +70,8 @@
                     queryResult = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IQueryable<Job>;
                 
                 var data = queryResult as IEnumerable<Job>;
-                if (query.Count.Value)
+
+                if (query.Count != null && query.Count.Value)
                     return new QueryResult<Job>(null, data.LongCount());
                 else
                     return new QueryResult<Job>(data.Skip(start).Take(limit), data.LongCount());
