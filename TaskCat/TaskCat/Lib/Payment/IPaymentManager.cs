@@ -1,7 +1,7 @@
 ﻿namespace TaskCat.Lib.Payment
 {
     using System.Collections.Generic;
-    using TaskCat.Data.Lib.Payment;
+    using Data.Lib.Payment;
 
     public interface IPaymentManager
     {

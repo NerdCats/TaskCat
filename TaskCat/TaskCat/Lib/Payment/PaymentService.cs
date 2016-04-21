@@ -12,6 +12,9 @@
     using Data.Model.Payment;
     using System.Text;
 
+    /// <summary>
+    /// Default Payment Service for all installer services through a IPaymentManager 
+    /// </summary>
     public class PaymentService : IPaymentService
     {
         public IPaymentManager _paymentManager { get; set; }
