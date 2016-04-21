@@ -1,16 +1,17 @@
 ﻿namespace TaskCat.Data.Model
 {
     using GeoJson;
-    using Microsoft.AspNet.Identity;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Security.Principal;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
         private string _name;
+        /// <summary>
+        /// Name for the order
+        /// </summary>
         public string Name
         {
             get
@@ -21,6 +22,10 @@
             set { _name = value; }
         }
 
+        /// <summary>
+        /// Order type that defines the type of the order 
+        /// and the job that follows
+        /// </summary>
         [Required(ErrorMessage ="Order Type not provided" )]
         public string Type { get; set; }
 
@@ -32,6 +37,9 @@
         private string _payloadType = "default";
         public string PayloadType { get { return _payloadType; } set { _payloadType = value; } }
 
+        /// <summary>
+        /// UserId that the order is created for
+        /// </summary>
         private string _userId;
         public string UserId { get { return _userId; } set { _userId = value; } }
 

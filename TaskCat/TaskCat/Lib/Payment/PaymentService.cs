@@ -10,6 +10,7 @@
     using Data.Entity;
     using Data.Model;
     using Data.Model.Payment;
+    using System.Text;
 
     public class PaymentService : IPaymentService
     {
@@ -20,11 +21,46 @@
         {
             this._paymentManager = paymentManager;
         }
-        public IList<IPaymentMethod> LoadActivePaymentMethods()
+
+        public IList<IPaymentMethod> GetActivePaymentMethods()
         {
             // FIXME: Currently no filters are here, so it would actually be
             // something to filter against whether it is active or not
             return _paymentManager.GetPaymentMethods();
+        }
+
+        public IList<IPaymentMethod> GetAllPaymentMethods(int storeId = 0, int filterByCountryId = 0)
+        {
+            // FIXME: When Country restrictions come here, we have to use here
+            return _paymentManager.GetPaymentMethods();
+        }
+
+        public IPaymentMethod GetPaymentMethodByName(string name)
+        {
+            return _paymentManager.GetPaymentMethods().Where(x => x.Name == name).FirstOrDefault();
+        }
+
+        public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest processPaymentRequest)
+        {
+            if (processPaymentRequest.OrderTotal == decimal.Zero)
+            {
+                var result = new ProcessPaymentResponse
+                {
+                    NewPaymentStatus = PaymentStatus.Paid
+                };
+                return result;
+            }
+
+            //We should strip out any white space or dash in the CC number entered.
+            if (!string.IsNullOrWhiteSpace(processPaymentRequest.CreditCardNumber))
+            {
+                processPaymentRequest.CreditCardNumber = processPaymentRequest.CreditCardNumber.Replace(" ", "");
+                processPaymentRequest.CreditCardNumber = processPaymentRequest.CreditCardNumber.Replace("-", "");
+            }
+            var paymentMethod = GetPaymentMethodByName(processPaymentRequest.PaymentMethodName);
+            if (paymentMethod == null)
+                throw new InvalidOperationException("Payment method couldn't be loaded");
+            return paymentMethod.ProcessPayment(processPaymentRequest);
         }
 
         public bool CanRePostProcessPayment(Job job)
@@ -54,9 +90,20 @@
             return paymentMethod.CanRePostProcessPayment(job);
         }
 
+        public bool SupportCapture(string paymentMethodName)
+        {
+            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            if (paymentMethod == null)
+                return false;
+            return paymentMethod.SupportCapture;
+        }
+
         public CapturePaymentResponse Capture(CapturePaymentRequest capturePaymentRequest)
         {
-            throw new NotImplementedException();
+            var paymentMethod = GetPaymentMethodByName(capturePaymentRequest.Order.PaymentMethod);
+            if (paymentMethod == null)
+                throw new InvalidOperationException("Payment method couldn't be loaded");
+            return paymentMethod.Capture(capturePaymentRequest);
         }
 
         public decimal GetAdditionalHandlingFee(IList<ShoppingCartItem> cart, string paymentMethodName)
@@ -67,69 +114,70 @@
 
         public string GetMaskedCreditCardNumber(string creditCardNumber)
         {
+            if (string.IsNullOrEmpty(creditCardNumber))
+                throw new ArgumentNullException("credit card number provided null");
+
+            string last4 = creditCardNumber.Substring(creditCardNumber.Length - 4, 4);
+
+            StringBuilder stringBuilder = new StringBuilder();           
+            for (int i = 0; i < creditCardNumber.Length - 4; i++)
+            {
+                stringBuilder.Append("X");
+            }
+            return string.Concat(stringBuilder.ToString(), last4);
+        }
+
+        public IList<int> GetRestrictedCountryIds(IPaymentMethod paymentMethod)
+        {
+            // TODO: What we have to do here is install a settings service that will tell us 
+            // that which countries are restricted from payment
+
             throw new NotImplementedException();
         }
 
-        public IList<int> GetRestictedCountryIds(IPaymentMethod paymentMethod)
-        {
-            throw new NotImplementedException();
-        }
-
-       
-
-        public IList<IPaymentMethod> LoadAllPaymentMethods(int storeId = 0, int filterByCountryId = 0)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPaymentMethod GetPaymentMethodByName(string name)
-        {
-            return _paymentManager.GetPaymentMethods().Where(x => x.Name == name).FirstOrDefault();
-        }
-
-        public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest processPaymentRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProcessPaymentResponse ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public RefundPaymentResponse Refund(RefundPaymentRequest refundPaymentRequest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveRestictedCountryIds(IPaymentMethod paymentMethod, List<int> countryIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SupportCapture(string paymentMethodSystemName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SupportPartiallyRefund(string paymentMethodSystemName)
+        public void SaveRestrictedCountryIds(IPaymentMethod paymentMethod, List<int> countryIds)
         {
             throw new NotImplementedException();
         }
 
         public bool SupportRefund(string paymentMethodSystemName)
         {
-            throw new NotImplementedException();
+            var paymentMethod = GetPaymentMethodByName(paymentMethodSystemName);
+            if (paymentMethod == null)
+                return false;
+            return paymentMethod.SupportRefund;
         }
 
-        public bool SupportVoid(string paymentMethodSystemName)
+        public RefundPaymentResponse Refund(RefundPaymentRequest refundPaymentRequest)
         {
-            throw new NotImplementedException();
+            var paymentMethod = GetPaymentMethodByName(refundPaymentRequest.Order.PaymentMethod);
+            if (paymentMethod == null)
+                throw new InvalidOperationException("Payment method couldn't be loaded");
+            return paymentMethod.Refund(refundPaymentRequest);
+        }
+
+        public bool SupportPartiallyRefund(string paymentMethodName)
+        {
+            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            if (paymentMethod == null)
+                return false;
+            return paymentMethod.SupportPartiallyRefund;
+        }       
+
+        public bool SupportVoid(string paymentMethodName)
+        {
+            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            if (paymentMethod == null)
+                return false;
+            return paymentMethod.SupportVoid;
         }
 
         public VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest)
         {
-            throw new NotImplementedException();
+            var paymentMethod = GetPaymentMethodByName(voidPaymentRequest.Order.PaymentMethod);
+            if (paymentMethod == null)
+                throw new InvalidOperationException("Payment method couldn't be loaded");
+            return paymentMethod.Void(voidPaymentRequest);
         }
 
 

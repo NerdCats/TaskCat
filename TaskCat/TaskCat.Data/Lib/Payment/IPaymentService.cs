@@ -16,7 +16,7 @@
         /// Load active payment methods
         /// </summary>      
         /// <returns>Payment methods</returns>
-        IList<IPaymentMethod> LoadActivePaymentMethods();
+        IList<IPaymentMethod> GetActivePaymentMethods();
 
         /// <summary>
         /// Load all payment providers
@@ -24,7 +24,7 @@
         /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
         /// <param name="filterByCountryId">Load records allowed only in a specified country; pass 0 to load all records</param>
         /// <returns>Payment providers</returns>
-        IList<IPaymentMethod> LoadAllPaymentMethods(int storeId = 0, int filterByCountryId = 0);
+        IList<IPaymentMethod> GetAllPaymentMethods(int storeId = 0, int filterByCountryId = 0);
 
         /// <summary>
         /// Get a payment method by its name
@@ -38,14 +38,14 @@
         /// </summary>
         /// <param name="paymentMethod">Payment method</param>
         /// <returns>A list of country identifiers</returns>
-        IList<int> GetRestictedCountryIds(IPaymentMethod paymentMethod);
+        IList<int> GetRestrictedCountryIds(IPaymentMethod paymentMethod);
 
         /// <summary>
         /// Saves a list of coutnry identifiers in which a certain payment method is now allowed
         /// </summary>
         /// <param name="paymentMethod">Payment method</param>
         /// <param name="countryIds">A list of country identifiers</param>
-        void SaveRestictedCountryIds(IPaymentMethod paymentMethod, List<int> countryIds);
+        void SaveRestrictedCountryIds(IPaymentMethod paymentMethod, List<int> countryIds);
 
 
         /// <summary>
@@ -125,13 +125,6 @@
         /// <param name="voidPaymentRequest">Request</param>
         /// <returns>Result</returns>
         VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest);
-
-        /// <summary>
-        /// Process recurring payment
-        /// </summary>
-        /// <param name="processPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>Process payment result</returns>
-        ProcessPaymentResponse ProcessRecurringPayment(ProcessPaymentRequest processPaymentRequest);
 
         /// <summary>
         /// Gets masked credit card number

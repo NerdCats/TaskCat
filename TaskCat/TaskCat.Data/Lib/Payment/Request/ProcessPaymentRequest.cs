@@ -46,7 +46,7 @@
         /// Gets or sets a payment method identifier
         /// </summary>
         /// </summary>
-        public string PaymentMethodSystemName { get; set; }
+        public string PaymentMethodName { get; set; }
 
         #region Payment method specific properties 
 
