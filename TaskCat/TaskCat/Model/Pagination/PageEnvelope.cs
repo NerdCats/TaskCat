@@ -9,6 +9,7 @@
 
     public class PageEnvelope<T>
     {
+        [JsonIgnore]
         public IPagingHelper paginationHelper; 
         public PaginationHeader pagination { get; set; }
 
