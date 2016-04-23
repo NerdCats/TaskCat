@@ -17,6 +17,7 @@
     using Lib.Storage;
     using Lib.AssetProvider;
     using Lib.HRID;
+    using Lib.Payment;
 
     public class AutofacContainerBuilder
     {
@@ -29,6 +30,7 @@
             builder.Register<DbContext>(c => context).As<IDbContext>().SingleInstance();
 
             builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>();
+            builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();

@@ -22,11 +22,19 @@
             this._codPaymentSettings = codPaymentSettings;
         }
 
-        public string Name
+        public string Key
         {
             get
             {
                 return "CashOnDelivery";
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "Cash On Delivery";
             }
         }
 

@@ -5,6 +5,8 @@
     using Response;
     using System.Collections.Generic;
     using Entity;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// Provides an interface for creating payment gateways & methods
@@ -89,12 +91,18 @@
         /// <summary>
         /// Gets a payment method type
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         PaymentMethodType PaymentMethodType { get; }
+
+        /// <summary>
+        /// Gets a IPaymentMethod Key
+        /// </summary>
+        string Key { get;}
 
         /// <summary>
         /// Gets a IPaymentMethod Name
         /// </summary>
-        string Name { get;}
+        string Name { get; }
 
         #endregion
     }

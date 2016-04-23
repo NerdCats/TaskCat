@@ -40,7 +40,7 @@
 
         public IPaymentMethod GetPaymentMethodByName(string name)
         {
-            return _paymentManager.GetPaymentMethods().Where(x => x.Name == name).FirstOrDefault();
+            return _paymentManager.GetPaymentMethods().Where(x => x.Key == name).FirstOrDefault();
         }
 
         public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest processPaymentRequest)
