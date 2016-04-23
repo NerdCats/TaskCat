@@ -46,7 +46,7 @@
                 var commentsFile = Path.Combine(baseDirectory, commentsFileName);
 
                 c.IncludeXmlComments(commentsFile);
-
+                c.DescribeAllEnumsAsStrings();
                 c.SingleApiVersion("v1", "TaskCat Core Api");
             } ).EnableSwaggerUi();
 
