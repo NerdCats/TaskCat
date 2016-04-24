@@ -1,14 +1,14 @@
-﻿namespace TaskCat.Data.Model.Tests.Model.Invoice
+﻿namespace TaskCat.Tests.Model.Invoice
 {
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Data.Model.Invoice;
     using System.Linq;
 
-    using Entity;
-    using Inventory;
+    using Data.Entity;
+    using Data.Model.Inventory;
+
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {

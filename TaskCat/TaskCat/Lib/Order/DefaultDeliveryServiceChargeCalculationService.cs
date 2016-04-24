@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Data.Model.Inventory;
+    using System.Linq;
 
     public class DefaultDeliveryServiceChargeCalculationService : IServiceChargeCalculationService
     {
@@ -12,10 +13,7 @@
             if (items != null)
             {
                 decimal TotalWeight = 0.0M;
-                foreach (ItemDetails item in items)
-                {
-                    TotalWeight += item.Weight;
-                }
+                TotalWeight = items.Sum(x => x.Weight);
 
                 if (TotalWeight <= 1.0M)
                 {

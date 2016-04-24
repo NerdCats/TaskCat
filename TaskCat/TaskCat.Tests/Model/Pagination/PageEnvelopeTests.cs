@@ -1,13 +1,14 @@
-﻿namespace TaskCat.Model.Pagination.Tests.Model.Pagination
+﻿namespace TaskCat.Tests.Model.Pagination
 {
-    using Lib.Utility;
     using Moq;
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
-    using TaskCat.Tests.TestData;
+    using TaskCat.Lib.Utility;
+    using TaskCat.Model.Pagination;
+    using TestData;
 
     [TestFixture(TestOf = typeof(PageEnvelope<TestEntity>))]
     public class PageEnvelopeTests

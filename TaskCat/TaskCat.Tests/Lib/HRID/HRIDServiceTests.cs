@@ -1,11 +1,11 @@
-﻿namespace TaskCat.Lib.HRID.Tests.Lib.HRID
+﻿namespace TaskCat.Tests.Lib.HRID
 {
     using NUnit.Framework;
-    using Db;
     using Moq;
     using System.Threading.Tasks;
-    using Exceptions;
-    using System;
+    using TaskCat.Lib.Db;
+    using TaskCat.Lib.HRID;
+    using TaskCat.Lib.Exceptions;
 
     [TestFixture()]
     public class HRIDServiceTests

@@ -49,7 +49,6 @@
     <Compile Include="Lib\HRID\HRIDServiceTests.cs" />
     <Compile Include="Model\Geocoding\DefaultAddressTests.cs" />
     <Compile Include="Model\Identity\Response\UserModelTests.cs" />
-    <Compile Include="Model\Inventory\ItemDetailsTests.cs" />
     <Compile Include="Model\Pagination\PageEnvelopeTests.cs" />
     <Compile Include="Order\OrderDetailsTest.cs" />
     <Compile Include="Order\DeliveryOrderTests.cs" />

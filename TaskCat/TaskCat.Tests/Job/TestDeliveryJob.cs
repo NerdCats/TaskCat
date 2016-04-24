@@ -9,9 +9,9 @@
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
     using Data.Model.Geocoding;
-    using Lib.HRID;
     using Moq;
-    using Lib.Job.Builders;
+    using TaskCat.Lib.Job.Builders;
+    using TaskCat.Lib.HRID;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJob
