@@ -292,6 +292,8 @@
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
+    <Compile Include="Lib\Order\Validation\DeliveryOrderValidator.cs" />
+    <Compile Include="Lib\Order\Validation\IOrderValidator.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentMethod.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentSettings.cs" />
     <Compile Include="Lib\Payment\COD\TransactMode.cs" />

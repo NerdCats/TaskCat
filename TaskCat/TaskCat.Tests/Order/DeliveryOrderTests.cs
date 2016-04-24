@@ -12,7 +12,6 @@
     [TestFixture(TestOf = typeof(DeliveryOrder))]
     public class DeliveryOrderTests
     {
-
         [Test]
         public void Test_DeliveryOrder_Creation_Without_Name()
         {

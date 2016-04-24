@@ -59,8 +59,6 @@
             {
                 cart.TotalWeight = cart.PackageList.Sum(x => x.Weight);
             }
-
-
         }
     }
 }
