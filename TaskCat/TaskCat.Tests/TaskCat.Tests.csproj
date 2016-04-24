@@ -51,6 +51,7 @@
     <Compile Include="Model\Identity\Response\UserModelTests.cs" />
     <Compile Include="Model\Invoice\InvoiceItemTests.cs" />
     <Compile Include="Model\Pagination\PageEnvelopeTests.cs" />
+    <Compile Include="Order\OrderDetailsTest.cs" />
     <Compile Include="Order\DeliveryOrderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\TestEntity.cs" />

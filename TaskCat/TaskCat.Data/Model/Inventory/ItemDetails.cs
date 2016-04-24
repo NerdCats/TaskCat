@@ -48,7 +48,7 @@
             }
         }
 
-        [Range(0.00, 100, ErrorMessage = "VAT must be a % between 0 and 100")]
+        [Range(0.00, 100, ErrorMessage = "Weight must be between 0 and 100")]
         public decimal Weight { get; set; }
 
         public ItemDetails()
