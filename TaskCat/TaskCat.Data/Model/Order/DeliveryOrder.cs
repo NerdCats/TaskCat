@@ -8,11 +8,20 @@
 
     public class DeliveryOrder : OrderModel
     {
+        /// <summary>
+        /// From where the package should be delivered, this is the pickup location
+        /// </summary>
         [Required]
         public DefaultAddress From { get; set; }
+        /// <summary>
+        // The place the package should be delivered to, this is the delivery location
+        /// </summary>
         [Required]
         public DefaultAddress To { get; set; }
 
+        /// <summary>
+        /// Package Description to describe what the package is all about
+        /// </summary>
         public string PackageDescription { get; set; }
         public decimal PackageWeight
         {
