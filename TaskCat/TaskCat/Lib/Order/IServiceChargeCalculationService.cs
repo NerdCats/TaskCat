@@ -8,5 +8,6 @@ namespace TaskCat.Lib.Order
 {
     interface IServiceChargeCalculationService
     {
+        decimal CalculateServiceCharge();
     }
 }

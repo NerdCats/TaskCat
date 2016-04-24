@@ -15,20 +15,32 @@ namespace TaskCat.Lib.Order
             this.Items = items;
         }
 
-        public double CalculateServiceCharge()
+        public decimal CalculateServiceCharge()
         {
-            double ServiceCharge;
+            decimal ServiceCharge = 0.0M;
 
             if(Items != null)
             {
+                decimal TotalWeight = 0.0M;
                 foreach(ItemDetails item in Items)
                 {
+                    TotalWeight += item.Weight;
+                }
+
+                if(TotalWeight <= 1.0M)
+                {
+                    ServiceCharge = 150.0M;
+                }
+                else
+                {
+                    //TODO Calculate service charge for per 500g weight
 
                 }
+
             }
 
 
-            return ;
+            return ServiceCharge;
         }
     }
 }
