@@ -12,13 +12,16 @@
     using Auth;
     using Data.Model.Identity.Response;
     using HRID;
+    using Validation;
 
     public class OrderRepository : IOrderRepository
     {
-        JobManager _manager;
-        SupportedOrderStore _supportedOrderStore;
-        AccountManager _accountManager;
-        IHRIDService _hridService;
+        JobManager manager;
+        SupportedOrderStore supportedOrderStore;
+        AccountManager accountManager;
+        IHRIDService hridService;
+        IOrderCalculationService orderCalculationService;
+        IOrderValidator orderValidator;
 
         public OrderRepository(
             JobManager manager, 
@@ -27,15 +30,16 @@
             IHRIDService hridService 
             )
         {
-            _manager = manager;
-            _supportedOrderStore = supportedOrderStore;
-            _accountManager = accountManager;
-            _hridService = hridService;
+            this.manager = manager;
+            this.supportedOrderStore = supportedOrderStore;
+            this.accountManager = accountManager;
+            this.hridService = hridService;
+            orderCalculationService = new DefaultOrderCalculationService();
         }
 
         public async Task<Job> PostOrder(OrderModel model)
         {
-            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.UserId));
+            UserModel userModel = new UserModel(await accountManager.FindByIdAsync(model.UserId));
 
             JobShop jobShop = new JobShop();
             JobBuilder builder;
@@ -43,15 +47,20 @@
             switch (model.Type)
             {
                 case OrderTypes.Ride:
-                    RideOrder rideOrderModel = model as RideOrder;
-                    Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(rideOrderModel, userModel, _hridService);
-                    break;
+                    {
+                        RideOrder rideOrderModel = model as RideOrder;
+                        Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
+                        builder = new RideJobBuilder(rideOrderModel, userModel, hridService);
+                        break;
+                    }
                 case OrderTypes.Delivery:
-                    DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                    Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, _hridService);
-                    break;
+                    {
+                        DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
+                        orderValidator = new DeliveryOrderValidator(orderCalculationService);
+                        orderValidator.ValidateOrder(deliveryOrderModel);
+                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
+                        break;
+                    }
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
 
@@ -61,8 +70,8 @@
 
         public async Task<Job> PostOrder(OrderModel model, string adminUserId)
         {
-            UserModel userModel = new UserModel(await _accountManager.FindByIdAsync(model.UserId));
-            UserModel adminUserModel = new UserModel(await _accountManager.FindByIdAsync(adminUserId));
+            UserModel userModel = new UserModel(await accountManager.FindByIdAsync(model.UserId));
+            UserModel adminUserModel = new UserModel(await accountManager.FindByIdAsync(adminUserId));
 
             JobShop jobShop = new JobShop();
             JobBuilder builder;
@@ -72,12 +81,12 @@
                 case OrderTypes.Ride:
                     RideOrder rideOrderModel = model as RideOrder;
                     Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, _hridService);
+                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
                     break;
                 case OrderTypes.Delivery:
                     DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                     Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, _hridService);
+                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService);
                     break;
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
@@ -89,33 +98,33 @@
         private async Task<Job> ConstructAndRegister(JobShop jobShop, JobBuilder builder)
         {
             var createdJob = jobShop.Construct(builder);
-            return await _manager.RegisterJob(createdJob);
+            return await manager.RegisterJob(createdJob);
         }
 
         public async Task<SupportedOrder> PostSupportedOrder(SupportedOrder supportedOrder)
         {
-            await _supportedOrderStore.Post(supportedOrder);
+            await supportedOrderStore.Post(supportedOrder);
             return supportedOrder;
         }
 
         public async Task<List<SupportedOrder>> GetAllSupportedOrder()
         {
-            return await _supportedOrderStore.GettAll();
+            return await supportedOrderStore.GettAll();
         }
 
         public async Task<SupportedOrder> GetSupportedOrder(string id)
         {
-            return await _supportedOrderStore.Get(id);
+            return await supportedOrderStore.Get(id);
         }
 
         public async Task<SupportedOrder> UpdateSupportedOrder(SupportedOrder order)
         {
-            return await _supportedOrderStore.Replace(order);
+            return await supportedOrderStore.Replace(order);
         }
 
         public async Task<SupportedOrder> DeleteSupportedOrder(string id)
         {
-            return await _supportedOrderStore.Delete(id);
+            return await supportedOrderStore.Delete(id);
         }
     }
 }

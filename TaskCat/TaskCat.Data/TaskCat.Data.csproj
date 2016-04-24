@@ -140,6 +140,7 @@
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
+    <Compile Include="Model\Order\OrderDetails.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\Payment\PaymentSettings.cs" />

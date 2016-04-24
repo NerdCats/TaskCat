@@ -5,9 +5,9 @@
     using Data.Model.Inventory;
     using Exception;
 
-    public class OrderCalculationService : IOrderCalculationService
+    public partial class DefaultOrderCalculationService : IOrderCalculationService
     {
-        public OrderCalculationService()
+        public DefaultOrderCalculationService()
         {
 
         }

@@ -89,8 +89,6 @@
         /// 
         public string PaymentMethod { get; set; }
 
-
-
         public OrderModel()
         {
 
