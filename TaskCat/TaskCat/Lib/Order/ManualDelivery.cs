@@ -33,7 +33,8 @@ namespace TaskCat.Lib.Order
                 }
                 else
                 {
-                    //TODO Calculate service charge for per 500g weight
+                    //TODO Calculate service charge for per 500g weight                    
+                    ServiceCharge = 150.0M;         // Mock value
 
                 }
 
