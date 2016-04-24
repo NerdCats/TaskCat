@@ -8,10 +8,12 @@
     public class DeliveryOrderValidator : IOrderValidator
     {
         private IOrderCalculationService calculationService;
+        private IServiceChargeCalculationService serviceChargeCalculationService;
 
-        public DeliveryOrderValidator(IOrderCalculationService calculationService)
+        public DeliveryOrderValidator(IOrderCalculationService calculationService, IServiceChargeCalculationService serviceChargeCalculationService)
         {
             this.calculationService = calculationService;
+            this.serviceChargeCalculationService = serviceChargeCalculationService;
         }
 
         public void ValidateOrder(OrderModel order)
@@ -24,8 +26,7 @@
 
             if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)
             {
-                // TODO: Would be fixed in #17
-                cart.ServiceCharge = 50;
+                cart.ServiceCharge = serviceChargeCalculationService.CalculateServiceCharge(cart.PackageList);
             }
 
             if (cart.SubTotal == null || cart.SubTotal.Value == 0)

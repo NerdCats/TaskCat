@@ -21,6 +21,7 @@
         AccountManager accountManager;
         IHRIDService hridService;
         IOrderCalculationService orderCalculationService;
+        IServiceChargeCalculationService serviceChargeCalculationService;
         IOrderValidator orderValidator;
 
         public OrderRepository(
@@ -35,6 +36,7 @@
             this.accountManager = accountManager;
             this.hridService = hridService;
             orderCalculationService = new DefaultOrderCalculationService();
+            serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
         }
 
         public async Task<Job> PostOrder(OrderModel model)
@@ -56,7 +58,7 @@
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderValidator = new DeliveryOrderValidator(orderCalculationService);
+                        orderValidator = new DeliveryOrderValidator(orderCalculationService, serviceChargeCalculationService);
                         orderValidator.ValidateOrder(deliveryOrderModel);
                         builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
                         break;

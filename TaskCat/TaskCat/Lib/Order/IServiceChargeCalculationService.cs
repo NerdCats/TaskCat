@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskCat.Lib.Order
+﻿namespace TaskCat.Lib.Order
 {
-    interface IServiceChargeCalculationService
+    using System.Collections.Generic;
+    using Data.Model.Inventory;
+
+    public interface IServiceChargeCalculationService
     {
-        decimal CalculateServiceCharge();
+        decimal CalculateServiceCharge(List<ItemDetails> items);
     }
 }

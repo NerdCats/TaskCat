@@ -1,46 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using TaskCat.Data.Model.Inventory;
-
-namespace TaskCat.Lib.Order
+﻿namespace TaskCat.Lib.Order
 {
+    using System.Collections.Generic;
+    using Data.Model.Inventory;
+
     public class DefaultDeliveryServiceChargeCalculationService : IServiceChargeCalculationService
     {
-        List<ItemDetails> Items;
-
-        public DefaultDeliveryServiceChargeCalculationService(List<ItemDetails> items)
-        {
-            this.Items = items;
-        }
-
-        public decimal CalculateServiceCharge()
+        public decimal CalculateServiceCharge(List<ItemDetails> items)
         {
             decimal ServiceCharge = 0.0M;
 
-            if(Items != null)
+            if (items != null)
             {
                 decimal TotalWeight = 0.0M;
-                foreach(ItemDetails item in Items)
+                foreach (ItemDetails item in items)
                 {
                     TotalWeight += item.Weight;
                 }
 
-                if(TotalWeight <= 1.0M)
+                if (TotalWeight <= 1.0M)
                 {
                     ServiceCharge = 150.0M;
                 }
                 else
                 {
-                    //TODO Calculate service charge for per 500g weight                    
+                    // TODO: Calculate service charge for per 500g weight                    
                     ServiceCharge = 150.0M;         // Mock value
 
                 }
 
             }
-
-
             return ServiceCharge;
         }
     }
