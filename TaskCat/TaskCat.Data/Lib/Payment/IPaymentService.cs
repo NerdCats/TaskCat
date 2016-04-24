@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Data.Lib.Payment
 {
-    using Model;
     using Model.Inventory;
     using Request;
     using Response;

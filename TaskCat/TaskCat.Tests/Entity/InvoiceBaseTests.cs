@@ -66,7 +66,7 @@
             Assert.AreEqual(invoiceItems.Sum(i => i.Total), baseInvoice.NetTotal);
             Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.SubTotal);
             Assert.AreEqual(100 + invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.TotalToPay);
-            Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT) - invoiceItems.Sum(i => i.Total), baseInvoice.VATAmount);
+            Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT) - invoiceItems.Sum(i => i.Total), baseInvoice.TotalVATAmount);
             Assert.AreEqual(invoiceItems.Sum(x=>x.Weight), baseInvoice.Weight);
         }
     }

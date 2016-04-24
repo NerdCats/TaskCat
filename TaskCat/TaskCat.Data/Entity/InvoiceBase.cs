@@ -26,7 +26,7 @@
 
         public virtual decimal ServiceCharge { get; set; }
 
-        public decimal VATAmount
+        public decimal TotalVATAmount
         {
             get
             {
