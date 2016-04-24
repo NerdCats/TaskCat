@@ -25,47 +25,37 @@
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model, OrderCreationOptions opt = OrderCreationOptions.CREATE)
         {
-            try
+
+            if (model == null) return BadRequest("No freaking payload man!");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var currentUserId = this.User.Identity.GetUserId();
+
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
-                if (model == null) return BadRequest("No freaking payload man!");
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-
-                var currentUserId = this.User.Identity.GetUserId();
-
-                if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) 
-                    && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
-                {
-                    if (model.UserId!=null && model.UserId != currentUserId)
-                        throw new InvalidOperationException(string.Format("Updating user id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
-                    if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
-                        throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
-                }
-
-                if (model.UserId == null) model.UserId = currentUserId;
-
-                Job createdJob;
-                
-                switch(opt)
-                {
-                    case OrderCreationOptions.CREATE:
-                        createdJob = await _repository.PostOrder(model);
-                        return Json(createdJob);
-                    case OrderCreationOptions.CREATE_AND_CLAIM:
-                        createdJob = await _repository.PostOrder(model, currentUserId);
-                        return Json(createdJob);
-                    default:
-                        throw new InvalidOperationException("Invalid OrderCreationOptions selected");
-                }
-                
+                if (model.UserId != null && model.UserId != currentUserId)
+                    throw new InvalidOperationException(string.Format("Updating user id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
+                if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
+                    throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
             }
-            catch(ValidationException ex)
+
+            if (model.UserId == null) model.UserId = currentUserId;
+
+            Job createdJob;
+
+            switch (opt)
             {
-                return BadRequest(ex.Message);
+                case OrderCreationOptions.CREATE:
+                    createdJob = await _repository.PostOrder(model);
+                    return Json(createdJob);
+                case OrderCreationOptions.CREATE_AND_CLAIM:
+                    createdJob = await _repository.PostOrder(model, currentUserId);
+                    return Json(createdJob);
+                default:
+                    throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+
         }
 
         [AllowAnonymous]

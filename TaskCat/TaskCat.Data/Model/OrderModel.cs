@@ -43,7 +43,7 @@
         /// <summary>
         /// UserId that the order is created for
         /// </summary>
-        [Required(ErrorMessage = "Order Type not provided")]
+        [Required(ErrorMessage = "User Id Not Provided")]
         public string UserId { get { return _userId; } set { _userId = value; } }
 
         /// <summary>

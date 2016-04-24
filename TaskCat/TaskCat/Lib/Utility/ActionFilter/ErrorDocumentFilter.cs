@@ -3,6 +3,7 @@
     using Exceptions;
     using Newtonsoft.Json;
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -30,6 +31,8 @@
                 else if (actionExecutedContext.Exception is ArgumentException)
                     httpStatusCode = HttpStatusCode.BadRequest;
                 else if(actionExecutedContext.Exception is FormatException)
+                    httpStatusCode = HttpStatusCode.BadRequest;
+                else if (actionExecutedContext.Exception is ValidationException)
                     httpStatusCode = HttpStatusCode.BadRequest;
 
                 error = actionExecutedContext.Exception;
