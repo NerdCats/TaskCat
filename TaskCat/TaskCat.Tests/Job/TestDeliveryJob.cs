@@ -34,7 +34,7 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
-
+            
             UserModel userModel = new UserModel() {
                 Email = "someone@somewhere.com",
                 EmailConfirmed = false,
