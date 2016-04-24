@@ -22,7 +22,7 @@
         IHRIDService hridService;
         IOrderCalculationService orderCalculationService;
         IServiceChargeCalculationService serviceChargeCalculationService;
-        IOrderProcessor orderValidator;
+        IOrderProcessor orderProcessor;
 
         public OrderRepository(
             JobManager manager, 
@@ -58,8 +58,8 @@
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderValidator = new DeliveryOrderProcessor(orderCalculationService, serviceChargeCalculationService);
-                        orderValidator.ValidateOrder(deliveryOrderModel);
+                        orderProcessor = new DeliveryOrderProcessor(orderCalculationService, serviceChargeCalculationService);
+                        orderProcessor.ProcessOrder(deliveryOrderModel);
                         builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
                         break;
                     }

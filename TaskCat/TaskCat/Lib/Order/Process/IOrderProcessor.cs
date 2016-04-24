@@ -4,6 +4,6 @@
 
     public interface IOrderProcessor
     {
-        void ValidateOrder(OrderModel order);
+        void ProcessOrder(OrderModel order);
     }
 }

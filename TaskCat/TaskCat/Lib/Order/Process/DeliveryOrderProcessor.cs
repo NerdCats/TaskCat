@@ -16,7 +16,7 @@
             this.serviceChargeCalculationService = serviceChargeCalculationService;
         }
 
-        public void ValidateOrder(OrderModel order)
+        public void ProcessOrder(OrderModel order)
         {
             var orderModel = order as DeliveryOrder;
             Validator.ValidateObject(orderModel, new ValidationContext(orderModel), true);
