@@ -12,7 +12,7 @@
     using Auth;
     using Data.Model.Identity.Response;
     using HRID;
-    using Validation;
+    using Process;
 
     public class OrderRepository : IOrderRepository
     {
@@ -22,7 +22,7 @@
         IHRIDService hridService;
         IOrderCalculationService orderCalculationService;
         IServiceChargeCalculationService serviceChargeCalculationService;
-        IOrderValidator orderValidator;
+        IOrderProcessor orderValidator;
 
         public OrderRepository(
             JobManager manager, 
@@ -58,7 +58,7 @@
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderValidator = new DeliveryOrderValidator(orderCalculationService, serviceChargeCalculationService);
+                        orderValidator = new DeliveryOrderProcessor(orderCalculationService, serviceChargeCalculationService);
                         orderValidator.ValidateOrder(deliveryOrderModel);
                         builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
                         break;

@@ -1,8 +1,8 @@
-﻿namespace TaskCat.Lib.Order.Validation
+﻿namespace TaskCat.Lib.Order.Process
 {
     using Data.Model;
 
-    public interface IOrderValidator
+    public interface IOrderProcessor
     {
         void ValidateOrder(OrderModel order);
     }

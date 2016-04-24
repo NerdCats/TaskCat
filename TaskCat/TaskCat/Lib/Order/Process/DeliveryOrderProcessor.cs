@@ -1,16 +1,16 @@
-﻿namespace TaskCat.Lib.Order.Validation
+﻿namespace TaskCat.Lib.Order.Process
 {
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using Data.Model;
     using Data.Model.Order;
 
-    public class DeliveryOrderValidator : IOrderValidator
+    public class DeliveryOrderProcessor : IOrderProcessor
     {
         private IOrderCalculationService calculationService;
         private IServiceChargeCalculationService serviceChargeCalculationService;
 
-        public DeliveryOrderValidator(IOrderCalculationService calculationService, IServiceChargeCalculationService serviceChargeCalculationService)
+        public DeliveryOrderProcessor(IOrderCalculationService calculationService, IServiceChargeCalculationService serviceChargeCalculationService)
         {
             this.calculationService = calculationService;
             this.serviceChargeCalculationService = serviceChargeCalculationService;
