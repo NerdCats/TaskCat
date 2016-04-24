@@ -6,11 +6,11 @@ using TaskCat.Data.Model.Inventory;
 
 namespace TaskCat.Lib.Order
 {
-    public class ManualDelivery : IServiceChargeCalculationService
+    public class DefaultDeliveryServiceChargeCalculationService : IServiceChargeCalculationService
     {
         List<ItemDetails> Items;
 
-        public ManualDelivery(List<ItemDetails> items)
+        public DefaultDeliveryServiceChargeCalculationService(List<ItemDetails> items)
         {
             this.Items = items;
         }
