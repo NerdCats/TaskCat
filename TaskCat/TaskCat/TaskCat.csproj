@@ -291,6 +291,8 @@
     <Compile Include="Lib\Order\Exception\OrderCalculationException.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
+    <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />
+    <Compile Include="Lib\Order\DefaultDeliveryServiceChargeCalculationService.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Order\Validation\DeliveryOrderValidator.cs" />
     <Compile Include="Lib\Order\Validation\IOrderValidator.cs" />
