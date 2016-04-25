@@ -28,8 +28,8 @@
         IPaymentService paymentService;
 
         public OrderRepository(
-            JobManager manager, 
-            SupportedOrderStore supportedOrderStore, 
+            JobManager manager,
+            SupportedOrderStore supportedOrderStore,
             AccountManager accountManager,
             IHRIDService hridService,
             IPaymentManager paymentManager
@@ -63,7 +63,10 @@
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderProcessor = new DeliveryOrderProcessor(orderCalculationService, serviceChargeCalculationService);
+                        orderProcessor = new DeliveryOrderProcessor(
+                            orderCalculationService,
+                            serviceChargeCalculationService,
+                            paymentService);
                         orderProcessor.ProcessOrder(deliveryOrderModel);
                         builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
                         break;

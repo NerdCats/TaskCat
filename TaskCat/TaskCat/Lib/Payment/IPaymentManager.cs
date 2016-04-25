@@ -5,6 +5,8 @@
 
     public interface IPaymentManager
     {
-        IList<IPaymentMethod> GetPaymentMethods();
+        bool AllowRePostingPayments { get; set; }
+
+        IList<IPaymentMethod> AllPaymentMethods { get; }
     }
 }

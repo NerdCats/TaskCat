@@ -18,30 +18,29 @@
     /// </summary>
     public class PaymentService : IPaymentService
     {
-        public IPaymentManager _paymentManager { get; set; }
-        public PaymentSettings _paymentSettings { get; set; }
+        public IPaymentManager paymentManager { get; set; }
 
         public PaymentService(IPaymentManager paymentManager)
         {
-            this._paymentManager = paymentManager;
+            this.paymentManager = paymentManager;
         }
 
         public IList<IPaymentMethod> GetActivePaymentMethods()
         {
             // FIXME: Currently no filters are here, so it would actually be
             // something to filter against whether it is active or not
-            return _paymentManager.GetPaymentMethods();
+            return paymentManager.AllPaymentMethods;
         }
 
         public IList<IPaymentMethod> GetAllPaymentMethods(int storeId = 0, int filterByCountryId = 0)
         {
             // FIXME: When Country restrictions come here, we have to use here
-            return _paymentManager.GetPaymentMethods();
+            return paymentManager.AllPaymentMethods;
         }
 
-        public IPaymentMethod GetPaymentMethodByName(string name)
+        public IPaymentMethod GetPaymentMethodByKey(string name)
         {
-            var method = _paymentManager.GetPaymentMethods().Where(x => x.Key == name).FirstOrDefault();
+            var method = paymentManager.AllPaymentMethods.Where(x => x.Key == name).FirstOrDefault();
             if (method == null)
                 throw new PaymentMethodException("Invalid payment method, no payment method named " + name + " not found");
             return method;
@@ -64,7 +63,7 @@
                 processPaymentRequest.CreditCardNumber = processPaymentRequest.CreditCardNumber.Replace(" ", "");
                 processPaymentRequest.CreditCardNumber = processPaymentRequest.CreditCardNumber.Replace("-", "");
             }
-            var paymentMethod = GetPaymentMethodByName(processPaymentRequest.PaymentMethodName);
+            var paymentMethod = GetPaymentMethodByKey(processPaymentRequest.PaymentMethodName);
             return paymentMethod.ProcessPayment(processPaymentRequest);
         }
 
@@ -73,10 +72,10 @@
             if (job == null)
                 throw new ArgumentNullException("order");
 
-            if (!_paymentSettings.AllowRePostingPayments)
+            if (!paymentManager.AllowRePostingPayments)
                 return false;
 
-            var paymentMethod = GetPaymentMethodByName(job.PaymentMethod);
+            var paymentMethod = GetPaymentMethodByKey(job.PaymentMethod);
 
             if (paymentMethod.PaymentMethodType != PaymentMethodType.Redirection)
                 return false;   //this option is available only for redirection payment methods
@@ -95,19 +94,19 @@
 
         public bool SupportCapture(string paymentMethodName)
         {
-            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            var paymentMethod = GetPaymentMethodByKey(paymentMethodName);
             return paymentMethod.SupportCapture;
         }
 
         public CapturePaymentResponse Capture(CapturePaymentRequest capturePaymentRequest)
         {
-            var paymentMethod = GetPaymentMethodByName(capturePaymentRequest.Order.PaymentMethod);
+            var paymentMethod = GetPaymentMethodByKey(capturePaymentRequest.Order.PaymentMethod);
             return paymentMethod.Capture(capturePaymentRequest);
         }
 
         public decimal GetAdditionalHandlingFee(IList<ShoppingCartItem> cart, string paymentMethodName)
         {
-            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            var paymentMethod = GetPaymentMethodByKey(paymentMethodName);
             return paymentMethod.GetAdditionalHandlingFee(cart);
         }
 
@@ -141,34 +140,32 @@
 
         public bool SupportRefund(string paymentMethodSystemName)
         {
-            var paymentMethod = GetPaymentMethodByName(paymentMethodSystemName);
+            var paymentMethod = GetPaymentMethodByKey(paymentMethodSystemName);
             return paymentMethod.SupportRefund;
         }
 
         public RefundPaymentResponse Refund(RefundPaymentRequest refundPaymentRequest)
         {
-            var paymentMethod = GetPaymentMethodByName(refundPaymentRequest.Order.PaymentMethod);
+            var paymentMethod = GetPaymentMethodByKey(refundPaymentRequest.Order.PaymentMethod);
             return paymentMethod.Refund(refundPaymentRequest);
         }
 
         public bool SupportPartiallyRefund(string paymentMethodName)
         {
-            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            var paymentMethod = GetPaymentMethodByKey(paymentMethodName);
             return paymentMethod.SupportPartiallyRefund;
         }       
 
         public bool SupportVoid(string paymentMethodName)
         {
-            var paymentMethod = GetPaymentMethodByName(paymentMethodName);
+            var paymentMethod = GetPaymentMethodByKey(paymentMethodName);
             return paymentMethod.SupportVoid;
         }
 
         public VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest)
         {
-            var paymentMethod = GetPaymentMethodByName(voidPaymentRequest.Order.PaymentMethod);
+            var paymentMethod = GetPaymentMethodByKey(voidPaymentRequest.Order.PaymentMethod);
             return paymentMethod.Void(voidPaymentRequest);
         }
-
-
     }
 }

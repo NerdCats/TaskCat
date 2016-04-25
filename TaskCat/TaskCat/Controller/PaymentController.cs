@@ -38,7 +38,7 @@
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Json(manager.GetPaymentMethods());
+            return Json(manager.AllPaymentMethods);
         }
     }
 }

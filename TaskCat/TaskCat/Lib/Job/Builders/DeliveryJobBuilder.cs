@@ -24,7 +24,7 @@
         public override void BuildTasks()
         {
             //FIXME: Looks like I can definitely refactor this and work this out
-
+            
             job.Tasks = new List<JobTask>();
 
             FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(_order.From, _order.To);

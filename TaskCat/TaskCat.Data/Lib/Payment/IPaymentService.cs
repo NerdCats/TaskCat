@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="name">payment method name</param>
         /// <returns></returns>
-        IPaymentMethod GetPaymentMethodByName(string name);
+        IPaymentMethod GetPaymentMethodByKey(string name);
 
         /// <summary>
         /// Gets a list of coutnry identifiers in which a certain payment method is now allowed

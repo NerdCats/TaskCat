@@ -28,8 +28,8 @@
             Validator.ValidateObject(orderModel, new ValidationContext(orderModel), true);
             Validator.ValidateObject(orderModel.OrderCart, new ValidationContext(orderModel.OrderCart), true);
 
-            var paymentMethod = paymentService.GetPaymentMethodByName(order.PaymentMethod);
-
+            var paymentMethod = paymentService.GetPaymentMethodByKey(order.PaymentMethod);
+            
             var cart = orderModel.OrderCart;
 
             if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)

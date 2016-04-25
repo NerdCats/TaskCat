@@ -303,7 +303,6 @@
     <Compile Include="Lib\Payment\IPaymentManager.cs" />
     <Compile Include="Lib\Payment\PaymentManager.cs" />
     <Compile Include="Lib\Payment\PaymentService.cs" />
-    <Compile Include="Lib\Payment\PaymentSettings.cs" />
     <Compile Include="Lib\Storage\BlobHelper.cs" />
     <Compile Include="Lib\Storage\BlobService.cs" />
     <Compile Include="Lib\Storage\BlobStorageUploadProvider.cs" />
