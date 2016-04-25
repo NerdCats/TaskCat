@@ -4,12 +4,12 @@
     using Lib.Order;
     using Microsoft.AspNet.Identity;
     using System;
-    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using System.Web.Http;
     using Data.Model;
     using Data.Entity.Identity;
     using Data.Model.Order;
+    using System.Web.Http.Description;
 
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
@@ -21,6 +21,18 @@
             _repository = repository;
         }
 
+        /// <summary>
+        /// Default endpoint to create an Order
+        /// </summary>
+        /// <param name="model">
+        /// OrderModel to be submitted, this can be anything that is inherited from OrderModel class
+        /// </param>
+        /// <param name="opt">
+        /// Order create options, an admin can create an order and claim it himself too
+        /// </param>
+        /// <returns></returns>
+        /// 
+        [ResponseType(typeof(Job))]
         [Authorize]
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model, OrderCreationOptions opt = OrderCreationOptions.CREATE)
@@ -58,6 +70,14 @@
 
         }
 
+        /// <summary>
+        /// Gets List of the all supported order types
+        /// </summary>
+        /// <returns>
+        /// List of supported orders
+        /// </returns>
+        /// 
+        [ResponseType(typeof(SupportedOrder))]
         [AllowAnonymous]
         [Route("SupportedOrder")]
         [HttpGet]
@@ -74,6 +94,16 @@
             }
         }
 
+        /// <summary>
+        /// Add a supported order in the system
+        /// </summary>
+        /// <param name="supportedOrder"></param>
+        /// <returns>
+        /// 
+        /// </returns>
+        /// 
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [ResponseType(typeof(SupportedOrder))]
         [Route("SupportedOrder")]
         [HttpPost]
         public async Task<IHttpActionResult> PostSupportedOrder(SupportedOrder supportedOrder)
@@ -92,7 +122,18 @@
             }
         }
 
+        /// <summary>
+        /// Get a supported order by id
+        /// </summary>
+        /// <param name="id">
+        /// id of the supported order entity
+        /// </param>
+        /// <returns>
+        /// Supported Order of that respective id
+        /// </returns>
+        /// 
         [AllowAnonymous]
+        [ResponseType(typeof(SupportedOrder))]
         [Route("SupportedOrder/{id}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetSupportedOrder(string id)
@@ -108,6 +149,17 @@
             }
         }
 
+        /// <summary>
+        /// Update a supported order
+        /// </summary>
+        /// <param name="order">
+        /// SupportedOrder that needs to be updated
+        /// </param>
+        /// <returns>
+        /// Updated Supported Order
+        /// </returns>
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [ResponseType(typeof(SupportedOrder))]
         [Route("SupportedOrder")]
         [HttpPut]
         public async Task<IHttpActionResult> UpdateSupportedOrder(SupportedOrder order)
@@ -126,6 +178,18 @@
             }
         }
 
+        /// <summary>
+        /// Delete a supported Order
+        /// </summary>
+        /// <param name="id">
+        /// id of supported order to delete
+        /// </param>
+        /// <returns>
+        /// Deleted Supported Order
+        /// </returns>
+        /// 
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [ResponseType(typeof(SupportedOrder))]
         [Route("SupportedOrder/{id}")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteSupportedOrder(string id)
