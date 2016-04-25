@@ -29,7 +29,8 @@
 
             if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)
             {
-                cart.ServiceCharge = serviceChargeCalculationService.CalculateServiceCharge(cart.PackageList);
+                cart.ServiceCharge = serviceChargeCalculationService.
+                    CalculateServiceCharge(cart.PackageList);
             }
 
             if (cart.SubTotal == null || cart.SubTotal.Value == 0)
@@ -38,25 +39,33 @@
             }
             else
             {
-                cart.SubTotal = calculationService.VerifyAndCalculateSubtotal(cart.PackageList, cart.SubTotal.Value);
+                cart.SubTotal = calculationService.
+                    VerifyAndCalculateSubtotal(cart.PackageList, cart.SubTotal.Value);
             }
 
             if (cart.TotalToPay == null || cart.TotalToPay.Value == 0)
             {
-                cart.TotalToPay = calculationService.CalculateTotalToPay(cart.PackageList, cart.ServiceCharge.Value);
+                cart.TotalToPay = calculationService.
+                    CalculateTotalToPay(cart.PackageList, cart.ServiceCharge.Value);
             }
             else
             {
-                cart.TotalToPay = calculationService.VerifyAndCalculateTotalToPay(cart.PackageList, cart.ServiceCharge.Value, cart.TotalToPay.Value);
+                cart.TotalToPay = calculationService.
+                    VerifyAndCalculateTotalToPay(
+                    cart.PackageList, cart.ServiceCharge.Value, cart.TotalToPay.Value);
             }
 
             if (cart.TotalVATAmount == null || cart.TotalVATAmount.Value == 0)
             {
-                cart.TotalVATAmount = calculationService.CalculateTotalVATAmount(cart.PackageList, cart.ServiceCharge.Value);
+                cart.TotalVATAmount = calculationService.
+                    CalculateTotalVATAmount(cart.PackageList, cart.ServiceCharge.Value);
             }
             else
             {
-                cart.TotalToPay = calculationService.VerifyAndTotalVATAmount(cart.PackageList, cart.ServiceCharge.Value, cart.TotalVATAmount.Value);
+                // FIXME
+                cart.TotalToPay = calculationService.
+                    VerifyAndTotalVATAmount(
+                    cart.PackageList, cart.ServiceCharge.Value, cart.TotalVATAmount.Value);
             }
 
             if (cart.TotalWeight == null || cart.TotalWeight.Value == 0)

@@ -30,6 +30,7 @@ namespace TaskCat.Lib.Order
             return CalculateSubtotal(items) + serviceCharge;
         }
 
+        // FIXME: I need help @.@
         public decimal CalculateTotalVATAmount(List<ItemDetails> items, decimal serviceCharge)
         {
             return CalculateSubtotal(items) - CalculateNetTotal(items);
@@ -58,6 +59,7 @@ namespace TaskCat.Lib.Order
             throw new OrderCalculationException("TotalToPay");
         }
 
+        // FIXME: I need help @.@
         public decimal VerifyAndTotalVATAmount(List<ItemDetails> items, decimal serviceCharge, decimal submittedTotalVatAmount)
         {
             var calculatedTotalVatAmount = CalculateTotalVATAmount(items, serviceCharge);
