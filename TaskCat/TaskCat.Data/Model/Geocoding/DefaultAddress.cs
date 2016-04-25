@@ -3,21 +3,17 @@
     using GeoJson;
     using Newtonsoft.Json;
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
     using Utility.Attributes;
 
     public class DefaultAddress : AddressBase
     {
-        [RequiredIf("AddressLine1", null)]
         public override string Address
         {
             get
             {
                 return GenerateAddress();
-            }
-            set
-            {
-                base.Address = value;
             }
         }
 
@@ -46,12 +42,14 @@
         }
 
         public string PostalCode { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Floor is required")]
         public string Floor { get; set; }
         public string HouseNumber { get; set; }
-        [RequiredIf("Address", null)]
+        [Required(AllowEmptyStrings =false, ErrorMessage = "AddressLine 1 is required")]
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string Country { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "City is required")]
         public string City { get; set; }
         public string State { get; set; }
 
