@@ -1,9 +1,11 @@
-﻿namespace TaskCat.Lib.Order
+﻿using System;
+
+namespace TaskCat.Lib.Order
 {
     using System.Collections.Generic;
     using System.Linq;
     using Data.Model.Inventory;
-    using Exception;
+    using Exceptions;
 
     public partial class DefaultOrderCalculationService : IOrderCalculationService
     {

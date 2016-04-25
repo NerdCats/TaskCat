@@ -4,6 +4,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Geocoding;
+    using Payment;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
@@ -89,7 +90,7 @@
         /// 
         [Required]
         public string PaymentMethod { get; set; }
-
+        
         public OrderModel()
         {
 

@@ -13,6 +13,8 @@
     using Data.Model.Identity.Response;
     using HRID;
     using Process;
+    using Data.Lib.Payment;
+    using Payment;
 
     public class OrderRepository : IOrderRepository
     {
@@ -23,12 +25,14 @@
         IOrderCalculationService orderCalculationService;
         IServiceChargeCalculationService serviceChargeCalculationService;
         IOrderProcessor orderProcessor;
+        IPaymentService paymentService;
 
         public OrderRepository(
             JobManager manager, 
             SupportedOrderStore supportedOrderStore, 
             AccountManager accountManager,
-            IHRIDService hridService 
+            IHRIDService hridService,
+            IPaymentManager paymentManager
             )
         {
             this.manager = manager;
@@ -37,6 +41,7 @@
             this.hridService = hridService;
             orderCalculationService = new DefaultOrderCalculationService();
             serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
+            paymentService = new PaymentService(paymentManager);
         }
 
         public async Task<Job> PostOrder(OrderModel model)

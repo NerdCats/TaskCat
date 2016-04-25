@@ -11,6 +11,7 @@
     using Data.Model;
     using Data.Model.Payment;
     using System.Text;
+    using Exceptions;
 
     /// <summary>
     /// Default Payment Service for all installer services through a IPaymentManager 
@@ -40,7 +41,10 @@
 
         public IPaymentMethod GetPaymentMethodByName(string name)
         {
-            return _paymentManager.GetPaymentMethods().Where(x => x.Key == name).FirstOrDefault();
+            var method = _paymentManager.GetPaymentMethods().Where(x => x.Key == name).FirstOrDefault();
+            if (method == null)
+                throw new PaymentMethodException("Invalid payment method, no payment method named " + name + " not found");
+            return method;
         }
 
         public ProcessPaymentResponse ProcessPayment(ProcessPaymentRequest processPaymentRequest)
@@ -61,8 +65,6 @@
                 processPaymentRequest.CreditCardNumber = processPaymentRequest.CreditCardNumber.Replace("-", "");
             }
             var paymentMethod = GetPaymentMethodByName(processPaymentRequest.PaymentMethodName);
-            if (paymentMethod == null)
-                throw new InvalidOperationException("Payment method couldn't be loaded");
             return paymentMethod.ProcessPayment(processPaymentRequest);
         }
 
@@ -75,8 +77,6 @@
                 return false;
 
             var paymentMethod = GetPaymentMethodByName(job.PaymentMethod);
-            if (paymentMethod == null)
-                return false; //Payment method couldn't be loaded (for example, was uninstalled)
 
             if (paymentMethod.PaymentMethodType != PaymentMethodType.Redirection)
                 return false;   //this option is available only for redirection payment methods
@@ -96,16 +96,12 @@
         public bool SupportCapture(string paymentMethodName)
         {
             var paymentMethod = GetPaymentMethodByName(paymentMethodName);
-            if (paymentMethod == null)
-                return false;
             return paymentMethod.SupportCapture;
         }
 
         public CapturePaymentResponse Capture(CapturePaymentRequest capturePaymentRequest)
         {
             var paymentMethod = GetPaymentMethodByName(capturePaymentRequest.Order.PaymentMethod);
-            if (paymentMethod == null)
-                throw new InvalidOperationException("Payment method couldn't be loaded");
             return paymentMethod.Capture(capturePaymentRequest);
         }
 
@@ -146,40 +142,30 @@
         public bool SupportRefund(string paymentMethodSystemName)
         {
             var paymentMethod = GetPaymentMethodByName(paymentMethodSystemName);
-            if (paymentMethod == null)
-                return false;
             return paymentMethod.SupportRefund;
         }
 
         public RefundPaymentResponse Refund(RefundPaymentRequest refundPaymentRequest)
         {
             var paymentMethod = GetPaymentMethodByName(refundPaymentRequest.Order.PaymentMethod);
-            if (paymentMethod == null)
-                throw new InvalidOperationException("Payment method couldn't be loaded");
             return paymentMethod.Refund(refundPaymentRequest);
         }
 
         public bool SupportPartiallyRefund(string paymentMethodName)
         {
             var paymentMethod = GetPaymentMethodByName(paymentMethodName);
-            if (paymentMethod == null)
-                return false;
             return paymentMethod.SupportPartiallyRefund;
         }       
 
         public bool SupportVoid(string paymentMethodName)
         {
             var paymentMethod = GetPaymentMethodByName(paymentMethodName);
-            if (paymentMethod == null)
-                return false;
             return paymentMethod.SupportVoid;
         }
 
         public VoidPaymentResponse Void(VoidPaymentRequest voidPaymentRequest)
         {
             var paymentMethod = GetPaymentMethodByName(voidPaymentRequest.Order.PaymentMethod);
-            if (paymentMethod == null)
-                throw new InvalidOperationException("Payment method couldn't be loaded");
             return paymentMethod.Void(voidPaymentRequest);
         }
 

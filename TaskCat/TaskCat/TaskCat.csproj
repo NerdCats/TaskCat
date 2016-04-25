@@ -281,6 +281,7 @@
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
     <Compile Include="Lib\Exceptions\EntityNotFoundException.cs" />
+    <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
     <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
@@ -288,7 +289,7 @@
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
-    <Compile Include="Lib\Order\Exception\OrderCalculationException.cs" />
+    <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />

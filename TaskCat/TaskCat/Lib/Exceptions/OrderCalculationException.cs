@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Order.Exception
+﻿namespace TaskCat.Lib.Exceptions
 {
     using System;
 
