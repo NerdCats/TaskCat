@@ -38,7 +38,8 @@
                             VAT = 15.0m
                         }              
                     }                    
-                }
+                },
+                PaymentMethod = "CashOnDelivery"
             };
 
             // Act

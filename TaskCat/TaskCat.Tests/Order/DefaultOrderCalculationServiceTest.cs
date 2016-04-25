@@ -3,8 +3,8 @@ namespace TaskCat.Tests.Order
     using Data.Model.Inventory;
     using NUnit.Framework;
     using System.Collections.Generic;
+    using TaskCat.Lib.Exceptions;
     using TaskCat.Lib.Order;
-    using TaskCat.Lib.Order.Exception;
 
     [TestFixture(TestOf = typeof(DefaultOrderCalculationService))]
     public class DefaultOrderCalculationServiceTest
