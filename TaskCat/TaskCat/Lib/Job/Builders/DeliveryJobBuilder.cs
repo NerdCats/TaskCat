@@ -6,19 +6,24 @@
     using System.Collections.Generic;
     using Data.Model.Identity.Response;
     using HRID;
+    using Data.Lib.Payment;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class DeliveryJobBuilder : JobBuilder
     {
-        private DeliveryOrder _order;
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel,hridService)
+        private IPaymentMethod paymentMethod;
+        private DeliveryOrder order;
+
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel,hridService)
         {
-            this._order = order;
+            this.order = order;
+            this.paymentMethod = paymentMethod;
         }
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel, adminUserModel, hridService)
         {
-            this._order = order;
+            this.order = order;
+            this.paymentMethod = paymentMethod;
         }
 
         public override void BuildTasks()
@@ -27,16 +32,16 @@
             
             job.Tasks = new List<JobTask>();
 
-            FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(_order.From, _order.To);
+            FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(order.From, order.To);
             job.Tasks.Add(fetchDeliveryManTask);         
             fetchDeliveryManTask.AssetUpdated += JobTask_AssetUpdated;
 
-            PackagePickUpTask pickUpTask = new PackagePickUpTask(_order.From);
+            PackagePickUpTask pickUpTask = new PackagePickUpTask(order.From);
             pickUpTask.SetPredecessor(fetchDeliveryManTask);
             job.Tasks.Add(pickUpTask);
             pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
-            DeliveryTask deliveryTask = new DeliveryTask(_order.From, _order.To);
+            DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
             deliveryTask.SetPredecessor(pickUpTask);
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;

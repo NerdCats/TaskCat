@@ -65,10 +65,10 @@
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
                         orderProcessor = new DeliveryOrderProcessor(
                             orderCalculationService,
-                            serviceChargeCalculationService,
-                            paymentService);
+                            serviceChargeCalculationService);
+                        var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
                         orderProcessor.ProcessOrder(deliveryOrderModel);
-                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService);
+                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod);
                         break;
                     }
                 default:
@@ -89,15 +89,23 @@
             switch (model.Type)
             {
                 case OrderTypes.Ride:
-                    RideOrder rideOrderModel = model as RideOrder;
-                    Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                    builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
-                    break;
+                    {
+                        RideOrder rideOrderModel = model as RideOrder;
+                        Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
+                        builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
+                        break;
+                    }
                 case OrderTypes.Delivery:
-                    DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                    Validator.ValidateObject(deliveryOrderModel, new ValidationContext(deliveryOrderModel), true);
-                    builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService);
-                    break;
+                    {
+                        DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
+                        orderProcessor = new DeliveryOrderProcessor(
+                                orderCalculationService,
+                                serviceChargeCalculationService);
+                        var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
+                        orderProcessor.ProcessOrder(deliveryOrderModel);
+                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod);
+                        break;
+                    }
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
 

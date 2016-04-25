@@ -10,6 +10,7 @@
     using Model.Identity.Response;
     using System.Linq;
     using Model.Payment;
+    using Lib.Payment;
 
     public class Job : HRIDEntity
     {
@@ -76,7 +77,7 @@
             }
         }
 
-        public string PaymentMethod { get; set; }
+        public IPaymentMethod PaymentMethod { get; set; }
         public bool Deleted { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
 

@@ -75,7 +75,7 @@
             if (!paymentManager.AllowRePostingPayments)
                 return false;
 
-            var paymentMethod = GetPaymentMethodByKey(job.PaymentMethod);
+            var paymentMethod = job.PaymentMethod;
 
             if (paymentMethod.PaymentMethodType != PaymentMethodType.Redirection)
                 return false;   //this option is available only for redirection payment methods

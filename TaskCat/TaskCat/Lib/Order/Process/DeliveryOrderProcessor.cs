@@ -9,17 +9,14 @@
     public class DeliveryOrderProcessor : IOrderProcessor
     {
         private IOrderCalculationService calculationService;
-        private IPaymentService paymentService;
         private IServiceChargeCalculationService serviceChargeCalculationService;
 
         public DeliveryOrderProcessor(
             IOrderCalculationService calculationService, 
-            IServiceChargeCalculationService serviceChargeCalculationService,
-            IPaymentService paymentService)
+            IServiceChargeCalculationService serviceChargeCalculationService)
         {
             this.calculationService = calculationService;
             this.serviceChargeCalculationService = serviceChargeCalculationService;
-            this.paymentService = paymentService;
         }
 
         public void ProcessOrder(OrderModel order)
@@ -27,8 +24,6 @@
             var orderModel = order as DeliveryOrder;
             Validator.ValidateObject(orderModel, new ValidationContext(orderModel), true);
             Validator.ValidateObject(orderModel.OrderCart, new ValidationContext(orderModel.OrderCart), true);
-
-            var paymentMethod = paymentService.GetPaymentMethodByKey(order.PaymentMethod);
             
             var cart = orderModel.OrderCart;
 

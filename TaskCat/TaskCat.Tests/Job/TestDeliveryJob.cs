@@ -12,12 +12,14 @@
     using Moq;
     using TaskCat.Lib.Job.Builders;
     using TaskCat.Lib.HRID;
+    using Data.Lib.Payment;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJob
     {
         IHRIDService hridService;
         string MockedHrid = "Job#123456";
+        Mock<IPaymentMethod> paymentMethodMock;
 
         [SetUp]
         public void Setup()
@@ -25,6 +27,7 @@
             Mock<IHRIDService> hridServiceMock = new Mock<IHRIDService>();
             hridServiceMock.Setup<string>(x => x.NextId(It.IsAny<string>())).Returns(MockedHrid);
             hridService = hridServiceMock.Object;
+            paymentMethodMock = new Mock<IPaymentMethod>();
         }
 
 
@@ -75,7 +78,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService);
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
@@ -142,7 +145,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService);
+            var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
             builder.BuildTasks();
 
             Assert.IsNotNull(builder);
@@ -197,7 +200,9 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, hridService);
+           
+
+            var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
             builder.BuildTasks();
 
             //Changing that back to IN PROGRESS
@@ -235,7 +240,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, hridService);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -296,7 +301,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, hridService);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
@@ -359,7 +364,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-            var builder = new DeliveryJobBuilder(order, userModel, hridService);
+            var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
             builder.BuildTasks();
 
             var SampleAssetModel = new AssetModel()
