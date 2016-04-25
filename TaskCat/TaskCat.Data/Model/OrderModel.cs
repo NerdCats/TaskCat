@@ -87,6 +87,7 @@
         /// A supported payment method list can be accessed GET /api/payment
         /// </remarks>
         /// 
+        [Required]
         public string PaymentMethod { get; set; }
 
         public OrderModel()
