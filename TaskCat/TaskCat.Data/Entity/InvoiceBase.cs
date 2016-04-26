@@ -26,56 +26,13 @@
 
         public virtual decimal ServiceCharge { get; set; }
 
-        public decimal TotalVATAmount
-        {
-            get
-            {
-                return SubTotal - NetTotal;
-            }
-        }
+        public decimal TotalVATAmount { get; set; }
 
-        public decimal SubTotal
-        {
-            get
-            {
-                if (InvoiceDetails == null)
-                    return 0;
+        public decimal SubTotal { get; set; }
+        public decimal NetTotal { get; set; }
 
-                return InvoiceDetails.Sum(i => i.TotalPlusVAT);
-            }
-        }
-
-        public decimal NetTotal
-        {
-            get
-            {
-                if (InvoiceDetails == null)
-                    return 0;
-
-                return InvoiceDetails.Sum(i => i.Total);
-            }
-        }
-
-        public decimal TotalToPay
-        {
-            get
-            {
-                return SubTotal + ServiceCharge;
-            }
-        }
-
-        private decimal weight;
-        public decimal Weight
-        {
-            get
-            {
-                return weight;
-            }
-            set
-            {
-                weight = value;
-            }
-        }
+        public decimal TotalToPay { get; set; }
+        public decimal Weight { get; set; }
 
         public virtual ICollection<ItemDetails> InvoiceDetails { get; set; }
 
@@ -87,7 +44,6 @@
         public InvoiceBase(ICollection<ItemDetails> invoiceDetails)
         {
             InvoiceDetails = invoiceDetails;
-            weight = InvoiceDetails.Sum(x => x.Weight);
         }
     }
 }
