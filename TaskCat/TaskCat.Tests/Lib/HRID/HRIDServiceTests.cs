@@ -7,7 +7,7 @@
     using TaskCat.Lib.HRID;
     using TaskCat.Lib.Exceptions;
 
-    [TestFixture()]
+    [TestFixture(TestOf = typeof(IHRIDService))]
     public class HRIDServiceTests
     {
         Mock<IDbContext> IDbContextMock;
