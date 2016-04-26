@@ -6,19 +6,19 @@
     using Data.Model.Inventory;
     using System.Collections.Generic;
     using System.IO;
-
+    using System;
     public class DeliveryInvoicePDFGenerator : IPDFService<DeliveryInvoice>
     {
         public void GeneratePDF(DeliveryInvoice invoice)
         {
+            if (string.IsNullOrWhiteSpace(invoice.HRID)) throw new ArgumentNullException("invoice with null/empty HRID provided to generate PDF");
+
             PdfPTable itemsTable = GenerateItemsTable(invoice);
 
-            FileStream fileStream = new FileStream(invoice.HRID + ".pdf",
-                                                    FileMode.Create,
-                                                    FileAccess.Write,
-                                                    FileShare.None);
+            FileStream fileStream = new FileStream(invoice.HRID + ".pdf",FileMode.Create,FileAccess.ReadWrite, FileShare.Read);
+            
             // Generating a PDF document
-            using (Document doc = new Document())
+            using (Document doc = new Document(PageSize.A4))
             {
                 PdfWriter writer = PdfWriter.GetInstance(doc, fileStream);
                 doc.Open();

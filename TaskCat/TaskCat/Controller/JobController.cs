@@ -147,7 +147,7 @@
             if (job.User.Type == Data.Model.Identity.IdentityTypes.USER)
                 customerName = (job.User.Profile as UserProfile).FullName;
             else if (job.User.Type == Data.Model.Identity.IdentityTypes.ENTERPRISE)
-                customerName = (job.User.Profile as EnterpriseUserProfile).ContactPersonName;
+                customerName = (job.User.Profile as EnterpriseUserProfile).CompanyName;
             else
             {
                 customerName = (job.User.Profile as AssetProfile).FullName;

@@ -1,10 +1,12 @@
-﻿using TaskCat.Data.Model.Identity.Registration;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using TaskCat.Data.Model.Identity.Registration;
 
 namespace TaskCat.Data.Model.Identity.Profile
 {
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class EnterpriseUserProfile : IdentityProfile
     {
-        public string ContactPersonName { get; set; }
+        public string CompanyName { get; set; }
         public string Website { get; set; }
 
         public EnterpriseUserProfile()
@@ -14,7 +16,7 @@ namespace TaskCat.Data.Model.Identity.Profile
 
         public EnterpriseUserProfile(EnterpriseUserRegistrationModel enterpriseUserModel)
         {
-            this.ContactPersonName = enterpriseUserModel.ContactPersonName;
+            this.CompanyName = enterpriseUserModel.ContactPersonName;
             this.Website = enterpriseUserModel.Website;
         }
     }
