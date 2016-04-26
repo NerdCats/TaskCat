@@ -78,12 +78,12 @@
         {
             List<ItemDetails> itemList = new List<ItemDetails>(invoice.InvoiceDetails);
             PdfPTable table = new PdfPTable(7);
-            table.TotalWidth = 100f;
-            float[] widths = new float[] { 0.5f, 4f, 1f, 0.5f, 1f, 1f, 1f };
+            table.TotalWidth = 120f;
+            float[] widths = new float[] { 0.5f, 4f, 1f, 1f, 0.5f, 1f, 2f };
             table.SetWidths(widths);
 
             //Add Headers
-            table.AddCell(HeaderCell("Item"));
+            table.AddCell(HeaderCell("#"));
             table.AddCell(HeaderCell("Description"));
             table.AddCell(HeaderCell("Price"));
             table.AddCell(HeaderCell("VAT"));
@@ -110,7 +110,7 @@
 
             PdfPCell ntText = new PdfPCell(new Phrase("Net Total:"));
             ntText.HorizontalAlignment = 2;
-            ntText.Colspan = 2;
+            ntText.Colspan = 4;
             ntText.Border = Rectangle.TOP_BORDER;
             table.AddCell(BlankCell());
             table.AddCell(BlankCell());
@@ -124,7 +124,7 @@
 
             PdfPCell vatText = new PdfPCell(new Phrase("Total VAT:"));
             vatText.HorizontalAlignment = 2;
-            vatText.Colspan = 2;
+            vatText.Colspan = 4;
             vatText.Border = Rectangle.TOP_BORDER;
 
             table.AddCell(BlankCell());
@@ -139,7 +139,7 @@
 
             PdfPCell stText = new PdfPCell(new Phrase("Subtotal:"));
             stText.HorizontalAlignment = 2;
-            stText.Colspan = 2;
+            stText.Colspan = 4;
             stText.Border = Rectangle.TOP_BORDER;
             table.AddCell(BlankCell());
             table.AddCell(BlankCell());
@@ -153,7 +153,7 @@
 
             PdfPCell scText = new PdfPCell(new Phrase("Service Charge:"));
             scText.HorizontalAlignment = 2;
-            scText.Colspan = 2;
+            scText.Colspan = 4;
             scText.Border = Rectangle.TOP_BORDER;
             table.AddCell(BlankCell());
             table.AddCell(BlankCell());
@@ -167,7 +167,7 @@
 
             PdfPCell gtText = new PdfPCell(new Phrase("Grand Total:"));
             gtText.HorizontalAlignment = 2;
-            gtText.Colspan = 2;
+            gtText.Colspan = 4;
             gtText.Border = Rectangle.TOP_BORDER;
 
             table.AddCell(BlankCell());
