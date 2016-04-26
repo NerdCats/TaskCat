@@ -1,8 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Inventory
 {
-    using System;
+    using MongoDB.Bson.Serialization.Attributes;
     using System.ComponentModel.DataAnnotations;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class ItemDetails
     {
         [Required]

@@ -12,7 +12,7 @@
         public string VendorName { get; set; }
         public DefaultAddress VendorAddress { get; set; }
         public IEnumerable<ItemDetails> ItemDetails { get; set; }
-        public string NotesToDeliveryMan { get; internal set; }
+        public string NotesToDeliveryMan { get; set; }
     }
 
 }

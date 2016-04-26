@@ -1,9 +1,11 @@
 ﻿namespace TaskCat.Data.Model.Order
 {
     using Inventory;
+    using MongoDB.Bson.Serialization.Attributes;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class OrderDetails
     {
         /// <summary>

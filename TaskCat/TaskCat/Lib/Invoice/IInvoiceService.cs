@@ -8,5 +8,6 @@
         TResponse GenerateInvoice<TRequest, TResponse>(TRequest request)
             where TRequest : InvoiceRequestBase
             where TResponse : InvoiceBase, IInvoiceFor<TRequest>, new();
+
     }
 }

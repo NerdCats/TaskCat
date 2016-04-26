@@ -79,7 +79,7 @@
             List<ItemDetails> itemList = new List<ItemDetails>(invoice.InvoiceDetails);
             PdfPTable table = new PdfPTable(7);
             table.TotalWidth = 100f;
-            float[] widths = new float[] { 0.5f, 4f, 1f, 0.5f, 1f };
+            float[] widths = new float[] { 0.5f, 4f, 1f, 0.5f, 1f, 1f, 1f };
             table.SetWidths(widths);
 
             //Add Headers

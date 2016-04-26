@@ -2,7 +2,9 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Geocoding;
+    using MongoDB.Bson.Serialization.Attributes;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class DeliveryOrder : OrderModel
     {
         /// <summary>

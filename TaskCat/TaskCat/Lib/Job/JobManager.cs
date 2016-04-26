@@ -35,14 +35,6 @@
             return ArrangeJobHooks(JobPayload);
         }
 
-        internal async Task<Job> GetJobByHridOrId(string id)
-        {
-            var JobPayload = await _store.FindOneByHridOrId(id);
-            if (JobPayload == null)
-                throw new EntityNotFoundException("Job", id);
-            return ArrangeJobHooks(JobPayload);
-        }
-
         private Job ArrangeJobHooks(Job JobPayload)
         {
             JobTask TerminalTask = null;
