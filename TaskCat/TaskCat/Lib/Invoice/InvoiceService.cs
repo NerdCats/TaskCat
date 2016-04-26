@@ -14,11 +14,13 @@
             _dbContext = dbcontext;
         }
 
-        public Task<TResponse> Generate<TRequest, TResponse>()
+        public TResponse GenerateInvoice<TRequest, TResponse>(TRequest request)
             where TRequest : InvoiceRequestBase
             where TResponse : InvoiceBase, IInvoiceFor<TRequest>, new()
         {
-            throw new NotImplementedException();
+            var response = new TResponse();
+            response.Populate(request);
+            return response;
         }
     }
 }

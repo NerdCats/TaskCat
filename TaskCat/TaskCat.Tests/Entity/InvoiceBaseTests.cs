@@ -8,7 +8,7 @@
 
     using Data.Entity;
     using Data.Model.Inventory;
-
+    using Data.Model.Payment;
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {
@@ -61,7 +61,7 @@
             baseInvoice.Notes = "Test Note";
             baseInvoice.ServiceCharge = 100;
             baseInvoice.DueDate = dueDate;
-            baseInvoice.Paid = false;
+            baseInvoice.Paid = PaymentStatus.Pending;
             baseInvoice.NetTotal = 100;
             baseInvoice.SubTotal = 200;
             baseInvoice.TotalToPay = 400;

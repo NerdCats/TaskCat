@@ -7,7 +7,7 @@
     using MongoDB.Bson.Serialization.Attributes;
     using Lib.Invoice.Response;
     using Model.Inventory;
-
+    using Model.Payment;
     [BsonKnownTypes(typeof(DeliveryInvoice))]
     public class InvoiceBase : DbEntity
     {
@@ -22,7 +22,7 @@
         public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
         public DateTime? DueDate { get; set; }
 
-        public bool Paid { get; set; }
+        public PaymentStatus Paid { get; set; }
 
         public virtual decimal ServiceCharge { get; set; }
 
@@ -34,14 +34,14 @@
         public decimal TotalToPay { get; set; }
         public decimal Weight { get; set; }
 
-        public virtual ICollection<ItemDetails> InvoiceDetails { get; set; }
+        public virtual IEnumerable<ItemDetails> InvoiceDetails { get; set; }
 
         public InvoiceBase()
         {
             InvoiceDetails = new List<ItemDetails>();
         }
 
-        public InvoiceBase(ICollection<ItemDetails> invoiceDetails)
+        public InvoiceBase(IEnumerable<ItemDetails> invoiceDetails)
         {
             InvoiceDetails = invoiceDetails;
         }
