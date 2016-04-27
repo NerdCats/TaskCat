@@ -1,7 +1,6 @@
 ﻿namespace TaskCat.Data.Lib.Invoice.Response
 {
     using Model.Geocoding;
-    using Entity;
     using TaskCat.Lib.Invoice.Request;
     using System;
     using Model.Payment;

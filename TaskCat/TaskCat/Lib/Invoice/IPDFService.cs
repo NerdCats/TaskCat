@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.Invoice
 {
-    using Data.Entity;
+    using Data.Lib.Invoice;
     using System.IO;
 
     public interface IPDFService<TInvoice> where TInvoice: InvoiceBase

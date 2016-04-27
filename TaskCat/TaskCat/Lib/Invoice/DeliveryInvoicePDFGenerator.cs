@@ -12,7 +12,7 @@
     {
         public MemoryStream GeneratePDF(DeliveryInvoice invoice)
         {
-            if (string.IsNullOrWhiteSpace(invoice.HRID)) throw new ArgumentNullException("invoice with null/empty HRID provided to generate PDF");
+            if (string.IsNullOrWhiteSpace(invoice.InvoiceId)) throw new ArgumentNullException("invoice with null/empty HRID provided to generate PDF");
 
             PdfPTable itemsTable = GenerateItemsTable(invoice);
 
@@ -25,7 +25,7 @@
                 doc.Open();
 
                 //Title
-                Paragraph title = new Paragraph(invoice.HRID);
+                Paragraph title = new Paragraph(invoice.InvoiceId);
                 title.Alignment = 2;
 
                 Paragraph date = new Paragraph("Date: " + invoice.CreatedTime.Value.ToShortDateString());

@@ -4,11 +4,9 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-
-    using Data.Entity;
     using Data.Model.Inventory;
     using Data.Model.Payment;
+    using Data.Lib.Invoice;
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {

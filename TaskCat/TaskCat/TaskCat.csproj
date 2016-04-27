@@ -264,7 +264,6 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="Controller\AssetProviderController.cs" />
-    <Compile Include="Controller\InvoiceController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\StorageController.cs" />
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />

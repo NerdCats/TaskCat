@@ -143,11 +143,21 @@
             return Json(await _repository.GetJobs(query, page, pageSize));
         }
 
+        /// <summary>
+        /// Generate an invoice against the job hrid given in here
+        /// </summary>
+        /// <param name="jobhrid">
+        /// Human Readable ID for a job
+        /// </param>
+        /// <returns>
+        /// A invoice for a job 
+        /// </returns>
         [Route("api/job/{jobhrid}/invoice")]
         [HttpGet]
         public async Task<IHttpActionResult> GenerateInvoiceForAJob(string jobhrid)
         {
             var job = await _repository.GetJobByHrid(jobhrid);
+
             string customerName;
             if (job.User.Type == Data.Model.Identity.IdentityTypes.USER)
                 customerName = (job.User.Profile as UserProfile).FullName;
@@ -179,7 +189,7 @@
                     VendorName = "Anonymous"
                 });
 
-                invoice.HRID = "Invoice-ABCDEFGH";
+                invoice.InvoiceId = job.HRID;
                 IPDFService<DeliveryInvoice> DeliveryInvoicePrinter = new DeliveryInvoicePDFGenerator();
                 var invoiceStream = DeliveryInvoicePrinter.GeneratePDF(invoice);
 
@@ -189,7 +199,7 @@
                 };
                 reponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = string.Concat(invoice.HRID, ".pdf")
+                    FileName = string.Concat(invoice.InvoiceId, ".pdf")
                 };
                 reponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 return ResponseMessage(reponseMessage);

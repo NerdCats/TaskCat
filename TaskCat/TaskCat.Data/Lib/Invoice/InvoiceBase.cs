@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Entity
+﻿namespace TaskCat.Data.Lib.Invoice
 {
     using System;
     using System.Collections.Generic;
@@ -9,8 +9,9 @@
     using Model.Payment;
 
     [BsonKnownTypes(typeof(DeliveryInvoice))]
-    public class InvoiceBase : HRIDEntity
+    public class InvoiceBase
     {
+        public string InvoiceId { get; set; }
         // FIXME: Would be fixed after Vendor profile is introduced
         [Required]
         public string Vendor { get; set; }
