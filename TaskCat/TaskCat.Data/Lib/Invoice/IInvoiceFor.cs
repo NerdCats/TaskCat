@@ -4,6 +4,6 @@
 
     public interface IInvoiceFor<TRequest> where TRequest : InvoiceRequestBase
     {
-
+        void Populate(TRequest request);
     }
 }

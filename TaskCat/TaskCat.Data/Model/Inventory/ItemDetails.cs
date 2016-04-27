@@ -1,8 +1,9 @@
 ﻿namespace TaskCat.Data.Model.Inventory
 {
-    using System;
+    using MongoDB.Bson.Serialization.Attributes;
     using System.ComponentModel.DataAnnotations;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class ItemDetails
     {
         [Required]
@@ -20,9 +21,6 @@
 
         [Range(0.00, 100, ErrorMessage = "VAT must be a % between 0 and 100")]
         public decimal VAT { get; set; }
-
-
-        public DateTime? CreatedTime { get; set; } = DateTime.UtcNow;
 
         public decimal Total
         {

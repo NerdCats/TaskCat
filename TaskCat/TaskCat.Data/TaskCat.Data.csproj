@@ -73,7 +73,6 @@
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
     <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
-    <Compile Include="Lib\Invoice\IInvoiceService.cs" />
     <Compile Include="Lib\Invoice\InvoiceRequestBase.cs" />
     <Compile Include="Lib\Invoice\Request\ItemDetailsInvoiceRequest.cs" />
     <Compile Include="Entity\ShadowCat\AssetDevice.cs" />
@@ -121,7 +120,7 @@
     <Compile Include="Model\Identity\Response\AssetWithLocationModel.cs" />
     <Compile Include="Model\Identity\Response\EnterpriseUserModel.cs" />
     <Compile Include="Model\Identity\Response\UserModel.cs" />
-    <Compile Include="Entity\InvoiceBase.cs" />
+    <Compile Include="Lib\Invoice\InvoiceBase.cs" />
     <Compile Include="Model\Identity\Response\UserModelBase.cs" />
     <Compile Include="Model\Inventory\ItemDetails.cs" />
     <Compile Include="Model\Inventory\ShoppingCartItem.cs" />

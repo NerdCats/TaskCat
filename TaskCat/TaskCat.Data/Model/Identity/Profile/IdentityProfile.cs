@@ -2,6 +2,7 @@
 {
     using MongoDB.Bson.Serialization.Attributes;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     [BsonKnownTypes(typeof(UserProfile), typeof(EnterpriseUserProfile))]
     public class IdentityProfile
     {

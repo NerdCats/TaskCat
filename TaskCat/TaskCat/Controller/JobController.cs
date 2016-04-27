@@ -12,6 +12,15 @@
     using System.Web.OData.Query;
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
+    using Data.Model.Order;
+    using Lib.Invoice;
+    using Lib.Invoice.Request;
+    using Data.Lib.Invoice.Response;
+    using Data.Model.Identity.Profile;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -51,7 +60,7 @@
 
                 Job job = null;
                 if (id.Length == 24)
-                    job = await _repository.GetJobByHridOrJobId(id);
+                    job = await _repository.GetJob(id);
                 else
                     job = await _repository.GetJobByHrid(id);
 
@@ -134,6 +143,72 @@
             return Json(await _repository.GetJobs(query, page, pageSize));
         }
 
+        /// <summary>
+        /// Generate an invoice against the job hrid given in here
+        /// </summary>
+        /// <param name="jobhrid">
+        /// Human Readable ID for a job
+        /// </param>
+        /// <returns>
+        /// A invoice for a job 
+        /// </returns>
+        [Route("api/job/{jobhrid}/invoice")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GenerateInvoiceForAJob(string jobhrid)
+        {
+            var job = await _repository.GetJobByHrid(jobhrid);
+
+            string customerName;
+            if (job.User.Type == Data.Model.Identity.IdentityTypes.USER)
+                customerName = (job.User.Profile as UserProfile).FullName;
+            else if (job.User.Type == Data.Model.Identity.IdentityTypes.ENTERPRISE)
+                customerName = (job.User.Profile as EnterpriseUserProfile).CompanyName;
+            else
+            {
+                customerName = (job.User.Profile as AssetProfile).FullName;
+            }
+
+            if (job.Order.Type == OrderTypes.Delivery)
+            {
+                DeliveryOrder order = job.Order as DeliveryOrder;
+                IInvoiceService invoiceService = new InvoiceService();
+                DeliveryInvoice invoice = invoiceService.GenerateInvoice<ItemDetailsInvoiceRequest, DeliveryInvoice>(new ItemDetailsInvoiceRequest()
+                {
+                    CustomerName = customerName,
+                    DeliveryFrom = order.From,
+                    DeliveryTo = order.To,
+                    ItemDetails = order.OrderCart.PackageList,
+                    NetTotal = order.OrderCart.PackageList.Sum(x => x.Total),
+                    NotesToDeliveryMan = order.NoteToDeliveryMan,
+                    PaymentStatus = job.PaymentStatus,
+                    ServiceCharge = order.OrderCart.ServiceCharge,
+                    SubTotal = order.OrderCart.SubTotal,
+                    TotalToPay = order.OrderCart.TotalToPay,
+                    TotalVATAmount = order.OrderCart.TotalVATAmount,
+                    TotalWeight = order.OrderCart.TotalWeight,
+                    VendorName = "Anonymous"
+                });
+
+                invoice.InvoiceId = job.HRID;
+                IPDFService<DeliveryInvoice> DeliveryInvoicePrinter = new DeliveryInvoicePDFGenerator();
+                var invoiceStream = DeliveryInvoicePrinter.GeneratePDF(invoice);
+
+                var reponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(invoiceStream.GetBuffer())
+                };
+                reponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = string.Concat(invoice.InvoiceId, ".pdf")
+                };
+                reponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return ResponseMessage(reponseMessage);
+            }
+            else
+            {
+                throw new NotImplementedException("Invoice for this job type is still not implemented");
+            }
+        }
 
 
         /// <summary>

@@ -6,7 +6,7 @@
     using System;
     using System.Collections.Generic;
 
-    [TestFixture]
+    [TestFixture(TestOf = typeof(OrderDetails))]
     public class OrderDetailsTest
     {
         [Test]

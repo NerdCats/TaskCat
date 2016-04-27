@@ -60,7 +60,7 @@
         [Route("api/payment/process/{jobid}")]
         public async Task<IHttpActionResult> Process(string jobid)
         {
-            var job = await jobRepository.GetJobByHridOrJobId(jobid);
+            var job = await jobRepository.GetJob(jobid);
             var result = job.PaymentMethod.ProcessPayment(new ProcessPaymentRequest() {
                 JobId = jobid
             });

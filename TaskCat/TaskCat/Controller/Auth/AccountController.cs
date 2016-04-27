@@ -270,7 +270,7 @@
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata")]
-        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query, int pageSize = AppConstants.DefaultPageSize, int page = 0)
+        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
@@ -285,7 +285,7 @@
                 {
                     // Initialize settings as needed.
                     AllowedFunctions = AllowedFunctions.AllMathFunctions,
-                    AllowedQueryOptions=AllowedQueryOptions.Count|AllowedQueryOptions.Filter|AllowedQueryOptions.OrderBy|AllowedQueryOptions.Skip|AllowedQueryOptions.Top
+                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
                 };
 
                 query.Validate(settings);
@@ -293,7 +293,7 @@
                 var users = await accountRepository.FindAllAsModelAsQueryable(page, pageSize);
                 
                 var queryResult = (query.ApplyTo(users)) as IEnumerable<UserModel>;
-                if (query.Count.Value)
+                if (envelope)
                     return Json(new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
                 return Json(queryResult);
             }

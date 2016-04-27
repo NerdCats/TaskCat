@@ -4,11 +4,9 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-
-    using Data.Entity;
     using Data.Model.Inventory;
-
+    using Data.Model.Payment;
+    using Data.Lib.Invoice;
     [TestFixture(TestOf = typeof(InvoiceBase))]
     public class InvoiceBaseTests
     {
@@ -61,13 +59,18 @@
             baseInvoice.Notes = "Test Note";
             baseInvoice.ServiceCharge = 100;
             baseInvoice.DueDate = dueDate;
-            baseInvoice.Paid = false;
+            baseInvoice.Paid = PaymentStatus.Pending;
+            baseInvoice.NetTotal = 100;
+            baseInvoice.SubTotal = 200;
+            baseInvoice.TotalToPay = 400;
+            baseInvoice.TotalVATAmount = 10;
+            baseInvoice.Weight = 5;
 
-            Assert.AreEqual(invoiceItems.Sum(i => i.Total), baseInvoice.NetTotal);
-            Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.SubTotal);
-            Assert.AreEqual(100 + invoiceItems.Sum(i => i.TotalPlusVAT), baseInvoice.TotalToPay);
-            Assert.AreEqual(invoiceItems.Sum(i => i.TotalPlusVAT) - invoiceItems.Sum(i => i.Total), baseInvoice.TotalVATAmount);
-            Assert.AreEqual(invoiceItems.Sum(x=>x.Weight), baseInvoice.Weight);
+            Assert.AreEqual(100, baseInvoice.NetTotal);
+            Assert.AreEqual(200, baseInvoice.SubTotal);
+            Assert.AreEqual(400, baseInvoice.TotalToPay);
+            Assert.AreEqual(10, baseInvoice.TotalVATAmount);
+            Assert.AreEqual(5, baseInvoice.Weight);
         }
     }
 }
