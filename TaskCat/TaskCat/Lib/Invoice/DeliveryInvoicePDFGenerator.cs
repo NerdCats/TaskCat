@@ -7,20 +7,21 @@
     using System.Collections.Generic;
     using System.IO;
     using System;
+
     public class DeliveryInvoicePDFGenerator : IPDFService<DeliveryInvoice>
     {
-        public void GeneratePDF(DeliveryInvoice invoice)
+        public MemoryStream GeneratePDF(DeliveryInvoice invoice)
         {
             if (string.IsNullOrWhiteSpace(invoice.HRID)) throw new ArgumentNullException("invoice with null/empty HRID provided to generate PDF");
 
             PdfPTable itemsTable = GenerateItemsTable(invoice);
 
-            FileStream fileStream = new FileStream(invoice.HRID + ".pdf",FileMode.Create,FileAccess.ReadWrite, FileShare.Read);
+            MemoryStream stream = new MemoryStream();
             
             // Generating a PDF document
             using (Document doc = new Document(PageSize.A4))
             {
-                PdfWriter writer = PdfWriter.GetInstance(doc, fileStream);
+                PdfWriter writer = PdfWriter.GetInstance(doc, stream);
                 doc.Open();
 
                 //Title
@@ -38,11 +39,10 @@
                 Paragraph companyName = new Paragraph("GO! Fetch");
                 doc.Add(companyName);
 
-                doc.Add(new Paragraph("[Address Line 1]"));
-                doc.Add(new Paragraph("[Address Line 2]"));
-                doc.Add(new Paragraph("[Town/City]"));
-                doc.Add(new Paragraph("[Postcode]"));
-                doc.Add(new Paragraph("Phone: [Phone Number]"));
+                doc.Add(new Paragraph("House-28, Road-20"));
+                doc.Add(new Paragraph("Block-K, Banani"));
+                doc.Add(new Paragraph("Dhaka-1200"));
+                doc.Add(new Paragraph("Phone: +88 - 01735829687"));
                 doc.Add(new Paragraph("__________________________"));
 
                 if (invoice.BillingAddress == invoice.ShippingAddress)
@@ -72,6 +72,8 @@
                 doc.Add(itemsTable);
                 doc.Close();
             }
+
+            return stream;
         }
 
         private PdfPTable GenerateItemsTable(DeliveryInvoice invoice)
@@ -210,5 +212,7 @@
             cell.Phrase = new Phrase(CellContent);
             return cell;
         }
+
+        
     }
 }

@@ -1,9 +1,10 @@
 ﻿namespace TaskCat.Lib.Invoice
 {
     using Data.Entity;
+    using System.IO;
 
     public interface IPDFService<TInvoice> where TInvoice: InvoiceBase
     {
-        void GeneratePDF(TInvoice invoice);
+        MemoryStream GeneratePDF(TInvoice invoice);
     }
 }

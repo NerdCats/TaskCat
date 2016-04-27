@@ -17,10 +17,15 @@
     using Lib.Invoice.Request;
     using Data.Lib.Invoice.Response;
     using Data.Model.Identity.Profile;
-    using System.Linq;/// <summary>
-                      /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
-                      /// </summary>
-                      /// 
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+
+    /// <summary>
+    /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
+    /// </summary>
+    /// 
     public class JobController : ApiController
     {
         private IJobRepository _repository;
@@ -163,7 +168,7 @@
                     DeliveryFrom = order.From,
                     DeliveryTo = order.To,
                     ItemDetails = order.OrderCart.PackageList,
-                    NetTotal = order.OrderCart.PackageList.Sum(x=>x.Total),
+                    NetTotal = order.OrderCart.PackageList.Sum(x => x.Total),
                     NotesToDeliveryMan = order.NoteToDeliveryMan,
                     PaymentStatus = job.PaymentStatus,
                     ServiceCharge = order.OrderCart.ServiceCharge,
@@ -176,8 +181,18 @@
 
                 invoice.HRID = "Invoice-ABCDEFGH";
                 IPDFService<DeliveryInvoice> DeliveryInvoicePrinter = new DeliveryInvoicePDFGenerator();
-                DeliveryInvoicePrinter.GeneratePDF(invoice);
-                return Ok();
+                var invoiceStream = DeliveryInvoicePrinter.GeneratePDF(invoice);
+
+                var reponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(invoiceStream.GetBuffer())
+                };
+                reponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = string.Concat(invoice.HRID, ".pdf")
+                };
+                reponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return ResponseMessage(reponseMessage);
             }
             else
             {
