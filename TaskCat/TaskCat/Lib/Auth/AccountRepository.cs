@@ -268,6 +268,7 @@
             var user =  await accountManager.FindByIdAsync(userId);
             if (user == null)
                 throw new EntityNotFoundException("User", userId);
+            return user;
         }
 
         internal async Task<UserModel> FindUserAsModel(string userId)
