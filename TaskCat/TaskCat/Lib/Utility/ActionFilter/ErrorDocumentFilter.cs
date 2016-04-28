@@ -9,12 +9,12 @@
     using System.Net.Http.Headers;
     using System.Web.Http.Filters;
 
-    internal class ErrorDocumentFilter : ActionFilterAttribute
+    internal class ErrorDocumentFilter : ExceptionFilterAttribute
     {
         // TODO: Need to add proper debug and other informations, if debug method is needed then we'd add the debug information, or else
         // Not going to add debug informations in production server :)
 
-        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Exception != null && actionExecutedContext.Request != null)
             {
