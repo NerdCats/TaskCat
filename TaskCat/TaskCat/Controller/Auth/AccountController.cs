@@ -7,6 +7,8 @@
     using Data.Model.Identity.Response;
     using Lib.Auth;
     using Lib.Constants;
+    using Lib.Utility.Odata;
+    using LinqToQuerystring;
     using Microsoft.AspNet.Identity;
     using Model.Pagination;
     using MongoDB.Driver;
@@ -17,7 +19,6 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
-    using System.Web.OData.Query;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -227,7 +228,6 @@
         /// </param>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("")]
         public async Task<IHttpActionResult> GetAllPaged(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
@@ -270,7 +270,7 @@
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata")]
-        public async Task<IHttpActionResult> GetAll(ODataQueryOptions<UserModel> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        public async Task<IHttpActionResult> GetAll(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
@@ -281,18 +281,22 @@
 
             try
             {
-                var settings = new ODataValidationSettings()
-                {
-                    // Initialize settings as needed.
-                    AllowedFunctions = AllowedFunctions.AllMathFunctions,
-                    AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
-                };
+                var queryParams = this.Request.GetQueryNameValuePairs();
+                queryParams.VerifyQuery(new List<string>() {
+                    OdataOptionExceptions.InlineCount,
+                    OdataOptionExceptions.Skip,
+                    OdataOptionExceptions.Top
+                });
 
-                query.Validate(settings);
+                var odataQuery = queryParams.GetOdataQuery(new List<string>() {
+                    "pageSize",
+                    "page",
+                    "envelope"
+                });
 
-                var users = await accountRepository.FindAllAsModelAsQueryable(page, pageSize);
-                
-                var queryResult = (query.ApplyTo(users)) as IEnumerable<UserModel>;
+                var users = await accountRepository.FindAllAsModel();
+                var queryResult = users.LinqToQuerystring(odataQuery).Skip(page * pageSize).Take(pageSize);
+
                 if (envelope)
                     return Json(new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
                 return Json(queryResult);

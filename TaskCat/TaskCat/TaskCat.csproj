@@ -340,6 +340,8 @@
     <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Lib\Utility\IPagingHelper.cs" />
     <Compile Include="Lib\Utility\JsonPatch\JobTaskPatchAdapter.cs" />
+    <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
+    <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
     <Compile Include="Lib\Utility\OrderModelExtensions.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
