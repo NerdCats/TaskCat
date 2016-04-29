@@ -75,6 +75,10 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Marvin.JsonPatch, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonPatch.NerdCats.Nuget.1.0.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -346,14 +350,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\LinqToQuerystring\LinqToQuerystring\LinqToQuerystring.csproj">
-      <Project>{7859c906-95d8-4322-aa44-bc854b065aee}</Project>
-      <Name>LinqToQuerystring</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj">
-      <Project>{82226e0c-a7b3-4bb7-8df5-7d53ec66b47a}</Project>
-      <Name>Marvin.JsonPatch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
