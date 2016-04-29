@@ -9,7 +9,6 @@
     using Data.Model;
     using Lib.Constants;
     using Marvin.JsonPatch;
-    using System.Web.OData.Query;
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
     using Data.Model.Order;
@@ -21,18 +20,22 @@
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-
+    using System.Collections.Generic;
+    using Lib.Utility.Odata;
+    using LinqToQuerystring;
+    using Model.Pagination;
+    using System.Web.Http.Description;
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
     /// 
     public class JobController : ApiController
     {
-        private IJobRepository _repository;
+        private IJobRepository repository;
 
         public JobController(IJobRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         /// <summary>
@@ -60,16 +63,16 @@
 
                 Job job = null;
                 if (id.Length == 24)
-                    job = await _repository.GetJob(id);
+                    job = await repository.GetJob(id);
                 else
-                    job = await _repository.GetJobByHrid(id);
+                    job = await repository.GetJobByHrid(id);
 
                 return Json(job);
             }
             else
             {
                 Job job = null;
-                job = await _repository.GetJobByHrid(id);
+                job = await repository.GetJobByHrid(id);
                 return Json(job);
             }
         }
@@ -88,8 +91,8 @@
             try
             {
                 if (envelope)
-                    return Json(await _repository.GetJobsEnveloped(type, page, pageSize, this.Request));
-                return Json(await _repository.GetJobs(type, page, pageSize));
+                    return Json(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
+                return Json(await repository.GetJobs(type, page, pageSize));
             }
             catch (Exception ex)
             {
@@ -100,10 +103,10 @@
         /// <summary>
         /// Odata powered query to get jobs
         /// </summary>
-        /// <param name="query">
+        /// <remarks>
         /// It would basically be a collection where all the odata queries are done with standard TaskCat Paging
         /// Supported Odata query are $count, $filter, $orderBy, $skip, $top  
-        /// </param>
+        /// </remarks>
         /// <param name="pageSize">
         /// pageSize for a single page
         /// </param>
@@ -116,12 +119,13 @@
         /// <returns>
         /// A list of Jobs that complies with the query
         /// </returns>
+        /// 
 
+        [ResponseType(typeof(Job))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
-        public async Task<IHttpActionResult> ListOdata(ODataQueryOptions<Job> query, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        public async Task<IHttpActionResult> ListOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
             if (page < 0)
@@ -129,18 +133,25 @@
 
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
-            var settings = new ODataValidationSettings()
-            {
-                // Initialize settings as needed.
-                AllowedFunctions = AllowedFunctions.AllMathFunctions,
-                AllowedQueryOptions = AllowedQueryOptions.Count | AllowedQueryOptions.Filter | AllowedQueryOptions.OrderBy
-            };
+            var queryParams = this.Request.GetQueryNameValuePairs();
+            queryParams.VerifyQuery(new List<string>() {
+                    OdataOptionExceptions.InlineCount,
+                    OdataOptionExceptions.Skip,
+                    OdataOptionExceptions.Top
+                });
 
-            query.Validate(settings);
+            var odataQuery = queryParams.GetOdataQuery(new List<string>() {
+                    "pageSize",
+                    "page",
+                    "envelope"
+                });
+
+            var jobs = await repository.GetJobs();
+            var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Json(await _repository.GetJobsEnveloped(query, page, pageSize, this.Request));
-            return Json(await _repository.GetJobs(query, page, pageSize));
+                return Json(new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Json(queryResult);
         }
 
         /// <summary>
@@ -156,7 +167,7 @@
         [HttpGet]
         public async Task<IHttpActionResult> GenerateInvoiceForAJob(string jobhrid)
         {
-            var job = await _repository.GetJobByHrid(jobhrid);
+            var job = await repository.GetJobByHrid(jobhrid);
 
             string customerName;
             if (job.User.Type == Data.Model.Identity.IdentityTypes.USER)
@@ -220,7 +231,7 @@
         {
             try
             {
-                Job job = await _repository.PostJob(model);
+                Job job = await repository.PostJob(model);
                 return Json(job);
             }
             catch (Exception)
@@ -234,7 +245,7 @@
         [HttpPost]
         public async Task<IHttpActionResult> Claim(string jobId)
         {
-            ReplaceOneResult result = await _repository.Claim(jobId, this.User.Identity.GetUserId());
+            ReplaceOneResult result = await repository.Claim(jobId, this.User.Identity.GetUserId());
             return Json(result);
         }
 
@@ -245,7 +256,7 @@
         {
             try
             {
-                ReplaceOneResult result = await _repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
+                ReplaceOneResult result = await repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
                 return Json(result);
             }
             catch (InvalidOperationException ex)

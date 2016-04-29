@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat", "TaskCat\TaskCat.csproj", "{3239D40E-E8FF-462A-8E91-1203055C6E55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Data", "TaskCat.Data\TaskCat.Data.csproj", "{3CBADD98-C5B3-4475-B18E-F9AF0EFD4A2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Tests", "TaskCat.Tests\TaskCat.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marvin.JsonPatch", "..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj", "{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82226E0C-A7B3-4BB7-8DF5-7D53EC66B47A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

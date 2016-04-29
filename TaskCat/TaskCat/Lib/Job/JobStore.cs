@@ -72,6 +72,14 @@
             });
         }
 
+        internal async Task<IQueryable<Job>> FindAllAsIQueryable()
+        {
+            return await Task.Run(() =>
+            {
+                return _context.Jobs.Find(x => true).ToEnumerable().AsQueryable();
+            });
+        }
+
         internal async Task<long> CountJobs()
         {
             return await _context.Jobs.CountAsync(x => true);

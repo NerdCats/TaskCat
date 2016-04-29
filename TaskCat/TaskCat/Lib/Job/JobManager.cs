@@ -9,19 +9,25 @@
     using Data.Model.Query;
     using System;
     using Exceptions;
+    using System.Linq;
 
     public class JobManager
     {
-        private JobStore _store;
+        private JobStore store;
 
         public JobManager(JobStore store)
         {
-            _store = store;
+            this.store = store;
+        }
+
+        internal async Task<IQueryable<Job>> GetJobs()
+        {
+            return await store.FindAllAsIQueryable();
         }
 
         internal async Task<Job> GetJob(string id)
         {
-            var JobPayload = await _store.FindOne(id);
+            var JobPayload = await store.FindOne(id);
             if (JobPayload == null)
                 throw new EntityNotFoundException("Job", id);
             return ArrangeJobHooks(JobPayload);
@@ -29,7 +35,7 @@
 
         internal async Task<Job> GetJobByHRID(string hrid)
         {
-            var JobPayload = await _store.FindOneByHRID(hrid);
+            var JobPayload = await store.FindOneByHRID(hrid);
             if (JobPayload == null)
                 throw new EntityNotFoundException("Job", hrid);
             return ArrangeJobHooks(JobPayload);
@@ -59,18 +65,18 @@
 
         internal async Task<long> GetTotalJobCount()
         {
-            return await _store.CountJobs();
+            return await store.CountJobs();
         }
 
         internal async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
-            var jobsResult = await _store.FindJobs(query, start, limit);
+            var jobsResult = await store.FindJobs(query, start, limit);
             return jobsResult;
         }
 
         internal async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
-            var jobs = await _store.FindJobs(type, start, limit);
+            var jobs = await store.FindJobs(type, start, limit);
             return jobs;
         }
 
@@ -79,29 +85,29 @@
             if (fromDateTime == null)
                 fromDateTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(5));
 
-            var jobs = await _store.FindJobs(userId, start, limit, fromDateTime, jobStateToFetchUpTo, sortByCreateTimeDirection);
+            var jobs = await store.FindJobs(userId, start, limit, fromDateTime, jobStateToFetchUpTo, sortByCreateTimeDirection);
             return jobs;
         }
 
         internal async Task<Job> RegisterJob(Job createdJob)
         {
-            var job = await _store.CreateOne(createdJob);
+            var job = await store.CreateOne(createdJob);
             return job;
         }
 
         internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
-            return await _store.UpdateJobTask(jobId, taskIndex, task);
+            return await store.UpdateJobTask(jobId, taskIndex, task);
         }
 
         internal async Task<UpdateResult> UpdateJobTask(string _id, List<JobTask> tasks)
         {
-            return await _store.UpdateJobTasks(_id, tasks);
+            return await store.UpdateJobTasks(_id, tasks);
         }
 
         internal async Task<ReplaceOneResult> UpdateJob(Job job)
         {
-            return await _store.ReplaceOne(job);
+            return await store.ReplaceOne(job);
         }
     }
 }

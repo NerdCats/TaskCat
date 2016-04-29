@@ -12,6 +12,7 @@
     using Marvin.JsonPatch;
     using System.Web.OData.Query;
     using Data.Model.Query;
+    using System.Linq;
 
     public class FakeJobRepository : IJobRepository
     {
@@ -24,16 +25,6 @@
                 };
             });
             return await task;
-        }
-
-        public Task<PageEnvelope<Job>> GetJobsEnveloped(ODataQueryOptions<Job> query, int page, int pageSize, HttpRequestMessage request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int page, int pageSize)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
@@ -85,6 +76,11 @@
         }
 
         public Task<Job> GetJobByHridOrJobId(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IQueryable<Job>> GetJobs()
         {
             throw new NotImplementedException();
         }

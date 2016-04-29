@@ -30,10 +30,12 @@
                     httpStatusCode = HttpStatusCode.Forbidden;
                 else if (actionExecutedContext.Exception is ArgumentException)
                     httpStatusCode = HttpStatusCode.BadRequest;
-                else if(actionExecutedContext.Exception is FormatException)
+                else if (actionExecutedContext.Exception is FormatException)
                     httpStatusCode = HttpStatusCode.BadRequest;
                 else if (actionExecutedContext.Exception is ValidationException)
                     httpStatusCode = HttpStatusCode.BadRequest;
+                else if (actionExecutedContext.Exception is NotSupportedException)
+                    httpStatusCode = HttpStatusCode.Forbidden;
 
                 error = actionExecutedContext.Exception;
                 response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);

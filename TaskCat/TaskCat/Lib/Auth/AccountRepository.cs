@@ -115,26 +115,11 @@
             return await accountManager.FindAllAsModel();
         }
 
-        internal async Task<IQueryable<UserModel>> FindAllAsModelAsQueryable(int page, int pageSize)
-        {
-            if (page < 0)
-                throw new ArgumentException("Invalid page index provided");
-            return await accountManager.FindAllAsModelAsQueryable(page * pageSize, pageSize);
-        }
-
         internal async Task<List<UserModel>> FindAllAsModel(int page, int pageSize)
         {
             if (page < 0)
                 throw new ArgumentException("Invalid page index provided");
             return await accountManager.FindAllAsModel(page * pageSize, pageSize);
-        }
-
-        internal async Task<PageEnvelope<User>> FindAllEnveloped(int page, int pageSize, HttpRequestMessage request)
-        {
-            var data = await FindAll(page, pageSize);
-            var total = await accountManager.GetTotalUserCount();
-
-            return new PageEnvelope<User>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
         }
 
         internal async Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request)
@@ -242,10 +227,6 @@
             }
         }
 
-
-
-
-
         // FIXME: I can fix this I think, the route to userName search wont be necessary if I can
         // provide user id right away from authcontext;
         internal async Task<IdentityResult> UpdatePassword(PasswordUpdateModel model, string userName)
@@ -309,8 +290,6 @@
             var refreshToken = await dbContext.RefreshTokens.Find(x => x.Id == refreshTokenId).FirstOrDefaultAsync();
             return refreshToken;
         }
-
-
 
         // FIXME: This is literally a crime, like literally, no freaking paging or anything
         // But Im too tired to do this, Why the hell I ever saw OData

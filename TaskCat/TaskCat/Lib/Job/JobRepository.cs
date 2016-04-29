@@ -16,53 +16,46 @@
     using Marvin.JsonPatch;
     using System.Web.OData.Query;
     using Data.Model.Query;
+
     public class JobRepository : IJobRepository
     {
-        private JobManager _manager;
-        private AccountManager _accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
+        private JobManager manager;
+        private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
 
         public JobRepository(JobManager manager, AccountManager accountManager)
         {
-            _manager = manager;
-            _accountManager = accountManager;
+            this.manager = manager;
+            this.accountManager = accountManager;
         }
 
         public async Task<Job> GetJob(string id)
         {
-            return await _manager.GetJob(id);
+            return await manager.GetJob(id);
+        }
+
+        public async Task<IQueryable<Job>> GetJobs()
+        {
+            return await manager.GetJobs();
         }
 
         public async Task<Job> GetJobByHrid(string hrid)
         {
-            return await _manager.GetJobByHRID(hrid);
+            return await manager.GetJobByHRID(hrid);
         }
 
         public async Task<IEnumerable<Job>> GetJobs(string type, int page, int pageSize)
         {
             if (page < 0)
                 throw new ArgumentException("Invalid page index provided");
-            return await _manager.GetJobs(type, page * pageSize, pageSize);
-        }
-
-        public async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int page, int pageSize)
-        {
-            if (page < 0)
-                throw new ArgumentException("Invalid page index provided");
-            return await _manager.GetJobs(query, page * pageSize, pageSize);
+            return await manager.GetJobs(type, page * pageSize, pageSize);
         }
 
         public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int page, int pageSize, HttpRequestMessage request)
         {
             var data = await GetJobs(type, page, pageSize);
-            var total = await _manager.GetTotalJobCount();
+            var total = await manager.GetTotalJobCount();
 
             return new PageEnvelope<Job>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request, new Dictionary<string, string>() { ["type"] = type });
-        }
-
-        public async Task<PageEnvelope<Job>> GetJobsEnveloped(ODataQueryOptions<Job> query, int page, int pageSize, HttpRequestMessage request)
-        {
-            var result = await GetJobs(query, page, pageSize);
-            return new PageEnvelope<Job>(result.Total, page, pageSize, AppConstants.DefaultOdataRoute, result.Result, request, request.GetQueryNameValuePairs().ToDictionary(x => x.Key, y => y.Value));
         }
 
         public Task<Job> PostJob(JobModel model)
@@ -72,7 +65,7 @@
 
         public async Task<ReplaceOneResult> UpdateJob(Job job)
         {
-            return await _manager.UpdateJob(job);
+            return await manager.UpdateJob(job);
         }
 
         public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
@@ -100,7 +93,7 @@
             if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType()== typeof(string))
             {                
                 // INFO: Now we need to actually fetch the asset and get shit done
-                var asset = await _accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(AssetRefReplaceOp.value.ToString());
+                var asset = await accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(AssetRefReplaceOp.value.ToString());
                 if (asset == null) return false;
                 var assetModel = new AssetModel(asset);
                 AssetRefReplaceOp.path = "/Asset";
@@ -117,7 +110,7 @@
         public async Task<ReplaceOneResult> Claim(string jobId, string userId)
         {
             var job = await GetJob(jobId);
-            var adminUser = await _accountManager.FindByIdAsync(userId);
+            var adminUser = await accountManager.FindByIdAsync(userId);
             var userModel = new UserModel(adminUser);
             job.JobServedBy = userModel;
 
