@@ -1,6 +1,3 @@
-[submodule "JsonPatch"]
-	path = JsonPatch
-	url = https://github.com/NerdCats/JsonPatch.git
 [submodule "PussyCat"]
 	path = PussyCat
 	url = https://github.com/NerdCats/PussyCat
