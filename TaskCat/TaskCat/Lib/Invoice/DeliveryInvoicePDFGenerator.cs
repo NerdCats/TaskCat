@@ -7,17 +7,36 @@
     using System.Collections.Generic;
     using System.IO;
     using System;
+    using Its.Configuration;
+    using App.Settings;
+    using System.Globalization;
+    using System.ComponentModel.DataAnnotations;
 
     public class DeliveryInvoicePDFGenerator : IPDFService<DeliveryInvoice>
     {
+        public DeliveryInvoicePDFGenerator()
+        {
+        }
+
         public MemoryStream GeneratePDF(DeliveryInvoice invoice)
         {
             if (string.IsNullOrWhiteSpace(invoice.InvoiceId)) throw new ArgumentNullException("invoice with null/empty HRID provided to generate PDF");
 
-            PdfPTable itemsTable = GenerateItemsTable(invoice);
+            ProprietorSettings propSettings;
+            try
+            {
+                propSettings = Settings.Get<ProprietorSettings>();
+                Validator.ValidateObject(propSettings, new ValidationContext(propSettings), true);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to read ProprietorSettings, Invalid/Missing Settings/Settings Property", ex);
+            }
+
+            PdfPTable itemsTable = GenerateItemsTable(invoice, new CultureInfo(propSettings.CultureCode));
 
             MemoryStream stream = new MemoryStream();
-            
+
             // Generating a PDF document
             using (Document doc = new Document(PageSize.A4))
             {
@@ -36,13 +55,13 @@
 
                 //Company Address
                 // TODO: Need to fix this, Issue #27
-                Paragraph companyName = new Paragraph("GO! Fetch");
+                Paragraph companyName = new Paragraph(propSettings.Name);
                 doc.Add(companyName);
 
-                doc.Add(new Paragraph("House-28, Road-20"));
-                doc.Add(new Paragraph("Block-K, Banani"));
-                doc.Add(new Paragraph("Dhaka-1200"));
-                doc.Add(new Paragraph("Phone: +88 - 01735829687"));
+                doc.Add(new Paragraph(propSettings.Address.AddressLine1));
+                doc.Add(new Paragraph(propSettings.Address.AddressLine2));
+                doc.Add(new Paragraph(string.Concat(propSettings.Address.City, "-", propSettings.Address.PostalCode)));
+                doc.Add(new Paragraph(string.Concat("Phone Number: ", propSettings.PhoneNumber)));
                 doc.Add(new Paragraph("__________________________"));
 
                 if (invoice.BillingAddress == invoice.ShippingAddress)
@@ -76,7 +95,7 @@
             return stream;
         }
 
-        private PdfPTable GenerateItemsTable(DeliveryInvoice invoice)
+        private PdfPTable GenerateItemsTable(DeliveryInvoice invoice, CultureInfo culture)
         {
             List<ItemDetails> itemList = new List<ItemDetails>(invoice.InvoiceDetails);
             PdfPTable table = new PdfPTable(7);
@@ -97,16 +116,16 @@
             foreach (var item in itemList)
             {
                 table.AddCell(QuantityCell((itemList.IndexOf(item) + 1).ToString() + "."));
-                table.AddCell(item.Item);
-                table.AddCell(PriceCell(item.Total.ToString("C")));
-                table.AddCell(PriceCell(item.VATAmount.ToString("C")));
+                table.AddCell(item.Item);             
+                table.AddCell(PriceCell(item.Total.ToString("C", culture)));
+                table.AddCell(PriceCell(item.VATAmount.ToString("C", culture)));
                 table.AddCell(QuantityCell(item.Quantity.ToString()));
                 table.AddCell(QuantityCell(item.Weight.ToString()));
-                table.AddCell(PriceCell(item.TotalPlusVAT.ToString("C")));
+                table.AddCell(PriceCell(item.TotalPlusVAT.ToString("C", culture)));
             }
 
             // Net Total Cell
-            PdfPCell netTotal = new PdfPCell(new Phrase(invoice.NetTotal.ToString("C")));
+            PdfPCell netTotal = new PdfPCell(new Phrase(invoice.NetTotal.ToString("C", culture)));
             netTotal.Border = Rectangle.TOP_BORDER;
             netTotal.HorizontalAlignment = 2;
 
@@ -120,7 +139,7 @@
             table.AddCell(netTotal);
 
             //Total Vat Cell
-            PdfPCell vatCell = new PdfPCell(new Phrase(invoice.TotalVATAmount.ToString("C")));
+            PdfPCell vatCell = new PdfPCell(new Phrase(invoice.TotalVATAmount.ToString("C", culture)));
             vatCell.Border = Rectangle.TOP_BORDER;
             vatCell.HorizontalAlignment = 2;
 
@@ -135,7 +154,7 @@
             table.AddCell(vatCell);
 
             // Sub Total Cell
-            PdfPCell subtotal = new PdfPCell(new Phrase(invoice.SubTotal.ToString("C")));
+            PdfPCell subtotal = new PdfPCell(new Phrase(invoice.SubTotal.ToString("C", culture)));
             subtotal.Border = Rectangle.TOP_BORDER;
             subtotal.HorizontalAlignment = 2;
 
@@ -149,7 +168,7 @@
             table.AddCell(subtotal);
 
             // Service Charge Cell
-            PdfPCell serviceCharge = new PdfPCell(new Phrase(invoice.ServiceCharge.ToString("C")));
+            PdfPCell serviceCharge = new PdfPCell(new Phrase(invoice.ServiceCharge.ToString("C", culture)));
             serviceCharge.Border = Rectangle.TOP_BORDER;
             serviceCharge.HorizontalAlignment = 2;
 
@@ -163,7 +182,7 @@
             table.AddCell(serviceCharge);
 
             // Grand Total Cell
-            PdfPCell grandTotal = new PdfPCell(new Phrase(invoice.TotalToPay.ToString("C")));
+            PdfPCell grandTotal = new PdfPCell(new Phrase(invoice.TotalToPay.ToString("C", culture)));
             grandTotal.Border = Rectangle.TOP_BORDER;
             grandTotal.HorizontalAlignment = 2;
 
@@ -212,7 +231,5 @@
             cell.Phrase = new Phrase(CellContent);
             return cell;
         }
-
-        
     }
 }

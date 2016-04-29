@@ -1,0 +1,12 @@
+﻿{
+  "Address": {
+    "AddressLine1": "House-28, Road-20",
+    "AddressLine2": "Block-K, Banani",
+    "Country": "Bangladesh",
+    "City": "Dhaka",
+    "PostalCode": "1200"
+  },
+  "Name": "Go! Fetch",
+  "PhoneNumber": "+88-01735829687",
+  "CultureCode": "bn-BD"
+}

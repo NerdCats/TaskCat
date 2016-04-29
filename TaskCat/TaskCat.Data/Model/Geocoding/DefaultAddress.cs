@@ -5,7 +5,6 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
-    using Utility.Attributes;
 
     public class DefaultAddress : AddressBase
     {
