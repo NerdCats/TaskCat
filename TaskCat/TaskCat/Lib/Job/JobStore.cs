@@ -27,7 +27,7 @@
 
         internal async Task<Job> FindOne(string id)
         {
-            var job = await _context.Jobs.Find(x => x._id == id).FirstOrDefaultAsync();
+            var job = await _context.Jobs.Find(x => x.Id == id).FirstOrDefaultAsync();
             return job;
         }
 
@@ -88,7 +88,7 @@
         internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
             task.ModifiedTime = DateTime.Now;
-            var Filter = Builders<Job>.Filter.Where(x => x._id == jobId);
+            var Filter = Builders<Job>.Filter.Where(x => x.Id == jobId);
             var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks[taskIndex], task);
 
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
@@ -97,7 +97,7 @@
 
         internal async Task<UpdateResult> UpdateJobTasks(string jobId, List<JobTask> tasks)
         {
-            var Filter = Builders<Job>.Filter.Where(x => x._id == jobId);
+            var Filter = Builders<Job>.Filter.Where(x => x.Id == jobId);
             var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks, tasks);
 
             var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
@@ -106,7 +106,7 @@
 
         internal async Task<ReplaceOneResult> ReplaceOne(Job job)
         {
-            var Filter = Builders<Job>.Filter.Where(x => x._id == job._id);
+            var Filter = Builders<Job>.Filter.Where(x => x.Id == job.Id);
             var result = await _context.Jobs.ReplaceOneAsync(Filter, job);
             return result;
         }

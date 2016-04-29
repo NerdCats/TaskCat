@@ -75,6 +75,10 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LinqToQuerystring, Version=0.6.5.28612, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToQueryStringNuget.1.0.0\lib\net35\LinqToQuerystring.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Marvin.JsonPatch, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JsonPatch.NerdCats.Nuget.1.0.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
