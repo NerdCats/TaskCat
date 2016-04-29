@@ -75,14 +75,6 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LinqToQuerystring, Version=0.7.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToQuerystring.0.7.0.8\lib\net35\LinqToQuerystring.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="LinqToQuerystring.WebApi2, Version=1.3.1.28352, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToQuerystring.WebApi2.1.4.1.14\lib\net45\LinqToQuerystring.WebApi2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -354,6 +346,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\LinqToQuerystring\LinqToQuerystring\LinqToQuerystring.csproj">
+      <Project>{7859c906-95d8-4322-aa44-bc854b065aee}</Project>
+      <Name>LinqToQuerystring</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\JsonPatch\src\Marvin.JsonPatch\Marvin.JsonPatch.csproj">
       <Project>{82226e0c-a7b3-4bb7-8df5-7d53ec66b47a}</Project>
       <Name>Marvin.JsonPatch</Name>

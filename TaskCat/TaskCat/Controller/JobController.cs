@@ -146,15 +146,6 @@
                     "envelope"
                 });
 
-            LinqToQuerystring.Configuration.TypeConversionMap = (from, to) =>
-            {
-                if (from == typeof(string) && to == typeof(JobState))
-                {
-                    return typeof(string);
-                }
-                return to;
-            };
-
             var jobs = await repository.GetJobs();
             var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
 
