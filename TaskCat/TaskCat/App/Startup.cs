@@ -79,7 +79,7 @@ namespace TaskCat.App
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             };

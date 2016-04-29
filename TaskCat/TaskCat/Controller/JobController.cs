@@ -25,6 +25,7 @@
     using LinqToQuerystring;
     using Model.Pagination;
     using System.Web.Http.Description;
+
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -119,8 +120,8 @@
         /// <returns>
         /// A list of Jobs that complies with the query
         /// </returns>
-        /// 
-
+        ///
+        [Authorize(Roles = "Asset, Administrator, BackOfficeAdmin")]
         [ResponseType(typeof(Job))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]

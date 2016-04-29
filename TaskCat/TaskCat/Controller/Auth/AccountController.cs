@@ -48,6 +48,8 @@
         /// UserModel or AssetModel to register into system
         /// </param>
         /// <returns></returns>
+        /// 
+        [ResponseType(typeof(IdentityResult))]
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegistrationModelBase userModel)
@@ -113,6 +115,7 @@
         /// <returns>
         /// Public profile for given user id, some properties are masked if you log in as anonymous as User or Asset
         /// </returns>
+        /// 
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
         [Route("Profile/{userId?}")]
@@ -227,6 +230,8 @@
         /// enveope in paged result, default is false, when enveloped, usually provide page number ,total and next and previous page links
         /// </param>
         /// <returns></returns>
+        /// 
+
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("")]
@@ -275,7 +280,7 @@
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata")]
-        public async Task<IHttpActionResult> GetAll(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        public async Task<IHttpActionResult> GetAllOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
@@ -309,7 +314,7 @@
         /// profile
         /// </summary>
         /// <param name="model">
-        /// 
+        /// Model 
         /// </param>
         /// <returns></returns>
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]

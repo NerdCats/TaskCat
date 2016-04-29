@@ -6,6 +6,7 @@
     using Auth;
     using Data.Entity.Identity;
     using Utility;
+
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
         private readonly AccountRepository authRepository;
