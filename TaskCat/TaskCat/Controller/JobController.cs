@@ -111,16 +111,9 @@
 
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
-            try
-            {
-                if (envelope)
-                    return Json(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
-                return Json(await repository.GetJobs(type, page, pageSize));
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            if (envelope)
+                return Json(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
+            return Json(await repository.GetJobs(type, page, pageSize));
         }
 
         /// <summary>
@@ -231,7 +224,7 @@
                 {
                     Content = new ByteArrayContent(invoiceStream.GetBuffer())
                 };
-                reponseMessage.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                reponseMessage.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
                     FileName = string.Concat(invoice.InvoiceId, ".pdf")
                 };
@@ -253,15 +246,8 @@
         [HttpPost]
         public async Task<IHttpActionResult> Post(JobModel model)
         {
-            try
-            {
-                Job job = await repository.PostJob(model);
-                return Json(job);
-            }
-            catch (Exception)
-            {
-                return InternalServerError();
-            }
+            Job job = await repository.PostJob(model);
+            return Json(job);
         }
 
         /// <summary>
@@ -277,6 +263,7 @@
         /// Returns a replace result that replaces the JobServedBy field
         /// </returns>
         /// 
+        [ResponseType(typeof(ReplaceOneResult))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/claim/{jobId}")]
         [HttpPost]
@@ -298,25 +285,18 @@
         /// </param>
         /// <param name="taskId"></param>
         /// <param name="taskPatch"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a ReplaceOneResult based on the update
+        /// </returns>
+        /// 
+        [ResponseType(typeof(ReplaceOneResult))]
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
-            try
-            {
-                ReplaceOneResult result = await repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
-                return Json(result);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Content(System.Net.HttpStatusCode.Forbidden, ex);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            ReplaceOneResult result = await repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
+            return Json(result);
         }
 
     }
