@@ -47,10 +47,12 @@
         /// If you're accessing the non-authorized endpoint, you can only search 
         /// by hrid 
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">
+        /// job id to get
+        /// </param>
+        /// <returns>Job </returns>
         /// 
-        [AllowAnonymous]
+        [ResponseType(typeof(Job))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
@@ -78,7 +80,27 @@
             }
         }
 
-
+        /// <summary>
+        /// List Jobs mostly with just type filter
+        /// </summary>
+        /// <param name="type">
+        /// Job type to be filtered by
+        /// </param>
+        /// <param name="pageSize">
+        /// Page Size to return results
+        /// </param>
+        /// <param name="page">
+        /// page number to return results
+        /// </param>
+        /// <param name="envelope">
+        /// envelope the job results in pagination header
+        /// </param>
+        /// <returns>
+        /// Return Jobs matching type filter
+        /// </returns>
+        /// 
+        [ResponseType(typeof(Job))]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         public async Task<IHttpActionResult> List(string type = "", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
@@ -226,7 +248,8 @@
         /// <summary>
         /// Post a generic job payload
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         [HttpPost]
         public async Task<IHttpActionResult> Post(JobModel model)
         {
@@ -241,6 +264,19 @@
             }
         }
 
+        /// <summary>
+        /// Claim a job as a server 
+        /// </summary>
+        /// <remarks>
+        /// This is used to claim a job 
+        /// </remarks>
+        /// <param name="jobId">
+        /// Id for a job
+        /// </param>
+        /// <returns>
+        /// Returns a replace result that replaces the JobServedBy field
+        /// </returns>
+        /// 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/claim/{jobId}")]
         [HttpPost]
@@ -250,6 +286,19 @@
             return Json(result);
         }
 
+        /// <summary>
+        /// Partial update to a specific task under a job
+        /// </summary>
+        /// <remarks>
+        /// Patch update to a specific task to set a partial update 
+        /// like changing assetRef or task state
+        /// </remarks>
+        /// <param name="jobId">
+        /// Job Id the task is associated with
+        /// </param>
+        /// <param name="taskId"></param>
+        /// <param name="taskPatch"></param>
+        /// <returns></returns>
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
