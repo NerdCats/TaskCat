@@ -2,7 +2,10 @@ language: csharp
 solution: TaskCat/TaskCat.sln
 before_install:
   - sudo apt-get install nunit-console
-before_script:
-  - nuget restore TaskCat/TaskCat.sln
+  - mkdir -p .nuget
+  - wget -O .nuget/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  - mono .nuget/nuget.exe # Output NuGet's version number
+install:
+  - mono .nuget/nuget.exe restore TaskCat/TaskCat.sln -Verbosity detailed   
 after_script:
   - nunit-console TaskCat/TaskCat.Tests/bin/Release/TaskCat.Tests.dll
