@@ -5,12 +5,12 @@
     using Identity.Response;
     using Geocoding;
 
-    public abstract class PickupTask : JobTask
+    public abstract class PickUpTask : JobTask
     {
         public DefaultAddress AssetLocation { get; set; }
         public DefaultAddress PickupLocation { get; set; }
 
-        public PickupTask(string type, string name, DefaultAddress pickupLocation) : base(type, name)
+        public PickUpTask(string type, string name, DefaultAddress pickupLocation) : base(type, name)
         {
             this.PickupLocation = pickupLocation;
         }

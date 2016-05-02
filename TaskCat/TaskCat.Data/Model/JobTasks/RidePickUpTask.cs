@@ -3,7 +3,7 @@
     using Lib.Constants;
     using Geocoding;
 
-    public class RidePickUpTask : PickupTask
+    public class RidePickUpTask : PickUpTask
     {
         //FIXME: Im really not sure what Im doing here, this doesnt look right
         private bool _ridePickedUp;

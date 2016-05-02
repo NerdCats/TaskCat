@@ -6,7 +6,7 @@
     using Data.Lib.Constants;
     using Geocoding;
 
-    public class PackagePickUpTask : PickupTask
+    public class PackagePickUpTask : PickUpTask
     {
         public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package", pickupLocation)
         {

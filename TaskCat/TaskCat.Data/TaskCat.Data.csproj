@@ -132,7 +132,7 @@
     <Compile Include="Model\JobTasks\FetchDeliveryManTask.cs" />
     <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\PackagePickUpTask.cs" />
-    <Compile Include="Model\JobTasks\PickupTask.cs" />
+    <Compile Include="Model\JobTasks\PickUpTask.cs" />
     <Compile Include="Model\JobTasks\Result\DefaultAssignAssetTaskResult.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
