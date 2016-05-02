@@ -365,6 +365,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include=".config\local\" />
     <Folder Include=".config\production\" />
     <Folder Include="App_Data\" />
   </ItemGroup>

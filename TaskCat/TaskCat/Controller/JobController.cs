@@ -52,6 +52,7 @@
         /// </param>
         /// <returns>Job </returns>
         /// 
+        [AllowAnonymous]
         [ResponseType(typeof(Job))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
@@ -179,6 +180,8 @@
         /// <returns>
         /// A invoice for a job 
         /// </returns>
+        /// 
+
         [Route("api/job/{jobhrid}/invoice")]
         [HttpGet]
         public async Task<IHttpActionResult> GenerateInvoiceForAJob(string jobhrid)
@@ -187,12 +190,12 @@
 
             string customerName;
             if (job.User.Type == Data.Model.Identity.IdentityTypes.USER)
-                customerName = (job.User.Profile as UserProfile).FullName;
+                customerName = (job.User.Profile as UserProfile)?.FullName;
             else if (job.User.Type == Data.Model.Identity.IdentityTypes.ENTERPRISE)
-                customerName = (job.User.Profile as EnterpriseUserProfile).CompanyName;
+                customerName = (job.User.Profile as EnterpriseUserProfile)?.CompanyName;
             else
             {
-                customerName = (job.User.Profile as AssetProfile).FullName;
+                customerName = (job.User.Profile as AssetProfile)?.FullName;
             }
 
             if (job.Order.Type == OrderTypes.Delivery)
