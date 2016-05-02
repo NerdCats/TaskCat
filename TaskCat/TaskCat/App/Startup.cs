@@ -68,7 +68,7 @@ namespace TaskCat.App
             app.Run(context =>
             {
                 context.Response.ContentType = "text/plain";
-                return context.Response.WriteAsync("Welcome to TaskCat, proudly baked by NerdCats");
+                return context.Response.WriteAsync("Welcome to TaskCat v0.1.0, proudly baked by NerdCats");
             });
 
         }
