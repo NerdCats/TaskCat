@@ -1,0 +1,40 @@
+version: 0.1.{build}-{branch}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+configuration: Release
+clone_depth: 10
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- cmd: nuget restore TaskCat\TaskCat.sln
+build:
+  publish_wap: true
+  verbosity: minimal
+test_script:
+- cmd: nunit3-console TaskCat\TaskCat.Tests\bin\Release\TaskCat.Tests.dll --result=TaskCatTestResults.xml;format=AppVeyor
+deploy:
+- provider: WebDeploy
+  server: https://taskcatdev.scm.azurewebsites.net:443/msdeploy.axd?site=TaskCatDev
+  website: TaskCatDev
+  username: $TaskCatDev
+  password:
+    secure: tL3rJEqF62V6urwtlIu9mWMpWdjHzBcruc2/duachZ1GRkO436Yw+6lCDtJawOFT6oivATC5400L8bqJFTgIOg==
+  remove_files: true
+  sync_retry_attempts: 2
+  on:
+    branch: master
+notifications:
+- provider: HipChat
+  room: GObd R&D
+  auth_token:
+    secure: YAeh5UgQevb3J3O+9q5yMsXJSgNm61XEcz5aMAcTsfs=
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true

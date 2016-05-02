@@ -18,11 +18,13 @@ namespace TaskCat.App
     using Data.Entity.Identity;
     using Data.Model.Identity;
     using Lib.Utility.ActionFilter;
+    using System.Reflection;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
             app.Properties["host.AppMode"] = ConfigurationManager.AppSettings["ENV"];
 
@@ -68,7 +70,8 @@ namespace TaskCat.App
             app.Run(context =>
             {
                 context.Response.ContentType = "text/plain";
-                return context.Response.WriteAsync("Welcome to TaskCat v0.1.0, proudly baked by NerdCats");
+
+                return context.Response.WriteAsync(string.Format($"Welcome to TaskCat '{version}', proudly baked by NerdCats"));
             });
 
         }
