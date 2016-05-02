@@ -1,5 +1,6 @@
 language: csharp
 before_install:
+  - sudo apt-get install mono-complete
   - sudo apt-get install nunit-console
   - mkdir -p .nuget
   - wget -O .nuget/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
