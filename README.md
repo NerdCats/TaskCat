@@ -1,5 +1,7 @@
 # TaskCat  
-[![Build status](https://ci.appveyor.com/api/projects/status/xm2s26l2hj00gddc/branch/master?svg=true)](https://ci.appveyor.com/project/thehoneymad/taskcat/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/wljujh5v58rso6wt/branch/master?svg=true)](https://ci.appveyor.com/project/thehoneymad/taskcat/branch/master)
+
+
 
   
 
