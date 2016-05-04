@@ -17,6 +17,7 @@
     {
         private IJobRepository jobRepository;
         private IPaymentManager manager;
+        private IPaymentService service;
 
         /// <summary>
         /// <c>PaymentController</c> constructor
@@ -24,8 +25,9 @@
         /// <param name="manager">
         /// <c>IPaymentManager instance to be injected in the controller</c>
         /// </param>
-        public PaymentController(IPaymentManager manager, IJobRepository jobRepository)
+        public PaymentController(IPaymentManager manager, IPaymentService service, IJobRepository jobRepository)
         {
+            this.service = service;
             this.manager = manager;
             this.jobRepository = jobRepository;
         }
@@ -63,7 +65,8 @@
         public async Task<IHttpActionResult> Process(string jobid)
         {
             var job = await jobRepository.GetJob(jobid);
-            var result = job.PaymentMethod.ProcessPayment(new ProcessPaymentRequest() {
+            var paymentMethod = service.GetPaymentMethodByKey(job.PaymentMethod);
+            var result = paymentMethod.ProcessPayment(new ProcessPaymentRequest() {
                 JobId = jobid
             });
 

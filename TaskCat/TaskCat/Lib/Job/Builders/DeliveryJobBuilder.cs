@@ -47,7 +47,7 @@
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
-            job.PaymentMethod = this.paymentMethod;
+            job.PaymentMethod = this.paymentMethod.Key;
             job.PaymentStatus = PaymentStatus.Pending;
 
             job.TerminalTask = deliveryTask;

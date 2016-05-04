@@ -77,7 +77,7 @@
             }
         }
 
-        public IPaymentMethod PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; }
         public bool Deleted { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentStatus PaymentStatus { get; set; }

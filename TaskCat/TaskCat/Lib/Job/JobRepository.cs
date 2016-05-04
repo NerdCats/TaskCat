@@ -77,7 +77,7 @@
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");
             }
 
-            if (job.PaymentMethod.Key != orderModel.PaymentMethod)
+            if (job.PaymentMethod != orderModel.PaymentMethod)
             {
                 throw new InvalidOperationException("Updating payment method of an exisiting order is not supported");
             }
