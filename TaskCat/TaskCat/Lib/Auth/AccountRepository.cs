@@ -22,6 +22,7 @@
     using Job;
     using Data.Model.Query;
     using Data.Model;
+    using Utility;
 
     public class AccountRepository
     {
@@ -256,10 +257,8 @@
         {
             var user = await FindUser(userId);
 
-            //FIXME: Someday I can use a factory here
-            if (user.Type == IdentityTypes.USER)
-                return new UserModel(user);
-            else return new AssetModel(user as Asset);
+            // FIXME: Need to take care of this isAuthenticated Shit
+            return user.ToModel(true);
         }
 
         internal async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)

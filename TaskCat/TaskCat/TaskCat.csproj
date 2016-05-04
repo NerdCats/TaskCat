@@ -347,7 +347,6 @@
     <Compile Include="Lib\Utility\IPagingHelper.cs" />
     <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
     <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
-    <Compile Include="Lib\Utility\OrderModelExtensions.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
@@ -365,7 +364,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include=".config\local\" />
     <Folder Include=".config\production\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
