@@ -38,7 +38,7 @@
 
             var cart = orderModel.OrderCart;
 
-            if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)
+            if (cart.ServiceCharge == null)
             {
                 cart.ServiceCharge = serviceChargeCalculationService.
                     CalculateServiceCharge(cart.PackageList);
@@ -47,7 +47,7 @@
             if (cart.SubTotal == null || cart.SubTotal.Value == 0)
             {
                 cart.SubTotal = calculationService.CalculateSubtotal(cart.PackageList);
-            }
+            } 
             else
             {
                 cart.SubTotal = calculationService.
