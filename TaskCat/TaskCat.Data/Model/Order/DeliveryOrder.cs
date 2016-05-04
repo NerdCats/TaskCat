@@ -23,7 +23,6 @@
         /// </summary>
         public string PackageDescription { get; set; }
         
-        [Required]
         public OrderDetails OrderCart { get; set; }
 
         /// <summary>

@@ -27,6 +27,11 @@
                 }
 
             }
+            else
+            {
+                return 150;
+            }
+
             return ServiceCharge;
         }
     }

@@ -201,6 +201,10 @@
             if (job.Order.Type == OrderTypes.Delivery)
             {
                 DeliveryOrder order = job.Order as DeliveryOrder;
+
+                if (order.OrderCart == null)
+                    throw new InvalidOperationException("Generating invoice with blank order cart is not supported");
+
                 IInvoiceService invoiceService = new InvoiceService();
                 DeliveryInvoice invoice = invoiceService.GenerateInvoice<ItemDetailsInvoiceRequest, DeliveryInvoice>(new ItemDetailsInvoiceRequest()
                 {

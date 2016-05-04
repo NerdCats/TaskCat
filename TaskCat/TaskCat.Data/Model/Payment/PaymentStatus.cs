@@ -8,26 +8,26 @@
         /// <summary>
         /// Pending
         /// </summary>
-        Pending = 10,
+        Pending,
         /// <summary>
         /// Authorized
         /// </summary>
-        Authorized = 20,
+        Authorized,
         /// <summary>
         /// Paid
         /// </summary>
-        Paid = 30,
+        Paid,
         /// <summary>
         /// Partially Refunded
         /// </summary>
-        PartiallyRefunded = 35,
+        PartiallyRefunded,
         /// <summary>
         /// Refunded
         /// </summary>
-        Refunded = 40,
+        Refunded,
         /// <summary>
         /// Voided
         /// </summary>
-        Voided = 50,
+        Voided,
     }
 }

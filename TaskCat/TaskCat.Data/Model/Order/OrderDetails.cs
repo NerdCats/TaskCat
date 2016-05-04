@@ -15,7 +15,7 @@
         /// Price field would be ignored if the order is from a regular User and 
         /// would only be considered if the request is from an Enterprise User
         /// </remarks>
-        [Required]
+        /// 
         public List<ItemDetails> PackageList { get; set; }
 
         /// <summary>

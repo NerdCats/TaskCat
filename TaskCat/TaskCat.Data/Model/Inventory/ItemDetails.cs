@@ -12,7 +12,7 @@
         [Range(1, 100000, ErrorMessage = "Quantity must be between 1 and 100000")]
         public int Quantity { get; set; }
 
-        [Range(0.1, 999999999, ErrorMessage = "Price must be between 0.01 and 999999999")]
+        [Range(0, 999999999, ErrorMessage = "Price must be between 0.0 and 999999999")]
         public decimal Price
         {
             get;

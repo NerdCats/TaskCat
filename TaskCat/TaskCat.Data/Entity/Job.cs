@@ -79,6 +79,7 @@
 
         public IPaymentMethod PaymentMethod { get; set; }
         public bool Deleted { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public PaymentStatus PaymentStatus { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)

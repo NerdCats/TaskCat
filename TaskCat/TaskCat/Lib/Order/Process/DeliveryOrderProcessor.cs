@@ -4,7 +4,8 @@
     using System.Linq;
     using Data.Model;
     using Data.Model.Order;
-    using Data.Lib.Payment;
+    using Data.Model.Inventory;
+    using System.Collections.Generic;
 
     public class DeliveryOrderProcessor : IOrderProcessor
     {
@@ -24,8 +25,15 @@
             var orderModel = order as DeliveryOrder;
             Validator.ValidateObject(orderModel, new ValidationContext(orderModel), true);
             Validator.ValidateObject(orderModel.OrderCart, new ValidationContext(orderModel.OrderCart), true);
+
             
             var cart = orderModel.OrderCart;
+            if (cart == null)
+            {
+                cart = new OrderDetails();
+                cart.PackageList = new List<ItemDetails>();
+            }
+                
 
             if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)
             {

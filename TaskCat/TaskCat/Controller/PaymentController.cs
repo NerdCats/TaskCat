@@ -55,7 +55,9 @@
         /// this is the job id that should get its payment processed
         /// </param>
         /// <returns></returns>
-        [Authorize]
+        /// 
+
+        [Authorize(Roles = "Administrator, Asset, BackOfficeAdmin")]
         [HttpPost]
         [Route("api/payment/process/{jobid}")]
         public async Task<IHttpActionResult> Process(string jobid)
