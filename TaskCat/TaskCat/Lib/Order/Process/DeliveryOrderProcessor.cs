@@ -24,16 +24,19 @@
         {
             var orderModel = order as DeliveryOrder;
             Validator.ValidateObject(orderModel, new ValidationContext(orderModel), true);
-            Validator.ValidateObject(orderModel.OrderCart, new ValidationContext(orderModel.OrderCart), true);
 
-            
-            var cart = orderModel.OrderCart;
-            if (cart == null)
+            if (orderModel.OrderCart != null)
             {
-                cart = new OrderDetails();
-                cart.PackageList = new List<ItemDetails>();
+                Validator.ValidateObject(orderModel.OrderCart, new ValidationContext(orderModel.OrderCart), true);
             }
-                
+            
+            if (orderModel.OrderCart == null)
+            {
+                orderModel.OrderCart = new OrderDetails();
+                orderModel.OrderCart.PackageList = new List<ItemDetails>();
+            }
+
+            var cart = orderModel.OrderCart;
 
             if (cart.ServiceCharge == null || cart.ServiceCharge.Value == 0)
             {

@@ -10,6 +10,7 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Response;
     using MongoDB.Driver;
+    using Exceptions;
 
     public class AccountManager : UserManager<User>
     {
@@ -54,6 +55,14 @@
             {
                 return null;
             }
+        }
+
+        public override async Task<User> FindByIdAsync(string userId)
+        {
+            var user = await base.FindByIdAsync(userId);
+            if (user == null)
+                throw new EntityNotFoundException("User", userId);
+            return user;
         }
 
         public async Task<T> FindAsByIdAsync<T>(string id) where T : User
