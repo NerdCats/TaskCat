@@ -83,15 +83,8 @@
         [HttpGet]
         public async Task<IHttpActionResult> GetAllSupportedOrder()
         {
-            try
-            {
-                var supportedOrderList = await _repository.GetAllSupportedOrder();
-                return Json(supportedOrderList);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            var supportedOrderList = await _repository.GetAllSupportedOrder();
+            return Json(supportedOrderList);
         }
 
         /// <summary>
@@ -108,18 +101,11 @@
         [HttpPost]
         public async Task<IHttpActionResult> PostSupportedOrder(SupportedOrder supportedOrder)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                await _repository.PostSupportedOrder(supportedOrder);
-                return Json(supportedOrder);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            await _repository.PostSupportedOrder(supportedOrder);
+            return Json(supportedOrder);
         }
 
         /// <summary>
@@ -138,15 +124,8 @@
         [HttpGet]
         public async Task<IHttpActionResult> GetSupportedOrder(string id)
         {
-            try
-            {
-                var supportedOrder = await _repository.GetSupportedOrder(id);
-                return Json(supportedOrder);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+             var supportedOrder = await _repository.GetSupportedOrder(id);
+             return Json(supportedOrder);         
         }
 
         /// <summary>
@@ -164,18 +143,11 @@
         [HttpPut]
         public async Task<IHttpActionResult> UpdateSupportedOrder(SupportedOrder order)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                var updatedSupportedOrder = await _repository.UpdateSupportedOrder(order);
-                return Json(updatedSupportedOrder);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            var updatedSupportedOrder = await _repository.UpdateSupportedOrder(order);
+            return Json(updatedSupportedOrder);
         }
 
         /// <summary>
@@ -194,15 +166,8 @@
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteSupportedOrder(string id)
         {
-            try
-            {
-                var deletedSupportedOrder = await _repository.DeleteSupportedOrder(id);
-                return Json(deletedSupportedOrder);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
+            var deletedSupportedOrder = await _repository.DeleteSupportedOrder(id);
+            return Json(deletedSupportedOrder);
         }
 
     }

@@ -146,7 +146,7 @@
             };
 
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
-            builder.BuildTasks();
+            builder.BuildJob();
 
             Assert.IsNotNull(builder);
             Assert.IsNotNull(builder.Job);
@@ -203,7 +203,7 @@
            
 
             var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
-            builder.BuildTasks();
+            builder.BuildJob();
 
             //Changing that back to IN PROGRESS
             builder.Job.Tasks.First().State = JobTaskState.IN_PROGRESS;
@@ -241,7 +241,7 @@
             };
 
             var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
-            builder.BuildTasks();
+            builder.BuildJob();
 
             var SampleAssetModel = new AssetModel()
             {
@@ -302,7 +302,7 @@
             };
 
             var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
-            builder.BuildTasks();
+            builder.BuildJob();
 
             var SampleAssetModel = new AssetModel()
             {
@@ -365,7 +365,7 @@
             };
 
             var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
-            builder.BuildTasks();
+            builder.BuildJob();
 
             var SampleAssetModel = new AssetModel()
             {

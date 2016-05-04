@@ -7,6 +7,7 @@
     using Data.Model.Identity.Response;
     using HRID;
     using Data.Lib.Payment;
+    using Data.Model.Payment;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class DeliveryJobBuilder : JobBuilder
@@ -26,7 +27,7 @@
             this.paymentMethod = paymentMethod;
         }
 
-        public override void BuildTasks()
+        public override void BuildJob()
         {
             //FIXME: Looks like I can definitely refactor this and work this out
             
@@ -45,6 +46,9 @@
             deliveryTask.SetPredecessor(pickUpTask);
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
+
+            job.PaymentMethod = this.paymentMethod;
+            job.PaymentStatus = PaymentStatus.Pending;
 
             job.TerminalTask = deliveryTask;
 

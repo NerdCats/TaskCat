@@ -306,5 +306,28 @@
             return Json(result);
         }
 
+        /// <summary>
+        /// Update a order inside a job
+        /// </summary>
+        /// <param name="jobId">
+        /// Job Id the task is associated with
+        /// </param>
+        /// <param name="orderModel">
+        /// OrderModel derivative to update
+        /// </param>
+        /// <returns>
+        /// Returns a ReplaceOneResult based on the update
+        /// </returns>
+        /// 
+        [ResponseType(typeof(ReplaceOneResult))]
+        [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
+        [Route("api/Job/{jobId}/order")]
+        [HttpPut]
+        public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel)
+        {
+            ReplaceOneResult result = await repository.UpdateOrder(jobId, orderModel);
+            return Json(result);
+        }
+
     }
 }

@@ -84,5 +84,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

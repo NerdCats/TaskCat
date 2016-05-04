@@ -6,7 +6,7 @@
     {
         public Job Construct(JobBuilder jobBuilder)
         {
-            jobBuilder.BuildTasks();
+            jobBuilder.BuildJob();
             return jobBuilder.Job;
         }
     }

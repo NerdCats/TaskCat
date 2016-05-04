@@ -10,7 +10,7 @@
         protected Job job;
         public Job Job { get { return job; } }
 
-        public abstract void BuildTasks();
+        public abstract void BuildJob();
 
         public JobBuilder(string name)
         {

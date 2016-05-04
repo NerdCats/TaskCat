@@ -14,8 +14,9 @@
     using Auth;
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
-    using System.Web.OData.Query;
-    using Data.Model.Query;
+    using Order;
+    using Order.Process;
+    using Data.Model.Order;
 
     public class JobRepository : IJobRepository
     {
@@ -66,6 +67,40 @@
         public async Task<ReplaceOneResult> UpdateJob(Job job)
         {
             return await manager.UpdateJob(job);
+        }
+
+        public async Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
+        {
+            var job = await GetJob(jobId);
+            if(job.Order.Type != orderModel.Type)
+            {
+                throw new InvalidOperationException("Updating with a different ordermodel for this job");
+            }
+
+            if (job.PaymentMethod.Key != orderModel.PaymentMethod)
+            {
+                throw new InvalidOperationException("Updating payment method of an exisiting order is not supported");
+            }
+
+            // FIXME: Finding a resolver here would help here dude
+            switch (orderModel.Type)
+            {
+                case OrderTypes.Delivery:
+                    {
+                        var orderCalculationService = new DefaultOrderCalculationService();
+                        var serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
+                        var orderProcessor = new DeliveryOrderProcessor(
+                            orderCalculationService,
+                            serviceChargeCalculationService);
+                        orderProcessor.ProcessOrder(orderModel);
+                        break;
+                    }
+            }
+
+            job.Order = orderModel;
+            
+            var result = await UpdateJob(job);
+            return result;
         }
 
         public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)

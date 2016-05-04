@@ -21,7 +21,7 @@
             this._order = order;
         }
 
-        public override void BuildTasks()
+        public override void BuildJob()
         {
             job.Tasks = new List<JobTask>();
 
