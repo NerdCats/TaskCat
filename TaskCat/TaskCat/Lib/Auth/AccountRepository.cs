@@ -85,9 +85,10 @@
             return await accountManager.FindAsync(userName, password);
         }
 
-        internal async Task<User> FindUserByUserNameEmailOrPhone(string userName, string password)
+        internal async Task<User> FindUserByUserNameEmailPhoneNumber(string userKey, string password)
         {
-            return await accountManager.FindAsync(userName, password);
+            var user = await accountManager.FindByUserNameOrEmailOrPhoneNumber(userKey);
+            return await FindUser(user.UserName, password);
         }
 
         internal async Task<User> FindUserByEmail(string email, string password)

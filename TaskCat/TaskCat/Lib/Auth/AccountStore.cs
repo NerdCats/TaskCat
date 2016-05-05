@@ -11,7 +11,7 @@
     using Data.Model.Identity.Response;
     using Microsoft.AspNet.Identity;
     using Utility;
-
+    using Exceptions;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class AccountStore : UserStore<User>
     {
@@ -19,6 +19,14 @@
         public AccountStore(IMongoCollection<User> users) : base(users)
         {
             collection = users;
+        }
+
+        public async Task<User> FindUserByUserNameOrPhoneNumberOrEmail(string userKey)
+        {
+            var user = await collection.Find(x => x.UserName == userKey || x.PhoneNumber == userKey || x.Email == x.Email).FirstOrDefaultAsync();
+            if (user == null)
+                throw new EntityNotFoundException("User", userKey);
+            return user;
         }
 
         public async Task<List<User>> FindAll(int start, int limit)

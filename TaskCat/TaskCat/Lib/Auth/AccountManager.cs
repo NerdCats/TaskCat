@@ -27,8 +27,7 @@
             PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6
-            };
-            
+            };           
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)
@@ -55,6 +54,12 @@
             {
                 return null;
             }
+        }
+
+        public async Task<User> FindByUserNameOrEmailOrPhoneNumber(string userKey)
+        {
+            var user = await accountStore.FindUserByUserNameOrPhoneNumberOrEmail(userKey);
+            return user;
         }
 
         public override async Task<User> FindByIdAsync(string userId)
