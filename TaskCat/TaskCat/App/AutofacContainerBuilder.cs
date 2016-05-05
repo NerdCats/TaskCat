@@ -18,6 +18,7 @@
     using Lib.AssetProvider;
     using Lib.HRID;
     using Lib.Payment;
+    using Data.Lib.Payment;
 
     public class AutofacContainerBuilder
     {
@@ -31,6 +32,7 @@
 
             builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>();
             builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>();
+            builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();
