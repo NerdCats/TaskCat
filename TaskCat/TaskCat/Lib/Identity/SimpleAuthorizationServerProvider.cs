@@ -90,7 +90,7 @@
             if (allowedOrigin == null) allowedOrigin = "*";
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-
+            
             //FIXME: Its a hack, usually it can be username, phonenumber or email address, need to implement this
             User user = await authRepository.FindUser(context.UserName, context.Password);
 
