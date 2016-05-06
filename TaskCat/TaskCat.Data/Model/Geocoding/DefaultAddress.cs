@@ -8,7 +8,7 @@
 
     public class DefaultAddress : AddressBase
     {
-        public override string FormattedAddress
+        public override string Address
         {
             get
             {
@@ -73,7 +73,7 @@
             }
             else
             {
-                return base.FormattedAddress;
+                return base.Address;
             }
         }
 

@@ -20,14 +20,14 @@
         }
         public AddressBase(string formattedAddress, string provider, Point point)
         {
-            FormattedAddress = formattedAddress;
+            Address = formattedAddress;
             Provider = provider;
             Point = point;
         }
 
         public virtual Point Point { get; set; }
 
-        public virtual string FormattedAddress
+        public virtual string Address
         {
             get { return formattedAddress; }
             set
@@ -53,7 +53,7 @@
 
         public override string ToString()
         {
-            return this.FormattedAddress;
+            return this.Address;
         }
     }
 }

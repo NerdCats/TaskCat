@@ -16,7 +16,7 @@
         public void Test_DefaultAddress_Creation()
         {
             addressWithFormattedString = new DefaultAddress("Test Formatted Address", new Point(new double[] { 1, 2 }.ToList()));
-            Assert.AreEqual("Test Formatted Address", addressWithFormattedString.FormattedAddress);
+            Assert.AreEqual("Test Formatted Address", addressWithFormattedString.Address);
 
             address = new DefaultAddress("Test AddressLine 1", "Test AddressLine 2", "Dhaka", "1217", "Bangladesh", new Point(new double[] { 1, 2 }.ToList()));
             address.State = "Dhaka";
@@ -25,7 +25,7 @@
             Assert.AreEqual("Dhaka", address.City);
             Assert.AreEqual("1217", address.PostalCode);
             Assert.AreEqual("Bangladesh", address.Country);
-            Assert.AreEqual("Test AddressLine 1, Test AddressLine 2, Dhaka-1217, Dhaka, Bangladesh", address.FormattedAddress);
+            Assert.AreEqual("Test AddressLine 1, Test AddressLine 2, Dhaka-1217, Dhaka, Bangladesh", address.Address);
         }
 
         [Test]

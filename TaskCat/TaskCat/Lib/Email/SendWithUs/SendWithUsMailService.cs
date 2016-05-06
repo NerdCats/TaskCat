@@ -31,7 +31,6 @@
 
             SendRequest sendWithUsRequest = new SendRequest()
             {
-                SenderName = proprietorSettings.Name,
                 RecipientName = request.RecipientName,
                 ProviderId = string.IsNullOrEmpty(settings.ProviderId) ? null : settings.ProviderId,
                 RecipientAddress = request.RecipientEmail,
@@ -42,7 +41,7 @@
                     {
                         Items = request.Job.Order.OrderCart?.PackageList?.Select(x => new EmailInvoiceItem(x, proprietorSettings.CultureCode)).ToList(),
                         ServiceCharge = request.Job.Order.OrderCart.ServiceCharge.Value.ToString("C", cultureInfo),
-                        ShippingAddress = request.Job.Order.To.FormattedAddress,
+                        ShippingAddress = request.Job.Order.To.Address,
                         ShippingDate = DateTime.Now.ToShortDateString(),
                         SubTotal = request.Job.Order.OrderCart.SubTotal.Value.ToString("C", cultureInfo),
                         Total = request.Job.Order.OrderCart.TotalToPay.Value.ToString("C", cultureInfo),
