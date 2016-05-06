@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using Geocoding;
     using Payment;
-
+    using Order;
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
@@ -22,6 +22,17 @@
 
             set { _name = value; }
         }
+
+        /// <summary>
+        /// From where the package should be delivered, this is the pickup location
+        /// </summary>
+        [Required]
+        public DefaultAddress From { get; set; }
+        /// <summary>
+        // The place the package should be delivered to, this is the delivery location
+        /// </summary>
+        [Required]
+        public DefaultAddress To { get; set; }
 
         /// <summary>
         /// Order type that defines the type of the order 
@@ -90,7 +101,14 @@
         /// 
         [Required]
         public string PaymentMethod { get; set; }
-        
+
+        /// <summary>
+        /// Package Description to describe what the package is all about
+        /// </summary>
+        public string Description { get; set; }
+
+        public OrderDetails OrderCart { get; set; }
+
         public OrderModel()
         {
 

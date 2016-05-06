@@ -9,6 +9,8 @@
         [Required]
         public string Item { get; set; }
 
+        public string PicUrl { get; set; }
+
         [Range(1, 100000, ErrorMessage = "Quantity must be between 1 and 100000")]
         public int Quantity { get; set; }
 

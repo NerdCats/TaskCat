@@ -24,8 +24,8 @@
             var deliveryOrder = new DeliveryOrder
             {
                 UserId = "this.User",
-                From = new DefaultAddress { Address = "My Home" },
-                To = new DefaultAddress { Address = "My Office" },
+                From = new DefaultAddress { FormattedAddress = "My Home" },
+                To = new DefaultAddress { FormattedAddress = "My Office" },
                 OrderCart = new OrderDetails
                 {
                     PackageList = new List<ItemDetails>()

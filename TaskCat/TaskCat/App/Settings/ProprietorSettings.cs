@@ -19,6 +19,8 @@
         [Required]
         public string CultureCode { get; set; }
         public SocialLinks Socials { get; set; }
+        public string LogoUrl { get; set; }
+        public string Website { get; set; }
     }
 
     public class SocialLinks

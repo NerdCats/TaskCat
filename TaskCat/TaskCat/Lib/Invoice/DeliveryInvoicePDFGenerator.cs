@@ -74,13 +74,13 @@
                 }
 
                 doc.Add(new Paragraph(invoice.CustomerName));
-                doc.Add(new Paragraph(invoice.ShippingAddress.Address));
+                doc.Add(new Paragraph(invoice.ShippingAddress.FormattedAddress));
 
                 if (invoice.BillingAddress != invoice.ShippingAddress)
                 {
                     doc.Add(new Paragraph("Billing Address:"));
                     doc.Add(new Paragraph(invoice.CustomerName));
-                    doc.Add(new Paragraph(invoice.BillingAddress.Address));
+                    doc.Add(new Paragraph(invoice.BillingAddress.FormattedAddress));
                 }
 
                 Paragraph separator = new Paragraph("_____________________________________________________________________________      ");
