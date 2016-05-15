@@ -2,7 +2,7 @@
 
 namespace TaskCat.Lib.Email.Model
 {
-    public class EmailInvoice : IEmailPayload
+    public class EmailInvoice
     {
         public string VAT { get; set; }
         public List<EmailInvoiceItem> Items { get; set; }

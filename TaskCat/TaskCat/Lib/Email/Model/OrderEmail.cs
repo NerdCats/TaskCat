@@ -2,7 +2,7 @@
 
 namespace TaskCat.Lib.Email.Model
 {
-    public class OrderMail
+    public class OrderEmail: IEmailPayload
     {
         public EmailInvoice Invoice { get; set; }
         public string JobId { get; set; }

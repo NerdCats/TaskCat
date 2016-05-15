@@ -3,7 +3,7 @@ using TaskCat.Data.Model.Inventory;
 
 namespace TaskCat.Lib.Email.Model
 {
-    public class EmailInvoiceItem : IEmailPayload
+    public class EmailInvoiceItem 
     {
         public string Name { get; set; }
         public string Total { get; set; }
