@@ -2,7 +2,7 @@
 {
     using System.Net;
 
-    public class SendMailResponse
+    public class SendEmailResponse
     {
         public bool Success { get; set; }
         public HttpStatusCode StatusCode { get; set; }

@@ -64,12 +64,75 @@
 
             if (!result.Result.Succeeded)
             {
-                return Content(HttpStatusCode.InternalServerError, result.Result);
+                return GetErrorResult(result.Result);
             }
 
             await accountContext.NotifyUserCreationByMail(result.User, this.Request);
 
             return Created<UserModel>(Url.Link(AppConstants.GetUserProfileByIdRoute, new { userId = result.User.Id }), result.User.ToModel(isUserAuthenticated: false));
+        }
+
+        /// <summary>
+        /// Route to confirm email address after a registration
+        /// </summary>
+        /// <param name="userId">
+        /// userId created against the email
+        /// </param>
+        /// <param name="code">
+        /// email verficiation token
+        /// </param>
+        /// <returns></returns>
+        /// 
+        [ResponseType(typeof(IdentityResult))]
+        [HttpGet]
+        [Route("ConfirmEmail", Name = AppConstants.ConfirmEmailRoute)]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId = "", string code = "")
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+            {
+                ModelState.AddModelError("", "User Id and Code are required");
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await accountContext.ConfirmEmailAsync(userId, code);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return GetErrorResult(result);
+            }
+        }
+
+        protected IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null)
+            {
+                return InternalServerError();
+            }
+
+            if (!result.Succeeded)
+            {
+                if (result.Errors != null)
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    return BadRequest();
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            return null;
         }
 
 

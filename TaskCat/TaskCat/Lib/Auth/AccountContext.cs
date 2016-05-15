@@ -35,11 +35,11 @@
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
         private readonly JobManager jobManager;
-        private readonly IMailService mailService;
+        private readonly IEmailService mailService;
 
         public AccountContext(
             IDbContext dbContext,
-            IMailService mailService,
+            IEmailService mailService,
             AccountManager accoutnManager,
             IBlobService blobService,
             JobManager jobManager)
@@ -80,16 +80,22 @@
             return creationResult;
         }
 
-        public async Task<SendMailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message )
+        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message )
         {
             var urlHelper = new UrlHelper(message);
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
-            var callbackUrl = new Uri(urlHelper.Link(AppConstants.ConfirmEmailRoute, new { id = user.Id }));
-            var result = await mailService.SendWelcomeMail(new SendMailRequest() {
+            var confirmationUrl = new Uri(urlHelper.Link(AppConstants.ConfirmEmailRoute, new { userId = user.Id, code = code }));
+            var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest() {
                 RecipientEmail = user.Email,
-                RecipientUsername = user.UserName
+                RecipientUsername = user.UserName,
+                ConfirmationUrl = confirmationUrl.ToString()
             });
             return result;
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(string userId, string code)
+        {
+            return await accountManager.ConfirmEmailAsync(userId, code);
         }
 
         internal async Task<Client> FindClient(string clientId)

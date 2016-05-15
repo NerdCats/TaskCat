@@ -49,7 +49,7 @@
             throw new NotImplementedException();
         }
 
-        public async Task<SendMailResponse> SendWelcomeMail(SendMailRequest request)
+        public async Task<SendMailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)
         {
             var email = mailFluent
             .To(request.RecipientEmail)

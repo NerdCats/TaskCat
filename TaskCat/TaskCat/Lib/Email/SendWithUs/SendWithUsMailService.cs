@@ -9,14 +9,14 @@
     using System.Threading.Tasks;
     using Model;
 
-    public class SendWithUsMailService : IMailService
+    public class SendWithUsMailService : IEmailService
     {
         public SendWithUsMailService()
         {
 
         }
 
-        public async Task<SendMailResponse> SendOrderMail(SendEmailInvoiceRequest request)
+        public async Task<SendEmailResponse> SendOrderMail(SendEmailInvoiceRequest request)
         {
             var proprietorSettings = Settings.Get<ProprietorSettings>();
 
@@ -56,7 +56,7 @@
             var client = new SendWithUsClient(settings.ApiKey);
             var response = await client.SendAsync(sendWithUsRequest);
 
-            return new SendMailResponse()
+            return new SendEmailResponse()
             {
                 Error = response.ErrorMessage,
                 StatusCode = response.StatusCode,
@@ -64,7 +64,7 @@
             };
         }
 
-        public Task<SendMailResponse> SendWelcomeMail(SendMailRequest request)
+        public Task<SendEmailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)
         {
             throw new NotImplementedException();
         }
