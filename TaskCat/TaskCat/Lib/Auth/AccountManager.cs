@@ -31,9 +31,11 @@
             };
 
             //TODO: Define proper user token protection provider token here
-            this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"){
+
+            this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"))
+            {
                 TokenLifespan = TimeSpan.FromHours(6)
-            });
+            };
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)
