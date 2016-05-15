@@ -1,8 +1,8 @@
-﻿using System.Globalization;
-using TaskCat.Data.Model.Inventory;
-
-namespace TaskCat.Lib.Email.Model
+﻿namespace TaskCat.Lib.Email.Model
 {
+    using System.Globalization;
+    using Data.Model.Inventory;
+
     public class EmailInvoiceItem 
     {
         public string Name { get; set; }

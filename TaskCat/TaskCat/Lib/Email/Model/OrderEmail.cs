@@ -1,7 +1,7 @@
-﻿using TaskCat.App.Settings;
-
-namespace TaskCat.Lib.Email.Model
+﻿namespace TaskCat.Lib.Email.Model
 {
+    using App.Settings;
+
     public class OrderEmail: IEmailPayload
     {
         public EmailInvoice Invoice { get; set; }
