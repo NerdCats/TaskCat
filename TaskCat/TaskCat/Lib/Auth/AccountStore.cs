@@ -12,13 +12,14 @@
     using Microsoft.AspNet.Identity;
     using Utility;
     using Exceptions;
+    using Db;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class AccountStore : UserStore<User>
     {
         IMongoCollection<User> collection;
-        public AccountStore(IMongoCollection<User> users) : base(users)
+        public AccountStore(IDbContext context) : base(context.Users)
         {
-            collection = users;
+            collection = context.Users;
         }
 
         public async Task<User> FindUserByUserNameOrPhoneNumberOrEmail(string userKey)

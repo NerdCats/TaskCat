@@ -23,6 +23,8 @@
     using Data.Model.Query;
     using Data.Model;
     using Utility;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin;
 
     public class AccountRepository
     {

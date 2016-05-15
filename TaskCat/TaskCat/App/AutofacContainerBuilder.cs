@@ -22,7 +22,7 @@
     using Lib.Email;
     using Lib.Email.SMTP;
     using Owin;
-    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security.DataProtection;
 
     public class AutofacContainerBuilder
     {
@@ -30,47 +30,51 @@
         {
             var builder = new ContainerBuilder();
 
-            DbContext context = new DbContext();
+            #region Account
+            builder.Register(c => app.GetDataProtectionProvider()).As<IDataProtectionProvider>().SingleInstance();
+            builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
+            #endregion
 
-            builder.Register<DbContext>(c => context).As<IDbContext>().SingleInstance();
+            #region Payment
+            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
 
-            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>();
-            builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>();
-            builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>();
+            #region Mail
+            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IMailService, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
 
-            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IMailService, ConcreteReflectionActivatorData>();
+            #region Job
+            builder.RegisterType<JobStore>().InstancePerLifetimeScope();
+            builder.RegisterType<JobManager>().InstancePerLifetimeScope();
+            #endregion
 
-            builder.RegisterType<JobStore>().SingleInstance();
-            builder.RegisterType<JobManager>().SingleInstance();
+            #region Order
+            builder.RegisterType<SupportedOrderStore>().InstancePerLifetimeScope();
+            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            #endregion
 
-            builder.RegisterType<OrderRepository>().SingleInstance();
-            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>();
-
-            builder.RegisterType<RoleManager>()
-                .SingleInstance();
-
-            builder.Register(c=> new AccountStore(context.Users)).As<IUserStore<User>>().SingleInstance();
-            
-            builder.RegisterType<AccountManager>().SingleInstance();
-
-            builder.RegisterType<SupportedOrderStore>().SingleInstance();
-
+            #region Storage
             builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
-            
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            #endregion
 
-            builder.RegisterType<AccountRepository>()
-                .SingleInstance();
-
+            #region Asset
             builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>();
+            #endregion
 
-            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>();
-
+            #region Auth
             builder.RegisterType<SimpleAuthorizationServerProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
             builder.RegisterType<SimpleRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
-
+            #endregion
 
             switch (ConfigurationManager.AppSettings["ENV"])
             {
@@ -81,6 +85,7 @@
                     builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
                     break;
             }
+
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }

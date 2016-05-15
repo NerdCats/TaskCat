@@ -9,6 +9,7 @@
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
     using Data.Entity.ShadowCat;
+    using System;
 
     public class DbContext : IDbContext
     {
@@ -155,6 +156,11 @@
                 else
                     ShadowCatDatabase = shadowCatMongoClient.GetDatabase(shadowCatUrlBuilder.DatabaseName);
             }
+        }
+
+        public void Dispose()
+        {
+            //TODO: Need to write this;
         }
     }
 }

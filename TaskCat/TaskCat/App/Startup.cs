@@ -19,7 +19,6 @@ namespace TaskCat.App
     using Data.Model.Identity;
     using Lib.Utility.ActionFilter;
     using System.Reflection;
-    using Microsoft.AspNet.Identity.Owin;
 
     public class Startup
     {
@@ -48,7 +47,7 @@ namespace TaskCat.App
 
             var config = new HttpConfiguration();
 
-            BsonSerializerConfig.Configure();
+            BsonSerializerConfig.Configure();           
 
             ConfigureOAuth(app, container);
 

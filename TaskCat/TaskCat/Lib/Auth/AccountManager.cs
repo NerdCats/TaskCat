@@ -5,19 +5,18 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity.Identity;
+    using Data.Entity.Identity;
     using Data.Model.Identity;
     using Data.Model.Identity.Response;
     using MongoDB.Driver;
     using Exceptions;
     using Microsoft.AspNet.Identity.Owin;
-    using AspNet.Identity.MongoDB;
     using Microsoft.Owin.Security.DataProtection;
 
     public class AccountManager : UserManager<User>
     {    
         AccountStore accountStore;
-        public AccountManager(IUserStore<User> store ): base(store)
+        public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : base(store)
         {
             accountStore = store as AccountStore;
             UserValidator = new UserValidator<User>(this)
@@ -31,7 +30,10 @@
                 RequiredLength = 6
             };
 
-            //this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(IDataProtector);
+            //TODO: Define proper user token protection provider token here
+            this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"){
+                TokenLifespan = TimeSpan.FromHours(6)
+            });
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)
