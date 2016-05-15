@@ -20,6 +20,7 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Description;
+    using Lib.Utility;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -29,7 +30,7 @@
     [RoutePrefix("api/Account")] 
     public class AccountController : ApiController
     {
-        private readonly AccountRepository accountRepository = null;
+        private readonly AccountContext accountContext = null;
 
         /// <summary>
         /// Account Controller Constructor
@@ -37,9 +38,9 @@
         /// <param name="authRepository">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AccountRepository authRepository)
+        public AccountController(AccountContext authRepository)
         {
-            this.accountRepository = authRepository;
+            this.accountContext = authRepository;
         }
 
         /// <summary>
@@ -50,7 +51,8 @@
         /// </param>
         /// <returns></returns>
         /// 
-        [ResponseType(typeof(IdentityResult))]
+
+        [ResponseType(typeof(UserModel))]
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegistrationModelBase userModel)
@@ -58,46 +60,18 @@
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await accountRepository.RegisterUser(userModel);
+            var result = await accountContext.RegisterUser(userModel);
 
-            var errorResult = GetErrorResult(result);
-
-            if (errorResult != null)
+            if (!result.Result.Succeeded)
             {
-                return errorResult;
+                return Content(HttpStatusCode.InternalServerError, result.Result);
             }
 
-            return Ok(result);
+            await accountContext.NotifyUserCreationByMail(result.User, this.Request);
+
+            return Created<UserModel>(Url.Link(AppConstants.GetUserProfileByIdRoute, new { userId = result.User.Id }), result.User.ToModel(isUserAuthenticated: false));
         }
 
-        // FIXME: this definitely looks ugly, need to clean up here
-        private IHttpActionResult GetErrorResult(IdentityResult result)
-        {
-            if (result == null)
-            {
-                return InternalServerError();
-            }
-
-            if (!result.Succeeded)
-            {
-                if (result.Errors != null)
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
-
-                if (ModelState.IsValid)
-                    return BadRequest();               
-                    // No ModelState errors are available to send, 
-                    // so just return an empty BadRequest.
-
-                return BadRequest(ModelState);
-            }
-
-            return null;
-        }
 
         /// <summary>
         /// View Public Profile on any user or asset
@@ -111,7 +85,7 @@
         /// 
         [AllowAnonymous]
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
-        [Route("Profile/{userId?}")]
+        [Route("Profile/{userId?}", Name = AppConstants.GetUserProfileByIdRoute)]
         [HttpGet]
         public async Task<IHttpActionResult> Profile(string userId = null)
         {
@@ -121,7 +95,7 @@
             if (string.IsNullOrWhiteSpace(userId))
                 userId = this.User.Identity.GetUserId();
 
-            var userModel = await accountRepository.FindUserAsModel(userId);
+            var userModel = await accountContext.FindUserAsModel(userId);
             if (userModel == null) return NotFound();
 
             if (this.User.Identity.IsAuthenticated)
@@ -175,7 +149,7 @@
                 userId = this.User.Identity.GetUserId();
             }
 
-            var result = await accountRepository.FindAssignedJobs(userId, page, pageSize, dateTimeUpto, jobStateUpto, sortDirection, this.Request);
+            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, dateTimeUpto, jobStateUpto, sortDirection, this.Request);
             return Json(result);
         }
 
@@ -208,9 +182,9 @@
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
 
             if (envelope)
-                return Json(await accountRepository.FindAllEnvelopedAsModel(page, pageSize, this.Request));
+                return Json(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request));
             else
-                return Json(await accountRepository.FindAllAsModel(page, pageSize));
+                return Json(await accountContext.FindAllAsModel(page, pageSize));
         }
 
         /// <summary>
@@ -259,7 +233,7 @@
                     "envelope"
                 });
 
-            var users = await accountRepository.FindAllAsModel();
+            var users = await accountContext.FindAllAsModel();
             var queryResult = users.LinqToQuerystring(odataQuery).Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
@@ -279,7 +253,7 @@
         [Route("profile")]
         public async Task<IHttpActionResult> Update(IdentityProfile model)
         {
-            return Json(await accountRepository.Update(model, this.User.Identity.Name));
+            return Json(await accountContext.Update(model, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -287,7 +261,7 @@
         [Route("profile/{id}")]
         public async Task<IHttpActionResult> Update([FromBody]IdentityProfile model, [FromUri]string id)
         {
-            return Json(await accountRepository.UpdateById(model, id));
+            return Json(await accountContext.UpdateById(model, id));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
@@ -295,7 +269,7 @@
         [Route("password")]
         public async Task<IHttpActionResult> UpdatePassword(PasswordUpdateModel model)
         {
-            return Json(await accountRepository.UpdatePassword(model, this.User.Identity.Name));
+            return Json(await accountContext.UpdatePassword(model, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
@@ -303,7 +277,7 @@
         [Route("username")]
         public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername)
         {
-            return Json(await accountRepository.UpdateUsername(newUsername, this.User.Identity.Name));
+            return Json(await accountContext.UpdateUsername(newUsername, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -311,7 +285,7 @@
         [Route("username/{userId}")]
         public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername, string userId)
         {
-            return Json(await accountRepository.UpdateUsernameById(userId, newUsername));
+            return Json(await accountContext.UpdateUsernameById(userId, newUsername));
         }
 
         // FIXME: Im not sure how this would pan out though, may be would pan out fine or not
@@ -320,7 +294,7 @@
         [Route("username")]
         public async Task<IHttpActionResult> SuggestUserName(string suggestedUserName)
         {
-             return Json(await accountRepository.IsUsernameAvailable(suggestedUserName));           
+             return Json(await accountContext.IsUsernameAvailable(suggestedUserName));           
         }
 
         [HttpPut]
@@ -328,7 +302,7 @@
         [Route("contacts")]
         public async Task<IHttpActionResult> UpdateContacts(ContactUpdateModel model)
         {
-            return Json(await accountRepository.UpdateContacts(model, this.User.Identity.Name));
+            return Json(await accountContext.UpdateContacts(model, this.User.Identity.Name));
         }
 
         /// <summary>
@@ -348,7 +322,7 @@
                 return StatusCode(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var result = await accountRepository.UploadAvatar(Request.Content, this.User.Identity.GetUserId());
+            var result = await accountContext.UploadAvatar(Request.Content, this.User.Identity.GetUserId());
 
             if (result != null)
             {

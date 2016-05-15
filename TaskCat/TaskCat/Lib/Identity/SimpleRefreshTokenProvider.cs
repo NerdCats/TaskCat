@@ -9,9 +9,9 @@
 
     public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
     {
-        private readonly AccountRepository authRepository;
+        private readonly AccountContext authRepository;
 
-        public SimpleRefreshTokenProvider(AccountRepository authRepository)
+        public SimpleRefreshTokenProvider(AccountContext authRepository)
         {
             this.authRepository = authRepository;
         }

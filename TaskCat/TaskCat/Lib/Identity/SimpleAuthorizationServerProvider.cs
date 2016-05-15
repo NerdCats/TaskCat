@@ -12,9 +12,9 @@
 
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        private readonly AccountRepository authRepository;
+        private readonly AccountContext authRepository;
 
-        public SimpleAuthorizationServerProvider(AccountRepository authRepository)
+        public SimpleAuthorizationServerProvider(AccountContext authRepository)
         {
             this.authRepository = authRepository;
         }

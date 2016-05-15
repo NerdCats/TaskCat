@@ -317,7 +317,7 @@
     <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Auth\AccountStore.cs" />
-    <Compile Include="Lib\Auth\AccountRepository.cs" />
+    <Compile Include="Lib\Auth\AccountContext.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManager.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
@@ -396,6 +396,7 @@
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
+    <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Model\Storage\FileDeleteModel.cs" />

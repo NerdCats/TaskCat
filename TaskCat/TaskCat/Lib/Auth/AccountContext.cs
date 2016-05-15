@@ -23,19 +23,23 @@
     using Data.Model.Query;
     using Data.Model;
     using Utility;
-    using Microsoft.AspNet.Identity.Owin;
-    using Microsoft.Owin;
+    using System.Security.Policy;
+    using Model.Identity;
+    using System.Web.Http.Routing;
+    using Email;
 
-    public class AccountRepository
+    public class AccountContext
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
         private readonly JobManager jobManager;
+        private readonly IMailService mailService;
 
-        public AccountRepository(
+        public AccountContext(
             IDbContext dbContext,
+            IMailService mailService,
             AccountManager accoutnManager,
             IBlobService blobService,
             JobManager jobManager)
@@ -44,14 +48,15 @@
             this.accountManager = accoutnManager;
             this.blobService = blobService;
             this.jobManager = jobManager;
+            this.mailService = mailService;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
-        internal async Task<IdentityResult> RegisterUser(RegistrationModelBase model)
+        internal async Task<AccountResult> RegisterUser(RegistrationModelBase model)
         {
             UserProfile profile;
             User user = null;
-
+            
             switch (model.Type)
             {
                 case IdentityTypes.USER:
@@ -70,9 +75,22 @@
 
             }
 
-            return await accountManager.CreateAsync(user, model.Password);
+            var creationResult =  new AccountResult(await accountManager.CreateAsync(user, model.Password), user);
+
+            return creationResult;
         }
 
+        public async Task<SendMailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message )
+        {
+            var urlHelper = new UrlHelper(message);
+            string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = new Uri(urlHelper.Link(AppConstants.ConfirmEmailRoute, new { id = user.Id }));
+            var result = await mailService.SendWelcomeMail(new SendMailRequest() {
+                RecipientEmail = user.Email,
+                RecipientUsername = user.UserName
+            });
+            return result;
+        }
 
         internal async Task<Client> FindClient(string clientId)
         {
