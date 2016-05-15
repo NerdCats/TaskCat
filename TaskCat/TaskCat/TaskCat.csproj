@@ -265,9 +265,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".config\local\SMTPMailSettings.json" />
-    <None Include="App_Data\EmailTemplates\Welcome.cshtml">
+    <Content Include="App_Data\EmailTemplates\Welcome.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -325,13 +325,13 @@
     <Compile Include="Lib\Db\MongoExtensions.cs" />
     <Compile Include="Lib\Email\Model\EmailInvoice.cs" />
     <Compile Include="Lib\Email\Model\EmailInvoiceItem.cs" />
-    <Compile Include="Lib\Email\IMailService.cs" />
+    <Compile Include="Lib\Email\IEmailService.cs" />
     <Compile Include="Lib\Email\Model\IEmailPayload.cs" />
     <Compile Include="Lib\Email\Model\WelcomeEmail.cs" />
     <Compile Include="Lib\Email\IEmailTemplateParser.cs" />
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
-    <Compile Include="Lib\Email\SendMailRequest.cs" />
-    <Compile Include="Lib\Email\SendMailResponse.cs" />
+    <Compile Include="Lib\Email\SendEmailRequest.cs" />
+    <Compile Include="Lib\Email\SendEmailResponse.cs" />
     <Compile Include="Lib\Email\Model\OrderMail.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsMailService.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsSettings.cs" />

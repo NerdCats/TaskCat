@@ -34,9 +34,9 @@
     public class JobController : ApiController
     {
         private IJobRepository repository;
-        private IMailService mailService;
+        private IEmailService mailService;
 
-        public JobController(IJobRepository repository, IMailService mailService)
+        public JobController(IJobRepository repository, IEmailService mailService)
         {
             this.repository = repository;
             this.mailService = mailService;

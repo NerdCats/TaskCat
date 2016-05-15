@@ -10,7 +10,7 @@
     using App_Start;
     using Model;
 
-    public class SMTPMailService : IMailService, IDisposable
+    public class SMTPMailService : IEmailService, IDisposable
     {
         private SMTPMailSettings settings;
         private SmtpClient smtpclient;
@@ -44,22 +44,26 @@
             catch (Exception) { }
         }
 
-        public Task<SendMailResponse> SendOrderMail(SendEmailInvoiceRequest request)
+        public Task<SendEmailResponse> SendOrderMail(SendEmailInvoiceRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<SendMailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)
+        public async Task<SendEmailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)
         {
             var email = mailFluent
             .To(request.RecipientEmail)
            .Subject("Welcome to " + propSettings.Name)
-           .UsingTemplate(EmailTemplatesConfig.WelcomeEmailTemplate, new WelcomeEmail() { Name = request.RecipientUsername });
+           .UsingTemplate(EmailTemplatesConfig.WelcomeEmailTemplate, new WelcomeEmail()
+           {
+               Name = request.RecipientUsername,
+               ConfirmationUrl = request.ConfirmationUrl
+           });
 
             try
             {
                 await smtpclient.SendMailAsync(email.Message);
-                return new SendMailResponse()
+                return new SendEmailResponse()
                 {
                     StatusCode = HttpStatusCode.OK,
                     Success = true
@@ -67,7 +71,7 @@
             }
             catch (Exception ex)
             {
-                return new SendMailResponse()
+                return new SendEmailResponse()
                 {
                     Error = ex.Message,
                     StatusCode = HttpStatusCode.InternalServerError,

@@ -46,7 +46,7 @@
             #endregion
 
             #region Mail
-            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IMailService, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IEmailService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Job

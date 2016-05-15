@@ -59,7 +59,7 @@ namespace TaskCat.App
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
-  
+            EmailTemplatesConfig.Configure();
 
             // FIXME: Need to move these with other startups
             // This is not ideal

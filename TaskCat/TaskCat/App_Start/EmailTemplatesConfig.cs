@@ -8,13 +8,14 @@
     {
         public static string WelcomeEmailTemplate { get; set; }
         public static string OrderInvoiceEmailTemplate { get; set; }
+
         public static void Configure()
         {
             var settings = Settings.Get<EmailTemplatePathSettings>();
 
             string path = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/EmailTemplates/");
 
-            using (TextReader reader = new StreamReader(string.Concat(path, nameof(settings.Welcome), ".cshtml")))
+            using (TextReader reader = new StreamReader(string.Concat(path, nameof(settings.Welcome), ".html")))
             {
                 WelcomeEmailTemplate = reader.ReadToEnd();
             }
