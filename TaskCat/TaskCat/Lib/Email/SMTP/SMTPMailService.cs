@@ -57,7 +57,8 @@
            .UsingTemplate(EmailTemplatesConfig.WelcomeEmailTemplate, new WelcomeEmail()
            {
                Name = request.RecipientUsername,
-               ConfirmationUrl = request.ConfirmationUrl
+               ConfirmationUrl = request.ConfirmationUrl,
+               Proprietor = propSettings
            });
 
             try

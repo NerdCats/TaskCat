@@ -332,7 +332,7 @@
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
     <Compile Include="Lib\Email\SendEmailRequest.cs" />
     <Compile Include="Lib\Email\SendEmailResponse.cs" />
-    <Compile Include="Lib\Email\Model\OrderMail.cs" />
+    <Compile Include="Lib\Email\Model\OrderEmail.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsMailService.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsSettings.cs" />
     <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />

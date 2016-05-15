@@ -35,7 +35,7 @@
                 ProviderId = string.IsNullOrEmpty(settings.ProviderId) ? null : settings.ProviderId,
                 RecipientAddress = request.RecipientEmail,
                 TemplateId = settings.Templates["OrderShip"],
-                Data = new OrderMail()
+                Data = new OrderEmail()
                 {
                     Invoice = new EmailInvoice()
                     {
