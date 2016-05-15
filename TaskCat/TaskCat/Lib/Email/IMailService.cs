@@ -4,5 +4,6 @@
     public interface IMailService
     {
         Task<SendMailResponse> SendOrderMail(SendEmailInvoiceRequest request);
+        Task<SendMailResponse> SendWelcomeMail(SendMailRequest request);
     }
 }

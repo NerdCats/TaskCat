@@ -7,7 +7,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Model;
 
     public class SendWithUsMailService : IMailService
     {
@@ -31,7 +31,7 @@
 
             SendRequest sendWithUsRequest = new SendRequest()
             {
-                RecipientName = request.RecipientName,
+                RecipientName = request.RecipientUsername,
                 ProviderId = string.IsNullOrEmpty(settings.ProviderId) ? null : settings.ProviderId,
                 RecipientAddress = request.RecipientEmail,
                 TemplateId = settings.Templates["OrderShip"],
@@ -62,6 +62,11 @@
                 StatusCode = response.StatusCode,
                 Success = response.Success
             };
+        }
+
+        public Task<SendMailResponse> SendWelcomeMail(SendMailRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using TaskCat.Data.Model.Inventory;
 
-namespace TaskCat.Lib.Email
+namespace TaskCat.Lib.Email.Model
 {
-    public class EmailInvoiceItem
+    public class EmailInvoiceItem : IEmailPayload
     {
         public string Name { get; set; }
         public string Total { get; set; }

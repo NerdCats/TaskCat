@@ -1,6 +1,6 @@
 ﻿using TaskCat.App.Settings;
 
-namespace TaskCat.Lib.Email.SendWithUs
+namespace TaskCat.Lib.Email.Model
 {
     public class OrderMail
     {

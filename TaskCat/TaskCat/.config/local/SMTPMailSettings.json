@@ -1,0 +1,7 @@
+﻿{
+  "Host": "smtp.gmail.com",
+  "Port": 587,
+  "Username": "noreply@gobd.co",
+  "Password": "GObd1234",
+  "EnableSSL": true
+}

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace TaskCat.Lib.Email
+namespace TaskCat.Lib.Email.Model
 {
-    public class EmailInvoice
+    public class EmailInvoice : IEmailPayload
     {
         public string VAT { get; set; }
         public List<EmailInvoiceItem> Items { get; set; }

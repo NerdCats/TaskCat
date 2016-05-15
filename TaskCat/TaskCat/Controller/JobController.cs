@@ -274,7 +274,7 @@
             {
                 Job = job,
                 RecipientEmail = job.User.Email,
-                RecipientName = job.User.UserName
+                RecipientUsername = job.User.UserName
             });
 
             return Json(result);
