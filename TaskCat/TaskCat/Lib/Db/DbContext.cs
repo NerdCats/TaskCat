@@ -20,7 +20,7 @@
         public IMongoDatabase ShadowCatDatabase { get; private set; }
 
         #region Auth
-
+        
         private IMongoCollection<User> _users;
         public IMongoCollection<User> Users
         {

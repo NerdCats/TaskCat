@@ -52,7 +52,7 @@
         public async Task<SendMailResponse> SendWelcomeMail(SendMailRequest request)
         {
             var email = mailFluent
-            .To("somedude@gmail.com")
+            .To(request.RecipientEmail)
            .Subject("Welcome to " + propSettings.Name)
            .UsingTemplate(EmailTemplatesConfig.WelcomeEmailTemplate, new WelcomeEmail() { Name = request.RecipientUsername });
 

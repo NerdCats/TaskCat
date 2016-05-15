@@ -20,10 +20,13 @@
     using Lib.Payment;
     using Data.Lib.Payment;
     using Lib.Email;
-    using Lib.Email.SendWithUs;
+    using Lib.Email.SMTP;
+    using Owin;
+    using Microsoft.AspNet.Identity.Owin;
+
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer()
+        public IContainer BuildContainer(IAppBuilder app)
         {
             var builder = new ContainerBuilder();
 
@@ -35,7 +38,7 @@
             builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>();
             builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>();
 
-            builder.RegisterType<SendWithUsMailService>().AsImplementedInterfaces<IMailService, ConcreteReflectionActivatorData>();
+            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IMailService, ConcreteReflectionActivatorData>();
 
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().SingleInstance();
@@ -47,6 +50,7 @@
                 .SingleInstance();
 
             builder.Register(c=> new AccountStore(context.Users)).As<IUserStore<User>>().SingleInstance();
+            
             builder.RegisterType<AccountManager>().SingleInstance();
 
             builder.RegisterType<SupportedOrderStore>().SingleInstance();

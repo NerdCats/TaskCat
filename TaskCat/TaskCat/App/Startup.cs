@@ -19,11 +19,12 @@ namespace TaskCat.App
     using Data.Model.Identity;
     using Lib.Utility.ActionFilter;
     using System.Reflection;
+    using Microsoft.AspNet.Identity.Owin;
 
     public class Startup
     {
         public void Configuration(IAppBuilder app)
-        {
+        {           
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
             app.Properties["host.AppMode"] = ConfigurationManager.AppSettings["ENV"];
@@ -40,7 +41,7 @@ namespace TaskCat.App
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
-            var container = builder.BuildContainer();
+            var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);

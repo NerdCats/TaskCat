@@ -6,16 +6,18 @@
     using System.Linq;
     using System.Threading.Tasks;
     using TaskCat.Data.Entity.Identity;
-    using TaskCat.Data.Entity;
     using Data.Model.Identity;
     using Data.Model.Identity.Response;
     using MongoDB.Driver;
     using Exceptions;
+    using Microsoft.AspNet.Identity.Owin;
+    using AspNet.Identity.MongoDB;
+    using Microsoft.Owin.Security.DataProtection;
 
     public class AccountManager : UserManager<User>
-    {
+    {    
         AccountStore accountStore;
-        public AccountManager(IUserStore<User> store) : base(store)
+        public AccountManager(IUserStore<User> store ): base(store)
         {
             accountStore = store as AccountStore;
             UserValidator = new UserValidator<User>(this)
@@ -27,7 +29,9 @@
             PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6
-            };           
+            };
+
+            //this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(IDataProtector);
         }
 
         public async Task<User> FindByEmailAsync(string email, string password)
