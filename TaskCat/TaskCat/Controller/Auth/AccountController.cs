@@ -356,7 +356,7 @@
         /// <summary>
         /// Get whether a suggested username is availalble or not
         /// </summary>
-        /// <param name="suggestedUserName">
+        /// <param name="suggestedUsername">
         /// suggested username 
         /// </param>
         /// <returns>
@@ -365,10 +365,10 @@
         [HttpGet]
         [Route("username")]
         [ResponseType(typeof(UsernameAvailibilityResponse))]
-        public async Task<IHttpActionResult> SuggestUserName(string suggestedUserName)
+        public async Task<IHttpActionResult> SuggestUserName(string suggestedUsername)
         {
-            var result = await accountContext.IsUsernameAvailable(suggestedUserName);
-            return Json(new UsernameAvailibilityResponse(suggestedUserName, result));
+            var result = await accountContext.IsUsernameAvailable(suggestedUsername);
+            return Json(new UsernameAvailibilityResponse(suggestedUsername, result));
         }
 
         [HttpPut]
