@@ -21,7 +21,7 @@
     using System.Web.Http;
     using System.Web.Http.Description;
     using Lib.Utility;
-
+    using Model.Account;
     /// <summary>
     /// Account (User And Asset related Controller)
     /// </summary>
@@ -353,11 +353,22 @@
 
         // FIXME: Im not sure how this would pan out though, may be would pan out fine or not
         // Should I use HTTP Verbs here to determine result?
+        /// <summary>
+        /// Get whether a suggested username is availalble or not
+        /// </summary>
+        /// <param name="suggestedUserName">
+        /// suggested username 
+        /// </param>
+        /// <returns>
+        /// returns the availability of suggested user name or not
+        /// </returns>
         [HttpGet]
         [Route("username")]
+        [ResponseType(typeof(UsernameAvailibilityResponse))]
         public async Task<IHttpActionResult> SuggestUserName(string suggestedUserName)
         {
-             return Json(await accountContext.IsUsernameAvailable(suggestedUserName));           
+            var result = await accountContext.IsUsernameAvailable(suggestedUserName);
+            return Json(new UsernameAvailibilityResponse(suggestedUserName, result));
         }
 
         [HttpPut]
