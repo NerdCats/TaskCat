@@ -360,7 +360,7 @@
         /// suggested username 
         /// </param>
         /// <returns>
-        /// returns the availability of suggested user name or not
+        /// returns the availability of suggested user name
         /// </returns>
         [HttpGet]
         [Route("username")]
