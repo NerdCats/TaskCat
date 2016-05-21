@@ -102,6 +102,7 @@
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
+            identity.AddClaim(new Claim(ClaimTypes.Authentication, "true"));
             identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
             identity.AddClaim(new Claim("sub", user.UserName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
