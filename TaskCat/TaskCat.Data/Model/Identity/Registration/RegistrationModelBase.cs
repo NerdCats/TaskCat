@@ -29,7 +29,7 @@
 
         [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage = @"Please provide a valid Bangladeshi Phone Number, ex(+)")]
         [Display(Name = "PhoneNumber")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "A valid email address must be provided")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "A valid phone number must be provided")]
         public string PhoneNumber { get; set; }
 
         public string PicUri { get; internal set; }

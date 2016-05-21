@@ -1,10 +1,5 @@
 ﻿namespace TaskCat.Controller.Auth
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
     using System.Web.Http;
     using Lib.Auth;
     using System.Threading.Tasks;
@@ -12,9 +7,9 @@
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController
     {
-        private readonly AccountRepository authRepository = null;
+        private readonly AccountContext authRepository = null;
 
-        public RefreshTokensController(AccountRepository authRepository)
+        public RefreshTokensController(AccountContext authRepository)
         {
             this.authRepository = authRepository;
         }

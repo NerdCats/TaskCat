@@ -18,5 +18,14 @@
         public DefaultAddress Address { get; set; }
         [Required]
         public string CultureCode { get; set; }
+        public SocialLinks Socials { get; set; }
+        public string LogoUrl { get; set; }
+        public string Website { get; set; }
+    }
+
+    public class SocialLinks
+    {
+        public string Facebook { get; set; }
+        public string Twitter { get; set; }
     }
 }

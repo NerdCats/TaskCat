@@ -3,7 +3,6 @@
     using Data.Model.Geocoding;
     using System.Collections.Generic;
     using Data.Model.Inventory;
-    using System;
 
     public class ItemDetailsInvoiceRequest : InvoiceRequestBase
     {

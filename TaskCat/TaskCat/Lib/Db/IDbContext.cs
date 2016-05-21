@@ -5,8 +5,9 @@
     using Data.Entity.Identity;
     using Data.Entity.ShadowCat;
     using AspNet.Identity.MongoDB;
+    using System;
 
-    public interface IDbContext
+    public interface IDbContext : IDisposable
     {
         IMongoDatabase Database { get; }
         IMongoDatabase ShadowCatDatabase { get; }

@@ -25,6 +25,7 @@
     using LinqToQuerystring;
     using Model.Pagination;
     using System.Web.Http.Description;
+    using Lib.Email;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -33,10 +34,12 @@
     public class JobController : ApiController
     {
         private IJobRepository repository;
+        private IEmailService mailService;
 
-        public JobController(IJobRepository repository)
+        public JobController(IJobRepository repository, IEmailService mailService)
         {
             this.repository = repository;
+            this.mailService = mailService;
         }
 
         /// <summary>
@@ -244,7 +247,6 @@
             }
         }
 
-
         /// <summary>
         /// Post a generic job payload
         /// </summary>
@@ -255,6 +257,27 @@
         {
             Job job = await repository.PostJob(model);
             return Json(job);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        /// 
+        [HttpGet]
+        [Route("api/job/notify/{jobId}")]
+        public async Task<IHttpActionResult> Notify(string jobId)
+        {
+            Job job = await repository.GetJob(jobId);
+            var result = await mailService.SendOrderMail(new SendEmailInvoiceRequest()
+            {
+                Job = job,
+                RecipientEmail = job.User.Email,
+                RecipientUsername = job.User.UserName
+            });
+
+            return Json(result);
         }
 
         /// <summary>

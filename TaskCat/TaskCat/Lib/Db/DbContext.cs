@@ -9,6 +9,7 @@
     using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
     using Data.Entity.ShadowCat;
+    using System;
 
     public class DbContext : IDbContext
     {
@@ -20,7 +21,7 @@
         public IMongoDatabase ShadowCatDatabase { get; private set; }
 
         #region Auth
-
+        
         private IMongoCollection<User> _users;
         public IMongoCollection<User> Users
         {
@@ -108,11 +109,12 @@
         }
 
         private void EnsureIndexes()
-        {
+        {         
             IndexChecks.EnsureUniqueIndexOnUserName(_users);
             IndexChecks.EnsureUniqueIndexOnEmail(_users);
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
 
+            IndexFacade.EnsureUniqueIndexOnPhoneNumber(_users);
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
         }
@@ -154,6 +156,11 @@
                 else
                     ShadowCatDatabase = shadowCatMongoClient.GetDatabase(shadowCatUrlBuilder.DatabaseName);
             }
+        }
+
+        public void Dispose()
+        {
+            //TODO: Need to write this;
         }
     }
 }

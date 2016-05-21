@@ -12,9 +12,9 @@
 
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-        private readonly AccountRepository authRepository;
+        private readonly AccountContext authRepository;
 
-        public SimpleAuthorizationServerProvider(AccountRepository authRepository)
+        public SimpleAuthorizationServerProvider(AccountContext authRepository)
         {
             this.authRepository = authRepository;
         }
@@ -90,9 +90,9 @@
             if (allowedOrigin == null) allowedOrigin = "*";
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-
+            
             //FIXME: Its a hack, usually it can be username, phonenumber or email address, need to implement this
-            User user = await authRepository.FindUser(context.UserName, context.Password);
+            User user = await authRepository.FindUserByUserNameEmailPhoneNumber(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -102,6 +102,7 @@
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
+            identity.AddClaim(new Claim(ClaimTypes.Authentication, "true"));
             identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
             identity.AddClaim(new Claim("sub", user.UserName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));

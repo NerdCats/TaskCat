@@ -41,14 +41,14 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = FromLocation;
             order.To = ToLocation;
-            order.PackageDescription = PackageDescription;
+            order.Description = PackageDescription;
             order.UserId = "12345678";
 
             Assert.IsNotNull(order);
             Assert.AreEqual(FromLocation, order.From);
             Assert.AreEqual(ToLocation, order.To);
             Assert.AreEqual(null, order.Name);
-            Assert.AreEqual(PackageDescription, order.PackageDescription);
+            Assert.AreEqual(PackageDescription, order.Description);
             Assert.AreEqual("default", order.PayloadType);
             Assert.AreEqual(JobTaskTypes.DELIVERY, order.Type);
             Assert.Null(order.ETA);
@@ -86,7 +86,7 @@
             DeliveryOrder order = new DeliveryOrder(orderName);
             order.From = FromLocation;
             order.To = ToLocation;
-            order.PackageDescription = PackageDescription;
+            order.Description = PackageDescription;
             order.UserId = "12345678";
 
             Assert.IsNotNull(order);

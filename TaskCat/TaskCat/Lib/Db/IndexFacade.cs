@@ -4,9 +4,19 @@
     using Job = Data.Entity.Job;
     using System.Collections.Generic;
     using Data.Entity;
+    using Data.Entity.Identity;
 
     public class IndexFacade
     {
+        public static void EnsureUniqueIndexOnPhoneNumber(IMongoCollection<User> userCollection)
+        {
+            CreateIndexOptions<User> options = new CreateIndexOptions<User>();
+            options.Background = true;
+            options.Unique = true;
+            options.Sparse = true;
+
+            userCollection.Indexes.CreateOne(Builders<User>.IndexKeys.Ascending(x => x.PhoneNumber));
+        }
         public static void EnsureJobIndexes(IMongoCollection<Job> jobCollection)
         {
             //Time Based indexes
@@ -55,5 +65,7 @@
             hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID));
             hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID));
         }
+
+       
     }
 }

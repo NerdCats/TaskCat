@@ -23,7 +23,7 @@ namespace TaskCat.App
     public class Startup
     {
         public void Configuration(IAppBuilder app)
-        {
+        {           
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
             app.Properties["host.AppMode"] = ConfigurationManager.AppSettings["ENV"];
@@ -40,14 +40,14 @@ namespace TaskCat.App
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
-            var container = builder.BuildContainer();
+            var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             var config = new HttpConfiguration();
 
-            BsonSerializerConfig.Configure();
+            BsonSerializerConfig.Configure();           
 
             ConfigureOAuth(app, container);
 
@@ -59,7 +59,7 @@ namespace TaskCat.App
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
-  
+            EmailTemplatesConfig.Configure();
 
             // FIXME: Need to move these with other startups
             // This is not ideal
