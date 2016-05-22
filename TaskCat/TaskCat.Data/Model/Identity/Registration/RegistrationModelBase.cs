@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Model.Identity.Registration
 {
+    using Geocoding;
     using MongoDB.Bson.Serialization.Attributes;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -37,5 +38,7 @@
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public IdentityTypes Type { get; set; }
+
+        public DefaultAddress Address { get; set; }
     }
 }

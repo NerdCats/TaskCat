@@ -41,7 +41,6 @@
         }
 
         public string PostalCode { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Floor is required")]
         public string Floor { get; set; }
         public string HouseNumber { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "AddressLine 1 is required")]
@@ -65,6 +64,7 @@
                 sb.AppendFormat("{0}", AddressLine1);
 
                 if (!string.IsNullOrWhiteSpace(AddressLine2)) sb.AppendFormat(", {0}", AddressLine2);
+                if (!string.IsNullOrWhiteSpace(Locality)) sb.AppendFormat(", {0}", Locality);
                 if (!string.IsNullOrWhiteSpace(City)) sb.AppendFormat(", {0}", City);
                 if (!string.IsNullOrWhiteSpace(City) && !string.IsNullOrWhiteSpace(PostalCode)) sb.AppendFormat("-{0}", PostalCode);
                 if (!string.IsNullOrWhiteSpace(State)) sb.AppendFormat(", {0}", State);

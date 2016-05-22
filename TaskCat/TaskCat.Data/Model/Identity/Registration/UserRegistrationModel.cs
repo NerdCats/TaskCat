@@ -15,6 +15,9 @@
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public Gender Gender { get; set; }
-        public DefaultAddress Address { get; set; }
+
+        public UserRegistrationModel()
+        {
+        }
     }
 }
