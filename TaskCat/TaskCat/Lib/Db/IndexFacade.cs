@@ -11,11 +11,10 @@
         public static void EnsureUniqueIndexOnPhoneNumber(IMongoCollection<User> userCollection)
         {
             CreateIndexOptions<User> options = new CreateIndexOptions<User>();
-            options.Background = true;
             options.Unique = true;
             options.Sparse = true;
 
-            userCollection.Indexes.CreateOne(Builders<User>.IndexKeys.Ascending(x => x.PhoneNumber));
+            userCollection.Indexes.CreateOne(Builders<User>.IndexKeys.Ascending(x => x.PhoneNumber), options);
         }
         public static void EnsureJobIndexes(IMongoCollection<Job> jobCollection)
         {
@@ -62,10 +61,8 @@
             var hridIndexOptions = new CreateIndexOptions();
             hridIndexOptions.Unique = true;
 
-            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID));
-            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID));
-        }
-
-       
+            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID), hridIndexOptions);
+            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID), hridIndexOptions);
+        }  
     }
 }
