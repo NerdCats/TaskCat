@@ -97,9 +97,8 @@ namespace TaskCat.App
         {
             var dbContext = container.Resolve<IDbContext>();
 
-            //FIXME: I know, utter stupidity here, need a script to do this
-            var numberOfClients = dbContext.Clients.Count(Builders<Client>.Filter.Empty);            
-            if (numberOfClients == 0)
+            //FIXME: I know, utter stupidity here, need a script to do this       
+            if (dbContext.Clients.Count(Builders<Client>.Filter.Empty) == 0)
             {
                 // Inserting clients if they are not initialized
                 dbContext.Clients.InsertOne(new Client
@@ -110,7 +109,7 @@ namespace TaskCat.App
                     ApplicationType = ApplicationTypes.JavaScript,
                     Active = false,
                     RefreshTokenLifeTime = 7200,
-                    AllowedOrigin = "http://gofetch.cloudapp.net"
+                    AllowedOrigin = "*"
                 });
 
                 dbContext.Clients.InsertOne(new Client

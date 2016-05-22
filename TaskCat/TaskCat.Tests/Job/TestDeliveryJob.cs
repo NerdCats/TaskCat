@@ -37,15 +37,17 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
-            
-            UserModel userModel = new UserModel() {
+
+            UserModel userModel = new UserModel()
+            {
                 Email = "someone@somewhere.com",
                 EmailConfirmed = false,
                 IsUserAuthenticated = false,
                 PhoneNumber = "+8801684512833",
                 PhoneNumberConfirmed = true,
-                Profile = new UserProfile() {
-                    Address = "Somewhere User belong",
+                Profile = new UserProfile()
+                {
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -66,7 +68,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -112,7 +114,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -133,7 +135,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -188,7 +190,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -200,7 +202,7 @@
                 UserName = "GabulTheAwesome"
             };
 
-           
+
 
             var builder = new DeliveryJobBuilder(order, userModel, hridService, paymentMethodMock.Object);
             builder.BuildJob();
@@ -228,7 +230,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -252,7 +254,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Some place in somewhere",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 20,
                     FirstName = "John",
                     LastName = "Doe",
@@ -289,7 +291,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -313,7 +315,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Some place in somewhere",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 20,
                     FirstName = "John",
                     LastName = "Doe",
@@ -352,7 +354,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Somewhere User belong",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 26,
                     FirstName = "Gabul",
                     LastName = "Habul",
@@ -376,7 +378,7 @@
                 PhoneNumberConfirmed = true,
                 Profile = new UserProfile()
                 {
-                    Address = "Some place in somewhere",
+                    Address = new DefaultAddress("Somewhere User belong", new Point(2, 1)),
                     Age = 20,
                     FirstName = "John",
                     LastName = "Doe",
