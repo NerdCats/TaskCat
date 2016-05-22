@@ -27,7 +27,7 @@
     /// </summary>
     /// 
 
-    [RoutePrefix("api/Account")] 
+    [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private readonly AccountContext accountContext = null;
@@ -351,24 +351,58 @@
             return Json(await accountContext.UpdateUsernameById(userId, newUsername));
         }
 
-        // FIXME: Im not sure how this would pan out though, may be would pan out fine or not
-        // Should I use HTTP Verbs here to determine result?
         /// <summary>
         /// Get whether a suggested username is availalble or not
         /// </summary>
-        /// <param name="suggestedUsername">
+        /// <param name="username">
         /// suggested username 
         /// </param>
         /// <returns>
         /// returns the availability of suggested user name
         /// </returns>
         [HttpGet]
-        [Route("username")]
-        [ResponseType(typeof(UsernameAvailibilityResponse))]
-        public async Task<IHttpActionResult> SuggestUserName(string suggestedUsername)
+        [Route("check/Username/{username}")]
+        [ResponseType(typeof(AvailibilityResponse))]
+        public async Task<IHttpActionResult> CheckUserName(string username)
         {
-            var result = await accountContext.IsUsernameAvailable(suggestedUsername);
-            return Json(new UsernameAvailibilityResponse(suggestedUsername, result));
+            var result = await accountContext.IsUsernameAvailable(username);
+            return Json(new AvailibilityResponse("username", username, result));
+        }
+
+        /// <summary>
+        /// Get whether a suggested phone number is availalble or not
+        /// </summary>
+        /// <param name="phoneNumber">
+        /// suggested phone number
+        /// </param>
+        /// <returns>
+        /// returns the availability of suggested phone number
+        /// </returns>
+        [HttpGet]
+        [Route("check/PhoneNumber/{phoneNumber}")]
+        [ResponseType(typeof(AvailibilityResponse))]
+        public async Task<IHttpActionResult> CheckPhoneNumber(string phoneNumber)
+        {
+            var result = await accountContext.IsPhoneNumberAvailable(phoneNumber);
+            return Json(new AvailibilityResponse("phoneNumber", phoneNumber, result));
+        }
+
+        /// <summary>
+        /// Get whether a suggested email is availalble or not
+        /// </summary>
+        /// <param name="email">
+        /// suggested email
+        /// </param>
+        /// <returns>
+        /// returns the availability of suggested email
+        /// </returns>
+        [HttpGet]
+        [Route("check/email/{email}")]
+        [ResponseType(typeof(AvailibilityResponse))]
+        public async Task<IHttpActionResult> CheckEmail(string email)
+        {
+            var result = await accountContext.IsEmailAvailable(email);
+            return Json(new AvailibilityResponse("email", email, result));
         }
 
         [HttpPut]

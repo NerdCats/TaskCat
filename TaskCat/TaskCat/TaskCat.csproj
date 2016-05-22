@@ -395,7 +395,7 @@
     <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
-    <Compile Include="Model\Account\UsernameAvailibilityResponse.cs" />
+    <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />

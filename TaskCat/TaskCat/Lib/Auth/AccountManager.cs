@@ -70,6 +70,12 @@
             return user;
         }
 
+        public async Task<User> FindByPhoneNumber(string phoneNumber)
+        {
+            var user = await accountStore.FindUserByPhoneNumber(phoneNumber);
+            return user;
+        }
+
         public override async Task<User> FindByIdAsync(string userId)
         {
             var user = await base.FindByIdAsync(userId);

@@ -219,17 +219,33 @@
 
         internal async Task<bool> IsUsernameAvailable(string suggestedUsername)
         {
+            var user = await accountManager.FindByNameAsync(suggestedUsername);
+            if (user == null)
+                return true;
+            return false;
+        }
+
+        internal async Task<bool> IsPhoneNumberAvailable(string phoneNumber)
+        {
             try
             {
-                var user = await accountManager.FindByNameAsync(suggestedUsername);
+                var user = await accountManager.FindByPhoneNumber(phoneNumber);
                 if (user == null)
                     return true;
                 return false;
             }
-            catch (Exception)
+            catch (EntityNotFoundException)
             {
                 return false;
             }
+        }
+
+        internal async Task<bool> IsEmailAvailable(string email)
+        {
+            var user = await accountManager.FindByEmailAsync(email);
+            if (user == null)
+                return true;
+            return false;
         }
 
         internal async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName)
