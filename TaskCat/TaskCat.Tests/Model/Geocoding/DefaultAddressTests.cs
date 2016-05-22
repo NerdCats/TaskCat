@@ -25,7 +25,7 @@
             Assert.AreEqual("Dhaka", address.City);
             Assert.AreEqual("1217", address.PostalCode);
             Assert.AreEqual("Bangladesh", address.Country);
-            Assert.AreEqual("Test AddressLine 1, Test AddressLine 2, Dhaka-1217, Dhaka, Bangladesh", address.Address);
+            Assert.AreEqual("Test AddressLine 1, Test AddressLine 2, TestLocality, Dhaka-1217, Dhaka, Bangladesh", address.Address);
         }
 
         [Test]
