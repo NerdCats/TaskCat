@@ -18,7 +18,7 @@
             addressWithFormattedString = new DefaultAddress("Test Formatted Address", new Point(new double[] { 1, 2 }.ToList()));
             Assert.AreEqual("Test Formatted Address", addressWithFormattedString.Address);
 
-            address = new DefaultAddress("Test AddressLine 1", "Test AddressLine 2", "Dhaka", "1217", "Bangladesh", new Point(new double[] { 1, 2 }.ToList()));
+            address = new DefaultAddress("Test AddressLine 1", "Test AddressLine 2", "TestLocality", "Dhaka", "1217", "Bangladesh", new Point(new double[] { 1, 2 }.ToList()));
             address.State = "Dhaka";
             Assert.AreEqual("Test AddressLine 1", address.AddressLine1);
             Assert.AreEqual("Test AddressLine 2", address.AddressLine2);
@@ -32,7 +32,7 @@
         public void Test_DefaultAddress_Creation_Without_AddressLine()
         {
             Assert.Throws<ArgumentException>(()=> {
-                address = new DefaultAddress("", "Test AddressLine 2", "Dhaka", "1217", "Bangladesh", new Point(new double[] { 1, 2 }.ToList()));
+                address = new DefaultAddress("", "Test AddressLine 2", "TestLocality", "Dhaka", "1217", "Bangladesh", new Point(new double[] { 1, 2 }.ToList()));
             });            
         }
     }
