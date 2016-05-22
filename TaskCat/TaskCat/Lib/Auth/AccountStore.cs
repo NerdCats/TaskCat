@@ -24,7 +24,7 @@
 
         public async Task<User> FindUserByUserNameOrPhoneNumberOrEmail(string userKey)
         {
-            var user = await collection.Find(x => x.UserName == userKey || x.PhoneNumber == userKey || x.Email == x.Email).FirstOrDefaultAsync();
+            var user = await collection.Find(x => x.UserName == userKey || x.PhoneNumber == userKey || x.Email == userKey).FirstOrDefaultAsync();
             if (user == null)
                 throw new EntityNotFoundException("User", userKey);
             return user;
