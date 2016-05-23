@@ -320,6 +320,7 @@
     <Compile Include="Lib\Auth\AccountContext.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManager.cs" />
+    <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
+    <Compile Include="Model\Response\ErrorResponse.cs" />
     <Compile Include="Model\Storage\FileDeleteModel.cs" />
     <Compile Include="Model\Storage\FileDownloadModel.cs" />
     <Compile Include="Model\Storage\FileUploadModel.cs" />

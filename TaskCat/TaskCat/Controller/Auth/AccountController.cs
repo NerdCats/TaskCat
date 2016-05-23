@@ -22,10 +22,11 @@
     using System.Web.Http.Description;
     using Lib.Utility;
     using Model.Account;
-    /// <summary>
-    /// Account (User And Asset related Controller)
-    /// </summary>
-    /// 
+    using Model.Response;
+    using System.Net.Http.Formatting;/// <summary>
+                                     /// Account (User And Asset related Controller)
+                                     /// </summary>
+                                     /// 
 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -352,57 +353,50 @@
         }
 
         /// <summary>
-        /// Get whether a suggested username is availalble or not
+        /// Check availibility of a suggsted <see cref="CheckPropertyNames.EMAIL"/> , <see cref="CheckPropertyNames.PHONENUMBER"/> or an <see cref="CheckPropertyNames.EMAIL"/>
         /// </summary>
-        /// <param name="username">
-        /// suggested username 
-        /// </param>
         /// <returns>
-        /// returns the availability of suggested user name
+        /// returns whether the suggested value is available
         /// </returns>
         [HttpGet]
-        [Route("check/Username/{username}")]
+        [Route("check")]
         [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckUserName(string username)
+        public async Task<IHttpActionResult> CheckEmail()
         {
-            var result = await accountContext.IsUsernameAvailable(username);
-            return Json(new AvailibilityResponse("username", username, result));
-        }
+            var queryParams = this.Request.GetQueryNameValuePairs();
+            if (queryParams.Count() > 1)
+                throw new NotSupportedException("More than one parameter availibility check is supported");
 
-        /// <summary>
-        /// Get whether a suggested phone number is availalble or not
-        /// </summary>
-        /// <param name="phoneNumber">
-        /// suggested phone number
-        /// </param>
-        /// <returns>
-        /// returns the availability of suggested phone number
-        /// </returns>
-        [HttpGet]
-        [Route("check/PhoneNumber/{phoneNumber}")]
-        [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckPhoneNumber(string phoneNumber)
-        {
-            var result = await accountContext.IsPhoneNumberAvailable(phoneNumber);
-            return Json(new AvailibilityResponse("phoneNumber", phoneNumber, result));
-        }
+            var queryKeyVal = queryParams.First();
+            var property = queryKeyVal.Key;
+            var suggestedValue = queryKeyVal.Value;
 
-        /// <summary>
-        /// Get whether a suggested email is availalble or not
-        /// </summary>
-        /// <param name="email">
-        /// suggested email
-        /// </param>
-        /// <returns>
-        /// returns the availability of suggested email
-        /// </returns>
-        [HttpGet]
-        [Route("check/email/{email}")]
-        [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckEmail(string email)
-        {
-            var result = await accountContext.IsEmailAvailable(email);
-            return Json(new AvailibilityResponse("email", email, result));
+            bool result;
+
+            switch (property.ToLower())
+            {
+                case CheckPropertyNames.EMAIL:
+                    result = await accountContext.IsEmailAvailable(suggestedValue);
+                    break;
+                case CheckPropertyNames.PHONENUMBER:
+                    result = await accountContext.IsPhoneNumberAvailable(suggestedValue);
+                    break;
+                case CheckPropertyNames.USERNAME:
+                    result = await accountContext.IsUsernameAvailable(suggestedValue);
+                    break;
+                default:
+                    return Content(HttpStatusCode.BadRequest, new ErrorResponse()
+                    {
+                        Message = $"Availibility check on {property} is not supported, supported property names are listed in data",
+                        Data = new List<string>() {
+                            CheckPropertyNames.EMAIL,
+                            CheckPropertyNames.PHONENUMBER,
+                            CheckPropertyNames.USERNAME
+                        }
+                    }, new JsonMediaTypeFormatter());
+            }
+
+            return Json(new AvailibilityResponse(property, suggestedValue, result));
         }
 
         [HttpPut]
