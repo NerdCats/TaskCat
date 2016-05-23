@@ -361,7 +361,7 @@
         [HttpGet]
         [Route("check")]
         [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckEmail()
+        public async Task<IHttpActionResult> Check()
         {
             var queryParams = this.Request.GetQueryNameValuePairs();
             if (queryParams.Count() > 1)

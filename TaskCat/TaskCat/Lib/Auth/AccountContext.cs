@@ -236,7 +236,7 @@
             }
             catch (EntityNotFoundException)
             {
-                return false;
+                return true;
             }
         }
 
