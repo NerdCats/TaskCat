@@ -51,7 +51,7 @@
 
             #region Job
             builder.RegisterType<JobStore>().InstancePerLifetimeScope();
-            builder.RegisterType<JobManager>().InstancePerLifetimeScope();
+            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
             #endregion
 
             #region Order
@@ -60,7 +60,7 @@
             #endregion
 
             #region Storage
-            builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
+            builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
             #endregion
 
@@ -89,5 +89,5 @@
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }
-    }    
+    }
 }

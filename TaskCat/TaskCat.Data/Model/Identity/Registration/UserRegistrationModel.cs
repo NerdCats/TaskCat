@@ -15,7 +15,7 @@
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public Gender Gender { get; set; }
-        public List<string> InterestedLocalities { get; internal set; }
+        public List<string> InterestedLocalities { get; set; }
 
         public UserRegistrationModel()
         {

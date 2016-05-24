@@ -34,7 +34,7 @@
         private readonly IDbContext dbContext;
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
-        private readonly JobManager jobManager;
+        private readonly IJobManager jobManager;
         private readonly IEmailService mailService;
 
         public AccountContext(
@@ -42,7 +42,7 @@
             IEmailService mailService,
             AccountManager accoutnManager,
             IBlobService blobService,
-            JobManager jobManager)
+            IJobManager jobManager)
         {
             this.dbContext = dbContext;
             this.accountManager = accoutnManager;
@@ -52,7 +52,7 @@
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
-        internal async Task<AccountResult> RegisterUser(RegistrationModelBase model)
+        public async Task<AccountResult> RegisterUser(RegistrationModelBase model)
         {
             UserProfile profile;
             User user = null;

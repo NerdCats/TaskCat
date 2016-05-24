@@ -349,6 +349,7 @@
     <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
+    <Compile Include="Lib\Job\IJobManager.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />
