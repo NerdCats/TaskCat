@@ -28,7 +28,7 @@
         [Required(ErrorMessage = "A email address must be provided")]
         public string Email { get; set; }
 
-        [Phone]
+        [Phone(ErrorMessage = "Phone number not valid")]
         [Display(Name = "PhoneNumber")]
         public string PhoneNumber { get; set; }
 
