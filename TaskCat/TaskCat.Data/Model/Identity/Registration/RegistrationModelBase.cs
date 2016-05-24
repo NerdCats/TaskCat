@@ -23,9 +23,9 @@
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Invalid email address provided")]
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "A valid email address must be provided")]
+        [Required(ErrorMessage = "A email address must be provided")]
         public string Email { get; set; }
 
         [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage = @"Please provide a valid Bangladeshi Phone Number, ex(+)")]
