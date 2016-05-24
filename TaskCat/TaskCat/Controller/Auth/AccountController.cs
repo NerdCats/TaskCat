@@ -23,11 +23,12 @@
     using Lib.Utility;
     using Model.Account;
     using Model.Response;
-    using System.Net.Http.Formatting;/// <summary>
-                                     /// Account (User And Asset related Controller)
-                                     /// </summary>
-                                     /// 
+    using System.Net.Http.Formatting;
 
+    /// <summary>
+    /// Account (User And Asset related Controller)
+    /// </summary>
+    /// 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
