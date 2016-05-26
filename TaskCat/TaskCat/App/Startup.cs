@@ -19,6 +19,10 @@ namespace TaskCat.App
     using Data.Model.Identity;
     using Lib.Utility.ActionFilter;
     using System.Reflection;
+    using Microsoft.Owin.Security.Facebook;
+    using Lib.Identity;
+    using Settings;
+    using AppSettings = Its.Configuration.Settings;
 
     public class Startup
     {
@@ -87,10 +91,25 @@ namespace TaskCat.App
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             };
 
+
+            app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
             // Generating Token with Providers
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
 
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
+            var externalLoginSettings = AppSettings.Get<ExternalLoginSettings>();
+            if (externalLoginSettings != null && externalLoginSettings.Facebook != null)
+            {
+                var facebookAuthOptions = new FacebookAuthenticationOptions()
+                {
+                    AppId = externalLoginSettings.Facebook.AppId,
+                    AppSecret = externalLoginSettings.Facebook.AppSecret,
+                    Provider = new FacebookAuthProvider()
+                };
+
+                app.UseFacebookAuthentication(facebookAuthOptions);
+            }
         }
 
         private void InitializeClients(IContainer container)
