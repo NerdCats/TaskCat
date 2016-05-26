@@ -24,15 +24,16 @@
     using Model.Account;
     using Model.Response;
     using System.Net.Http.Formatting;
-
-    /// <summary>
-    /// Account (User And Asset related Controller)
-    /// </summary>
-    /// 
+    using Lib.Db;
+    using Data.Entity.Identity;    /// <summary>
+                                   /// Account (User And Asset related Controller)
+                                   /// </summary>
+                                   /// 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private readonly AccountContext accountContext = null;
+        private readonly IDbContext dbContext;
 
         /// <summary>
         /// Account Controller Constructor
@@ -40,8 +41,9 @@
         /// <param name="authRepository">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AccountContext authRepository)
+        public AccountController(AccountContext authRepository, IDbContext dbcontext)
         {
+            this.dbContext = dbcontext;
             this.accountContext = authRepository;
         }
 
@@ -433,6 +435,50 @@
             }
 
             return BadRequest();
+        }
+
+        private string ValidateClientAndRedirectUri(HttpRequestMessage request, ref string redirectUriOutput)
+        {
+            Uri redirectUri;
+            var queryStrings = request.GetQueryNameValuePairs();
+            var redirectUriString = queryStrings.FirstOrDefault(keyValue => string.Compare(keyValue.Key, "redirect_uri", true) == 0).Value;
+
+            if (string.IsNullOrWhiteSpace(redirectUriString))
+            {
+                return "redirect_uri is required";
+            }
+
+            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
+
+            if (!validUri)
+            {
+                return "redirect_uri is invalid";
+            }
+
+            var clientId = queryStrings.FirstOrDefault(keyValue => string.Compare(keyValue.Key, "client_id", true) == 0).Value;
+
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                return "client_Id is required";
+            }
+
+            // TODO: I need to find client here, no client repository to be honest
+            Client client = null;
+
+            if (client == null)
+            {
+                return string.Format("Client_id '{0}' is not registered in the system.", clientId);
+            }
+
+            if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
+            {
+                return string.Format("The given URL is not allowed by Client_id '{0}' configuration.", clientId);
+            }
+
+            redirectUriOutput = redirectUri.AbsoluteUri;
+
+            return string.Empty;
+
         }
 
     }
