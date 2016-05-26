@@ -283,6 +283,7 @@
     <Content Include=".config\local\ProprietorSettings.json" />
     <Content Include=".config\local\SendWithUsSettings.json" />
     <Content Include=".config\local\EmailTemplatePathSettings.json" />
+    <Content Include=".config\local\ExternalLoginSettings.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -307,6 +308,7 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="App\Settings\EmailTemplatePathSettings.cs" />
+    <Compile Include="App\Settings\ExternalLoginSettings.cs" />
     <Compile Include="App\Settings\ProprietorSettings.cs" />
     <Compile Include="App\Settings\SMTPMailSettings.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
