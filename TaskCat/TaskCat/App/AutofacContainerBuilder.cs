@@ -69,10 +69,10 @@
             #endregion
 
             #region Auth
-            builder.RegisterType<SimpleAuthorizationServerProvider>()
+            builder.RegisterType<TaskCatAuthorizationServerProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
-            builder.RegisterType<SimpleRefreshTokenProvider>()
+            builder.RegisterType<TaskCatRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 

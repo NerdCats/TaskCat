@@ -10,11 +10,11 @@
     using System.Security.Claims;
     using Microsoft.Owin.Security;
 
-    public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
+    public class TaskCatAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         private readonly AccountContext authRepository;
 
-        public SimpleAuthorizationServerProvider(AccountContext authRepository)
+        public TaskCatAuthorizationServerProvider(AccountContext authRepository)
         {
             this.authRepository = authRepository;
         }
