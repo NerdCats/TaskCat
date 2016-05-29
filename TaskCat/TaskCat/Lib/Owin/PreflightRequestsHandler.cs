@@ -21,6 +21,10 @@
                 context.Response.Headers.Add("Access-Control-Allow-Headers", new string[] { "authorization" });
                 context.Response.Headers.Add("Access-Control-Allow-Methods", new string[] { "GET", "POST", "PUT", "DELETE" });
             }
+            else
+            {
+                await Next.Invoke(context);
+            }
         }
     }
 }
