@@ -5,7 +5,7 @@
     using System.Net.Http;
     using System.Threading.Tasks;
 
-    public class PreflightRequestsHandler : OwinMiddleware
+    internal class PreflightRequestsHandler : OwinMiddleware
     {
         public PreflightRequestsHandler(OwinMiddleware next) : base(next)
         {
