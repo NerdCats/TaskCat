@@ -18,7 +18,7 @@
 
     public class OrderRepository : IOrderRepository
     {
-        JobManager manager;
+        IJobManager manager;
         SupportedOrderStore supportedOrderStore;
         AccountManager accountManager;
         IHRIDService hridService;
@@ -28,7 +28,7 @@
         IPaymentService paymentService;
 
         public OrderRepository(
-            JobManager manager,
+            IJobManager manager,
             SupportedOrderStore supportedOrderStore,
             AccountManager accountManager,
             IHRIDService hridService,
