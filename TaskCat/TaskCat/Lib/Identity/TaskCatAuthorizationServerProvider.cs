@@ -9,6 +9,7 @@
     using Utility;
     using System.Security.Claims;
     using Microsoft.Owin.Security;
+    using Exceptions;
 
     public class TaskCatAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
@@ -90,15 +91,24 @@
             if (allowedOrigin == null) allowedOrigin = "*";
 
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { allowedOrigin });
-            
-            //FIXME: Its a hack, usually it can be username, phonenumber or email address, need to implement this
-            User user = await authRepository.FindUserByUserNameEmailPhoneNumber(context.UserName, context.Password);
 
-            if (user == null)
+            //FIXME: Its a hack, usually it can be username, phonenumber or email address, need to implement this
+            User user;
+            try
+            {
+                user = await authRepository.FindUserByUserNameEmailPhoneNumber(context.UserName, context.Password);
+                if(user ==null)
+                {
+                    context.SetError("invalid_grant", "The user name or password is incorrect.");
+                    return;
+                }
+            }
+            catch (EntityNotFoundException)
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
+
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
