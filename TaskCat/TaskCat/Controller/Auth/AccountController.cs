@@ -189,7 +189,7 @@
         /// Desired page number
         /// </param>
         /// <param name="fromDateTime">
-        /// Results should be fetched from this date, by default results for last 5 days are sent back
+        /// Results should be fetched from this date, if sent null, all results are fetched back regardless of Creation Time of the Job
         /// </param>
         /// <param name="jobStateUpto">
         /// Highest Job State to be fetched, default is IN_PROGRESS, that means by default ENQUEUED and IN_PROGRESS jobs would be fetched
