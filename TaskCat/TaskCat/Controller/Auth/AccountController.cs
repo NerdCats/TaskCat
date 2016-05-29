@@ -183,7 +183,7 @@
         /// userId for the Asset to find assigned jobs, would only work for Administrator and BackendAdministrator roles
         /// </param>
         /// <param name="pageSize">
-        /// PageSize of the request, default is 10
+        /// Page size of the request, default is 10
         /// </param>
         /// <param name="page">
         /// Desired page number
