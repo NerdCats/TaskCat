@@ -39,14 +39,16 @@
 
         internal async Task<IEnumerable<Job>> FindJobs(string orderType, int start, int limit)
         {
-            var FindContext = string.IsNullOrWhiteSpace(orderType) ? 
+            var FindContext = string.IsNullOrWhiteSpace(orderType) ?
                 _context.Jobs.Find(x => true) : _context.Jobs.Find(x => x.Order.Type == orderType);
             return await FindContext.SortBy(x => x.CreateTime).Skip(start).Limit(limit).ToListAsync();
         }
 
-        internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo , SortDirection sortByCreateTimeDirection)
+        internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo, SortDirection sortByCreateTimeDirection)
         {
-            var FindContext = _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo && x.CreateTime >= fromDateTime);
+            var FindContext = fromDateTime == null ?
+                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo) :
+                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo && x.CreateTime >= fromDateTime);
             var orderContext = sortByCreateTimeDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
             return new QueryResult<Job>()
             {
@@ -57,12 +59,13 @@
 
         internal async Task<QueryResult<Job>> FindJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
-            return await Task.Run(() => {
-                IQueryable queryResult; 
+            return await Task.Run(() =>
+            {
+                IQueryable queryResult;
                 queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
-                if (query.OrderBy!=null)
+                if (query.OrderBy != null)
                     queryResult = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IQueryable<Job>;
-                
+
                 var data = queryResult as IEnumerable<Job>;
 
                 if (query.Count != null && query.Count.Value)

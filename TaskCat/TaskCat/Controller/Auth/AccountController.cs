@@ -204,8 +204,13 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         [Route("{userId?}/jobs")]
-        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, DateTime? fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
+        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, string fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
         {
+            DateTime? fromdt = null;
+            if (!string.IsNullOrEmpty(fromDateTime))
+            {
+                fromdt = DateTime.Parse(fromDateTime);
+            }
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 if (this.User.IsInRole("Asset") && (this.User.Identity.GetUserId() != userId))
@@ -216,7 +221,7 @@
                 userId = this.User.Identity.GetUserId();
             }
 
-            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromDateTime, jobStateUpto, sortDirection, this.Request);
+            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request);
             return Json(result);
         }
 

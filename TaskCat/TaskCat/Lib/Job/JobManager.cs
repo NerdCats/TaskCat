@@ -82,9 +82,6 @@
 
         public async Task<QueryResult<Job>> GetJobsAssignedToUser(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
         {
-            if (fromDateTime == null)
-                fromDateTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(5));
-
             var jobs = await store.FindJobs(userId, start, limit, fromDateTime, jobStateToFetchUpTo, sortByCreateTimeDirection);
             return jobs;
         }
