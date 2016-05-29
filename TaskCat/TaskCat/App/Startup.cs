@@ -23,6 +23,7 @@ namespace TaskCat.App
     using Lib.Identity;
     using Settings;
     using AppSettings = Its.Configuration.Settings;
+    using Lib.Owin;
 
     public class Startup
     {
@@ -46,10 +47,13 @@ namespace TaskCat.App
 
             var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
+            app.Use(typeof(PreflightRequestsHandler));
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
+            
             var config = new HttpConfiguration();
+            
 
             BsonSerializerConfig.Configure();           
 
@@ -57,9 +61,10 @@ namespace TaskCat.App
 
             WebApiConfig.Register(config, webApiDependencyResolver);
             config.Filters.Add(new ErrorDocumentFilter());
+            
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-
+            
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
