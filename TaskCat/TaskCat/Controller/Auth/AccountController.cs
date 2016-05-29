@@ -183,13 +183,13 @@
         /// userId for the Asset to find assigned jobs, would only work for Administrator and BackendAdministrator roles
         /// </param>
         /// <param name="pageSize">
-        /// PageSize of the request, default is 10
+        /// Page size of the request, default is 10
         /// </param>
         /// <param name="page">
         /// Desired page number
         /// </param>
-        /// <param name="dateTimeUpto">
-        /// Results should be fetched from this date, usually results for last 5 days are sent back
+        /// <param name="fromDateTime">
+        /// Results should be fetched from this date, by default results for last 5 days are sent back
         /// </param>
         /// <param name="jobStateUpto">
         /// Highest Job State to be fetched, default is IN_PROGRESS, that means by default ENQUEUED and IN_PROGRESS jobs would be fetched
@@ -204,8 +204,13 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         [Route("{userId?}/jobs")]
-        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, DateTime? dateTimeUpto = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
+        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, string fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
         {
+            DateTime? fromdt = null;
+            if (!string.IsNullOrEmpty(fromDateTime))
+            {
+                fromdt = DateTime.Parse(fromDateTime);
+            }
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 if (this.User.IsInRole("Asset") && (this.User.Identity.GetUserId() != userId))
@@ -216,7 +221,7 @@
                 userId = this.User.Identity.GetUserId();
             }
 
-            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, dateTimeUpto, jobStateUpto, sortDirection, this.Request);
+            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request);
             return Json(result);
         }
 
