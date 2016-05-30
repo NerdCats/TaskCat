@@ -37,7 +37,5 @@
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public IdentityTypes Type { get; set; }
-
-        public DefaultAddress Address { get; set; }
     }
 }

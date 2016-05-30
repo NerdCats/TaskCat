@@ -37,7 +37,6 @@
             this.FirstName = userModel.FirstName;
             this.LastName = userModel.LastName;
             this.Gender = userModel.Gender;
-            this.Address = userModel.Address;
             this.Age = userModel.Age;
             this.InterestedLocalities = userModel.InterestedLocalities;
         }
