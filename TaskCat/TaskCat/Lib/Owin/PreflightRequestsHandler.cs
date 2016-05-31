@@ -19,7 +19,7 @@
                 // Define and add values to variables: origins, headers, methods (can be global)               
                 context.Response.Headers.Add("Access-Control-Allow-Origin", new string[] { "*" });
                 context.Response.Headers.Add("Access-Control-Allow-Headers", new string[] { "authorization", "content-type" });
-                context.Response.Headers.Add("Access-Control-Allow-Methods", new string[] { "GET", "POST", "PUT", "DELETE" });
+                context.Response.Headers.Add("Access-Control-Allow-Methods", new string[] { "GET", "POST", "PUT", "DELETE", "PATCH" });
             }
             else
             {
