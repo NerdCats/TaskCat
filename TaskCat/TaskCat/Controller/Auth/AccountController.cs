@@ -25,10 +25,13 @@
     using Model.Response;
     using System.Net.Http.Formatting;
     using Lib.Db;
-    using Data.Entity.Identity;    /// <summary>
-                                   /// Account (User And Asset related Controller)
-                                   /// </summary>
-                                   /// 
+    using Data.Entity.Identity;
+    using Lib.Email;
+
+    /// <summary>
+    /// Account (User And Asset related Controller)
+    /// </summary>
+    /// 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -108,6 +111,20 @@
             {
                 return GetErrorResult(result);
             }
+        }
+
+        [ResponseType(typeof(SendEmailResponse))]
+        [HttpGet]
+        [Route("ResendConfirmEmail")]
+        public async Task<IHttpActionResult> ResendConfirmationEmail(string userId)
+        {
+            var user = await accountContext.FindUser(userId);
+            var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
+
+            if (result.Error != null)
+                return Json(result);
+            else
+                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
         }
 
         protected IHttpActionResult GetErrorResult(IdentityResult result)
