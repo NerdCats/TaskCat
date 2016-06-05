@@ -35,7 +35,7 @@
             builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
             builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountContext>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
             builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
             #endregion
 

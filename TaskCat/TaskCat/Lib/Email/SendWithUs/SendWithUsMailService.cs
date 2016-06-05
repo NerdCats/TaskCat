@@ -56,12 +56,7 @@
             var client = new SendWithUsClient(settings.ApiKey);
             var response = await client.SendAsync(sendWithUsRequest);
 
-            return new SendEmailResponse()
-            {
-                Error = response.ErrorMessage,
-                StatusCode = response.StatusCode,
-                Success = response.Success
-            };
+            return new SendEmailResponse(response.StatusCode, response.ErrorMessage);
         }
 
         public Task<SendEmailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)

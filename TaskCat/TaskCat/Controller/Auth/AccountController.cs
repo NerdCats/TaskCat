@@ -25,26 +25,27 @@
     using Model.Response;
     using System.Net.Http.Formatting;
     using Lib.Db;
-    using Data.Entity.Identity;    /// <summary>
-                                   /// Account (User And Asset related Controller)
-                                   /// </summary>
-                                   /// 
+    using Data.Entity.Identity;
+    using Lib.Email;
+
+    /// <summary>
+    /// Account (User And Asset related Controller)
+    /// </summary>
+    /// 
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private readonly AccountContext accountContext = null;
-        private readonly IDbContext dbContext;
+        private readonly IAccountContext accountContext = null;
 
         /// <summary>
         /// Account Controller Constructor
         /// </summary>
-        /// <param name="authRepository">
+        /// <param name="accountContext">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AccountContext authRepository, IDbContext dbcontext)
+        public AccountController(IAccountContext accountContext)
         {
-            this.dbContext = dbcontext;
-            this.accountContext = authRepository;
+            this.accountContext = accountContext;
         }
 
         /// <summary>
@@ -108,6 +109,30 @@
             {
                 return GetErrorResult(result);
             }
+        }
+
+        /// <summary>
+        /// Resend Confirmation Mails from the system if needed
+        /// </summary>
+        /// <param name="userId">
+        /// user that needs a confirmation mail 
+        /// </param>
+        /// <returns>
+        /// Sends back a response that states the status of the email request
+        /// </returns>
+        [ResponseType(typeof(SendEmailResponse))]
+        [HttpGet]
+        [Route("ResendConfirmEmail")]
+        public async Task<IHttpActionResult> ResendConfirmationEmail(string userId)
+        {
+            var user = await accountContext.FindUser(userId);
+            var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
+
+            if (!result.Success)
+                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());    
+            else
+                return Json(result);
+
         }
 
         protected IHttpActionResult GetErrorResult(IdentityResult result)
