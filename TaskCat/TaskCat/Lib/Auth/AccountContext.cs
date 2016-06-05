@@ -27,7 +27,7 @@
     using System.Web.Http.Routing;
     using Email;
 
-    public class AccountContext
+    public class AccountContext : IAccountContext
     {
         // FIXME: direct dbContext usage in repo.. Should I?
         private readonly IDbContext dbContext;

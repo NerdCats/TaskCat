@@ -35,19 +35,17 @@
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private readonly AccountContext accountContext = null;
-        private readonly IDbContext dbContext;
+        private readonly IAccountContext accountContext = null;
 
         /// <summary>
         /// Account Controller Constructor
         /// </summary>
-        /// <param name="authRepository">
+        /// <param name="accountContext">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AccountContext authRepository, IDbContext dbcontext)
+        public AccountController(IAccountContext accountContext)
         {
-            this.dbContext = dbcontext;
-            this.accountContext = authRepository;
+            this.accountContext = accountContext;
         }
 
         /// <summary>
@@ -113,6 +111,15 @@
             }
         }
 
+        /// <summary>
+        /// Resend Confirmation Mails from the system if needed
+        /// </summary>
+        /// <param name="userId">
+        /// user that needs a confirmation mail 
+        /// </param>
+        /// <returns>
+        /// Sends back a response that states the status of the email request
+        /// </returns>
         [ResponseType(typeof(SendEmailResponse))]
         [HttpGet]
         [Route("ResendConfirmEmail")]
@@ -121,10 +128,11 @@
             var user = await accountContext.FindUser(userId);
             var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
 
-            if (result.Error != null)
-                return Json(result);
+            if (!result.Success)
+                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());    
             else
-                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
+                return Json(result);
+
         }
 
         protected IHttpActionResult GetErrorResult(IdentityResult result)
