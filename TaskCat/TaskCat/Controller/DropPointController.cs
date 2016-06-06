@@ -1,7 +1,11 @@
 ﻿namespace TaskCat.Controller
 {
+    using Data.Entity;
     using Lib.DropPoint;
-    using System.Collections.Generic;
+    using Microsoft.AspNet.Identity;
+    using Model.Response;
+    using System;
+    using System.Threading.Tasks;
     using System.Web.Http;
 
     public class DropPointController : ApiController
@@ -12,31 +16,41 @@
         {
             this.service = service;
         }
-        // GET: api/DropPoint
-        public IEnumerable<string> Get()
+
+        [HttpGet]
+        public string Get(string userId)
         {
-            return new string[] { "value1", "value2" };
+            throw new NotImplementedException("Method not implemented yet");
         }
 
-        // GET: api/DropPoint/5
-        public string Get(int id)
+        [HttpPost]
+        [Authorize]
+        public async Task<IHttpActionResult> Post([FromBody]DropPoint value)
         {
-            return "value";
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        // POST: api/DropPoint
-        public void Post([FromBody]string value)
-        {
+            if (value.Id != this.User.Identity.GetUserId() && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
+            {
+                // TODO: Need to fix this differently by a proper result
+                return Unauthorized();
+            }
+
+            throw new NotImplementedException("Method not implemented yet");
         }
 
         // PUT: api/DropPoint/5
         public void Put(int id, [FromBody]string value)
         {
+            throw new NotImplementedException("Method not implemented yet");
         }
 
         // DELETE: api/DropPoint/5
         public void Delete(int id)
         {
+            throw new NotImplementedException("Method not implemented yet");
         }
     }
 }
