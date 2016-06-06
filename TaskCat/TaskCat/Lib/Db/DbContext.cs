@@ -21,7 +21,7 @@
         public IMongoDatabase ShadowCatDatabase { get; private set; }
 
         #region Auth
-        
+
         private IMongoCollection<User> _users;
         public IMongoCollection<User> Users
         {
@@ -82,6 +82,7 @@
                 return _assetLocations;
             }
         }
+        #endregion
 
         private IMongoCollection<HRIDEntity> _hrids;
         public IMongoCollection<HRIDEntity> HRIDs
@@ -92,7 +93,14 @@
             }
         }
 
-        #endregion
+        private IMongoCollection<DropPoint> _dropPoints;
+        public IMongoCollection<DropPoint> DropPoints
+        {
+            get
+            {
+                return _dropPoints;
+            }
+        }
 
         public DbContext()
         {
@@ -109,7 +117,7 @@
         }
 
         private void EnsureIndexes()
-        {         
+        {
             IndexChecks.EnsureUniqueIndexOnUserName(_users);
             IndexChecks.EnsureUniqueIndexOnEmail(_users);
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
@@ -130,7 +138,7 @@
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
 
-            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);          
+            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }
 
         private void InitiateDatabase()
