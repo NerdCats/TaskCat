@@ -74,6 +74,15 @@
             dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Ascending(x => x.UserId));
             dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Descending(x => x.UserId));
 
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Descending(x => x.UserId));
+
+            var combinedIndexOptions = new CreateIndexOptions();
+            combinedIndexOptions.Unique = true;
+
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Ascending(x => x.UserId).Ascending(x => x.Name), combinedIndexOptions);
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Descending(x => x.UserId).Descending(x => x.Name), combinedIndexOptions);
+
+
             var geoIndexOptions = new CreateIndexOptions();
             geoIndexOptions.Background = true;
             geoIndexOptions.Sparse = true;

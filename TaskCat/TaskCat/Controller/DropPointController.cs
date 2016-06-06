@@ -18,6 +18,12 @@
         }
 
         [HttpGet]
+        public IHttpActionResult GetDropPointNameSuggestions()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
         public string Get(string userId)
         {
             throw new NotImplementedException("Method not implemented yet");
