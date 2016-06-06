@@ -70,9 +70,28 @@
         }
 
         [Test]
-        public async Task Test_Post_DropPoint_As_Administrator_With_Other_User()
+        public async Task Test_Post_DropPoint_As_User_With_Other_UserId()
         {
+            DropPoint = new DropPoint(
+                "456789",
+                testDropPointName,
+                testAddress);
 
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
+
+            ClaimsIdentityMock.As<IIdentity>();
+            ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns(testAuthType);
+            ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
+            ClaimsIdentityMock.SetupGet(x => x.Name).Returns(testUserName);
+            ClaimsIdentityMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(testAuthType, testUserId));
+            IIPrincipalMock.SetupGet(x => x.Identity).Returns(ClaimsIdentityMock.Object);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
+
+            Controller.User = IIPrincipalMock.Object;
+
+            var result = await Controller.Post(DropPoint);
+            Assert.IsInstanceOf<UnauthorizedResult>(result);
         }
     }
 }
