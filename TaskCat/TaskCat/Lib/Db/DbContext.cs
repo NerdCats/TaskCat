@@ -142,6 +142,7 @@
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
+            _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }

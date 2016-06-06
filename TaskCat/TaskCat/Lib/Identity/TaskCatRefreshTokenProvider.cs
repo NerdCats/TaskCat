@@ -9,9 +9,9 @@
 
     public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {
-        private readonly AccountContext authRepository;
+        private readonly IAccountContext authRepository;
 
-        public TaskCatRefreshTokenProvider(AccountContext authRepository)
+        public TaskCatRefreshTokenProvider(IAccountContext authRepository)
         {
             this.authRepository = authRepository;
         }

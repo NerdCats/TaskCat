@@ -23,6 +23,7 @@
     using Lib.Email.SMTP;
     using Owin;
     using Microsoft.Owin.Security.DataProtection;
+    using Lib.DropPoint;
 
     public class AutofacContainerBuilder
     {
@@ -40,7 +41,6 @@
             #endregion
 
             #region Payment
-            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
@@ -74,6 +74,14 @@
 
             builder.RegisterType<TaskCatRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region Hrid
+            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region DropPoint
+            builder.RegisterType<DropPointService>().AsImplementedInterfaces<IDropPointService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             switch (ConfigurationManager.AppSettings["ENV"])

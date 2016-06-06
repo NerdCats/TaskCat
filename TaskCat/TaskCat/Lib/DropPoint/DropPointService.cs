@@ -8,7 +8,7 @@
     using Exceptions;
     using System.Linq;
 
-    public class DropPointService : IRepository<DropPoint>
+    public class DropPointService : IDropPointService
     {
         private IMongoCollection<DropPoint> collection;
 
