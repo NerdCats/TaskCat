@@ -84,6 +84,7 @@
         }
         #endregion
 
+        #region HRIDS=
         private IMongoCollection<HRIDEntity> _hrids;
         public IMongoCollection<HRIDEntity> HRIDs
         {
@@ -92,7 +93,9 @@
                 return _hrids;
             }
         }
+        #endregion
 
+        #region DropPoints
         private IMongoCollection<DropPoint> _dropPoints;
         public IMongoCollection<DropPoint> DropPoints
         {
@@ -101,6 +104,7 @@
                 return _dropPoints;
             }
         }
+        #endregion
 
         public DbContext()
         {
@@ -125,6 +129,7 @@
             IndexFacade.EnsureUniqueIndexOnPhoneNumber(_users);
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
+            IndexFacade.EnsureDropPointIndex(_dropPoints);
         }
 
         private void InitiateCollections()

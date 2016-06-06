@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using Data.Entity;
     using Data.Entity.Identity;
+    using System;
 
     public class IndexFacade
     {
@@ -63,6 +64,22 @@
 
             hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID), hridIndexOptions);
             hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID), hridIndexOptions);
-        }  
+        }
+
+        public static void EnsureDropPointIndex(IMongoCollection<DropPoint> dropPointCollection)
+        {
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Ascending(x => x.Name));
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Descending(x => x.Name));
+
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Ascending(x => x.UserId));
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Descending(x => x.UserId));
+
+            var geoIndexOptions = new CreateIndexOptions();
+            geoIndexOptions.Background = true;
+            geoIndexOptions.Sparse = true;
+
+            dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Geo2DSphere(x => x.Address.Point), geoIndexOptions);
+
+        }
     }
 }
