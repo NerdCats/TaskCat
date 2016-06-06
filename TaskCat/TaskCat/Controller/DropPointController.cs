@@ -32,13 +32,20 @@
                 return BadRequest(ModelState);
             }
 
-            if (value.Id != this.User.Identity.GetUserId() && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
+            var authorizedId = this.User.Identity.GetUserId();
+
+            if (value.Id != authorizedId
+                && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
             }
 
-            throw new NotImplementedException("Method not implemented yet");
+            value.UserId = authorizedId;
+
+            var result = await service.Insert(value);
+
+            return Json(result);
         }
 
         // PUT: api/DropPoint/5
