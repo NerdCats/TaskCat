@@ -37,8 +37,9 @@
                 return BadRequest(ModelState);
             }
 
-            var authorizedId = this.User.Identity.GetUserId();
-
+            var authorizedId = User.Identity.GetUserId();
+           
+            
             if (value.Id!=null && value.Id != authorizedId
                 && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
             {

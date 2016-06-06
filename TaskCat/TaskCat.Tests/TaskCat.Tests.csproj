@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Account\AccountContextTest.cs" />
     <Compile Include="Controller\AccountControllerTests.cs" />
+    <Compile Include="Controller\DropPointControllerTest.cs" />
     <Compile Include="Entity\InvoiceBaseTests.cs" />
     <Compile Include="Job\TestDeliveryJob.cs" />
     <Compile Include="Lib\HRID\HRIDServiceTests.cs" />
