@@ -39,7 +39,7 @@
 
             var authorizedId = this.User.Identity.GetUserId();
 
-            if (value.Id != authorizedId
+            if (value.Id!=null && value.Id != authorizedId
                 && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
             {
                 // TODO: Need to fix this differently by a proper result
