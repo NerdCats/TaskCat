@@ -3,7 +3,6 @@
     using Data.Entity;
     using Lib.DropPoint;
     using Microsoft.AspNet.Identity;
-    using Model.Response;
     using System;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -46,11 +45,9 @@
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
             }
-
+            value.Id = default(string);
             value.UserId = authorizedId;
-
             var result = await service.Insert(value);
-
             return Json(result);
         }
 
