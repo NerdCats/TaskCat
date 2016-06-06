@@ -126,10 +126,22 @@
         public async Task<IHttpActionResult> ResendConfirmationEmail(string userId)
         {
             var user = await accountContext.FindUser(userId);
+            if (user.EmailConfirmed)
+            {
+                return Content(
+                    HttpStatusCode.BadRequest,
+                    new ErrorResponse()
+                    {
+                        Message = string.Concat("User with ", userId, " has already his email confirmed"),
+                        Data = new { emailAlreadyConfirmed = true }
+                    },
+                    new JsonMediaTypeFormatter());
+            }
+
             var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
 
             if (!result.Success)
-                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());    
+                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
             else
                 return Json(result);
 
