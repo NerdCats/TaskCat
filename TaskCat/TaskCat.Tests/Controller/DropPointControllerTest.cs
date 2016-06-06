@@ -16,21 +16,34 @@
     [TestFixture]
     public class DropPointControllerTest
     {
-        [Test]
-        public async Task Test_Post_DropPoint()
+        private Mock<ClaimsIdentity> ClaimsIdentityMock;
+        private DropPointController Controller;
+        private DropPoint DropPoint;
+        private Mock<IDropPointService> DropPointServiceMock;
+        private Mock<IPrincipal> IIPrincipalMock;
+
+        [SetUp]
+        public void Setup()
         {
-            DropPoint dropPoint = new DropPoint(
+            this.DropPoint = new DropPoint(
                 "123456",
                 "test_name",
                 new DefaultAddress(
                     "test_formatted_address",
                     new Point(2, 1)));
 
-            Mock<IDropPointService> dropPointServiceMock = new Mock<IDropPointService>();
-            dropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(dropPoint);
+            this.DropPointServiceMock = new Mock<IDropPointService>();
+            this.IIPrincipalMock = new Mock<IPrincipal>();
+            this.ClaimsIdentityMock = new Mock<ClaimsIdentity>();
 
-            var IIPrincipalMock = new Mock<IPrincipal>();
-            var ClaimsIdentityMock = new Mock<ClaimsIdentity>();
+            this.Controller = new DropPointController(DropPointServiceMock.Object);
+        }
+
+        [Test]
+        public async Task Test_Post_DropPoint_As_User()
+        {
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
+
             ClaimsIdentityMock.As<IIdentity>();
             ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns("test_auth_type");
             ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
@@ -41,16 +54,15 @@
             IIPrincipalMock.Setup(x => x.IsInRole("Administrator")).Returns(false);
             IIPrincipalMock.Setup(x => x.IsInRole("BackOfficeAdmin")).Returns(false);
 
-            DropPointController controller = new DropPointController(dropPointServiceMock.Object);
-            controller.User = IIPrincipalMock.Object;
+            Controller.User = IIPrincipalMock.Object;
 
-            var result = await controller.Post(dropPoint);
+            var result = await Controller.Post(DropPoint);
             Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
 
             var convertedResult = result as JsonResult<DropPoint>;
-            Assert.AreEqual(dropPoint.Address, convertedResult.Content.Address);
-            Assert.AreEqual(dropPoint.Name, convertedResult.Content.Name);
-            Assert.AreEqual(dropPoint.UserId, convertedResult.Content.UserId);
+            Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
+            Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
+            Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
         }
     }
 }
