@@ -134,6 +134,9 @@
                     },
                     {
                         "userName", context.UserName
+                    },
+                    {
+                        "userId", user.Id
                     }
                 });
 
