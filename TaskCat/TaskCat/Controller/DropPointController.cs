@@ -19,7 +19,7 @@
         [HttpGet]
         public IHttpActionResult GetDropPointNameSuggestions()
         {
-            throw new NotImplementedException();
+            return Json(DropPointNameSuggestions.Values);
         }
 
         [HttpGet]
@@ -52,16 +52,17 @@
             return Json(result);
         }
 
-        // PUT: api/DropPoint/5
         public void Put(int id, [FromBody]string value)
         {
             throw new NotImplementedException("Method not implemented yet");
         }
 
-        // DELETE: api/DropPoint/5
-        public void Delete(int id)
+        [HttpDelete]
+        [Authorize]
+        public async Task<DropPoint> Delete(string id)
         {
-            throw new NotImplementedException("Method not implemented yet");
+            var result = await service.Delete(id);
+            return result;
         }
     }
 }
