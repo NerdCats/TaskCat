@@ -4,6 +4,7 @@
     using MongoDB.Driver;
     using Data.Entity;
     using Domain;
+    using System;
     using System.Threading.Tasks;
     using Exceptions;
     using System.Linq;
@@ -45,6 +46,10 @@
 
         public async Task<DropPoint> Update(DropPoint obj)
         {
+            if(obj.Id==null)
+            {
+                throw new ArgumentNullException(nameof(obj.Id));
+            }
             var result = await collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
             if (result.IsAcknowledged)
             {

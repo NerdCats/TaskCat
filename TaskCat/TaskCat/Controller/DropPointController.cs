@@ -52,9 +52,15 @@
             return Json(result);
         }
 
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public async Task<IHttpActionResult> Put(DropPoint value)
         {
-            throw new NotImplementedException("Method not implemented yet");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await service.Update(value);
+            return Json(result);
         }
 
         [HttpDelete]
