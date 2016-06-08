@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Controller
 {
     using Data.Entity;
+    using Data.Entity.Identity;
     using Lib.Constants;
     using Lib.DropPoint;
     using Lib.Utility.Odata;
@@ -8,7 +9,9 @@
     using Microsoft.AspNet.Identity;
     using Model.Pagination;
     using MongoDB.Driver;
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -31,7 +34,30 @@
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [Authorize]
+        public async Task<IHttpActionResult> Get(string query, string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        {
+            if(string.IsNullOrWhiteSpace(query))
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
+            if(userId!=null && this.User.Identity.GetUserId()!=userId 
+                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+            {
+                // TODO: Need to fix this differently by a proper result
+                return Unauthorized();
+            }
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
+            var result = await service.SearchDropPoints(userId, query);
+            return Json(result);
+        }
+
+        [HttpGet]
+        [Route("api/DropPoint/odata")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        public async Task<IHttpActionResult> GetOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
                 return BadRequest("Page size cant be 0");
@@ -73,9 +99,9 @@
             }
 
             var authorizedId = User.Identity.GetUserId();
-           
-            
-            if (value.UserId!=null && value.UserId != authorizedId
+
+
+            if (value.UserId != null && value.UserId != authorizedId
                 && (!this.User.IsInRole("Administrator") || !this.User.IsInRole("BackOfficeAdmin")))
             {
                 // TODO: Need to fix this differently by a proper result

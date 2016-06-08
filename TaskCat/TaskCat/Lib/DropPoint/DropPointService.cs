@@ -3,12 +3,12 @@
     using Db;
     using MongoDB.Driver;
     using Data.Entity;
-    using Domain;
     using System;
     using System.Threading.Tasks;
     using Exceptions;
     using System.Linq;
-
+    using System.Collections.Generic;
+    using MongoDB.Bson;
     public class DropPointService : IDropPointService
     {
         public IMongoCollection<DropPoint> Collection { get; set; }
@@ -58,6 +58,21 @@
             }
 
             throw new EntityUpdateException(typeof(DropPoint), obj.Id);
+        }
+
+        public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)
+        {
+            if (String.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException(nameof(userId));
+
+            if (String.IsNullOrWhiteSpace(query))
+                throw new ArgumentNullException(nameof(query));
+
+            var userIdFilter = Builders<DropPoint>.Filter.Where(x => x.UserId == userId);
+            var queryFilter = Builders<DropPoint>.Filter.Regex(x => x.Address.Address, new BsonRegularExpression(query, "i"));
+
+            var result = await Collection.Find(Builders<DropPoint>.Filter.And(userIdFilter, queryFilter)).ToListAsync();
+            return result;
         }
     }
 }
