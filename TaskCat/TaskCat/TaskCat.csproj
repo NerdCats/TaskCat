@@ -337,6 +337,7 @@
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
     <Compile Include="Lib\Domain\IRepository.cs" />
+    <Compile Include="Lib\DropPoint\DropPointNameSuggestions.cs" />
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />
     <Compile Include="Lib\Email\Model\EmailInvoice.cs" />
@@ -436,6 +437,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".config\production\" />
+    <Folder Include="Model\DropPoint\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

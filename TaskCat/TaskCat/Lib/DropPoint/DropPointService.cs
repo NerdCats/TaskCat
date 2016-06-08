@@ -11,17 +11,17 @@
 
     public class DropPointService : IDropPointService
     {
-        private IMongoCollection<DropPoint> collection;
+        public IMongoCollection<DropPoint> Collection { get; set; }
 
         public DropPointService(IDbContext dbContext)
         {
-            this.collection = dbContext.DropPoints;
+            this.Collection = dbContext.DropPoints;
         }
 
         public async Task<DropPoint> Delete(string id)
         {
             var item = await Get(id);
-            var result = await collection.DeleteOneAsync(x => x.Id == item.Id);
+            var result = await Collection.DeleteOneAsync(x => x.Id == item.Id);
             if (result.DeletedCount > 0 && result.IsAcknowledged)
                 return item;
             else
@@ -30,7 +30,7 @@
 
         public async Task<DropPoint> Get(string id)
         {
-            var result = (await collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
+            var result = (await Collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
             if (result == null)
             {
                 throw new EntityNotFoundException(typeof(DropPoint), id);
@@ -40,7 +40,7 @@
 
         public async Task<DropPoint> Insert(DropPoint obj)
         {
-            await collection.InsertOneAsync(obj);
+            await Collection.InsertOneAsync(obj);
             return obj;
         }
 
@@ -50,7 +50,7 @@
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
-            var result = await collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
+            var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
             if (result.IsAcknowledged)
             {
                 if (result.MatchedCount == 0) throw new EntityNotFoundException(typeof(DropPoint), obj.Id);
