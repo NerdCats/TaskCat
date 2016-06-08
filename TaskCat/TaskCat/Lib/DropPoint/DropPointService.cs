@@ -19,6 +19,41 @@
             this.Collection = dbContext.DropPoints;
         }
 
+        public async Task<DropPoint> Get(string id)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var result = (await Collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
+            if (result == null)
+            {
+                throw new EntityNotFoundException(typeof(DropPoint), id);
+            }
+            return result;
+        }
+
+        public async Task<DropPoint> Get(string id, string userId)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (String.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var result = (await Collection.Find(x => x.Id == id && x.UserId == userId).ToListAsync()).FirstOrDefault();
+            if (result == null)
+            {
+                throw new EntityNotFoundException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, id));
+            }
+            return result;
+        }
+
         public async Task<DropPoint> Delete(string id)
         {
             if (String.IsNullOrWhiteSpace(id))
@@ -26,8 +61,9 @@
                 throw new ArgumentNullException(nameof(id));
             }
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
-
-            return DeleteResult(result);
+            if (result == null)
+                throw new EntityDeleteException(typeof(DropPoint), result.Id);
+            return result;
         }
 
         public async Task<DropPoint> Delete(string id, string userId)
@@ -41,23 +77,8 @@
                 throw new ArgumentNullException(nameof(userId));
             }
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id && x.UserId == userId);
-            return DeleteResult(result);
-        }
-
-        private static DropPoint DeleteResult(DropPoint result)
-        {
             if (result == null)
-                throw new EntityDeleteException(typeof(DropPoint), result.Id);
-            return result;
-        }
-
-        public async Task<DropPoint> Get(string id)
-        {
-            var result = (await Collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
-            if (result == null)
-            {
-                throw new EntityNotFoundException(typeof(DropPoint), id);
-            }
+                throw new EntityDeleteException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, id));
             return result;
         }
 
@@ -74,7 +95,9 @@
                 throw new ArgumentNullException(nameof(obj.Id));
             }
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id, obj);
-            return UpdateResult(result);
+            if (result == null)
+                throw new EntityUpdateException(typeof(DropPoint), obj.Id);
+            return result;
         }
 
         public async Task<DropPoint> Update(DropPoint obj, string userId)
@@ -90,14 +113,9 @@
             }
 
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id && x.UserId == userId, obj);
-            return UpdateResult(result);
-        }
-
-        private static DropPoint UpdateResult(DropPoint obj)
-        {
-            if (obj == null)
-                throw new EntityUpdateException(typeof(DropPoint), obj.Id);
-            return obj;
+            if (result == null)
+                throw new EntityUpdateException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, obj.Id));
+            return result;
         }
 
         public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)

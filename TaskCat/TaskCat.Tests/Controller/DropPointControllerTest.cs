@@ -62,6 +62,7 @@
             Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
 
             var convertedResult = result as JsonResult<DropPoint>;
+            Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -95,7 +96,8 @@
                 testDropPointName,
                 testAddress);
 
-            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).Returns<DropPoint>((x) => Task.FromResult(x));
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>()))
+                .Returns<DropPoint>((x) => Task.FromResult(x));
 
             SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(true);
@@ -106,13 +108,14 @@
             Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
 
             var convertedResult = result as JsonResult<DropPoint>;
+            Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
         }
 
         [Test]
-        public async Task Test_Get_DropPoint_As_User()
+        public async Task Test_Search_DropPoint_As_User()
         {
             DropPoint = new DropPoint(
                 testUserId,
@@ -131,7 +134,7 @@
             Controller.User = IIPrincipalMock.Object;
             Controller.Request = httpRequestMock.Object;
 
-            var result = await Controller.Get("test_query", testUserId);
+            var result = await Controller.Search("test_query", testUserId);
             Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
             Assert.IsNotNull(result);
 
@@ -141,7 +144,7 @@
         }
 
         [Test]
-        public async Task Test_Get_DropPoint_As_Administrator_With_Other_UserId()
+        public async Task Test_Search_DropPoint_As_Administrator_With_Other_UserId()
         {
             DropPoint = new DropPoint(
                 "23456",
@@ -161,13 +164,17 @@
             Controller.User = IIPrincipalMock.Object;
             Controller.Request = httpRequestMock.Object;
 
-            var result = await Controller.Get("test_query", testUserId);
+            var result = await Controller.Search("test_query", testUserId);
             Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
-            Assert.IsNotNull(result);
+            
+            var convertedResult = result as JsonResult<PageEnvelope<DropPoint>>;
+            Assert.IsNotNull(convertedResult);
+            Assert.AreEqual(1, convertedResult.Content.data.Count());
+            Assert.AreEqual(DropPoint, convertedResult.Content.data.First());
         }
 
         [Test]
-        public async Task Test_Get_DropPoint_As_User_With_Other_UserId()
+        public async Task Test_Search_DropPoint_As_User_With_Other_UserId()
         {
             DropPoint = new DropPoint(
                 "23456",
@@ -187,8 +194,43 @@
             Controller.User = IIPrincipalMock.Object;
             Controller.Request = httpRequestMock.Object;
 
-            var result = await Controller.Get("test_query", "23456");
+            var result = await Controller.Search("test_query", "23456");
             Assert.IsInstanceOf<UnauthorizedResult>(result);
+        }
+
+        [Test]
+        public async Task Test_Update_DropPoint_As_User()
+        {
+            DropPoint = new DropPoint(
+                testUserId,
+                testDropPointName,
+                testAddress)
+            {
+                Id = "test_dropPoint_id"
+            };
+            var dropPoints = new List<DropPoint>() { DropPoint };
+
+            DropPointServiceMock.Setup(x => x.Update(DropPoint, testUserId))
+                .Returns<DropPoint, string>((x, id) => Task.FromResult(x));
+
+            SetupAuth();
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
+
+            Mock<HttpRequestMessage> httpRequestMock = new Mock<HttpRequestMessage>();
+
+            Controller.User = IIPrincipalMock.Object;
+            Controller.Request = httpRequestMock.Object;
+
+            var result = await Controller.Put(DropPoint);
+            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            
+            var convertedResult = result as JsonResult<DropPoint>;
+            Assert.IsNotNull(convertedResult.Content);
+            Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
+            Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
+            Assert.AreEqual("test_dropPoint_id", convertedResult.Content.Id);
+            Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
         }
 
         private void SetupAuth()

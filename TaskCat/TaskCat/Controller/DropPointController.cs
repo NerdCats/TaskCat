@@ -29,6 +29,31 @@
         }
 
         [HttpGet]
+        [Authorize]
+        public async Task<IHttpActionResult> Get(string id, string userId=null)
+        {
+            var authorizedId = User.Identity.GetUserId();
+            if (userId != null && userId != authorizedId
+                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+            {
+                // TODO: Need to fix this differently by a proper result
+                return Unauthorized();
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+                userId = authorizedId;
+
+            if (User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            {
+                return Json(await service.Get(id));
+            }
+            else
+            {
+                return Json(await service.Get(id, userId));
+            }
+        }
+
+        [HttpGet]
         [Route("api/DropPoint/suggestions")]
         public IHttpActionResult GetDropPointNameSuggestions()
         {
@@ -37,7 +62,8 @@
 
         [HttpGet]
         [Authorize]
-        public async Task<IHttpActionResult> Get(string query, string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [Route("api/DropPoint/search")]
+        public async Task<IHttpActionResult> Search(string query, string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (string.IsNullOrWhiteSpace(query))
             {
