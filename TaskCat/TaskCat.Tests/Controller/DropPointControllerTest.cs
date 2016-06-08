@@ -233,6 +233,34 @@
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
         }
 
+        [Test]
+        public async Task Test_Update_DropPoint_As_User_With_Other_UserId()
+        {
+            DropPoint = new DropPoint(
+                "23456",
+                testDropPointName,
+                testAddress)
+            {
+                Id = "test_dropPoint_id"
+            };
+            var dropPoints = new List<DropPoint>() { DropPoint };
+
+            DropPointServiceMock.Setup(x => x.Update(DropPoint, testUserId))
+                .Returns<DropPoint, string>((x, id) => Task.FromResult(x));
+
+            SetupAuth();
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
+
+            Mock<HttpRequestMessage> httpRequestMock = new Mock<HttpRequestMessage>();
+
+            Controller.User = IIPrincipalMock.Object;
+            Controller.Request = httpRequestMock.Object;
+
+            var result = await Controller.Put(DropPoint);
+            Assert.IsInstanceOf<UnauthorizedResult>(result);
+        }
+
         private void SetupAuth()
         {
             ClaimsIdentityMock.As<IIdentity>();
