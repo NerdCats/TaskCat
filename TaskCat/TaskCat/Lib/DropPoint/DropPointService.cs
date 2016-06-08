@@ -70,8 +70,10 @@
 
             var userIdFilter = Builders<DropPoint>.Filter.Where(x => x.UserId == userId);
             var queryFilter = Builders<DropPoint>.Filter.Regex(x => x.Address.Address, new BsonRegularExpression(query, "i"));
+            var nameFilter = Builders<DropPoint>.Filter.Regex(x => x.Name, new BsonRegularExpression(query, "i"));
+            var nameOrQueryFilter = Builders<DropPoint>.Filter.Or(nameFilter, queryFilter);
 
-            var result = await Collection.Find(Builders<DropPoint>.Filter.And(userIdFilter, queryFilter)).ToListAsync();
+            var result = await Collection.Find(Builders<DropPoint>.Filter.And(userIdFilter, nameOrQueryFilter)).ToListAsync();
             return result;
         }
     }
