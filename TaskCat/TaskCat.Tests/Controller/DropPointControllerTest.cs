@@ -50,7 +50,7 @@
                 testDropPointName,
                 testAddress);
 
-            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).Returns<DropPoint>((x) => Task.FromResult(x));
 
             SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
@@ -75,7 +75,7 @@
                 testDropPointName,
                 testAddress);
 
-            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).Returns<DropPoint>((x) => Task.FromResult(x));
 
             SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
@@ -95,7 +95,7 @@
                 testDropPointName,
                 testAddress);
 
-            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
+            DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).Returns<DropPoint>((x) => Task.FromResult(x));
 
             SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(true);
@@ -130,7 +130,7 @@
 
             Controller.User = IIPrincipalMock.Object;
             Controller.Request = httpRequestMock.Object;
-            
+
             var result = await Controller.Get("test_query", testUserId);
             Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
             Assert.IsNotNull(result);
