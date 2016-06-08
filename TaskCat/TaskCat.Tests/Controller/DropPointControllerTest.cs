@@ -13,6 +13,10 @@
     using System.Web.Http.Results;
     using System.Security.Claims;
     using Data.Entity.Identity;
+    using System.Collections.Generic;
+    using TaskCat.Model.Pagination;
+    using System.Net.Http;
+    using System.Linq;
     [TestFixture]
     public class DropPointControllerTest
     {
@@ -48,13 +52,7 @@
 
             DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
 
-            ClaimsIdentityMock.As<IIdentity>();
-            ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns(testAuthType);
-            ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
-            ClaimsIdentityMock.SetupGet(x => x.Name).Returns(testUserName);
-            ClaimsIdentityMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(testAuthType, testUserId));
-
-            IIPrincipalMock.SetupGet(x => x.Identity).Returns(ClaimsIdentityMock.Object);
+            SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
 
@@ -79,12 +77,7 @@
 
             DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
 
-            ClaimsIdentityMock.As<IIdentity>();
-            ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns(testAuthType);
-            ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
-            ClaimsIdentityMock.SetupGet(x => x.Name).Returns(testUserName);
-            ClaimsIdentityMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(testAuthType, testUserId));
-            IIPrincipalMock.SetupGet(x => x.Identity).Returns(ClaimsIdentityMock.Object);
+            SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
 
@@ -104,12 +97,7 @@
 
             DropPointServiceMock.Setup(x => x.Insert(It.IsAny<DropPoint>())).ReturnsAsync(DropPoint);
 
-            ClaimsIdentityMock.As<IIdentity>();
-            ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns(testAuthType);
-            ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
-            ClaimsIdentityMock.SetupGet(x => x.Name).Returns(testUserName);
-            ClaimsIdentityMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(testAuthType, testUserId));
-            IIPrincipalMock.SetupGet(x => x.Identity).Returns(ClaimsIdentityMock.Object);
+            SetupAuth();
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(true);
             IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(true);
 
@@ -121,6 +109,96 @@
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
+        }
+
+        [Test]
+        public async Task Test_Get_DropPoint_As_User()
+        {
+            DropPoint = new DropPoint(
+                testUserId,
+                testDropPointName,
+                testAddress);
+            var dropPoints = new List<DropPoint>() { DropPoint };
+
+            DropPointServiceMock.Setup(x => x.SearchDropPoints(testUserId, It.IsAny<string>())).ReturnsAsync(dropPoints);
+
+            SetupAuth();
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
+
+            Mock<HttpRequestMessage> httpRequestMock = new Mock<HttpRequestMessage>();
+
+            Controller.User = IIPrincipalMock.Object;
+            Controller.Request = httpRequestMock.Object;
+            
+            var result = await Controller.Get("test_query", testUserId);
+            Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
+            Assert.IsNotNull(result);
+
+            var convertedResult = result as JsonResult<PageEnvelope<DropPoint>>;
+            Assert.AreEqual(1, convertedResult.Content.data.Count());
+            Assert.AreEqual(DropPoint, convertedResult.Content.data.First());
+        }
+
+        [Test]
+        public async Task Test_Get_DropPoint_As_Administrator_With_Other_UserId()
+        {
+            DropPoint = new DropPoint(
+                "23456",
+                testDropPointName,
+                testAddress);
+            var dropPoints = new List<DropPoint>() { DropPoint };
+
+            DropPointServiceMock.Setup(x => x.SearchDropPoints(testUserId, It.IsAny<string>()))
+                .ReturnsAsync(dropPoints);
+
+            SetupAuth();
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(true);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(true);
+
+            Mock<HttpRequestMessage> httpRequestMock = new Mock<HttpRequestMessage>();
+
+            Controller.User = IIPrincipalMock.Object;
+            Controller.Request = httpRequestMock.Object;
+
+            var result = await Controller.Get("test_query", testUserId);
+            Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public async Task Test_Get_DropPoint_As_User_With_Other_UserId()
+        {
+            DropPoint = new DropPoint(
+                "23456",
+                testDropPointName,
+                testAddress);
+            var dropPoints = new List<DropPoint>() { DropPoint };
+
+            DropPointServiceMock.Setup(x => x.SearchDropPoints(testUserId, It.IsAny<string>()))
+                .ReturnsAsync(dropPoints);
+
+            SetupAuth();
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_ADMINISTRATOR)).Returns(false);
+            IIPrincipalMock.Setup(x => x.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)).Returns(false);
+
+            Mock<HttpRequestMessage> httpRequestMock = new Mock<HttpRequestMessage>();
+
+            Controller.User = IIPrincipalMock.Object;
+            Controller.Request = httpRequestMock.Object;
+
+            var result = await Controller.Get("test_query", "23456");
+            Assert.IsInstanceOf<UnauthorizedResult>(result);
+        }
+
+        private void SetupAuth()
+        {
+            ClaimsIdentityMock.As<IIdentity>();
+            ClaimsIdentityMock.SetupGet(x => x.AuthenticationType).Returns(testAuthType);
+            ClaimsIdentityMock.SetupGet(x => x.IsAuthenticated).Returns(true);
+            ClaimsIdentityMock.SetupGet(x => x.Name).Returns(testUserName);
+            ClaimsIdentityMock.Setup(x => x.FindFirst(It.IsAny<string>())).Returns(new Claim(testAuthType, testUserId));
+            IIPrincipalMock.SetupGet(x => x.Identity).Returns(ClaimsIdentityMock.Object);
         }
     }
 }
