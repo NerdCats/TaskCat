@@ -34,7 +34,7 @@
         {
             var authorizedId = User.Identity.GetUserId();
             if (userId != null && userId != authorizedId
-                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+                && !IsUserAdminOrBackendOfficeAdmin())
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
@@ -43,7 +43,7 @@
             if (string.IsNullOrWhiteSpace(userId))
                 userId = authorizedId;
 
-            if (User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            if (IsUserAdminOrBackendOfficeAdmin())
             {
                 return Json(await service.Get(id));
             }
@@ -73,7 +73,7 @@
             var currentUserId = this.User.Identity.GetUserId();
 
             if (userId != null && currentUserId != userId
-                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+                && !IsUserAdminOrBackendOfficeAdmin())
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
@@ -138,7 +138,7 @@
 
 
             if (value.UserId != null && value.UserId != authorizedId
-                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+                && !IsUserAdminOrBackendOfficeAdmin())
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
@@ -149,6 +149,11 @@
                 value.UserId = authorizedId;
             var result = await service.Insert(value);
             return Json(result);
+        }
+
+        private bool IsUserAdminOrBackendOfficeAdmin()
+        {
+            return (this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         [HttpPut]
@@ -163,13 +168,13 @@
             var authorizedId = User.Identity.GetUserId();
 
             if (value.UserId != null && value.UserId != authorizedId
-                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+                && !IsUserAdminOrBackendOfficeAdmin())
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
             }
          
-            if(this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            if(IsUserAdminOrBackendOfficeAdmin())
             {
                 return Json(await service.Update(value));
             }
@@ -186,7 +191,7 @@
         {
             var authorizedId = User.Identity.GetUserId();
             if (userId != null && userId != authorizedId
-                && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
+                && !IsUserAdminOrBackendOfficeAdmin())
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
@@ -195,7 +200,7 @@
             if (string.IsNullOrWhiteSpace(userId))
                 userId = authorizedId;
 
-            if (this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            if (IsUserAdminOrBackendOfficeAdmin())
             {
                 return Json(await service.Delete(id));
             }
