@@ -7,9 +7,9 @@
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController
     {
-        private readonly AccountContext authRepository = null;
+        private readonly IAccountContext authRepository = null;
 
-        public RefreshTokensController(AccountContext authRepository)
+        public RefreshTokensController(IAccountContext authRepository)
         {
             this.authRepository = authRepository;
         }

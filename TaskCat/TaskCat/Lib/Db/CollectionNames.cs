@@ -9,5 +9,7 @@
         public const string UsersCollectionName = "Users";
         public const string SupportedOrderCollectionName = "SupportedOrders";
         public const string HRIDCollectionName = "HRIDs";
+
+        public const string DropPointCollectionName = "DropPoints";
     }
 }

@@ -23,6 +23,7 @@
     using Lib.Email.SMTP;
     using Owin;
     using Microsoft.Owin.Security.DataProtection;
+    using Lib.DropPoint;
 
     public class AutofacContainerBuilder
     {
@@ -35,12 +36,11 @@
             builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
             builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountContext>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
             builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
             #endregion
 
             #region Payment
-            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<PaymentManager>().AsImplementedInterfaces<IPaymentManager, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<PaymentService>().AsImplementedInterfaces<IPaymentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
@@ -51,7 +51,7 @@
 
             #region Job
             builder.RegisterType<JobStore>().InstancePerLifetimeScope();
-            builder.RegisterType<JobManager>().InstancePerLifetimeScope();
+            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
             #endregion
 
             #region Order
@@ -60,7 +60,7 @@
             #endregion
 
             #region Storage
-            builder.Register(c=>new BlobService()).As<IBlobService>().SingleInstance();
+            builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
             #endregion
 
@@ -69,11 +69,19 @@
             #endregion
 
             #region Auth
-            builder.RegisterType<SimpleAuthorizationServerProvider>()
+            builder.RegisterType<TaskCatAuthorizationServerProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
-            builder.RegisterType<SimpleRefreshTokenProvider>()
+            builder.RegisterType<TaskCatRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region Hrid
+            builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region DropPoint
+            builder.RegisterType<DropPointService>().AsImplementedInterfaces<IDropPointService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             switch (ConfigurationManager.AppSettings["ENV"])
@@ -89,5 +97,5 @@
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }
-    }    
+    }
 }

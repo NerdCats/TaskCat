@@ -20,10 +20,10 @@
 
     public class JobRepository : IJobRepository
     {
-        private JobManager manager;
+        private IJobManager manager;
         private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
 
-        public JobRepository(JobManager manager, AccountManager accountManager)
+        public JobRepository(IJobManager manager, AccountManager accountManager)
         {
             this.manager = manager;
             this.accountManager = accountManager;

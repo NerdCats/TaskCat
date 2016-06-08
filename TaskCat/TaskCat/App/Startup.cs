@@ -19,6 +19,11 @@ namespace TaskCat.App
     using Data.Model.Identity;
     using Lib.Utility.ActionFilter;
     using System.Reflection;
+    using Microsoft.Owin.Security.Facebook;
+    using Lib.Identity;
+    using Settings;
+    using AppSettings = Its.Configuration.Settings;
+    using Lib.Owin;
 
     public class Startup
     {
@@ -42,10 +47,13 @@ namespace TaskCat.App
 
             var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
+            app.Use(typeof(PreflightRequestsHandler));
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
+            
             var config = new HttpConfiguration();
+            
 
             BsonSerializerConfig.Configure();           
 
@@ -53,9 +61,10 @@ namespace TaskCat.App
 
             WebApiConfig.Register(config, webApiDependencyResolver);
             config.Filters.Add(new ErrorDocumentFilter());
+            
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-
+            
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
 
@@ -87,10 +96,25 @@ namespace TaskCat.App
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             };
 
+
+            app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
             // Generating Token with Providers
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
 
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
+            var externalLoginSettings = AppSettings.Get<ExternalLoginSettings>();
+            if (externalLoginSettings != null && externalLoginSettings.Facebook != null)
+            {
+                var facebookAuthOptions = new FacebookAuthenticationOptions()
+                {
+                    AppId = externalLoginSettings.Facebook.AppId,
+                    AppSecret = externalLoginSettings.Facebook.AppSecret,
+                    Provider = new FacebookAuthProvider()
+                };
+
+                app.UseFacebookAuthentication(facebookAuthOptions);
+            }
         }
 
         private void InitializeClients(IContainer container)

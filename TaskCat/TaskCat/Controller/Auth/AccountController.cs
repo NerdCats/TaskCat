@@ -22,25 +22,30 @@
     using System.Web.Http.Description;
     using Lib.Utility;
     using Model.Account;
+    using Model.Response;
+    using System.Net.Http.Formatting;
+    using Lib.Db;
+    using Data.Entity.Identity;
+    using Lib.Email;
+
     /// <summary>
     /// Account (User And Asset related Controller)
     /// </summary>
     /// 
-
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private readonly AccountContext accountContext = null;
+        private readonly IAccountContext accountContext = null;
 
         /// <summary>
         /// Account Controller Constructor
         /// </summary>
-        /// <param name="authRepository">
+        /// <param name="accountContext">
         /// AuthRepository is an Authentication Repository Instance
         /// </param>
-        public AccountController(AccountContext authRepository)
+        public AccountController(IAccountContext accountContext)
         {
-            this.accountContext = authRepository;
+            this.accountContext = accountContext;
         }
 
         /// <summary>
@@ -104,6 +109,42 @@
             {
                 return GetErrorResult(result);
             }
+        }
+
+        /// <summary>
+        /// Resend Confirmation Mails from the system if needed
+        /// </summary>
+        /// <param name="userId">
+        /// user that needs a confirmation mail 
+        /// </param>
+        /// <returns>
+        /// Sends back a response that states the status of the email request
+        /// </returns>
+        [ResponseType(typeof(SendEmailResponse))]
+        [HttpGet]
+        [Route("ResendConfirmEmail")]
+        public async Task<IHttpActionResult> ResendConfirmationEmail(string userId)
+        {
+            var user = await accountContext.FindUser(userId);
+            if (user.EmailConfirmed)
+            {
+                return Content(
+                    HttpStatusCode.BadRequest,
+                    new ErrorResponse()
+                    {
+                        Message = string.Concat("User with ", userId, " has already his email confirmed"),
+                        Data = new { emailAlreadyConfirmed = true }
+                    },
+                    new JsonMediaTypeFormatter());
+            }
+
+            var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
+
+            if (!result.Success)
+                return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
+            else
+                return Json(result);
+
         }
 
         protected IHttpActionResult GetErrorResult(IdentityResult result)
@@ -179,13 +220,13 @@
         /// userId for the Asset to find assigned jobs, would only work for Administrator and BackendAdministrator roles
         /// </param>
         /// <param name="pageSize">
-        /// PageSize of the request, default is 10
+        /// Page size of the request, default is 10
         /// </param>
         /// <param name="page">
         /// Desired page number
         /// </param>
-        /// <param name="dateTimeUpto">
-        /// Results should be fetched from this date, usually results for last 5 days are sent back
+        /// <param name="fromDateTime">
+        /// Results should be fetched from this date, if sent null, all results are fetched back regardless of Creation Time of the Job
         /// </param>
         /// <param name="jobStateUpto">
         /// Highest Job State to be fetched, default is IN_PROGRESS, that means by default ENQUEUED and IN_PROGRESS jobs would be fetched
@@ -200,8 +241,13 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
         [Route("{userId?}/jobs")]
-        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, DateTime? dateTimeUpto = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
+        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, string fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
         {
+            DateTime? fromdt = null;
+            if (!string.IsNullOrEmpty(fromDateTime))
+            {
+                fromdt = DateTime.Parse(fromDateTime);
+            }
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 if (this.User.IsInRole("Asset") && (this.User.Identity.GetUserId() != userId))
@@ -212,7 +258,7 @@
                 userId = this.User.Identity.GetUserId();
             }
 
-            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, dateTimeUpto, jobStateUpto, sortDirection, this.Request);
+            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request);
             return Json(result);
         }
 
@@ -352,57 +398,50 @@
         }
 
         /// <summary>
-        /// Get whether a suggested username is availalble or not
+        /// Check availibility of a suggsted <see cref="CheckPropertyNames.EMAIL"/> , <see cref="CheckPropertyNames.PHONENUMBER"/> or an <see cref="CheckPropertyNames.EMAIL"/>
         /// </summary>
-        /// <param name="username">
-        /// suggested username 
-        /// </param>
         /// <returns>
-        /// returns the availability of suggested user name
+        /// returns whether the suggested value is available
         /// </returns>
         [HttpGet]
-        [Route("check/Username/{username}")]
+        [Route("check")]
         [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckUserName(string username)
+        public async Task<IHttpActionResult> Check()
         {
-            var result = await accountContext.IsUsernameAvailable(username);
-            return Json(new AvailibilityResponse("username", username, result));
-        }
+            var queryParams = this.Request.GetQueryNameValuePairs();
+            if (queryParams.Count() > 1)
+                throw new NotSupportedException("More than one parameter availibility check is supported");
 
-        /// <summary>
-        /// Get whether a suggested phone number is availalble or not
-        /// </summary>
-        /// <param name="phoneNumber">
-        /// suggested phone number
-        /// </param>
-        /// <returns>
-        /// returns the availability of suggested phone number
-        /// </returns>
-        [HttpGet]
-        [Route("check/PhoneNumber/{phoneNumber}")]
-        [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckPhoneNumber(string phoneNumber)
-        {
-            var result = await accountContext.IsPhoneNumberAvailable(phoneNumber);
-            return Json(new AvailibilityResponse("phoneNumber", phoneNumber, result));
-        }
+            var queryKeyVal = queryParams.First();
+            var property = queryKeyVal.Key;
+            var suggestedValue = queryKeyVal.Value;
 
-        /// <summary>
-        /// Get whether a suggested email is availalble or not
-        /// </summary>
-        /// <param name="email">
-        /// suggested email
-        /// </param>
-        /// <returns>
-        /// returns the availability of suggested email
-        /// </returns>
-        [HttpGet]
-        [Route("check/email/{email}")]
-        [ResponseType(typeof(AvailibilityResponse))]
-        public async Task<IHttpActionResult> CheckEmail(string email)
-        {
-            var result = await accountContext.IsEmailAvailable(email);
-            return Json(new AvailibilityResponse("email", email, result));
+            bool result;
+
+            switch (property.ToLower())
+            {
+                case CheckPropertyNames.EMAIL:
+                    result = await accountContext.IsEmailAvailable(suggestedValue);
+                    break;
+                case CheckPropertyNames.PHONENUMBER:
+                    result = await accountContext.IsPhoneNumberAvailable(suggestedValue);
+                    break;
+                case CheckPropertyNames.USERNAME:
+                    result = await accountContext.IsUsernameAvailable(suggestedValue);
+                    break;
+                default:
+                    return Content(HttpStatusCode.BadRequest, new ErrorResponse()
+                    {
+                        Message = $"Availibility check on {property} is not supported, supported property names are listed in data",
+                        Data = new List<string>() {
+                            CheckPropertyNames.EMAIL,
+                            CheckPropertyNames.PHONENUMBER,
+                            CheckPropertyNames.USERNAME
+                        }
+                    }, new JsonMediaTypeFormatter());
+            }
+
+            return Json(new AvailibilityResponse(property, suggestedValue, result));
         }
 
         [HttpPut]
@@ -439,5 +478,50 @@
 
             return BadRequest();
         }
+
+        private string ValidateClientAndRedirectUri(HttpRequestMessage request, ref string redirectUriOutput)
+        {
+            Uri redirectUri;
+            var queryStrings = request.GetQueryNameValuePairs();
+            var redirectUriString = queryStrings.FirstOrDefault(keyValue => string.Compare(keyValue.Key, "redirect_uri", true) == 0).Value;
+
+            if (string.IsNullOrWhiteSpace(redirectUriString))
+            {
+                return "redirect_uri is required";
+            }
+
+            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
+
+            if (!validUri)
+            {
+                return "redirect_uri is invalid";
+            }
+
+            var clientId = queryStrings.FirstOrDefault(keyValue => string.Compare(keyValue.Key, "client_id", true) == 0).Value;
+
+            if (string.IsNullOrWhiteSpace(clientId))
+            {
+                return "client_Id is required";
+            }
+
+            // TODO: I need to find client here, no client repository to be honest
+            Client client = null;
+
+            if (client == null)
+            {
+                return string.Format("Client_id '{0}' is not registered in the system.", clientId);
+            }
+
+            if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
+            {
+                return string.Format("The given URL is not allowed by Client_id '{0}' configuration.", clientId);
+            }
+
+            redirectUriOutput = redirectUri.AbsoluteUri;
+
+            return string.Empty;
+
+        }
+
     }
 }

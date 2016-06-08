@@ -64,20 +64,11 @@
             try
             {
                 await smtpclient.SendMailAsync(email.Message);
-                return new SendEmailResponse()
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Success = true
-                };
+                return new SendEmailResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return new SendEmailResponse()
-                {
-                    Error = ex.Message,
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Success = false
-                };
+                return new SendEmailResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

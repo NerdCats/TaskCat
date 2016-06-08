@@ -11,7 +11,7 @@
     using Exceptions;
     using System.Linq;
 
-    public class JobManager
+    public class JobManager : IJobManager
     {
         private JobStore store;
 
@@ -20,12 +20,12 @@
             this.store = store;
         }
 
-        internal async Task<IQueryable<Job>> GetJobs()
+        public async Task<IQueryable<Job>> GetJobs()
         {
             return await store.FindAllAsIQueryable();
         }
 
-        internal async Task<Job> GetJob(string id)
+        public async Task<Job> GetJob(string id)
         {
             var JobPayload = await store.FindOne(id);
             if (JobPayload == null)
@@ -33,7 +33,7 @@
             return ArrangeJobHooks(JobPayload);
         }
 
-        internal async Task<Job> GetJobByHRID(string hrid)
+        public async Task<Job> GetJobByHRID(string hrid)
         {
             var JobPayload = await store.FindOneByHRID(hrid);
             if (JobPayload == null)
@@ -61,51 +61,48 @@
             JobPayload.SetupDefaultBehaviourForFirstJobTask();
 
             return JobPayload;
-        }      
+        }
 
-        internal async Task<long> GetTotalJobCount()
+        public async Task<long> GetTotalJobCount()
         {
             return await store.CountJobs();
         }
 
-        internal async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int start, int limit)
+        public async Task<QueryResult<Job>> GetJobs(ODataQueryOptions<Job> query, int start, int limit)
         {
             var jobsResult = await store.FindJobs(query, start, limit);
             return jobsResult;
         }
 
-        internal async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
+        public async Task<IEnumerable<Job>> GetJobs(string type, int start, int limit)
         {
             var jobs = await store.FindJobs(type, start, limit);
             return jobs;
         }
 
-        internal async Task<QueryResult<Job>> GetJobsAssignedToUser(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
+        public async Task<QueryResult<Job>> GetJobsAssignedToUser(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending)
         {
-            if (fromDateTime == null)
-                fromDateTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(5));
-
             var jobs = await store.FindJobs(userId, start, limit, fromDateTime, jobStateToFetchUpTo, sortByCreateTimeDirection);
             return jobs;
         }
 
-        internal async Task<Job> RegisterJob(Job createdJob)
+        public async Task<Job> RegisterJob(Job createdJob)
         {
             var job = await store.CreateOne(createdJob);
             return job;
         }
 
-        internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
+        public async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
             return await store.UpdateJobTask(jobId, taskIndex, task);
         }
 
-        internal async Task<UpdateResult> UpdateJobTask(string _id, List<JobTask> tasks)
+        public async Task<UpdateResult> UpdateJobTask(string _id, List<JobTask> tasks)
         {
             return await store.UpdateJobTasks(_id, tasks);
         }
 
-        internal async Task<ReplaceOneResult> UpdateJob(Job job)
+        public async Task<ReplaceOneResult> UpdateJob(Job job)
         {
             return await store.ReplaceOne(job);
         }

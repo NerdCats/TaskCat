@@ -23,14 +23,13 @@
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Invalid email address provided")]
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "A valid email address must be provided")]
+        [Required(ErrorMessage = "A email address must be provided")]
         public string Email { get; set; }
 
-        [RegularExpression(@"(\+8801\d{9})|(01\d{9})", ErrorMessage = @"Please provide a valid Bangladeshi Phone Number, ex(+)")]
+        [Phone(ErrorMessage = "Phone number not valid")]
         [Display(Name = "PhoneNumber")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "A valid phone number must be provided")]
         public string PhoneNumber { get; set; }
 
         public string PicUri { get; internal set; }
@@ -38,7 +37,5 @@
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public IdentityTypes Type { get; set; }
-
-        public DefaultAddress Address { get; set; }
     }
 }

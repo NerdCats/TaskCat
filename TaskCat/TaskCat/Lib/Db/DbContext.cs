@@ -21,7 +21,7 @@
         public IMongoDatabase ShadowCatDatabase { get; private set; }
 
         #region Auth
-        
+
         private IMongoCollection<User> _users;
         public IMongoCollection<User> Users
         {
@@ -82,7 +82,9 @@
                 return _assetLocations;
             }
         }
+        #endregion
 
+        #region HRIDS=
         private IMongoCollection<HRIDEntity> _hrids;
         public IMongoCollection<HRIDEntity> HRIDs
         {
@@ -91,7 +93,17 @@
                 return _hrids;
             }
         }
+        #endregion
 
+        #region DropPoints
+        private IMongoCollection<DropPoint> _dropPoints;
+        public IMongoCollection<DropPoint> DropPoints
+        {
+            get
+            {
+                return _dropPoints;
+            }
+        }
         #endregion
 
         public DbContext()
@@ -109,7 +121,7 @@
         }
 
         private void EnsureIndexes()
-        {         
+        {
             IndexChecks.EnsureUniqueIndexOnUserName(_users);
             IndexChecks.EnsureUniqueIndexOnEmail(_users);
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
@@ -117,6 +129,7 @@
             IndexFacade.EnsureUniqueIndexOnPhoneNumber(_users);
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
+            IndexFacade.EnsureDropPointIndex(_dropPoints);
         }
 
         private void InitiateCollections()
@@ -129,8 +142,9 @@
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
+            _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
 
-            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);          
+            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }
 
         private void InitiateDatabase()

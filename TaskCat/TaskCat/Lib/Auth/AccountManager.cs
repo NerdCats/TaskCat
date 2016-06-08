@@ -14,9 +14,10 @@
     using Microsoft.Owin.Security.DataProtection;
 
     public class AccountManager : UserManager<User>
-    {    
+    {
         AccountStore accountStore;
-        public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : base(store)
+
+        public AccountManager(IUserStore<User> store) : base(store)
         {
             accountStore = store as AccountStore;
             UserValidator = new UserValidator<User>(this)
@@ -29,7 +30,9 @@
             {
                 RequiredLength = 6
             };
-
+        }
+        public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : this(store)
+        {
             //TODO: Define proper user token protection provider token here
 
             this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"))
@@ -40,7 +43,7 @@
 
         public async Task<User> FindByEmailAsync(string email, string password)
         {
-            return await FindByEmailAsync<User>(email, password); 
+            return await FindByEmailAsync<User>(email, password);
         }
 
         public async Task<T> FindByEmailAsync<T>(string email, string password) where T : User
@@ -90,7 +93,7 @@
 
             Type type = typeof(T);
 
-            if ((type == typeof(User) && user.Type == IdentityTypes.USER) 
+            if ((type == typeof(User) && user.Type == IdentityTypes.USER)
                 || (type == typeof(Asset) && user.Type != IdentityTypes.USER))
                 return user as T;
 
@@ -132,6 +135,6 @@
             return await accountStore.GetUserCountAsync();
         }
 
-        
+
     }
 }

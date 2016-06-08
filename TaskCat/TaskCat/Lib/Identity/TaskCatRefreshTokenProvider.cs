@@ -7,11 +7,11 @@
     using Data.Entity.Identity;
     using Utility;
 
-    public class SimpleRefreshTokenProvider : IAuthenticationTokenProvider
+    public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {
-        private readonly AccountContext authRepository;
+        private readonly IAccountContext authRepository;
 
-        public SimpleRefreshTokenProvider(AccountContext authRepository)
+        public TaskCatRefreshTokenProvider(IAccountContext authRepository)
         {
             this.authRepository = authRepository;
         }
