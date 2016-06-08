@@ -20,6 +20,11 @@
 
         public async Task<DropPoint> Delete(string id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             var item = await Get(id);
             var result = await Collection.DeleteOneAsync(x => x.Id == item.Id);
             if (result.DeletedCount > 0 && result.IsAcknowledged)
@@ -46,11 +51,31 @@
 
         public async Task<DropPoint> Update(DropPoint obj)
         {
-            if(obj.Id==null)
+            if (obj.Id == null)
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
             var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
+            return UpdateResult(obj, result);
+        }
+        public async Task<DropPoint> Update(DropPoint obj, string userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            if (obj.Id == null)
+            {
+                throw new ArgumentNullException(nameof(obj.Id));
+            }
+
+            var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id && x.UserId == userId, obj);
+            return UpdateResult(obj, result);
+        }
+
+        private static DropPoint UpdateResult(DropPoint obj, ReplaceOneResult result)
+        {
             if (result.IsAcknowledged)
             {
                 if (result.MatchedCount == 0) throw new EntityNotFoundException(typeof(DropPoint), obj.Id);
@@ -59,6 +84,8 @@
 
             throw new EntityUpdateException(typeof(DropPoint), obj.Id);
         }
+
+        
 
         public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)
         {

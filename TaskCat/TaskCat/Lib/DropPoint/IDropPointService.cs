@@ -11,5 +11,6 @@
         IMongoCollection<DropPoint> Collection { get; set; }
 
         Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query);
+        Task<DropPoint> Update(DropPoint value, string userId);
     }
 }
