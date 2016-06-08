@@ -73,8 +73,8 @@
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
-            var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
-            return UpdateResult(obj, result);
+            var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id, obj);
+            return UpdateResult(result);
         }
 
         public async Task<DropPoint> Update(DropPoint obj, string userId)
@@ -89,22 +89,16 @@
                 throw new ArgumentNullException(nameof(obj.Id));
             }
 
-            var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id && x.UserId == userId, obj);
-            return UpdateResult(obj, result);
+            var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id && x.UserId == userId, obj);
+            return UpdateResult(result);
         }
 
-        private static DropPoint UpdateResult(DropPoint obj, ReplaceOneResult result)
+        private static DropPoint UpdateResult(DropPoint obj)
         {
-            if (result.IsAcknowledged)
-            {
-                if (result.MatchedCount == 0) throw new EntityNotFoundException(typeof(DropPoint), obj.Id);
-                return obj;
-            }
-
-            throw new EntityUpdateException(typeof(DropPoint), obj.Id);
+            if (obj == null)
+                throw new EntityUpdateException(typeof(DropPoint), obj.Id);
+            return obj;
         }
-
-
 
         public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)
         {
