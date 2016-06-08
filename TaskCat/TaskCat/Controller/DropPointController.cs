@@ -142,9 +142,6 @@
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
             }
-
-            if (string.IsNullOrWhiteSpace(value.UserId))
-                value.UserId = authorizedId;
          
             if(this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
@@ -171,8 +168,15 @@
 
             if (string.IsNullOrWhiteSpace(userId))
                 userId = authorizedId;
-            var result = await service.Delete(id);
-            return Json(result);
+
+            if (this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            {
+                return Json(await service.Delete(id));
+            }
+            else
+            {
+                return Json(await service.Delete(id, userId));
+            }
         }
     }
 }

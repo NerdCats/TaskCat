@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using MongoDB.Bson;
+
     public class DropPointService : IDropPointService
     {
         public IMongoCollection<DropPoint> Collection { get; set; }
@@ -20,17 +21,34 @@
 
         public async Task<DropPoint> Delete(string id)
         {
-            if (id == null)
+            if (String.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
+            var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
 
-            var item = await Get(id);
-            var result = await Collection.DeleteOneAsync(x => x.Id == item.Id);
-            if (result.DeletedCount > 0 && result.IsAcknowledged)
-                return item;
-            else
-                throw new EntityDeleteException(typeof(DropPoint), item.Id);
+            return DeleteResult(result);
+        }
+
+        public async Task<DropPoint> Delete(string id, string userId)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+            if (String.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id && x.UserId == userId);
+            return DeleteResult(result);
+        }
+
+        private static DropPoint DeleteResult(DropPoint result)
+        {
+            if (result == null)
+                throw new EntityDeleteException(typeof(DropPoint), result.Id);
+            return result;
         }
 
         public async Task<DropPoint> Get(string id)
@@ -51,21 +69,22 @@
 
         public async Task<DropPoint> Update(DropPoint obj)
         {
-            if (obj.Id == null)
+            if (String.IsNullOrWhiteSpace(obj.Id))
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
             var result = await Collection.ReplaceOneAsync(x => x.Id == obj.Id, obj);
             return UpdateResult(obj, result);
         }
+
         public async Task<DropPoint> Update(DropPoint obj, string userId)
         {
-            if (userId == null)
+            if (String.IsNullOrWhiteSpace(userId))
             {
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            if (obj.Id == null)
+            if (String.IsNullOrWhiteSpace(obj.Id))
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
@@ -85,7 +104,7 @@
             throw new EntityUpdateException(typeof(DropPoint), obj.Id);
         }
 
-        
+
 
         public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)
         {
