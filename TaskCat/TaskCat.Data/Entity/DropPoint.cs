@@ -1,10 +1,11 @@
 ﻿namespace TaskCat.Data.Entity
 {
     using Model.Geocoding;
-
+    using System.ComponentModel.DataAnnotations;
     public class DropPoint : DbEntity
     {
         public DefaultAddress Address { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Drop Point Name is not provided")]
         public string Name { get; set; }
         public string UserId { get; set; }
 
