@@ -42,16 +42,22 @@
                 throw new ArgumentNullException(nameof(query));
             }
 
-            if(userId!=null && this.User.Identity.GetUserId()!=userId 
+            var currentUserId = this.User.Identity.GetUserId();
+
+            if (userId!=null && currentUserId != userId 
                 && (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) || !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN)))
             {
                 // TODO: Need to fix this differently by a proper result
                 return Unauthorized();
             }
+            userId = currentUserId;
 
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
-            var result = await service.SearchDropPoints(userId, query);
-            return Json(result);
+            var queryResult = await service.SearchDropPoints(userId, query);
+
+            if (envelope)
+                return Json(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Json(queryResult);
         }
 
         [HttpGet]
