@@ -1,12 +1,15 @@
 ﻿namespace TaskCat.Tests.Account
 {
+    using App.Settings;
     using Data.Entity.Identity;
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Model.Identity.Registration;
+    using Its.Configuration;
     using Microsoft.AspNet.Identity;
     using Moq;
     using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
@@ -26,6 +29,18 @@
         Mock<AccountManager> accountManagerMock;
         Mock<IBlobService> blobServiceMock = new Mock<IBlobService>();
         Mock<IJobManager> jobManagerMock = new Mock<IJobManager>();
+
+        [SetUp]
+        public void SetUp()
+        {
+            Settings.Reset();
+            Settings.Set<ClientSettings>(new ClientSettings()
+            {
+                WebCatUrl = "http://testwebcat.com/",
+                ConfirmEmailPath = "confirm"
+            });
+            Settings.CertificatePassword = null;
+        }
 
         [Test]
         public async Task Test_RegisterUser_With_Single_Interested_Locality()
@@ -76,8 +91,6 @@
         {
             accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
-            accountManagerMock.Setup(x => x.GenerateEmailConfirmationToken(It.IsAny<string>())).Returns("123456");
-
             mailServiceMock.Setup(x => x.SendWelcomeMail(
                 It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(
                 new SendEmailResponse(HttpStatusCode.OK));
@@ -89,7 +102,13 @@
                 blobServiceMock.Object,
                 jobManagerMock.Object);
 
+            Environment.SetEnvironmentVariable("Its.Configuration.Settings.Precedence", "local|production");
 
+            var userMock = new Mock<User>(new RegistrationModelBase() { UserName = "test_username" });
+
+            var result = await accountContext.NotifyUserCreationByMail(userMock.Object);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
         }
     }
 }

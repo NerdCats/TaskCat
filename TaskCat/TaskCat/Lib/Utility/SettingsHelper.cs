@@ -17,7 +17,8 @@
             List<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateObject(settingsClass, new ValidationContext(settingsClass), validationResults, true);
 
-            throw new SettingsException<T>(string.Join(",", validationResults.Select(x => x.ErrorMessage)));
+            if (validationResults.Count > 0)
+                throw new SettingsException<T>(string.Join(",", validationResults.Select(x => x.ErrorMessage)));
         }
     }
 }
