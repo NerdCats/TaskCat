@@ -43,6 +43,12 @@ namespace TaskCat.App
                     break;
             }
 
+#if DEBUG
+            AppSettings.Precedence = new[] { "local", "production" };
+#else
+            AppSettings.Precedence = new[] { "production", "local" };
+#endif
+
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
             var container = builder.BuildContainer(app);

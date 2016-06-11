@@ -284,6 +284,7 @@
     <Content Include=".config\local\SendWithUsSettings.json" />
     <Content Include=".config\local\EmailTemplatePathSettings.json" />
     <Content Include=".config\local\ExternalLoginSettings.json" />
+    <Content Include=".config\local\ClientSettings.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -359,6 +360,7 @@
     <Compile Include="Lib\Exceptions\EntityUpdateException.cs" />
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
     <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
+    <Compile Include="Lib\Exceptions\SettingsException.cs" />
     <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
@@ -417,6 +419,7 @@
     <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
     <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
+    <Compile Include="Lib\Utility\SettingsHelper.cs" />
     <Compile Include="Lib\Utility\UrlExtensions.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
