@@ -27,7 +27,7 @@
         Mock<IJobManager> jobManagerMock = new Mock<IJobManager>();
 
         [Test]
-        public async Task TestRegisterUserWithSingleInterestedLocality()
+        public async Task Test_RegisterUser_With_Single_Interested_Locality()
         {
             accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
@@ -69,5 +69,7 @@
             Assert.AreEqual(1, (result.User.Profile as UserProfile).InterestedLocalities.Count);
             Assert.AreEqual("TestLocality", (result.User.Profile as UserProfile).InterestedLocalities.First());
         }
+
+
     }
 }
