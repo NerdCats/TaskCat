@@ -78,7 +78,18 @@
 
             accountManagerMock.Setup(x => x.GenerateEmailConfirmationToken(It.IsAny<string>())).Returns("123456");
 
-            mailServiceMock.Setup(x => x.SendWelcomeMail(It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(new SendEmailResponse(HttpStatusCode.OK));
+            mailServiceMock.Setup(x => x.SendWelcomeMail(
+                It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(
+                new SendEmailResponse(HttpStatusCode.OK));
+
+            var accountContext = new AccountContext(
+                dbContextMock.Object,
+                mailServiceMock.Object,
+                accountManagerMock.Object,
+                blobServiceMock.Object,
+                jobManagerMock.Object);
+
+
         }
     }
 }

@@ -285,6 +285,7 @@
     <Content Include=".config\local\EmailTemplatePathSettings.json" />
     <Content Include=".config\local\ExternalLoginSettings.json" />
     <Content Include=".config\local\ClientSettings.json" />
+    <Content Include=".config\production\ClientSettings.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -441,7 +442,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include=".config\production\" />
     <Folder Include="Model\DropPoint\" />
   </ItemGroup>
   <PropertyGroup>

@@ -81,9 +81,8 @@
             return creationResult;
         }
 
-        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message)
+        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user)
         {
-            var urlHelper = new UrlHelper(message);
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
             var clientSettings = Settings.Get<ClientSettings>();

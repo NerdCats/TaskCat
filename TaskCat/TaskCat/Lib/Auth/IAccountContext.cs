@@ -39,7 +39,7 @@
         Task<bool> IsEmailAvailable(string email);
         Task<bool> IsPhoneNumberAvailable(string phoneNumber);
         Task<bool> IsUsernameAvailable(string suggestedUsername);
-        Task<SendEmailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message);
+        Task<SendEmailResponse> NotifyUserCreationByMail(User user);
         Task<AccountResult> RegisterUser(RegistrationModelBase model);
         Task<bool> RemoveRefreshToken(string hashedTokenId);
         Task<bool> RemoveRefreshToken(RefreshToken refreshToken);
