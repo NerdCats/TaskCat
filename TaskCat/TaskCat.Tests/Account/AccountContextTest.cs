@@ -9,6 +9,7 @@
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
     using TaskCat.Lib.Auth;
     using TaskCat.Lib.Db;
@@ -70,6 +71,14 @@
             Assert.AreEqual("TestLocality", (result.User.Profile as UserProfile).InterestedLocalities.First());
         }
 
+        [Test]
+        public async Task Test_NotifyUserCreationByMail()
+        {
+            accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
+            accountManagerMock.Setup(x => x.GenerateEmailConfirmationToken(It.IsAny<string>())).Returns("123456");
+
+            mailServiceMock.Setup(x => x.SendWelcomeMail(It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(new SendEmailResponse(HttpStatusCode.OK));
+        }
     }
 }
