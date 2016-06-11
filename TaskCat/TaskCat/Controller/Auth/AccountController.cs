@@ -72,7 +72,7 @@
                 return GetErrorResult(result.Result);
             }
 
-            await accountContext.NotifyUserCreationByMail(result.User, this.Request);
+            await accountContext.NotifyUserCreationByMail(result.User);
 
             return Created<UserModel>(Url.Link(AppConstants.GetUserProfileByIdRoute, new { userId = result.User.Id }), result.User.ToModel(isUserAuthenticated: false));
         }
@@ -138,7 +138,7 @@
                     new JsonMediaTypeFormatter());
             }
 
-            var result = await accountContext.NotifyUserCreationByMail(user, this.Request);
+            var result = await accountContext.NotifyUserCreationByMail(user);
 
             if (!result.Success)
                 return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());

@@ -23,7 +23,7 @@
             Mock<IAccountContext> accountContextMock = new Mock<IAccountContext>();
             accountContextMock.Setup(x => x.FindUser(It.IsAny<string>())).ReturnsAsync(
                 new User(new UserRegistrationModel(), new UserProfile()));
-            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>(), It.IsAny<HttpRequestMessage>()))
+            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>()))
                 .ReturnsAsync(new SendEmailResponse(HttpStatusCode.OK, null));
 
             AccountController accountController = new AccountController(accountContextMock.Object);
@@ -45,7 +45,7 @@
             Mock<IAccountContext> accountContextMock = new Mock<IAccountContext>();
             accountContextMock.Setup(x => x.FindUser(It.IsAny<string>())).ReturnsAsync(
                 new User(new UserRegistrationModel(), new UserProfile()));
-            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>(), It.IsAny<HttpRequestMessage>()))
+            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>()))
                 .ReturnsAsync(new SendEmailResponse(HttpStatusCode.InternalServerError, "Random mail error"));
 
             AccountController accountController = new AccountController(accountContextMock.Object);
