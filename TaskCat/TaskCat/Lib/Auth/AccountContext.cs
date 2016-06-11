@@ -26,6 +26,8 @@
     using Model.Identity;
     using System.Web.Http.Routing;
     using Email;
+    using Its.Configuration;
+    using App.Settings;
 
     public class AccountContext : IAccountContext
     {
@@ -55,7 +57,7 @@
         {
             UserProfile profile;
             User user = null;
-            
+
             switch (model.Type)
             {
                 case IdentityTypes.USER:
@@ -74,17 +76,23 @@
 
             }
 
-            var creationResult =  new AccountResult(await accountManager.CreateAsync(user, model.Password), user);
+            var creationResult = new AccountResult(await accountManager.CreateAsync(user, model.Password), user);
 
             return creationResult;
         }
 
-        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, HttpRequestMessage message )
+        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user)
         {
-            var urlHelper = new UrlHelper(message);
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
-            var confirmationUrl = new Uri(urlHelper.Link(AppConstants.ConfirmEmailRoute, new { userId = user.Id, code = code }));
-            var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest() {
+
+            var clientSettings = Settings.Get<ClientSettings>();
+            clientSettings.Validate();
+
+            var confirmEmailRouteParams = new Dictionary<string, string>() { { "userId", user.Id }, { "code", code } };
+            var confirmationUrl = string.Concat(clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, confirmEmailRouteParams.ToQuerystring());
+
+            var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest()
+            {
                 RecipientEmail = user.Email,
                 RecipientUsername = user.UserName,
                 ConfirmationUrl = confirmationUrl.ToString()
@@ -182,14 +190,14 @@
                 var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
                 var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
-            else if(user.Roles.Any(x=>x=="Administrator" || x== "BackOfficeAdmin"))
+            else if (user.Roles.Any(x => x == "Administrator" || x == "BackOfficeAdmin"))
             {
                 var userModel = new UserModel(user);
                 var updateDef = Builders<Job>.Update.Set(x => x.JobServedBy, userModel);
                 var searchFilter = Builders<Job>.Filter.Where(x => x.JobServedBy.UserId == user.Id);
                 var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
             }
-            else if(user.Type== IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
+            else if (user.Type == IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
             {
                 var userModel = user.Type == IdentityTypes.USER ? new UserModel(user) : new EnterpriseUserModel(user as EnterpriseUser);
                 var updateDef = Builders<Job>.Update.Set(x => x.User, userModel);
@@ -294,7 +302,7 @@
 
         public async Task<User> FindUser(string userId)
         {
-            var user =  await accountManager.FindByIdAsync(userId);
+            var user = await accountManager.FindByIdAsync(userId);
             if (user == null)
                 throw new EntityNotFoundException("User", userId);
             return user;

@@ -1,14 +1,18 @@
 ﻿namespace TaskCat.Tests.Account
 {
+    using App.Settings;
     using Data.Entity.Identity;
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Model.Identity.Registration;
+    using Its.Configuration;
     using Microsoft.AspNet.Identity;
     using Moq;
     using NUnit.Framework;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Threading.Tasks;
     using TaskCat.Lib.Auth;
     using TaskCat.Lib.Db;
@@ -26,8 +30,20 @@
         Mock<IBlobService> blobServiceMock = new Mock<IBlobService>();
         Mock<IJobManager> jobManagerMock = new Mock<IJobManager>();
 
+        [SetUp]
+        public void SetUp()
+        {
+            Settings.Reset();
+            Settings.Set<ClientSettings>(new ClientSettings()
+            {
+                WebCatUrl = "http://testwebcat.com/",
+                ConfirmEmailPath = "confirm"
+            });
+            Settings.CertificatePassword = null;
+        }
+
         [Test]
-        public async Task TestRegisterUserWithSingleInterestedLocality()
+        public async Task Test_RegisterUser_With_Single_Interested_Locality()
         {
             accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
@@ -68,6 +84,31 @@
             Assert.NotNull((result.User.Profile as UserProfile).InterestedLocalities);
             Assert.AreEqual(1, (result.User.Profile as UserProfile).InterestedLocalities.Count);
             Assert.AreEqual("TestLocality", (result.User.Profile as UserProfile).InterestedLocalities.First());
+        }
+
+        [Test]
+        public async Task Test_NotifyUserCreationByMail()
+        {
+            accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
+
+            mailServiceMock.Setup(x => x.SendWelcomeMail(
+                It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(
+                new SendEmailResponse(HttpStatusCode.OK));
+
+            var accountContext = new AccountContext(
+                dbContextMock.Object,
+                mailServiceMock.Object,
+                accountManagerMock.Object,
+                blobServiceMock.Object,
+                jobManagerMock.Object);
+
+            Environment.SetEnvironmentVariable("Its.Configuration.Settings.Precedence", "local|production");
+
+            var userMock = new Mock<User>(new RegistrationModelBase() { UserName = "test_username" });
+
+            var result = await accountContext.NotifyUserCreationByMail(userMock.Object);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
         }
     }
 }

@@ -25,7 +25,7 @@
                 foreach (var param in otherParamsException)
                 {
                     if (qParamDict.ContainsKey(param.ToLower()))
-                        qParamDict.Remove(param);
+                        qParamDict.Remove(param.ToLower());
                 }
             }
 
