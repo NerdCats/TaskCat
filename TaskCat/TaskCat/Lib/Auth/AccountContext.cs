@@ -26,6 +26,8 @@
     using Model.Identity;
     using System.Web.Http.Routing;
     using Email;
+    using Its.Configuration;
+    using App.Settings;
 
     public class AccountContext : IAccountContext
     {
@@ -84,8 +86,11 @@
             var urlHelper = new UrlHelper(message);
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
+            var clientSettings = Settings.Get<ClientSettings>();
+            clientSettings.Validate();
+
             var confirmEmailRouteParams = new Dictionary<string, string>() { { "userId", user.Id }, { "code", code } };
-            var confirmationUrl = confirmEmailRouteParams.ToQuerystring();
+            var confirmationUrl = string.Concat(clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, confirmEmailRouteParams.ToQuerystring());
 
             var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest()
             {
