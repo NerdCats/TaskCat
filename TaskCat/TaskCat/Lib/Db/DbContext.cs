@@ -118,6 +118,16 @@
             InitiateDatabase();
             InitiateCollections();
             EnsureIndexes();
+
+            EnsureGlobalPolicyForNullIgnore();
+        }
+
+        private void EnsureGlobalPolicyForNullIgnore()
+        {
+            ConventionPack pack = new ConventionPack();
+            pack.Add(new IgnoreIfNullConvention(true));
+
+            ConventionRegistry.Register("Ignore null properties of data", pack, type => type == typeof(User));
         }
 
         private void EnsureIndexes()
