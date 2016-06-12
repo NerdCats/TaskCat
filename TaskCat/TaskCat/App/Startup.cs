@@ -24,7 +24,8 @@ namespace TaskCat.App
     using Settings;
     using AppSettings = Its.Configuration.Settings;
     using Lib.Owin;
-
+    using MongoDB.Bson.Serialization.Conventions;
+    using MongoDB.Bson;
     public class Startup
     {
         public void Configuration(IAppBuilder app)
@@ -48,6 +49,8 @@ namespace TaskCat.App
 #else
             AppSettings.Precedence = new[] { "production", "local" };
 #endif
+
+            SetupMongoConventions();
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
@@ -89,6 +92,21 @@ namespace TaskCat.App
                 return context.Response.WriteAsync(string.Format($"Welcome to TaskCat '{version}', proudly baked by NerdCats"));
             });
 
+        }
+
+        private void SetupMongoConventions()
+        {
+            var pack = new ConventionPack()
+            {
+                new EnumRepresentationConvention(BsonType.String)
+            };
+
+            ConventionRegistry.Register("EnumConvensions", pack, t => true);
+
+            ConventionPack nullPack = new ConventionPack();
+            nullPack.Add(new IgnoreIfNullConvention(true));
+
+            ConventionRegistry.Register("IgnoreNull", nullPack, type => true);
         }
 
         private void ConfigureOAuth(IAppBuilder app, IContainer container)
