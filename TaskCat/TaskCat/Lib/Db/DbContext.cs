@@ -108,13 +108,6 @@
 
         public DbContext()
         {
-            var pack = new ConventionPack()
-            {
-                new EnumRepresentationConvention(BsonType.String)
-            };
-
-            ConventionRegistry.Register("EnumConvensions", pack, t => true);
-
             InitiateDatabase();
             InitiateCollections();
             EnsureIndexes();
