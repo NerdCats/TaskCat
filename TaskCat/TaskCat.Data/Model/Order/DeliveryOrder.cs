@@ -1,7 +1,5 @@
 ﻿namespace TaskCat.Data.Model.Order
 {
-    using System.ComponentModel.DataAnnotations;
-    using Geocoding;
     using MongoDB.Bson.Serialization.Attributes;
 
     [BsonIgnoreExtraElements(Inherited = true)]
@@ -14,7 +12,7 @@
 
         public decimal RequiredChangeFor { get; set; }
 
-        public DeliveryOrder(string name = null) : base(name, "Delivery")
+        public DeliveryOrder(string name = null) : base(name, OrderTypes.Delivery)
         {
 
         }
