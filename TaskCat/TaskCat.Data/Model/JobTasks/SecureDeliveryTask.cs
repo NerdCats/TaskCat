@@ -1,8 +1,8 @@
-﻿using TaskCat.Data.Lib.Constants;
-using TaskCat.Data.Model.Geocoding;
-
-namespace TaskCat.Data.Model.JobTasks
+﻿namespace TaskCat.Data.Model.JobTasks
 {
+    using Lib.Constants;
+    using Geocoding;
+
     public class SecureDeliveryTask : DeliveryTask
     {
         public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) : 

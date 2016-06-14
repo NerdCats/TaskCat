@@ -54,13 +54,20 @@
 
             if (order.Type == OrderTypes.ClassifiedDelivery)
             {
+                SecureDeliveryTask secureDeliveryTask = new SecureDeliveryTask(order.To, order.From);
+                secureDeliveryTask.SetPredecessor(deliveryTask);
+                job.Tasks.Add(secureDeliveryTask);
+                secureDeliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
+                job.TerminalTask = secureDeliveryTask;
+            }
+            else if (order.Type == OrderTypes.Delivery)
+            {
+                job.TerminalTask = deliveryTask;
             }
 
             job.PaymentMethod = this.paymentMethod.Key;
             job.PaymentStatus = PaymentStatus.Pending;
-
-            job.TerminalTask = deliveryTask;
 
             job.EnsureTaskAssetEventsAssigned();
             job.EnsureInitialJobState();
