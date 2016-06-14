@@ -12,7 +12,7 @@
 
         public decimal RequiredChangeFor { get; set; }
 
-        public DeliveryOrder(string type = OrderTypes.Delivery, string name = null) : base(name, type)
+        public DeliveryOrder(string name = null, string type = OrderTypes.Delivery) : base(name, type)
         {
             if (!(type == OrderTypes.Delivery || type == OrderTypes.ClassifiedDelivery))
             {
