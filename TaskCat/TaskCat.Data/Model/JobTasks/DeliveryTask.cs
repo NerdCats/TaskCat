@@ -1,10 +1,10 @@
 ﻿namespace TaskCat.Data.Model.JobTasks
 {
     using System;
-    using Data.Model;
-    using Data.Model.Identity.Response;
-    using Data.Lib.Constants;
-    using Data.Lib.Exceptions;
+    using Model;
+    using Identity.Response;
+    using Lib.Constants;
+    using Lib.Exceptions;
     using Geocoding;
 
     public class DeliveryTask : JobTask
@@ -12,10 +12,17 @@
         public DefaultAddress From { get; set; }
         public DefaultAddress To { get; set; }
 
-        public DeliveryTask(DefaultAddress from, DefaultAddress to) : base(JobTaskTypes.DELIVERY, "Deliverying Package")
+        public DeliveryTask(DefaultAddress from, DefaultAddress to) :
+            base(JobTaskTypes.DELIVERY, "Deliverying Package")
         {
             this.From = from;
             this.To = to;
+        }
+
+        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type, string name) : base(type, name)
+        {
+            if (type != JobTaskTypes.SECURE_DELIVERY)
+                throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
         }
 
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
@@ -59,7 +66,7 @@
 
                 VerifyPropertyTypesFromResult(type);
 
-                var asset = type.GetProperty("Asset");                                              
+                var asset = type.GetProperty("Asset");
                 Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
             }
             catch (Exception)

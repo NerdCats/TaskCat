@@ -151,6 +151,7 @@
     <Compile Include="Model\JobTasks\Result\DefaultAssignAssetTaskResult.cs" />
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
+    <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />

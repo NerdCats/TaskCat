@@ -8,5 +8,6 @@
         public const string PACKAGE_PICKUP = "PackagePickUp";
         public const string DELIVERY = "Delivery";
         public const string FETCH_DELIVERYMAN = "FetchDeliveryMan";
+        public const string SECURE_DELIVERY = "SecureDelivery";
     }
 }

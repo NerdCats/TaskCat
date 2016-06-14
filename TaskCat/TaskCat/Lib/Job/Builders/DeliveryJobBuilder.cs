@@ -40,33 +40,32 @@
             job.Tasks.Add(fetchDeliveryManTask);
             fetchDeliveryManTask.AssetUpdated += JobTask_AssetUpdated;
 
-            if (order.Type == OrderTypes.Delivery)
+            PackagePickUpTask pickUpTask = new PackagePickUpTask(order.From);
+            pickUpTask.SetPredecessor(fetchDeliveryManTask);
+            job.Tasks.Add(pickUpTask);
+            pickUpTask.AssetUpdated += JobTask_AssetUpdated;
+
+
+            DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
+            deliveryTask.SetPredecessor(pickUpTask);
+            job.Tasks.Add(deliveryTask);
+            deliveryTask.AssetUpdated += JobTask_AssetUpdated;
+
+
+            if (order.Type == OrderTypes.ClassifiedDelivery)
             {
-               
-                PackagePickUpTask pickUpTask = new PackagePickUpTask(order.From);
-                pickUpTask.SetPredecessor(fetchDeliveryManTask);
-                job.Tasks.Add(pickUpTask);
-                pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
-                DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
-                deliveryTask.SetPredecessor(pickUpTask);
-                job.Tasks.Add(deliveryTask);
-                deliveryTask.AssetUpdated += JobTask_AssetUpdated;
-
-                job.PaymentMethod = this.paymentMethod.Key;
-                job.PaymentStatus = PaymentStatus.Pending;
-
-                job.TerminalTask = deliveryTask;
-
-                job.EnsureTaskAssetEventsAssigned();
-                job.EnsureInitialJobState();
-
-                job.SetupDefaultBehaviourForFirstJobTask(); 
             }
-            else
-            {
-                throw new NotSupportedException($"{order.Type} is not supported for this JobBuilder process");
-            }
+
+            job.PaymentMethod = this.paymentMethod.Key;
+            job.PaymentStatus = PaymentStatus.Pending;
+
+            job.TerminalTask = deliveryTask;
+
+            job.EnsureTaskAssetEventsAssigned();
+            job.EnsureInitialJobState();
+
+            job.SetupDefaultBehaviourForFirstJobTask();
         }
 
 
