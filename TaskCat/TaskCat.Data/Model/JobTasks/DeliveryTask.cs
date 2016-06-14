@@ -6,6 +6,7 @@
     using Lib.Constants;
     using Lib.Exceptions;
     using Geocoding;
+    using Result;
 
     public class DeliveryTask : JobTask
     {
@@ -17,9 +18,11 @@
         {
             this.From = from;
             this.To = to;
+            this.Result = new AssetTaskResult();
         }
 
-        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type, string name) : base(type, name)
+        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type, string name) : 
+            base(type, name)
         {
             if (type != JobTaskTypes.SECURE_DELIVERY)
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
@@ -79,6 +82,17 @@
         {
             IsReadytoMoveToNextTask = (To != null && Asset != null) ? true : false;
             MoveToNextState();
+        }
+
+        public override JobTaskResult SetResultToNextState()
+        {
+            var result = new AssetTaskResult();
+            result.ResultType = typeof(AssetTaskResult);
+            if (this.Asset == null)
+                throw new InvalidOperationException("Moving to next state when Asset is null");
+            result.Asset = this.Asset;
+            result.TaskCompletionTime = DateTime.UtcNow;
+            return result;
         }
     }
 }
