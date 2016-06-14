@@ -370,7 +370,6 @@
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Invoice\IPDFService.cs" />
     <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
-    <Compile Include="Lib\Job\Builders\ClassifiedDeliveryJobBuilder.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Job\IJobManager.cs" />
