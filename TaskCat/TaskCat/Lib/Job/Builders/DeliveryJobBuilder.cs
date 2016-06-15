@@ -8,6 +8,8 @@
     using HRID;
     using Data.Lib.Payment;
     using Data.Model.Payment;
+    using System;
+
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class DeliveryJobBuilder : JobBuilder
@@ -29,12 +31,13 @@
 
         public override void BuildJob()
         {
-            //FIXME: Looks like I can definitely refactor this and work this out
+            // FIXME: Looks like I can definitely refactor this and work this out
             
             job.Tasks = new List<JobTask>();
 
+            // INFO: Fetching to 
             FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(order.From, order.To);
-            job.Tasks.Add(fetchDeliveryManTask);         
+            job.Tasks.Add(fetchDeliveryManTask);
             fetchDeliveryManTask.AssetUpdated += JobTask_AssetUpdated;
 
             PackagePickUpTask pickUpTask = new PackagePickUpTask(order.From);
@@ -42,15 +45,29 @@
             job.Tasks.Add(pickUpTask);
             pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
+
             DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
             deliveryTask.SetPredecessor(pickUpTask);
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
+
+            if (order.Type == OrderTypes.ClassifiedDelivery)
+            {
+                SecureDeliveryTask secureDeliveryTask = new SecureDeliveryTask(order.To, order.From);
+                secureDeliveryTask.SetPredecessor(deliveryTask);
+                job.Tasks.Add(secureDeliveryTask);
+                secureDeliveryTask.AssetUpdated += JobTask_AssetUpdated;
+
+                job.TerminalTask = secureDeliveryTask;
+            }
+            else if (order.Type == OrderTypes.Delivery)
+            {
+                job.TerminalTask = deliveryTask;
+            }
+
             job.PaymentMethod = this.paymentMethod.Key;
             job.PaymentStatus = PaymentStatus.Pending;
-
-            job.TerminalTask = deliveryTask;
 
             job.EnsureTaskAssetEventsAssigned();
             job.EnsureInitialJobState();
