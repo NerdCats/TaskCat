@@ -75,8 +75,8 @@
                     break;
 
             }
-
-            var creationResult = new AccountResult(await accountManager.CreateAsync(user, model.Password), user);
+            var identityResult = await accountManager.CreateAsync(user, model.Password);
+            var creationResult = new AccountResult(identityResult, user);
 
             return creationResult;
         }
