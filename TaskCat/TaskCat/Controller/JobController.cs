@@ -160,15 +160,24 @@
                     OdataOptionExceptions.Top
                 });
 
-            //IsUserOrEnterpriseUserOnly();
-
             var odataQuery = queryParams.GetOdataQuery(new List<string>() {
                     "pageSize",
                     "page",
                     "envelope"
                 });
 
-            var jobs = await repository.GetJobs();
+            IQueryable<Job> jobs;
+            jobs = await repository.GetJobs();
+
+            if (IsUserOrEnterpriseUserOnly())
+            {
+                // INFO: You're in this block because the user is either just a regular user 
+                // or enterprise user , not an administrator or anything
+                // so he is only entitled to get the jobs he ordered 
+
+                jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
+            }
+
             var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
@@ -179,9 +188,9 @@
         private bool IsUserOrEnterpriseUserOnly()
         {
             return ((User.IsInRole(RoleNames.ROLE_USER) || User.IsInRole(RoleNames.ROLE_ENTERPRISE))
-                            && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
-                            && !User.IsInRole(RoleNames.ROLE_ASSET)
-                            && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
+                && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !User.IsInRole(RoleNames.ROLE_ASSET)
+                && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         /// <summary>
