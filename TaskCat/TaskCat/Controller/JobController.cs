@@ -140,7 +140,7 @@
         /// A list of Jobs that complies with the query
         /// </returns>
         ///
-        [Authorize(Roles = "Asset, Administrator, BackOfficeAdmin")]
+        [Authorize]
         [ResponseType(typeof(IEnumerable<Job>))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
