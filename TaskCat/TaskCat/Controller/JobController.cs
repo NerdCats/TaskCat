@@ -26,7 +26,7 @@
     using Model.Pagination;
     using System.Web.Http.Description;
     using Lib.Email;
-
+    using Data.Entity.Identity;
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -140,8 +140,8 @@
         /// A list of Jobs that complies with the query
         /// </returns>
         ///
-        [Authorize(Roles = "Asset, Administrator, BackOfficeAdmin")]
-        [ResponseType(typeof(Job))]
+        [Authorize]
+        [ResponseType(typeof(IEnumerable<Job>))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
@@ -166,12 +166,31 @@
                     "envelope"
                 });
 
-            var jobs = await repository.GetJobs();
+            IQueryable<Job> jobs;
+            jobs = await repository.GetJobs();
+
+            if (IsUserOrEnterpriseUserOnly())
+            {
+                // INFO: You're in this block because the user is either just a regular user 
+                // or enterprise user , not an administrator or anything
+                // so he is only entitled to get the jobs he ordered 
+
+                jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
+            }
+
             var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
                 return Json(new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
             return Json(queryResult);
+        }
+
+        private bool IsUserOrEnterpriseUserOnly()
+        {
+            return ((User.IsInRole(RoleNames.ROLE_USER) || User.IsInRole(RoleNames.ROLE_ENTERPRISE))
+                && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !User.IsInRole(RoleNames.ROLE_ASSET)
+                && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         /// <summary>
