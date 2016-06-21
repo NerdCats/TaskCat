@@ -26,7 +26,7 @@
     using Model.Pagination;
     using System.Web.Http.Description;
     using Lib.Email;
-
+    using Data.Entity.Identity;
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -141,7 +141,7 @@
         /// </returns>
         ///
         [Authorize(Roles = "Asset, Administrator, BackOfficeAdmin")]
-        [ResponseType(typeof(Job))]
+        [ResponseType(typeof(IEnumerable<Job>))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
         public async Task<IHttpActionResult> ListOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
@@ -160,6 +160,8 @@
                     OdataOptionExceptions.Top
                 });
 
+            //IsUserOrEnterpriseUserOnly();
+
             var odataQuery = queryParams.GetOdataQuery(new List<string>() {
                     "pageSize",
                     "page",
@@ -172,6 +174,14 @@
             if (envelope)
                 return Json(new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
             return Json(queryResult);
+        }
+
+        private bool IsUserOrEnterpriseUserOnly()
+        {
+            return ((User.IsInRole(RoleNames.ROLE_USER) || User.IsInRole(RoleNames.ROLE_ENTERPRISE))
+                            && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                            && !User.IsInRole(RoleNames.ROLE_ASSET)
+                            && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         /// <summary>
