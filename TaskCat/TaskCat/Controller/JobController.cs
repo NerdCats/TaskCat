@@ -27,6 +27,10 @@
     using System.Web.Http.Description;
     using Lib.Email;
     using Data.Entity.Identity;
+    using Model.Job;
+
+
+
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -355,9 +359,9 @@
         [HttpPost]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/cancel/{jobId}")]
-        public async Task CancelJob([FromUri]string jobId)
+        public async Task CancelJob(JobCancellationRequest request)
         {
-            await repository.CancelJob(jobId);
+            await repository.CancelJob(request);
         }
 
         /// <summary>

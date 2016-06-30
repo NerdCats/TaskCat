@@ -19,8 +19,9 @@
     using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
     using Data.Model;
+    using TaskCat.Model.Job;
     [TestFixture]
-    public class TestJob
+    public class TestDeliveryJob
     {
         IHRIDService hridService;
         string MockedHrid = "Job#123456";
@@ -39,6 +40,7 @@
         public async Task Test_Cancel_Delivery_Job_With_No_Task_In_Progress()
         {
             var searchJobId = "i1i2i3i4";
+            string cancellationReason = "test cancellation reason";
 
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
@@ -52,13 +54,18 @@
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
-            var jobRepository = new JobRepository(jobManagerMock.Object, 
+            var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object));
 
-            var result = await jobRepository.CancelJob(searchJobId);
+            var result = await jobRepository.CancelJob(new JobCancellationRequest()
+            {
+                JobId = searchJobId,
+                Reason = cancellationReason
+            });
 
             Assert.IsNotNull(result);
             Assert.AreEqual(JobState.CANCELLED, result.UpdatedValue.State);
+            Assert.AreEqual(cancellationReason, result.UpdatedValue.CancellationReason);
             Assert.AreEqual(JobTaskState.CANCELLED, result.UpdatedValue.Tasks.First().State);
         }
 

@@ -425,6 +425,7 @@
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
+    <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Model\Response\ChallengeResult.cs" />

@@ -11,7 +11,7 @@
     using Marvin.JsonPatch;
     using System.Linq;
     using Data.Model.Operation;
-
+    using Model.Job;
     public interface IJobRepository
     {
         Task<Job> GetJob(string id);
@@ -25,6 +25,6 @@
         Task<ReplaceOneResult> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> Claim(string jobId, string userId);
         Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel);
-        Task<UpdateResult<Job>> CancelJob(string jobId);
+        Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request);
     }
 }

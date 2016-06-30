@@ -18,7 +18,7 @@
     using Order.Process;
     using Data.Model.Order;
     using Data.Model.Operation;
-
+    using Model.Job;
     public class JobRepository : IJobRepository
     {
         private IJobManager manager;
@@ -153,10 +153,11 @@
             return await UpdateJob(job);
         }
 
-        public async Task<UpdateResult<Job>> CancelJob(string jobId)
+        public async Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request)
         {
-            var job = await GetJob(jobId);
+            var job = await GetJob(request.JobId);
             job.State = JobState.CANCELLED;
+            job.CancellationReason = request.Reason ?? request.Reason;
 
             var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
 

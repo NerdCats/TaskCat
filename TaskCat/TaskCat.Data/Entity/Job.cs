@@ -10,7 +10,6 @@
     using Model.Identity.Response;
     using System.Linq;
     using Model.Payment;
-    using Lib.Payment;
 
     public class Job : HRIDEntity
     {
@@ -78,9 +77,11 @@
         }
 
         public string PaymentMethod { get; set; }
-        public bool Deleted { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentStatus PaymentStatus { get; set; }
+
+        public string CancellationReason { get; set; }
+        public bool IsDeleted { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
