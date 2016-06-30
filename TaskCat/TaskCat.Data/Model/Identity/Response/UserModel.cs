@@ -19,7 +19,7 @@
         {
             this.UserId = user.Id;
             this.Type = user.Type;
-            this.PhoneNumber = user.PhoneNumberConfirmed ? user.PhoneNumber : string.Empty;
+            this.PhoneNumber = user.PhoneNumber;
             this.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
             this.Email = user.Email;
             this.EmailConfirmed = user.EmailConfirmed;

@@ -17,7 +17,8 @@
     using Order;
     using Order.Process;
     using Data.Model.Order;
-
+    using Data.Model.Operation;
+    using Model.Job;
     public class JobRepository : IJobRepository
     {
         private IJobManager manager;
@@ -72,7 +73,7 @@
         public async Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
         {
             var job = await GetJob(jobId);
-            if(job.Order.Type != orderModel.Type)
+            if (job.Order.Type != orderModel.Type)
             {
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");
             }
@@ -98,14 +99,19 @@
             }
 
             job.Order = orderModel;
-            
+
             var result = await UpdateJob(job);
             return result;
         }
 
-        public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
+        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
             var job = await GetJob(jobId);
+
+            if (job.State == JobState.CANCELLED)
+            {
+                throw new NotSupportedException($"Job {jobId} is in state {job.State}, restore job for further changes");
+            }
 
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
             if (selectedTask == null) throw new ArgumentException("Invalid JobTask Id provided");
@@ -125,8 +131,8 @@
         public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
         {
             var AssetRefReplaceOp = taskPatch.Operations.FirstOrDefault(x => x.op == "replace" && x.path == "/AssetRef");
-            if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType()== typeof(string))
-            {                
+            if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType() == typeof(string))
+            {
                 // INFO: Now we need to actually fetch the asset and get shit done
                 var asset = await accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(AssetRefReplaceOp.value.ToString());
                 if (asset == null) return false;
@@ -150,6 +156,36 @@
             job.JobServedBy = userModel;
 
             return await UpdateJob(job);
+        }
+
+        public async Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request)
+        {
+            var job = await GetJob(request.JobId);
+            job.State = JobState.CANCELLED;
+            job.CancellationReason = request.Reason ?? request.Reason;
+
+            var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
+
+            jobTaskToCancel = jobTaskToCancel ?? job.Tasks.First();
+
+            jobTaskToCancel.State = JobTaskState.CANCELLED;
+            var result = await UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
+        }
+
+        public async Task<UpdateResult<Job>> RestoreJob(string jobId)
+        {
+            var job = await GetJob(jobId);
+
+            if (!job.IsJobFreezed)
+                throw new NotSupportedException($" job {job.Id} is not freezed to be restored");
+
+            job.State = JobState.ENQUEUED;
+            job.Tasks.ForEach(x => x.State = JobTaskState.PENDING);
+            job.CancellationReason = null;
+
+            var result = await UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
     }
 }

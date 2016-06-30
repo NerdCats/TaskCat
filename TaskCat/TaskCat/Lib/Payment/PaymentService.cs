@@ -80,7 +80,7 @@
             if (paymentMethod.PaymentMethodType != PaymentMethodType.Redirection)
                 return false;   //this option is available only for redirection payment methods
 
-            if (job.Deleted)
+            if (job.IsDeleted)
                 return false;  //do not allow for deleted orders
 
             if (job.State == JobState.CANCELLED)

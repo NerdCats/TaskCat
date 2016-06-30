@@ -91,6 +91,7 @@
     <Compile Include="Controller\DropPointControllerTest.cs" />
     <Compile Include="Entity\InvoiceBaseTests.cs" />
     <Compile Include="Job\TestDeliveryJobBuilder.cs" />
+    <Compile Include="Job\TestDeliveryJob.cs" />
     <Compile Include="Lib\HRID\HRIDServiceTests.cs" />
     <Compile Include="Lib\UtilityTests\UrlExtensionsTests.cs" />
     <Compile Include="Model\Geocoding\DefaultAddressTests.cs" />

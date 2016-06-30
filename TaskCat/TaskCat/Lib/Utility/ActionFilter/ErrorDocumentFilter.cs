@@ -22,6 +22,8 @@
                 Exception error;
                 HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
 
+                // TODO: Possible place to refactor here
+
                 if (actionExecutedContext.Exception is NotImplementedException)
                     httpStatusCode = HttpStatusCode.NotImplemented;
                 else if (actionExecutedContext.Exception is EntityNotFoundException)
@@ -35,7 +37,7 @@
                 else if (actionExecutedContext.Exception is ValidationException)
                     httpStatusCode = HttpStatusCode.BadRequest;
                 else if (actionExecutedContext.Exception is NotSupportedException)
-                    httpStatusCode = HttpStatusCode.Forbidden;
+                    httpStatusCode = HttpStatusCode.BadRequest;
 
                 error = actionExecutedContext.Exception;
                 response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);

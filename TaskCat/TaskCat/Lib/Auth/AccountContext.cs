@@ -20,7 +20,7 @@
     using Model.Storage;
     using Exceptions;
     using Job;
-    using Data.Model.Query;
+    using Data.Model.Operation;
     using Data.Model;
     using Utility;
     using Model.Identity;
@@ -75,8 +75,8 @@
                     break;
 
             }
-
-            var creationResult = new AccountResult(await accountManager.CreateAsync(user, model.Password), user);
+            var identityResult = await accountManager.CreateAsync(user, model.Password);
+            var creationResult = new AccountResult(identityResult, user);
 
             return creationResult;
         }

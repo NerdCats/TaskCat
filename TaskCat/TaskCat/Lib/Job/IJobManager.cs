@@ -6,7 +6,7 @@ using System.Web.OData.Query;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Data.Model;
-using TaskCat.Data.Model.Query;
+using TaskCat.Data.Model.Operation;
 
 namespace TaskCat.Lib.Job
 {

@@ -402,7 +402,6 @@
     <Compile Include="Lib\Identity\TaskCatAuthorizationServerProvider.cs" />
     <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
     <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
-    <Compile Include="Lib\Job\FakeJobRepository.cs" />
     <Compile Include="Lib\Job\IJobRepository.cs" />
     <Compile Include="Lib\Job\JobBuilder.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />
@@ -426,6 +425,7 @@
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
+    <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Model\Response\ChallengeResult.cs" />

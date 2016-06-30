@@ -84,15 +84,8 @@
             builder.RegisterType<DropPointService>().AsImplementedInterfaces<IDropPointService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
-            switch (ConfigurationManager.AppSettings["ENV"])
-            {
-                case "mock":
-                    builder.RegisterType<FakeJobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-                    break;
-                default:
-                    builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-                    break;
-            }
+
+            builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
