@@ -172,5 +172,20 @@
             var result = await UpdateJob(job);
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
+
+        public async Task<UpdateResult<Job>> RestoreJob(string jobId)
+        {
+            var job = await GetJob(jobId);
+
+            if (!job.IsJobFreezed)
+                throw new NotSupportedException($" job {job.Id} is not freezed to be restored");
+
+            job.State = JobState.ENQUEUED;
+            job.Tasks.ForEach(x => x.State = JobTaskState.PENDING);
+            job.CancellationReason = null;
+
+            var result = await UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
+        }
     }
 }

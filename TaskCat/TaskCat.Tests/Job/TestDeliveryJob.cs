@@ -69,6 +69,36 @@
             Assert.AreEqual(JobTaskState.CANCELLED, result.UpdatedValue.Tasks.First().State);
         }
 
+        [Test]
+        public async Task Test_Restore_Delivery_Job_With_No_Task_In_Progress()
+        {
+            var searchJobId = "i1i2i3i4";
+            string cancellationReason = "test cancellation reason";
+            var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
+
+            var createdJob = GetDummyJob();
+            createdJob.State = JobState.CANCELLED;
+            createdJob.Tasks.Last().State = JobTaskState.CANCELLED;
+
+            var jobManagerMock = new Mock<IJobManager>();
+            jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
+                .ReturnsAsync(replaceOneResult);
+
+            jobManagerMock.Setup(x => x.GetJob(searchJobId)).ReturnsAsync(createdJob);
+
+            var userStoreMock = new Mock<IUserStore<User>>();
+
+            var jobRepository = new JobRepository(jobManagerMock.Object,
+                new AccountManager(userStoreMock.Object));
+
+            var result = await jobRepository.RestoreJob(searchJobId);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(JobState.ENQUEUED, result.UpdatedValue.State);
+            result.UpdatedValue.Tasks.ForEach(x => Assert.AreEqual(JobTaskState.PENDING, x.State));
+            Assert.AreEqual(null, result.UpdatedValue.CancellationReason);
+        }
+
         private Job GetDummyJob()
         {
             DeliveryOrder order = new DeliveryOrder();

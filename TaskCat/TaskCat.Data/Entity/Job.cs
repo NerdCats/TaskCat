@@ -83,6 +83,15 @@
         public string CancellationReason { get; set; }
         public bool IsDeleted { get; set; }
 
+        [JsonIgnore]
+        public bool IsJobFreezed
+        {
+            get
+            {
+                return IsDeleted || State == JobState.CANCELLED;
+            }
+        }
+
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
             State = JobState.COMPLETED;

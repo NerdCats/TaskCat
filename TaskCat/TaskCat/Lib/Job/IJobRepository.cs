@@ -26,5 +26,6 @@
         Task<ReplaceOneResult> Claim(string jobId, string userId);
         Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel);
         Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request);
+        Task<UpdateResult<Job>> RestoreJob(string jobId);
     }
 }
