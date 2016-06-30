@@ -1,9 +1,11 @@
 ﻿namespace TaskCat.Data.Model.Operation
 {
-    using TaskCat.Data.Entity;
+    using Entity;
 
     public class UpdateResult<T> where T: DbEntity
     {
-
+        public long MatchedCount { get; set; }
+        public long ModifiedCount { get; set; }
+        public T UpdatedValue { get; set; }
     }
 }
