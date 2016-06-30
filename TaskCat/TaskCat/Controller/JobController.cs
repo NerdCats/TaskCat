@@ -28,7 +28,7 @@
     using Lib.Email;
     using Data.Entity.Identity;
     using Model.Job;
-
+    using Data.Model.Operation;
 
 
     /// <summary>
@@ -356,12 +356,31 @@
         /// Cancel a job with specific job id
         /// </summary>
         /// <returns></returns>
+        [ResponseType(typeof(UpdateResult<Job>))]
         [HttpPost]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/cancel/{jobId}")]
-        public async Task CancelJob(JobCancellationRequest request)
+        public async Task<IHttpActionResult> CancelJob(JobCancellationRequest request)
         {
-            await repository.CancelJob(request);
+            return Json(await repository.CancelJob(request));
+        }
+
+        /// <summary>
+        /// Restores a freezed job with a specific job id
+        /// </summary>
+        /// <remarks>
+        /// A job can freeze itslef if its deleted or cancelled
+        /// All outstanding and future changes for a job would be rejected unless it is restored
+        /// </remarks>
+        /// <returns></returns>
+        /// 
+        [ResponseType(typeof(UpdateResult<Job>))]
+        [HttpPost]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Route("api/Job/restore/{jobId}")]
+        public async Task<IHttpActionResult> RestoreJob(string jobId)
+        {
+            return Json(await repository.RestoreJob(jobId));
         }
 
         /// <summary>
