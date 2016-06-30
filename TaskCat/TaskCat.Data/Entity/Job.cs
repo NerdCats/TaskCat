@@ -175,7 +175,7 @@
 
         private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
         {
-            if (updatedState > JobTaskState.PENDING && updatedState<=JobTaskState.COMPLETED && TerminalTask != sender)
+            if (updatedState > JobTaskState.PENDING && updatedState <= JobTaskState.COMPLETED && TerminalTask != sender)
                 State = JobState.IN_PROGRESS;
             else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
                 State = JobState.IN_PROGRESS;

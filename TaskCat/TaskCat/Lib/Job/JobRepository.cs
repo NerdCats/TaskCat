@@ -108,6 +108,11 @@
         {
             var job = await GetJob(jobId);
 
+            if (job.State == JobState.CANCELLED)
+            {
+                throw new NotSupportedException($"Job {jobId} is in state {job.State}, restore job for further changes");
+            }
+
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
             if (selectedTask == null) throw new ArgumentException("Invalid JobTask Id provided");
 
