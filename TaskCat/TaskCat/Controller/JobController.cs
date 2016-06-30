@@ -344,8 +344,20 @@
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
-            ReplaceOneResult result = await repository.UpdateJobWithPatch(jobId, taskId, taskPatch);
+            ReplaceOneResult result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
             return Json(result);
+        }
+
+        /// <summary>
+        /// Cancel a job with specific job id
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Route("api/Job/cancel/{jobId}")]
+        public async Task CancelJob([FromUri]string jobId)
+        {
+            await repository.CancelJob(jobId);
         }
 
         /// <summary>

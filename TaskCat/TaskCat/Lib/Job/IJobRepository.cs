@@ -21,8 +21,9 @@
         Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage message);
         Task<ReplaceOneResult> UpdateJob(Job job);
         Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch);
-        Task<ReplaceOneResult> UpdateJobWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
+        Task<ReplaceOneResult> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> Claim(string jobId, string userId);
         Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel);
+        Task<ReplaceOneResult> CancelJob(string jobId);
     }
 }

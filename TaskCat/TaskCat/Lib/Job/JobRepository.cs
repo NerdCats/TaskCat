@@ -103,7 +103,7 @@
             return result;
         }
 
-        public async Task<ReplaceOneResult> UpdateJobWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
+        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
         {
             var job = await GetJob(jobId);
 
@@ -150,6 +150,18 @@
             job.JobServedBy = userModel;
 
             return await UpdateJob(job);
+        }
+
+        public async Task<ReplaceOneResult> CancelJob(string jobId)
+        {
+            var job = await GetJob(jobId);
+            job.State = JobState.CANCELLED;
+
+            var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
+            jobTaskToCancel.State = JobTaskState.CANCELLED;
+
+            var result = await UpdateJob(job);
+            return result;
         }
     }
 }
