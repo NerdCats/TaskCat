@@ -2,14 +2,15 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TaskCat.Data.Entity;
+    using Data.Entity;
     using Data.Model.Api;
-    using TaskCat.Model.Pagination;
+    using Model.Pagination;
     using System.Net.Http;
     using Data.Model;
     using MongoDB.Driver;
     using Marvin.JsonPatch;
     using System.Linq;
+    using Data.Model.Operation;
 
     public interface IJobRepository
     {
@@ -24,6 +25,6 @@
         Task<ReplaceOneResult> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> Claim(string jobId, string userId);
         Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel);
-        Task<ReplaceOneResult> CancelJob(string jobId);
+        Task<UpdateResult<Job>> CancelJob(string jobId);
     }
 }

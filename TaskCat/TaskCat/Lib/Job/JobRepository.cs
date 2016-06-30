@@ -17,6 +17,7 @@
     using Order;
     using Order.Process;
     using Data.Model.Order;
+    using Data.Model.Operation;
 
     public class JobRepository : IJobRepository
     {
@@ -152,7 +153,7 @@
             return await UpdateJob(job);
         }
 
-        public async Task<ReplaceOneResult> CancelJob(string jobId)
+        public async Task<UpdateResult<Job>> CancelJob(string jobId)
         {
             var job = await GetJob(jobId);
             job.State = JobState.CANCELLED;
@@ -163,7 +164,7 @@
 
             jobTaskToCancel.State = JobTaskState.CANCELLED;
             var result = await UpdateJob(job);
-            return result;
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
     }
 }

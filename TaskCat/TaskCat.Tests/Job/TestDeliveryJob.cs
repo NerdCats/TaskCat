@@ -36,7 +36,7 @@
         }
 
         [Test]
-        public async Task Test_Cancel_Job_With_No_Task_In_Progress()
+        public async Task Test_Cancel_Delivery_Job_With_No_Task_In_Progress()
         {
             var searchJobId = "i1i2i3i4";
 
@@ -58,7 +58,8 @@
             var result = await jobRepository.CancelJob(searchJobId);
 
             Assert.IsNotNull(result);
-            Assert.Equals(JobState.CANCELLED, createdJob);
+            Assert.AreEqual(JobState.CANCELLED, result.UpdatedValue.State);
+            Assert.AreEqual(JobTaskState.CANCELLED, result.UpdatedValue.Tasks.First().State);
         }
 
         private Job GetDummyJob()

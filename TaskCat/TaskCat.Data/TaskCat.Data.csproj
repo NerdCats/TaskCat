@@ -153,6 +153,7 @@
     <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
+    <Compile Include="Model\Operation\UpdateResult.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\DeliveryOrder.cs" />
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
@@ -161,7 +162,7 @@
     <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\Payment\PaymentSettings.cs" />
     <Compile Include="Model\Payment\PaymentStatus.cs" />
-    <Compile Include="Model\Query\QueryResult.cs" />
+    <Compile Include="Model\Operation\QueryResult.cs" />
     <Compile Include="Model\ShadowCat\AssetLocationWithDistance.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
