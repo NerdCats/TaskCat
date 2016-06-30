@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Query
+﻿namespace TaskCat.Data.Model.Operation
 {
     using Entity;
     using System.Collections.Generic;

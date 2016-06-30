@@ -72,7 +72,7 @@
         public async Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
         {
             var job = await GetJob(jobId);
-            if(job.Order.Type != orderModel.Type)
+            if (job.Order.Type != orderModel.Type)
             {
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");
             }
@@ -98,12 +98,12 @@
             }
 
             job.Order = orderModel;
-            
+
             var result = await UpdateJob(job);
             return result;
         }
 
-        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId,  JsonPatchDocument<JobTask> taskPatch)
+        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
             var job = await GetJob(jobId);
 
@@ -125,8 +125,8 @@
         public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
         {
             var AssetRefReplaceOp = taskPatch.Operations.FirstOrDefault(x => x.op == "replace" && x.path == "/AssetRef");
-            if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType()== typeof(string))
-            {                
+            if (AssetRefReplaceOp != null && AssetRefReplaceOp.value.GetType() == typeof(string))
+            {
                 // INFO: Now we need to actually fetch the asset and get shit done
                 var asset = await accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(AssetRefReplaceOp.value.ToString());
                 if (asset == null) return false;
@@ -158,8 +158,10 @@
             job.State = JobState.CANCELLED;
 
             var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
-            jobTaskToCancel.State = JobTaskState.CANCELLED;
 
+            jobTaskToCancel = jobTaskToCancel ?? job.Tasks.First();
+
+            jobTaskToCancel.State = JobTaskState.CANCELLED;
             var result = await UpdateJob(job);
             return result;
         }

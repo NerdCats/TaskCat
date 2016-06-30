@@ -6,7 +6,7 @@
     using Data.Entity;
     using MongoDB.Driver;
     using System.Web.OData.Query;
-    using Data.Model.Query;
+    using Data.Model.Operation;
     using System;
     using Exceptions;
     using System.Linq;

@@ -20,7 +20,7 @@
     using Model.Storage;
     using Exceptions;
     using Job;
-    using Data.Model.Query;
+    using Data.Model.Operation;
     using Data.Model;
     using Utility;
     using Model.Identity;
