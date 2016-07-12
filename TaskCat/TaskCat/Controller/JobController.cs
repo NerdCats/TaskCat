@@ -182,7 +182,11 @@
             var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            {
+                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);                
+                return Json(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+            }
+                
             return Json(queryResult);
         }
 
