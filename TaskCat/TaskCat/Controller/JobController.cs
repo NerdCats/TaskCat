@@ -178,10 +178,11 @@
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
+            var queryTotal = jobs.LinqToQuerystring(queryString: odataQuery);
+            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+                return Json(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
             return Json(queryResult);
         }
 
