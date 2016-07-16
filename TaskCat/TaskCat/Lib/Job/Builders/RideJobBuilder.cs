@@ -6,6 +6,8 @@
     using Data.Model.JobTasks;
     using Data.Model.Identity.Response;
     using HRID;
+    using System;
+    using Data.Entity;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class RideJobBuilder : JobBuilder
@@ -43,6 +45,11 @@
 
             job.EnsureTaskAssetEventsAssigned();
 
+        }
+
+        public override void UpdateJob(OrderModel order, Job job)
+        {
+            throw new NotImplementedException();
         }
 
         // FIXME: I can definitely put this over in the job or at least put a
