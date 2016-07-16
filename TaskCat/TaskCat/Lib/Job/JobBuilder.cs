@@ -11,10 +11,6 @@
         public Job Job { get { return job; } }
 
         public abstract void BuildJob();
-        public JobBuilder(string name)
-        {
-            job = new Job(name);
-        }
 
         public JobBuilder(OrderModel order, UserModel userModel, IHRIDService hridService)
         {
