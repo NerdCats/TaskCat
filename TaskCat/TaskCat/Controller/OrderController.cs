@@ -10,15 +10,18 @@
     using Data.Entity.Identity;
     using Data.Model.Order;
     using System.Web.Http.Description;
+    using Lib.Job;
 
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
     {
         private IOrderRepository _repository;
+        private IJobRepository _jobRepository;
 
-        public OrderController(IOrderRepository repository)
+        public OrderController(IOrderRepository repository, IJobRepository jobRepository)
         {
             _repository = repository;
+            _jobRepository = jobRepository;
         }
 
         /// <summary>
@@ -37,7 +40,6 @@
         [HttpPost]
         public async Task<IHttpActionResult> PostOrder(OrderModel model, OrderCreationOptions opt = OrderCreationOptions.CREATE)
         {
-
             if (model == null) return BadRequest("No freaking payload man!");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -47,7 +49,7 @@
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (model.UserId != null && model.UserId != currentUserId)
-                    throw new InvalidOperationException(string.Format("Updating user id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
+                    throw new InvalidOperationException(string.Format("Updating order/job id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
                     throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
             }
@@ -68,6 +70,32 @@
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
 
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IHttpActionResult> UpdateOrder([FromBody]OrderModel model, [FromUri]string jobId)
+        {
+            if (model == null) return BadRequest("No freaking payload man!");
+            if (ModelState.IsValid) return BadRequest(ModelState);
+
+            var job = await this._jobRepository.GetJob(jobId);
+
+            var currentUserId = this.User.Identity.GetUserId();
+
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            {
+                if (model.UserId != null && model.UserId != currentUserId)
+                    throw new InvalidOperationException(string.Format(
+                        "Updating user id {0} is not authorized against user id {1}", 
+                        model.UserId, this.User.Identity.GetUserId()));
+            }
+
+            job.Order = model;
+            
+
+            throw new NotImplementedException("This is not implemented yet");
         }
 
         /// <summary>
