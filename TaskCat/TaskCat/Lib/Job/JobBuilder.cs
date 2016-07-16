@@ -11,6 +11,7 @@
         public Job Job { get { return job; } }
 
         public abstract void BuildJob();
+        public abstract void UpdateJob(OrderModel order, Job job);
 
         public JobBuilder(OrderModel order, UserModel userModel, IHRIDService hridService)
         {
