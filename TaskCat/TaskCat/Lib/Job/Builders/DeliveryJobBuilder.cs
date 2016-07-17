@@ -140,6 +140,9 @@
                     break;
             }
 
+            job.Name = order.Name;
+            job.ModifiedTime = DateTime.UtcNow;
+
             return jobToUpdate;
         }
     }
