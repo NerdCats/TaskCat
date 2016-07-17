@@ -5,10 +5,11 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     [BsonIgnoreExtraElements(Inherited = true)]
 
-    public class OrderDetails : IEquatable<OrderDetails>
+    public class OrderDetails
     {
         /// <summary>
         /// Package List to describe what Items would be delivered
@@ -43,13 +44,5 @@
         /// from end user should only be equal to service charge + payment charge
         /// </summary>
         public virtual decimal? TotalToPay { get; set; }
-
-        public bool Equals(OrderDetails other)
-        {
-            if (other.PackageList.Count != this.PackageList.Count)
-                return false;
-
-            
-        }
     }
 }

@@ -12,6 +12,7 @@
     using Data.Entity;
     using System.Linq;
     using Data.Lib.Constants;
+    using KellermanSoftware.CompareNetObjects;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -101,7 +102,20 @@
                 throw new NotSupportedException("Job and updated order type mismatch");
             }
 
-            jobToUpdate.Order = order;
+            if (!string.Equals(jobToUpdate.Order.PayloadType, order.PayloadType))
+            {
+                throw new NotSupportedException("Order payload type changed, order payload type is not updateable");
+            }
+
+            // Checking whether the new orders are okay or not
+            jobToUpdate.Order.Description = order.Description;
+            jobToUpdate.Order.ETA = order.ETA;
+            jobToUpdate.Order.ETAMinutes = order.ETAMinutes;
+
+            CompareLogic compareLogic = new CompareLogic();
+            compareLogic.Config.ComparePrivateFields = true;
+
+            var orderCartComparisonResult = compareLogic.Compare(jobToUpdate.Order.OrderCart, order.OrderCart);
 
             // Fetching the job task that is currently in progress
             var jobTaskCurrentlyInProgress = jobToUpdate.Tasks.FirstOrDefault(x => x.State == JobTaskState.IN_PROGRESS);
@@ -121,27 +135,40 @@
                     PackagePickUpTask pickUpTask = jobToUpdate.Tasks[1] as PackagePickUpTask;
                     pickUpTask.PickupLocation = order.From;
                     pickUpTask.State = JobTaskState.PENDING;
+
+                    if (!orderCartComparisonResult.AreEqual)
+                    {
+                        jobToUpdate.Order.OrderCart = order.OrderCart;
+                    }
                     goto case JobTaskTypes.DELIVERY;
                 case JobTaskTypes.DELIVERY:
                     DeliveryTask deliveryTask = jobToUpdate.Tasks[2] as DeliveryTask;
                     deliveryTask.From = order.From;
                     deliveryTask.To = order.To;
                     deliveryTask.State = JobTaskState.PENDING;
+
+                    jobToUpdate.Order.From = order.From;
+                    jobToUpdate.Order.To = order.To;
+
                     if (order.Type == OrderTypes.ClassifiedDelivery)
                     {
                         goto case JobTaskTypes.SECURE_DELIVERY;
                     }
                     break;
                 case JobTaskTypes.SECURE_DELIVERY:
-                    SecureDeliveryTask secureDeliveryTask = jobToUpdate.Tasks.Last() as SecureDeliveryTask;
-                    secureDeliveryTask.From = order.To;
-                    secureDeliveryTask.To = order.From;
-                    secureDeliveryTask.State = JobTaskState.PENDING;
-                    break;
+                    throw new NotSupportedException("Cant update order when secure delivery is in progress");
             }
 
             job.Name = order.Name;
             job.ModifiedTime = DateTime.UtcNow;
+
+            if (order.PaymentMethod != jobToUpdate.Order.PaymentMethod)
+            {
+                if (jobToUpdate.PaymentStatus >= PaymentStatus.Authorized && jobToUpdate.PaymentStatus <= PaymentStatus.Refunded)
+                    throw new InvalidOperationException($"Current payment method {jobToUpdate.PaymentMethod} is on state {jobToUpdate.PaymentStatus}, Changing payment mehtod is not supported");
+                jobToUpdate.Order.PaymentMethod = order.PaymentMethod;
+                jobToUpdate.PaymentStatus = PaymentStatus.Pending;
+            }
 
             return jobToUpdate;
         }

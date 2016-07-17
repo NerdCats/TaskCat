@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
 
     [BsonIgnoreExtraElements(Inherited = true)]
-    public class ItemDetails : IEquatable<ItemDetails>
+    public class ItemDetails
     {
         [Required]
         public string Item { get; set; }
@@ -54,31 +54,6 @@
 
         public ItemDetails()
         {
-        }
-
-        public bool Equals(ItemDetails other)
-        {
-            if (!string.Equals(this.Item, other.Item))
-                return false;
-            if (!string.Equals(this.PicUrl, other.PicUrl))
-                return false;
-            if (Quantity != other.Quantity)
-                return false;
-            if (Price != other.Price)
-                return false;
-            if (VAT != other.VAT)
-                return false;
-            if (Total != other.Total)
-                return false;
-            if (VATAmount != other.VATAmount)
-                return false;
-            if (TotalPlusVAT != other.TotalPlusVAT)
-                return false;
-            if (Weight != other.Weight)
-                return false;
-
-            return true;
-
         }
     }
 }
