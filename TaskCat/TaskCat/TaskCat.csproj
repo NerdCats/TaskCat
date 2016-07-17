@@ -377,6 +377,8 @@
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Job\IJobManager.cs" />
+    <Compile Include="Lib\Job\JobUpdater.cs" />
+    <Compile Include="Lib\Job\Updaters\DeliveryJobUpdater.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />

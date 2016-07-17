@@ -47,11 +47,6 @@
 
         }
 
-        public override Job UpdateJob(OrderModel order, Job job)
-        {
-            throw new NotImplementedException();
-        }
-
         // FIXME: I can definitely put this over in the job or at least put a
         // virtual function if just nothing except assigning to the dictionary 
         // happens

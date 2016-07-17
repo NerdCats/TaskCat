@@ -72,32 +72,6 @@
 
         }
 
-        [HttpPut]
-        [Authorize]
-        public async Task<IHttpActionResult> UpdateOrder([FromBody]OrderModel model, [FromUri]string jobId)
-        {
-            if (model == null) return BadRequest("No freaking payload man!");
-            if (ModelState.IsValid) return BadRequest(ModelState);
-
-            var job = await this._jobRepository.GetJob(jobId);
-
-            var currentUserId = this.User.Identity.GetUserId();
-
-            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
-                && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
-            {
-                if (model.UserId != null && model.UserId != currentUserId)
-                    throw new InvalidOperationException(string.Format(
-                        "Updating user id {0} is not authorized against user id {1}", 
-                        model.UserId, this.User.Identity.GetUserId()));
-            }
-
-            job.Order = model;
-            
-            
-            throw new NotImplementedException("This is not implemented yet");
-        }
-
         /// <summary>
         /// Gets List of the all supported order types
         /// </summary>
