@@ -55,7 +55,6 @@
         {
             if (!job.Assets.ContainsKey(AssetRef))
                 job.Assets[AssetRef] = asset; // FIXME: I definitely need to fix it here, database fetch needed, dont know how this should work out
-
         }
     }
 }

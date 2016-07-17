@@ -19,6 +19,8 @@
     using Data.Model.Order;
     using Data.Model.Operation;
     using Model.Job;
+    using Updaters;
+
     public class JobRepository : IJobRepository
     {
         private IJobManager manager;
@@ -94,11 +96,12 @@
                             orderCalculationService,
                             serviceChargeCalculationService);
                         orderProcessor.ProcessOrder(orderModel);
+                        var jobUpdater = new DeliveryJobUpdater(job);
+                        jobUpdater.UpdateJob(orderModel);
+                        job = jobUpdater.Job;
                         break;
                     }
             }
-
-            job.Order = orderModel;
 
             var result = await UpdateJob(job);
             return result;
