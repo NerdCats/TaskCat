@@ -397,14 +397,39 @@
         /// </returns>
         /// 
         [ResponseType(typeof(ReplaceOneResult))]
-        [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
+        [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
         public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel)
         {
+            if (orderModel == null) return BadRequest("Null order payload provided");
+            if (ModelState.IsValid) return BadRequest(ModelState);
+
+            var currentUserId = this.User.Identity.GetUserId();
+            var job = await repository.GetJob(jobId);
+
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            {
+                if (orderModel.UserId != null && orderModel.UserId != currentUserId)
+                    throw new InvalidOperationException(string.Format(
+                        "Updating user id {0} is not authorized against user id {1}", 
+                        orderModel.UserId, this.User.Identity.GetUserId()));
+            }
+            else if( this.User.IsInRole(RoleNames.ROLE_USER) || 
+                this.User.IsInRole(RoleNames.ROLE_ENTERPRISE))
+            {
+                if (job.User.UserId != currentUserId)
+                    throw new UnauthorizedAccessException("Job belongs to a different user");
+            }
+            else
+            {
+                if (!job.Assets.Any(x => x.Key == currentUserId))
+                    throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
+            }
+
             ReplaceOneResult result = await repository.UpdateOrder(jobId, orderModel);
             return Json(result);
         }
-
     }
 }
