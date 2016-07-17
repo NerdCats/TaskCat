@@ -47,7 +47,7 @@
 
         }
 
-        public override void UpdateJob(OrderModel order, Job job)
+        public override Job UpdateJob(OrderModel order, Job job)
         {
             throw new NotImplementedException();
         }

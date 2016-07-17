@@ -11,6 +11,7 @@
     using System;
     using Data.Entity;
     using System.Linq;
+    using Data.Lib.Constants;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -83,11 +84,11 @@
                 job.Assets[AssetRef] = asset;
         }
 
-        public override void UpdateJob(OrderModel order, Job job)
+        public override Job UpdateJob(OrderModel order, Job jobToUpdate)
         {
-            if(job.State == JobState.COMPLETED)
+            if (jobToUpdate.State >= JobState.COMPLETED)
             {
-                throw new NotSupportedException("Updating order of a completed job is not supported");
+                throw new NotSupportedException("Updating order of a completed/cancelled job is not supported");
             }
 
             if (order.Type != OrderTypes.Delivery || order.Type != OrderTypes.ClassifiedDelivery)
@@ -95,34 +96,51 @@
                 throw new NotSupportedException("Invalid Order Type provided");
             }
 
-            if (job.Order.Type != order.Type)
+            if (jobToUpdate.Order.Type != order.Type)
             {
                 throw new NotSupportedException("Job and updated order type mismatch");
             }
 
-            job.Order = order;
+            jobToUpdate.Order = order;
 
-            FetchDeliveryManTask fetchDeliveryManTask = job.Tasks.First() as FetchDeliveryManTask;
-            fetchDeliveryManTask.From = order.From;
-            fetchDeliveryManTask.To = order.To;
-            fetchDeliveryManTask.State = JobTaskState.PENDING;
+            // Fetching the job task that is currently in progress
+            var jobTaskCurrentlyInProgress = jobToUpdate.Tasks.FirstOrDefault(x => x.State == JobTaskState.IN_PROGRESS);
 
-            PackagePickUpTask pickUpTask = job.Tasks[1] as PackagePickUpTask;
-            pickUpTask.PickupLocation = order.From;
-            pickUpTask.State = JobTaskState.PENDING;
+            // Usually this jobTask depicts the state of the JOB itself
+            if (jobTaskCurrentlyInProgress == null) throw new NotSupportedException("No job task is currently in progress, this job is close to finish or already finished");
 
-            DeliveryTask deliveryTask = job.Tasks[2] as DeliveryTask;
-            deliveryTask.From = order.From;
-            deliveryTask.To = order.To;
-            deliveryTask.State = JobTaskState.PENDING;
-
-            if (order.Type == OrderTypes.ClassifiedDelivery)
+            switch (jobTaskCurrentlyInProgress.Type)
             {
-                SecureDeliveryTask secureDeliveryTask = job.Tasks.Last() as SecureDeliveryTask;
-                secureDeliveryTask.From = order.To;
-                secureDeliveryTask.To = order.From;
-                secureDeliveryTask.State = JobTaskState.PENDING;
+                case JobTaskTypes.FETCH_DELIVERYMAN:
+                    FetchDeliveryManTask fetchDeliveryManTask = jobToUpdate.Tasks.First() as FetchDeliveryManTask;
+                    fetchDeliveryManTask.From = order.From;
+                    fetchDeliveryManTask.To = order.To;
+                    fetchDeliveryManTask.State = JobTaskState.PENDING;
+                    goto case JobTaskTypes.PACKAGE_PICKUP;
+                case JobTaskTypes.PACKAGE_PICKUP:
+                    PackagePickUpTask pickUpTask = jobToUpdate.Tasks[1] as PackagePickUpTask;
+                    pickUpTask.PickupLocation = order.From;
+                    pickUpTask.State = JobTaskState.PENDING;
+                    goto case JobTaskTypes.DELIVERY;
+                case JobTaskTypes.DELIVERY:
+                    DeliveryTask deliveryTask = jobToUpdate.Tasks[2] as DeliveryTask;
+                    deliveryTask.From = order.From;
+                    deliveryTask.To = order.To;
+                    deliveryTask.State = JobTaskState.PENDING;
+                    if (order.Type == OrderTypes.ClassifiedDelivery)
+                    {
+                        goto case JobTaskTypes.SECURE_DELIVERY;
+                    }
+                    break;
+                case JobTaskTypes.SECURE_DELIVERY:
+                    SecureDeliveryTask secureDeliveryTask = jobToUpdate.Tasks.Last() as SecureDeliveryTask;
+                    secureDeliveryTask.From = order.To;
+                    secureDeliveryTask.To = order.From;
+                    secureDeliveryTask.State = JobTaskState.PENDING;
+                    break;
             }
+
+            return jobToUpdate;
         }
     }
 }
