@@ -37,6 +37,21 @@
         }
 
         [Test]
+        public async Task Test_Update_Order()
+        {
+            var jobManagerMock = new Mock<IJobManager>();
+            var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
+
+            jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
+                .ReturnsAsync(replaceOneResult);
+
+            var userStoreMock = new Mock<IUserStore<User>>();
+            var jobRepository = new JobRepository(jobManagerMock.Object,
+                new AccountManager(userStoreMock.Object));
+
+        }
+
+        [Test]
         public async Task Test_Cancel_Delivery_Job_With_No_Task_In_Progress()
         {
             var searchJobId = "i1i2i3i4";

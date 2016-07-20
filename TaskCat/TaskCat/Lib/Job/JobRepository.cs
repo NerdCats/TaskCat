@@ -72,9 +72,8 @@
             return await manager.UpdateJob(job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
+        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
         {
-            var job = await GetJob(jobId);
             if (job.Order.Type != orderModel.Type)
             {
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");

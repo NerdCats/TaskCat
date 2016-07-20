@@ -428,7 +428,7 @@
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
             }
 
-            ReplaceOneResult result = await repository.UpdateOrder(jobId, orderModel);
+            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
             return Json(result);
         }
     }
