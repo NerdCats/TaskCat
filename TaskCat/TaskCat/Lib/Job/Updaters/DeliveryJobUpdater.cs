@@ -57,11 +57,18 @@
 
             // Fetching the job task that is currently in progress
             var jobTaskCurrentlyInProgress = job.Tasks.FirstOrDefault(x => x.State == JobTaskState.IN_PROGRESS);
+            string firstJobTaskTypeToUpdate = null;
 
             // Usually this jobTask depicts the state of the JOB itself
-            if (jobTaskCurrentlyInProgress == null) throw new NotSupportedException("No job task is currently in progress, this job is close to finish or havent started progressing properly yet");
+            // And this definitely needs refactoring mama
+            if (jobTaskCurrentlyInProgress == null && job.State > JobState.ENQUEUED)
+                throw new NotSupportedException("No job task is currently in progress, this job is probably close to finished");
+            else if (jobTaskCurrentlyInProgress == null && job.State == JobState.ENQUEUED)
+                firstJobTaskTypeToUpdate = JobTaskTypes.FETCH_DELIVERYMAN;
+            else if (jobTaskCurrentlyInProgress != null)
+                firstJobTaskTypeToUpdate = jobTaskCurrentlyInProgress.Type;
 
-            switch (jobTaskCurrentlyInProgress.Type)
+            switch (firstJobTaskTypeToUpdate)
             {
                 case JobTaskTypes.FETCH_DELIVERYMAN:
                     FetchDeliveryManTask fetchDeliveryManTask = job.Tasks.First() as FetchDeliveryManTask;
