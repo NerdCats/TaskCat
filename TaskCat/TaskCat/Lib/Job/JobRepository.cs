@@ -79,11 +79,6 @@
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");
             }
 
-            if (job.PaymentMethod != orderModel.PaymentMethod)
-            {
-                throw new InvalidOperationException("Updating payment method of an exisiting order is not supported");
-            }
-
             // FIXME: Finding a resolver here would help here dude
             switch (orderModel.Type)
             {

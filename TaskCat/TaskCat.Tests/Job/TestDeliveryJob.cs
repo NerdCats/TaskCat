@@ -20,6 +20,9 @@
     using Data.Lib.Payment;
     using Data.Model;
     using TaskCat.Model.Job;
+    using Data.Model.Inventory;
+    using System.Collections.Generic;
+
     [TestFixture]
     public class TestDeliveryJob
     {
@@ -37,8 +40,11 @@
         }
 
         [Test]
-        public async Task Test_Update_Order()
+        public async Task Test_Update_Delivery_Order_In_Initial_State()
         {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+
             var jobManagerMock = new Mock<IJobManager>();
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
@@ -49,6 +55,13 @@
             var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object));
 
+            var job = GetDummyJob();
+            var updatedOrder = GetDummyOrder();
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+
+            var result = await jobRepository.UpdateOrder(job, updatedOrder);
         }
 
         [Test]
@@ -116,9 +129,7 @@
 
         private Job GetDummyJob()
         {
-            DeliveryOrder order = new DeliveryOrder();
-            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
-            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            DeliveryOrder order = GetDummyOrder();
 
             UserModel userModel = new UserModel()
             {
@@ -166,6 +177,49 @@
             builder.BuildJob();
 
             return builder.Job;
+        }
+
+        private DeliveryOrder GetDummyOrder()
+        {
+            DeliveryOrder order = new DeliveryOrder();
+            order.UserId = "abcdef123ijkl12";
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            order.PaymentMethod = "SamplePaymentMethod";
+            return order;
+        }
+
+        private OrderDetails GetDummyCart()
+        {
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.PackageList = new List<ItemDetails>();
+            orderDetails.PackageList.Add(new ItemDetails()
+            {
+                Item = "Item 1",
+                PicUrl = "http://sample-pic-source/pic.png",
+                Price = 10,
+                Quantity = 1,
+                VAT = 15,
+                Weight = 0.2M
+            });
+
+            orderDetails.PackageList.Add(new ItemDetails()
+            {
+                Item = "Item 2",
+                PicUrl = "http://sample-pic-source/pic2.png",
+                Price = 10,
+                Quantity = 1,
+                VAT = 15,
+                Weight = 0.2M
+            });
+
+            orderDetails.ServiceCharge = 100;
+            orderDetails.SubTotal = 20;
+            orderDetails.TotalVATAmount = 3;
+            orderDetails.TotalWeight = 0.4M;
+            orderDetails.TotalToPay = 123;
+
+            return orderDetails;
         }
     }
 }
