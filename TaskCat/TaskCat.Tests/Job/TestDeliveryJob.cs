@@ -55,8 +55,8 @@
             var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object));
 
-            var job = GetDummyJob();
-            var updatedOrder = GetDummyOrder();
+            var job = GetDummyJob(OrderTypes.Delivery);
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
             updatedOrder.Name = orderName;
             updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
             updatedOrder.OrderCart = GetDummyCart();
@@ -72,7 +72,7 @@
 
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
-            var createdJob = GetDummyJob();
+            var createdJob = GetDummyJob(OrderTypes.Delivery);
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
@@ -104,7 +104,7 @@
             string cancellationReason = "test cancellation reason";
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
-            var createdJob = GetDummyJob();
+            var createdJob = GetDummyJob(OrderTypes.Delivery);
             createdJob.State = JobState.CANCELLED;
             createdJob.Tasks.Last().State = JobTaskState.CANCELLED;
 
@@ -127,9 +127,9 @@
             Assert.AreEqual(null, result.UpdatedValue.CancellationReason);
         }
 
-        private Job GetDummyJob()
+        private Job GetDummyJob(string orderType)
         {
-            DeliveryOrder order = GetDummyOrder();
+            DeliveryOrder order = GetDummyOrder(orderType);
 
             UserModel userModel = new UserModel()
             {
@@ -179,13 +179,14 @@
             return builder.Job;
         }
 
-        private DeliveryOrder GetDummyOrder()
+        private DeliveryOrder GetDummyOrder(string orderType)
         {
             DeliveryOrder order = new DeliveryOrder();
             order.UserId = "abcdef123ijkl12";
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             order.PaymentMethod = "SamplePaymentMethod";
+            order.Type = orderType;
             return order;
         }
 
@@ -214,7 +215,7 @@
             });
 
             orderDetails.ServiceCharge = 100;
-            orderDetails.SubTotal = 20;
+            orderDetails.SubTotal = 23;
             orderDetails.TotalVATAmount = 3;
             orderDetails.TotalWeight = 0.4M;
             orderDetails.TotalToPay = 123;
