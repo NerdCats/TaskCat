@@ -9,9 +9,16 @@
     using Data.Lib.Constants;
     using Data.Model.JobTasks;
     using Data.Model.Payment;
+    using System.Collections.Generic;
 
     public class DeliveryJobUpdater : JobUpdater
     {
+        private List<string> supportedOrderTypes = new List<string>()
+        {
+            OrderTypes.Delivery,
+            OrderTypes.ClassifiedDelivery
+        };
+
         public DeliveryJobUpdater(Job job) : base(job)
         {
         }
@@ -23,7 +30,7 @@
                 throw new NotSupportedException("Updating order of a completed/cancelled job is not supported");
             }
 
-            if (order.Type != OrderTypes.Delivery || order.Type != OrderTypes.ClassifiedDelivery)
+            if (!supportedOrderTypes.Any(x => x == order.Type))
             {
                 throw new NotSupportedException("Invalid Order Type provided");
             }
@@ -52,7 +59,7 @@
             var jobTaskCurrentlyInProgress = job.Tasks.FirstOrDefault(x => x.State == JobTaskState.IN_PROGRESS);
 
             // Usually this jobTask depicts the state of the JOB itself
-            if (jobTaskCurrentlyInProgress == null) throw new NotSupportedException("No job task is currently in progress, this job is close to finish or already finished");
+            if (jobTaskCurrentlyInProgress == null) throw new NotSupportedException("No job task is currently in progress, this job is close to finish or havent started progressing properly yet");
 
             switch (jobTaskCurrentlyInProgress.Type)
             {
