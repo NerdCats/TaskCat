@@ -50,9 +50,18 @@
         private List<JobTask> tasks;
         public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
 
+        private JobState state;
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public JobState State { get; set; }
+        public JobState State
+        {
+            get { return state; }
+            set
+            {
+                state = value;
+                CompletionTime = DateTime.UtcNow;
+            }
+        }
 
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
@@ -65,6 +74,7 @@
                 return false;
             }
         }
+        public DateTime? CompletionTime { get; set; }
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }
@@ -103,7 +113,7 @@
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
-            State = JobState.COMPLETED;
+            State = JobState.COMPLETED;        
         }
 
         public Job()
