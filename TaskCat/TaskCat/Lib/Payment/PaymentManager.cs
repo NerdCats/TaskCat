@@ -16,7 +16,7 @@
                 new CashOnDeliveryPaymentMethod(
                     new CashOnDeliveryPaymentSettings()
                     {
-                        AdditionalFee = 2,
+                        AdditionalFee = 0,
                         IsAdditionalFeeSetOnPercentage = true,
                         TransactMode = TransactMode.AuthorizeAndCapture
                     }));

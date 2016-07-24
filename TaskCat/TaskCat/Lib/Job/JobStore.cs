@@ -9,7 +9,7 @@
     using Data.Model;
     using System.Linq;
     using System.Web.OData.Query;
-    using Data.Model.Query;
+    using Data.Model.Operation;
     using LinqToQuerystring;
 
     public class JobStore
