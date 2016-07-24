@@ -22,6 +22,7 @@
     using TaskCat.Model.Job;
     using Data.Model.Inventory;
     using System.Collections.Generic;
+    using System;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -105,6 +106,28 @@
             Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
             Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
             Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_Completed_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+
+            var job = GetDummyJob(OrderTypes.Delivery);
+            job.Tasks.ForEach(x => { x.State = JobTaskState.COMPLETED; });
+            job.State = JobState.COMPLETED;
+
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
+
+            Assert.ThrowsAsync<NotSupportedException>(async () => {
+                var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            });   
         }
 
         [Test]
