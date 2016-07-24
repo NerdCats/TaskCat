@@ -60,7 +60,7 @@
         {
             get
             {
-                if (this.Order.ETA.HasValue)
+                if (this.Order.ETA.HasValue && this.State==JobState.IN_PROGRESS)
                     return DateTime.UtcNow.Subtract(this.Order.ETA.Value).TotalSeconds > 0;
                 return false;
             }
