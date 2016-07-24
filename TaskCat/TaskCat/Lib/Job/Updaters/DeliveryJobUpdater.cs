@@ -47,6 +47,8 @@
 
             // Checking whether the new orders are okay or not
             job.Order.Description = order.Description;
+            (job.Order as DeliveryOrder).NoteToDeliveryMan = (order as DeliveryOrder).NoteToDeliveryMan;
+            (job.Order as DeliveryOrder).RequiredChangeFor = (order as DeliveryOrder).RequiredChangeFor;
             job.Order.ETA = order.ETA;
             job.Order.ETAMinutes = order.ETAMinutes;
 

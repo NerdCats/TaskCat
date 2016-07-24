@@ -39,12 +39,8 @@
             paymentMethodMock = new Mock<IPaymentMethod>();
         }
 
-        [Test]
-        public async Task Test_Update_Delivery_Order_In_Initial_State()
+        private JobRepository SetupMockJobRepositoryForUpdate()
         {
-            string orderName = "Updated Name";
-            string noteToDeliveryMan = "Updated Note to Delivery Man";
-
             var jobManagerMock = new Mock<IJobManager>();
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
@@ -54,14 +50,61 @@
             var userStoreMock = new Mock<IUserStore<User>>();
             var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object));
+            return jobRepository;
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_Initial_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
 
             var job = GetDummyJob(OrderTypes.Delivery);
             var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
             updatedOrder.Name = orderName;
             updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
             updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
 
             var result = await jobRepository.UpdateOrder(job, updatedOrder);
+
+            var newOrder = job.Order as DeliveryOrder;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderName, job.Name);
+            Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
+            Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
+            Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_In_Progress_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+
+            var job = GetDummyJob(OrderTypes.Delivery);
+            job.State = JobState.IN_PROGRESS;
+            job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks[1].State = JobTaskState.IN_PROGRESS;
+
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
+
+            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+
+            var newOrder = job.Order as DeliveryOrder;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderName, job.Name);
+            Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
+            Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
+            Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
         }
 
         [Test]
