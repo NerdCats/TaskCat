@@ -45,7 +45,6 @@
                 {
                     throw new JobTaskDependencyException("Error occured on dependency assignment", this, ex);
                 }
-
             }
 
             Predecessor.JobTaskCompleted += Predecessor_JobTaskCompleted;

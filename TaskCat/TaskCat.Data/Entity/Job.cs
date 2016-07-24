@@ -59,7 +59,6 @@
             set
             {
                 state = value;
-                CompletionTime = DateTime.UtcNow;
             }
         }
 
@@ -113,7 +112,17 @@
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
-            State = JobState.COMPLETED;        
+            CompleteJob();
+        }
+
+        public void CompleteJob()
+        {
+            if (Tasks.All(x => x.State == JobTaskState.COMPLETED))
+            {
+                throw new NotSupportedException("Setting Job State to COMPLETED when all the job Tasks are not completed");
+            }
+            State = JobState.COMPLETED;
+            CompletionTime = DateTime.UtcNow;
         }
 
         public Job()

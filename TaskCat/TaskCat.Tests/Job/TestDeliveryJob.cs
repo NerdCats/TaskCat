@@ -109,7 +109,7 @@
         }
 
         [Test]
-        public async Task Test_Update_Delivery_Order_In_Completed_State()
+        public void Test_Update_Delivery_Order_In_Completed_State()
         {
             string orderName = "Updated Name";
             string noteToDeliveryMan = "Updated Note to Delivery Man";
