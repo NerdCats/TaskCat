@@ -56,6 +56,15 @@
 
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
+        public bool ETAFailed
+        {
+            get
+            {
+                if (this.Order.ETA.HasValue)
+                    return DateTime.UtcNow.Subtract(this.Order.ETA.Value).TotalSeconds > 0;
+                return false;
+            }
+        }
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }
