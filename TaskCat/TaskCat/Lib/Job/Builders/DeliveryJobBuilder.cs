@@ -9,6 +9,10 @@
     using Data.Lib.Payment;
     using Data.Model.Payment;
     using System;
+    using Data.Entity;
+    using System.Linq;
+    using Data.Lib.Constants;
+    using KellermanSoftware.CompareNetObjects;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -17,7 +21,7 @@
         private IPaymentMethod paymentMethod;
         private DeliveryOrder order;
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel,hridService)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel, hridService)
         {
             this.order = order;
             this.paymentMethod = paymentMethod;
@@ -32,7 +36,7 @@
         public override void BuildJob()
         {
             // FIXME: Looks like I can definitely refactor this and work this out
-            
+
             job.Tasks = new List<JobTask>();
 
             // INFO: Fetching to 
@@ -45,12 +49,10 @@
             job.Tasks.Add(pickUpTask);
             pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
-
             DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
             deliveryTask.SetPredecessor(pickUpTask);
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
-
 
             if (order.Type == OrderTypes.ClassifiedDelivery)
             {
@@ -80,7 +82,7 @@
         {
             //FIXME: Replicating code constantly, need to fix these
             if (!job.Assets.ContainsKey(AssetRef))
-                job.Assets[AssetRef] = asset; 
+                job.Assets[AssetRef] = asset;
         }
     }
 }

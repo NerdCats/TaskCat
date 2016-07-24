@@ -6,6 +6,8 @@
     using Data.Model.JobTasks;
     using Data.Model.Identity.Response;
     using HRID;
+    using System;
+    using Data.Entity;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class RideJobBuilder : JobBuilder
@@ -53,7 +55,6 @@
         {
             if (!job.Assets.ContainsKey(AssetRef))
                 job.Assets[AssetRef] = asset; // FIXME: I definitely need to fix it here, database fetch needed, dont know how this should work out
-
         }
     }
 }

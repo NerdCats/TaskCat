@@ -182,10 +182,15 @@
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var queryResult = jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize).Take(pageSize);
+            var queryTotal = jobs.LinqToQuerystring(queryString: odataQuery);
+            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Job>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            {
+                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);                
+                return Json(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+            }
+                
             return Json(queryResult);
         }
 
@@ -397,14 +402,39 @@
         /// </returns>
         /// 
         [ResponseType(typeof(ReplaceOneResult))]
-        [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
+        [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
         public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel)
         {
-            ReplaceOneResult result = await repository.UpdateOrder(jobId, orderModel);
+            if (orderModel == null) return BadRequest("Null order payload provided");
+            if (ModelState.IsValid) return BadRequest(ModelState);
+
+            var currentUserId = this.User.Identity.GetUserId();
+            var job = await repository.GetJob(jobId);
+
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
+            {
+                if (orderModel.UserId != null && orderModel.UserId != currentUserId)
+                    throw new InvalidOperationException(string.Format(
+                        "Updating user id {0} is not authorized against user id {1}", 
+                        orderModel.UserId, this.User.Identity.GetUserId()));
+            }
+            else if( this.User.IsInRole(RoleNames.ROLE_USER) || 
+                this.User.IsInRole(RoleNames.ROLE_ENTERPRISE))
+            {
+                if (job.User.UserId != currentUserId)
+                    throw new UnauthorizedAccessException("Job belongs to a different user");
+            }
+            else
+            {
+                if (!job.Assets.Any(x => x.Key == currentUserId))
+                    throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
+            }
+
+            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
             return Json(result);
         }
-
     }
 }

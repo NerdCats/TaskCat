@@ -38,6 +38,8 @@
                     httpStatusCode = HttpStatusCode.BadRequest;
                 else if (actionExecutedContext.Exception is NotSupportedException)
                     httpStatusCode = HttpStatusCode.BadRequest;
+                else if (actionExecutedContext.Exception is UnauthorizedAccessException)
+                    httpStatusCode = HttpStatusCode.Unauthorized;
 
                 error = actionExecutedContext.Exception;
                 response = actionExecutedContext.Request.CreateResponse(httpStatusCode, error);

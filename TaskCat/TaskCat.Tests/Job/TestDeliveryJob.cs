@@ -20,6 +20,10 @@
     using Data.Lib.Payment;
     using Data.Model;
     using TaskCat.Model.Job;
+    using Data.Model.Inventory;
+    using System.Collections.Generic;
+    using System;
+
     [TestFixture]
     public class TestDeliveryJob
     {
@@ -36,6 +40,96 @@
             paymentMethodMock = new Mock<IPaymentMethod>();
         }
 
+        private JobRepository SetupMockJobRepositoryForUpdate()
+        {
+            var jobManagerMock = new Mock<IJobManager>();
+            var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
+
+            jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
+                .ReturnsAsync(replaceOneResult);
+
+            var userStoreMock = new Mock<IUserStore<User>>();
+            var jobRepository = new JobRepository(jobManagerMock.Object,
+                new AccountManager(userStoreMock.Object));
+            return jobRepository;
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_Initial_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+
+            var job = GetDummyJob(OrderTypes.Delivery);
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
+
+            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+
+            var newOrder = job.Order as DeliveryOrder;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderName, job.Name);
+            Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
+            Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
+            Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_In_Progress_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+
+            var job = GetDummyJob(OrderTypes.Delivery);
+            job.State = JobState.IN_PROGRESS;
+            job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks[1].State = JobTaskState.IN_PROGRESS;
+
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
+
+            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+
+            var newOrder = job.Order as DeliveryOrder;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderName, job.Name);
+            Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
+            Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
+            Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
+        }
+
+        [Test]
+        public async Task Test_Update_Delivery_Order_In_Completed_State()
+        {
+            string orderName = "Updated Name";
+            string noteToDeliveryMan = "Updated Note to Delivery Man";
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+
+            var job = GetDummyJob(OrderTypes.Delivery);
+            job.Tasks.ForEach(x => { x.State = JobTaskState.COMPLETED; });
+            job.State = JobState.COMPLETED;
+
+            var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
+            updatedOrder.Name = orderName;
+            updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            updatedOrder.OrderCart = GetDummyCart();
+            updatedOrder.RequiredChangeFor = 1000;
+
+            Assert.ThrowsAsync<NotSupportedException>(async () => {
+                var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            });   
+        }
+
         [Test]
         public async Task Test_Cancel_Delivery_Job_With_No_Task_In_Progress()
         {
@@ -44,7 +138,7 @@
 
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
-            var createdJob = GetDummyJob();
+            var createdJob = GetDummyJob(OrderTypes.Delivery);
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
@@ -76,7 +170,7 @@
             string cancellationReason = "test cancellation reason";
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
-            var createdJob = GetDummyJob();
+            var createdJob = GetDummyJob(OrderTypes.Delivery);
             createdJob.State = JobState.CANCELLED;
             createdJob.Tasks.Last().State = JobTaskState.CANCELLED;
 
@@ -99,11 +193,9 @@
             Assert.AreEqual(null, result.UpdatedValue.CancellationReason);
         }
 
-        private Job GetDummyJob()
+        private Job GetDummyJob(string orderType)
         {
-            DeliveryOrder order = new DeliveryOrder();
-            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
-            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            DeliveryOrder order = GetDummyOrder(orderType);
 
             UserModel userModel = new UserModel()
             {
@@ -151,6 +243,50 @@
             builder.BuildJob();
 
             return builder.Job;
+        }
+
+        private DeliveryOrder GetDummyOrder(string orderType)
+        {
+            DeliveryOrder order = new DeliveryOrder();
+            order.UserId = "abcdef123ijkl12";
+            order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
+            order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            order.PaymentMethod = "SamplePaymentMethod";
+            order.Type = orderType;
+            return order;
+        }
+
+        private OrderDetails GetDummyCart()
+        {
+            OrderDetails orderDetails = new OrderDetails();
+            orderDetails.PackageList = new List<ItemDetails>();
+            orderDetails.PackageList.Add(new ItemDetails()
+            {
+                Item = "Item 1",
+                PicUrl = "http://sample-pic-source/pic.png",
+                Price = 10,
+                Quantity = 1,
+                VAT = 15,
+                Weight = 0.2M
+            });
+
+            orderDetails.PackageList.Add(new ItemDetails()
+            {
+                Item = "Item 2",
+                PicUrl = "http://sample-pic-source/pic2.png",
+                Price = 10,
+                Quantity = 1,
+                VAT = 15,
+                Weight = 0.2M
+            });
+
+            orderDetails.ServiceCharge = 100;
+            orderDetails.SubTotal = 23;
+            orderDetails.TotalVATAmount = 3;
+            orderDetails.TotalWeight = 0.4M;
+            orderDetails.TotalToPay = 123;
+
+            return orderDetails;
         }
     }
 }

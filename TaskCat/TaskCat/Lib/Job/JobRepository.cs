@@ -19,6 +19,8 @@
     using Data.Model.Order;
     using Data.Model.Operation;
     using Model.Job;
+    using Updaters;
+
     public class JobRepository : IJobRepository
     {
         private IJobManager manager;
@@ -70,17 +72,11 @@
             return await manager.UpdateJob(job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(string jobId, OrderModel orderModel)
+        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
         {
-            var job = await GetJob(jobId);
             if (job.Order.Type != orderModel.Type)
             {
                 throw new InvalidOperationException("Updating with a different ordermodel for this job");
-            }
-
-            if (job.PaymentMethod != orderModel.PaymentMethod)
-            {
-                throw new InvalidOperationException("Updating payment method of an exisiting order is not supported");
             }
 
             // FIXME: Finding a resolver here would help here dude
@@ -94,11 +90,12 @@
                             orderCalculationService,
                             serviceChargeCalculationService);
                         orderProcessor.ProcessOrder(orderModel);
+                        var jobUpdater = new DeliveryJobUpdater(job);
+                        jobUpdater.UpdateJob(orderModel);
+                        job = jobUpdater.Job;
                         break;
                     }
             }
-
-            job.Order = orderModel;
 
             var result = await UpdateJob(job);
             return result;
