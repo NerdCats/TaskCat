@@ -17,7 +17,7 @@
     using TaskCat.Data.Model.JobTasks.Preference;
     using System;
     using Data.Lib.Constants;
-    using System.Web.Http.ModelBinding;
+    using System.ComponentModel.DataAnnotations;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJobBuilder
@@ -42,6 +42,8 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            order.UserId = "SampleUserId";
+            order.PaymentMethod = "SamplePaymentMethod";
 
             UserModel userModel = new UserModel()
             {
@@ -84,7 +86,9 @@
                 UserId = "123456789",
                 UserName = "GabulTheAwesome"
             };
-                       
+
+            Validator.ValidateObject(order, new ValidationContext(order), validateAllProperties: true);
+
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
 
             Assert.IsNotNull(builder);
