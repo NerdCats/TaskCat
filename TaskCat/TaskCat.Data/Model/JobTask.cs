@@ -98,8 +98,20 @@
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? ETA { get; set; }
         public DateTime? CreateTime { get; set; }
+        public DateTime? InitiationTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public DateTime? CompletionTime { get; set; }
+        public TimeSpan? Duration
+        {
+            get
+            {
+                if (CompletionTime.HasValue && InitiationTime.HasValue)
+                {
+                    return CompletionTime.Value.Subtract(InitiationTime.Value);
+                }
+                return null;
+            }
+        }
 
         [BsonIgnoreIfNull]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -161,10 +173,14 @@
 
         public virtual void MoveToNextState()
         {
-            if (State == JobTaskState.IN_PROGRESS && !IsReadytoMoveToNextTask)
-                return;
+            if (State == JobTaskState.IN_PROGRESS)
+            {
+                InitiationTime = DateTime.UtcNow;
+                if (!IsReadytoMoveToNextTask)
+                    return;
+            }
 
-            if(state < JobTaskState.COMPLETED)
+            if (state < JobTaskState.COMPLETED)
                 State++;
 
             while (IsReadytoMoveToNextTask && state<JobTaskState.COMPLETED)

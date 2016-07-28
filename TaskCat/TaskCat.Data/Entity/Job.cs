@@ -74,13 +74,14 @@
             }
         }
         public DateTime? CompletionTime { get; set; }
-        public TimeSpan? JobDuration
+        public DateTime? InitiatinTime { get; set; }
+        public TimeSpan? Duration
         {
             get
             {
-                if (CompletionTime.HasValue && CreateTime.HasValue)
+                if (CompletionTime.HasValue && InitiatinTime.HasValue)
                 {
-                    return CompletionTime.Value.Subtract(CreateTime.Value);
+                    return CompletionTime.Value.Subtract(InitiatinTime.Value);
                 }
                 return null;
             }
@@ -224,7 +225,10 @@
         private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
         {
             if (updatedState > JobTaskState.PENDING && updatedState <= JobTaskState.COMPLETED && TerminalTask != sender)
+            {
+                this.InitiatinTime = DateTime.UtcNow;
                 State = JobState.IN_PROGRESS;
+            }
             else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
                 State = JobState.IN_PROGRESS;
             else if (updatedState == JobTaskState.COMPLETED && TerminalTask == sender)
