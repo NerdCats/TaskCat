@@ -74,6 +74,17 @@
             }
         }
         public DateTime? CompletionTime { get; set; }
+        public TimeSpan? JobDuration
+        {
+            get
+            {
+                if (CompletionTime.HasValue && CreateTime.HasValue)
+                {
+                    return CompletionTime.Value.Subtract(CreateTime.Value);
+                }
+                return null;
+            }
+        }
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }
