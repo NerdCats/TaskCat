@@ -9,10 +9,7 @@
     using Data.Lib.Payment;
     using Data.Model.Payment;
     using System;
-    using Data.Entity;
     using System.Linq;
-    using Data.Lib.Constants;
-    using KellermanSoftware.CompareNetObjects;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -75,8 +72,22 @@
             job.EnsureInitialJobState();
 
             job.SetupDefaultBehaviourForFirstJobTask();
+
+            SetupJobTaskETAs(order);
         }
 
+        private void SetupJobTaskETAs(DeliveryOrder order)
+        {
+            
+            if (order.JobTaskETAPreference?.Count > 0)
+            {
+                foreach (var pref in order.JobTaskETAPreference)
+                {
+                    var jobTask = job.Tasks.Where(x => x.Type == pref.Type).FirstOrDefault();
+                    
+                }
+            }
+        }
 
         private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
         {
