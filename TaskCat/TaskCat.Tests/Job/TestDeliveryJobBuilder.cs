@@ -13,6 +13,11 @@
     using TaskCat.Lib.Job.Builders;
     using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
+    using System.Collections.Generic;
+    using TaskCat.Data.Model.JobTasks.Preference;
+    using System;
+    using Data.Lib.Constants;
+    using System.ComponentModel.DataAnnotations;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJobBuilder
@@ -37,6 +42,8 @@
             DeliveryOrder order = new DeliveryOrder();
             order.From = new DefaultAddress("Test From Address", new Point((new double[] { 1, 2 }).ToList()));
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
+            order.UserId = "SampleUserId";
+            order.PaymentMethod = "SamplePaymentMethod";
 
             UserModel userModel = new UserModel()
             {
@@ -79,6 +86,8 @@
                 UserId = "123456789",
                 UserName = "GabulTheAwesome"
             };
+
+            Validator.ValidateObject(order, new ValidationContext(order), validateAllProperties: true);
 
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
 
@@ -147,6 +156,24 @@
                 UserName = "GabulTheAwesome"
             };
 
+            var jobTaskETAPreferences = new List<JobTaskETAPreference>();
+
+            var testETA = DateTime.Now.AddDays(1);
+            jobTaskETAPreferences.Add(new JobTaskETAPreference()
+            {
+                ETA = testETA,
+                Type = "TestJobTaskType"
+            });
+
+            jobTaskETAPreferences.Add(new JobTaskETAPreference()
+            {
+                ETA = testETA,
+                Type = JobTaskTypes.PACKAGE_PICKUP
+            });
+
+            order.JobTaskETAPreference = jobTaskETAPreferences;
+
+
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
             builder.BuildJob();
 
@@ -170,6 +197,7 @@
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
+            Assert.AreEqual(testETA, builder.Job.Tasks[1].ETA);
         }
 
         [Test]

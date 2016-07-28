@@ -98,8 +98,20 @@
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? ETA { get; set; }
         public DateTime? CreateTime { get; set; }
+        public DateTime? InitiationTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public DateTime? CompletionTime { get; set; }
+        public TimeSpan? Duration
+        {
+            get
+            {
+                if (CompletionTime.HasValue && InitiationTime.HasValue)
+                {
+                    return CompletionTime.Value.Subtract(InitiationTime.Value);
+                }
+                return null;
+            }
+        }
 
         [BsonIgnoreIfNull]
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -114,7 +126,15 @@
         public bool IsStartingTask { get; set; } = true;
         public bool IsTerminatingTask { get; set; } = false;
 
-        public bool ETAFailed { get; set; } = false;
+        public bool ETAFailed
+        {
+            get
+            {
+                if (this.ETA.HasValue && this.State == JobTaskState.IN_PROGRESS)
+                    return DateTime.UtcNow.Subtract(this.ETA.Value).TotalSeconds > 0;
+                return false;
+            }
+        }
 
         public JobTask()
         {
@@ -153,10 +173,14 @@
 
         public virtual void MoveToNextState()
         {
-            if (State == JobTaskState.IN_PROGRESS && !IsReadytoMoveToNextTask)
-                return;
+            if (State == JobTaskState.IN_PROGRESS)
+            {
+                InitiationTime = DateTime.UtcNow;
+                if (!IsReadytoMoveToNextTask)
+                    return;
+            }
 
-            if(state < JobTaskState.COMPLETED)
+            if (state < JobTaskState.COMPLETED)
                 State++;
 
             while (IsReadytoMoveToNextTask && state<JobTaskState.COMPLETED)
@@ -173,12 +197,15 @@
             if (!IsReadytoMoveToNextTask)
                 throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
 
+            this.CompletionTime = DateTime.UtcNow;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
             {
                 Result = SetResultToNextState();
-                if (Result!=null && Result.TaskCompletionTime == null)
-                    Result.TaskCompletionTime = DateTime.UtcNow;
+                if (Result != null && Result.TaskCompletionTime == null)
+                {
+                    Result.TaskCompletionTime = CompletionTime;
+                }
                 JobTaskCompleted(this, Result);
             }
         }
