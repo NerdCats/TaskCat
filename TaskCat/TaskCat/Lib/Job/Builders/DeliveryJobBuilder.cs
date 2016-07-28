@@ -9,10 +9,7 @@
     using Data.Lib.Payment;
     using Data.Model.Payment;
     using System;
-    using Data.Entity;
     using System.Linq;
-    using Data.Lib.Constants;
-    using KellermanSoftware.CompareNetObjects;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -75,8 +72,30 @@
             job.EnsureInitialJobState();
 
             job.SetupDefaultBehaviourForFirstJobTask();
+
+            if (order.JobTaskETAPreference?.Count > 0)
+                SetupJobTaskETAs(order);
         }
 
+        private void SetupJobTaskETAs(DeliveryOrder order)
+        {
+            var duplicatePref = order.JobTaskETAPreference.GroupBy(x => x.Type).Where(x => x.Count() > 1).FirstOrDefault();
+            if (duplicatePref != null && duplicatePref.Count() > 0)
+                throw new NotSupportedException("Duplicate preference for one single jobtask type detected");
+
+            if (order.JobTaskETAPreference?.Count > 0)
+            {
+
+                foreach (var task in this.job.Tasks)
+                {
+                    var pref = order.JobTaskETAPreference.FirstOrDefault(x => x.Type == task.Type);
+                    if (pref != null)
+                    {
+                        task.ETA = pref.ETA.HasValue ? pref.ETA : null;
+                    }
+                }
+            }
+        }
 
         private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
         {

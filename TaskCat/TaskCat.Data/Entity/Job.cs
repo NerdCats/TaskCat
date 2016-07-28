@@ -50,12 +50,42 @@
         private List<JobTask> tasks;
         public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
 
+        private JobState state;
         [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public JobState State { get; set; }
+        public JobState State
+        {
+            get { return state; }
+            set
+            {
+                state = value;
+            }
+        }
 
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
+        public bool ETAFailed
+        {
+            get
+            {
+                if (this.Order.ETA.HasValue && this.State==JobState.IN_PROGRESS)
+                    return DateTime.UtcNow.Subtract(this.Order.ETA.Value).TotalSeconds > 0;
+                return false;
+            }
+        }
+        public DateTime? CompletionTime { get; set; }
+        public DateTime? InitiatinTime { get; set; }
+        public TimeSpan? Duration
+        {
+            get
+            {
+                if (CompletionTime.HasValue && InitiatinTime.HasValue)
+                {
+                    return CompletionTime.Value.Subtract(InitiatinTime.Value);
+                }
+                return null;
+            }
+        }
 
         [BsonIgnoreIfNull]
         public DateTime? PreferredDeliveryTime { get; set; }
@@ -94,7 +124,17 @@
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {
+            CompleteJob();
+        }
+
+        public void CompleteJob()
+        {
+            if (Tasks.All(x => x.State == JobTaskState.COMPLETED))
+            {
+                throw new NotSupportedException("Setting Job State to COMPLETED when all the job Tasks are not completed");
+            }
             State = JobState.COMPLETED;
+            CompletionTime = DateTime.UtcNow;
         }
 
         public Job()
@@ -185,7 +225,10 @@
         private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
         {
             if (updatedState > JobTaskState.PENDING && updatedState <= JobTaskState.COMPLETED && TerminalTask != sender)
+            {
+                this.InitiatinTime = DateTime.UtcNow;
                 State = JobState.IN_PROGRESS;
+            }
             else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
                 State = JobState.IN_PROGRESS;
             else if (updatedState == JobTaskState.COMPLETED && TerminalTask == sender)
