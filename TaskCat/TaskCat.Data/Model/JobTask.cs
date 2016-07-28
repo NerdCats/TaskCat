@@ -181,12 +181,15 @@
             if (!IsReadytoMoveToNextTask)
                 throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
 
+            this.CompletionTime = DateTime.UtcNow;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
             {
                 Result = SetResultToNextState();
-                if (Result!=null && Result.TaskCompletionTime == null)
-                    Result.TaskCompletionTime = DateTime.UtcNow;
+                if (Result != null && Result.TaskCompletionTime == null)
+                {
+                    Result.TaskCompletionTime = CompletionTime;
+                }
                 JobTaskCompleted(this, Result);
             }
         }
