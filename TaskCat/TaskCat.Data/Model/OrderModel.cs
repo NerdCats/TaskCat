@@ -4,8 +4,10 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Geocoding;
-    using Payment;
     using Order;
+    using JobTasks.Preference;
+    using System.Collections.Generic;
+
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
@@ -119,5 +121,7 @@
             this.Name = name;
             this.Type = type;
         }
+
+        public List<JobTaskETAPreference> JobTaskETAPreference { get; set; }
     }
 }
