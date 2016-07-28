@@ -78,13 +78,19 @@
 
         private void SetupJobTaskETAs(DeliveryOrder order)
         {
-            
+            var duplicatePref = order.JobTaskETAPreference.GroupBy(x => x.Type).Where(x => x.Count() > 0).FirstOrDefault();
+            if (duplicatePref != null && duplicatePref.Count() > 0)
+                throw new NotSupportedException("Duplicate preference for one single jobtask type detected");
+
             if (order.JobTaskETAPreference?.Count > 0)
             {
                 foreach (var pref in order.JobTaskETAPreference)
                 {
                     var jobTask = job.Tasks.Where(x => x.Type == pref.Type).FirstOrDefault();
-                    
+                    if(jobTask!=null)
+                    {
+                        jobTask.ETA = pref.ETA.HasValue ? pref.ETA : null;
+                    }
                 }
             }
         }

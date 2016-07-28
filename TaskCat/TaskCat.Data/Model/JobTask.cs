@@ -114,7 +114,15 @@
         public bool IsStartingTask { get; set; } = true;
         public bool IsTerminatingTask { get; set; } = false;
 
-        public bool ETAFailed { get; set; } = false;
+        public bool ETAFailed
+        {
+            get
+            {
+                if (this.ETA.HasValue && this.State == JobTaskState.IN_PROGRESS)
+                    return DateTime.UtcNow.Subtract(this.ETA.Value).TotalSeconds > 0;
+                return false;
+            }
+        }
 
         public JobTask()
         {

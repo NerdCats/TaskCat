@@ -83,6 +83,7 @@
             switch (orderModel.Type)
             {
                 case OrderTypes.Delivery:
+                case OrderTypes.ClassifiedDelivery:
                     {
                         var orderCalculationService = new DefaultOrderCalculationService();
                         var serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
