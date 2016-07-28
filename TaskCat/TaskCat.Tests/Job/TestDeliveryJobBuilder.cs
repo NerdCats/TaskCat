@@ -13,6 +13,11 @@
     using TaskCat.Lib.Job.Builders;
     using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
+    using System.Collections.Generic;
+    using TaskCat.Data.Model.JobTasks.Preference;
+    using System;
+    using Data.Lib.Constants;
+    using System.Web.Http.ModelBinding;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJobBuilder
@@ -79,7 +84,7 @@
                 UserId = "123456789",
                 UserName = "GabulTheAwesome"
             };
-
+                       
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
 
             Assert.IsNotNull(builder);
@@ -147,6 +152,24 @@
                 UserName = "GabulTheAwesome"
             };
 
+            var jobTaskETAPreferences = new List<JobTaskETAPreference>();
+
+            var testETA = DateTime.Now.AddDays(1);
+            jobTaskETAPreferences.Add(new JobTaskETAPreference()
+            {
+                ETA = testETA,
+                Type = "TestJobTaskType"
+            });
+
+            jobTaskETAPreferences.Add(new JobTaskETAPreference()
+            {
+                ETA = testETA,
+                Type = JobTaskTypes.PACKAGE_PICKUP
+            });
+
+            order.JobTaskETAPreference = jobTaskETAPreferences;
+
+
             var builder = new DeliveryJobBuilder(order, userModel, backendAdminModel, hridService, paymentMethodMock.Object);
             builder.BuildJob();
 
@@ -170,6 +193,7 @@
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
+            Assert.AreEqual(testETA, builder.Job.Tasks[1].ETA);
         }
 
         [Test]

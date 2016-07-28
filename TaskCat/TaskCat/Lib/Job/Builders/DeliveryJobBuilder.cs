@@ -73,23 +73,25 @@
 
             job.SetupDefaultBehaviourForFirstJobTask();
 
-            SetupJobTaskETAs(order);
+            if (order.JobTaskETAPreference?.Count > 0)
+                SetupJobTaskETAs(order);
         }
 
         private void SetupJobTaskETAs(DeliveryOrder order)
         {
-            var duplicatePref = order.JobTaskETAPreference.GroupBy(x => x.Type).Where(x => x.Count() > 0).FirstOrDefault();
+            var duplicatePref = order.JobTaskETAPreference.GroupBy(x => x.Type).Where(x => x.Count() > 1).FirstOrDefault();
             if (duplicatePref != null && duplicatePref.Count() > 0)
                 throw new NotSupportedException("Duplicate preference for one single jobtask type detected");
 
             if (order.JobTaskETAPreference?.Count > 0)
             {
-                foreach (var pref in order.JobTaskETAPreference)
+
+                foreach (var task in this.job.Tasks)
                 {
-                    var jobTask = job.Tasks.Where(x => x.Type == pref.Type).FirstOrDefault();
-                    if(jobTask!=null)
+                    var pref = order.JobTaskETAPreference.FirstOrDefault(x => x.Type == task.Type);
+                    if (pref != null)
                     {
-                        jobTask.ETA = pref.ETA.HasValue ? pref.ETA : null;
+                        task.ETA = pref.ETA.HasValue ? pref.ETA : null;
                     }
                 }
             }
