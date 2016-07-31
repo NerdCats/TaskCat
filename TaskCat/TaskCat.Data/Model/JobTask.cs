@@ -7,6 +7,7 @@
     using Utility;
     using Identity.Response;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask
     {
         protected string Name;

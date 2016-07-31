@@ -11,6 +11,7 @@
     using System.Linq;
     using Model.Payment;
 
+    [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity
     {
         [BsonIgnore]
