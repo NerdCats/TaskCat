@@ -15,6 +15,8 @@
                     return string.Concat(JobTaskName, " is in progress");
                 case JobTaskState.COMPLETED:
                     return string.Concat(JobTaskName, " is completed");
+                case JobTaskState.CANCELLED:
+                    return string.Concat(JobTaskName, " is cancelled");
                 default:
                     throw new InvalidOperationException("Invalid/Unsupported JobTask state provided");
             }
@@ -30,6 +32,8 @@
                     return string.Concat(JobName, " is in progress");
                 case JobState.COMPLETED:
                     return string.Concat(JobName, " is completed");
+                case JobState.CANCELLED:
+                    return string.Concat(JobName, " is cancelled");
                 default:
                     throw new InvalidOperationException("Invalid/Unsupported Job state provided");
             }

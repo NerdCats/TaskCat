@@ -4,7 +4,7 @@
 
     public class JobCancellationRequest
     {
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "JobId not provided")]
         public string JobId { get; set; }
         public string Reason { get; set; }
     }
