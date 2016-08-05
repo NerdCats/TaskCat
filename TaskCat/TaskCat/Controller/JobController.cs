@@ -271,7 +271,7 @@
             }
             else
             {
-                throw new NotImplementedException("Invoice for this job type is still not implemented");
+                throw new NotImplementedException($"Invoice for job type {job.Order.Type} is still not implemented");
             }
         }
 

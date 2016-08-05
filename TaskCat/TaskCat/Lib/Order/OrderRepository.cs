@@ -60,6 +60,7 @@
                         builder = new RideJobBuilder(rideOrderModel, userModel, hridService);
                         break;
                     }
+                case OrderTypes.ClassifiedDelivery:
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
