@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Tests.Job
+﻿using TaskCat.Data.Model.Identity;
+
+namespace TaskCat.Tests.Job
 {
     using Moq;
     using NUnit.Framework;
@@ -89,11 +91,16 @@
             var job = GetDummyJob(OrderTypes.Delivery);
             job.State = JobState.IN_PROGRESS;
             job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks.First().Asset = GetDummyAssetModel();
+            job.Tasks.First().UpdateTask();
             job.Tasks[1].State = JobTaskState.IN_PROGRESS;
+            job.Tasks[1].UpdateTask();
 
             var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
             updatedOrder.Name = orderName;
             updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
+            // INFO: Although we are assigning a cart here, our job is already in progress of delivery as
+            // we already gave everything to complete the pickup job and start the delivery job
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
@@ -104,8 +111,10 @@
             Assert.IsNotNull(result);
             Assert.AreEqual(orderName, job.Name);
             Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
-            Assert.AreEqual(updatedOrder.OrderCart, newOrder.OrderCart);
+            Assert.IsNull(newOrder.OrderCart);
             Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
+            Assert.IsNull(job.Tasks.First().InitiationTime);
+            Assert.IsNotNull(job.Tasks[1].InitiationTime);
         }
 
         [Test]
@@ -191,6 +200,35 @@
             Assert.AreEqual(JobState.ENQUEUED, result.UpdatedValue.State);
             result.UpdatedValue.Tasks.ForEach(x => Assert.AreEqual(JobTaskState.PENDING, x.State));
             Assert.AreEqual(null, result.UpdatedValue.CancellationReason);
+        }
+
+        private AssetModel GetDummyAssetModel()
+        {
+            var assetModel = new AssetModel()
+            {
+                AverageRating = 3.2,
+                Email = "someAsset @asset.com",
+                EmailConfirmed = true,
+                IsUserAuthenticated = true,
+                PhoneNumber = "123456789",
+                PhoneNumberConfirmed = true,
+                Profile = new AssetProfile()
+                {
+                    Address = new DefaultAddress("Somewhere in the world", new Point(1,2)),
+                    Age = 25,
+                    DriversLicenseId = "123456",
+                    FirstName = "Some",
+                    LastName = "Asset",
+                    Gender = Gender.MALE,
+                    NationalId = "e123r123",
+                    PicUri = "http://some-pic-uri.img"
+                },
+                Type = IdentityTypes.BIKE_MESSENGER,
+                UserId = "123456789",
+                UserName = "someasset"
+            };
+
+            return assetModel;
         }
 
         private Job GetDummyJob(string orderType)

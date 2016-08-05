@@ -176,15 +176,19 @@
         {
             if (State == JobTaskState.IN_PROGRESS)
             {
-                InitiationTime = DateTime.UtcNow;
+                InitiationTime = InitiationTime ?? DateTime.UtcNow;
                 if (!IsReadytoMoveToNextTask)
                     return;
             }
 
-            if (state < JobTaskState.COMPLETED)
+            if (State < JobTaskState.COMPLETED)
+            {
                 State++;
+                if (State == JobTaskState.IN_PROGRESS)
+                    InitiationTime = DateTime.UtcNow;
+            }
 
-            while (IsReadytoMoveToNextTask && state<JobTaskState.COMPLETED)
+            while (IsReadytoMoveToNextTask && State<JobTaskState.COMPLETED)
                 State++;
             
             if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
