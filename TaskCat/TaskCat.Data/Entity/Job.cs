@@ -75,14 +75,18 @@
             }
         }
         public DateTime? CompletionTime { get; set; }
-        public DateTime? InitiatinTime { get; set; }
+        public DateTime? InitiationTime { get; set; }
         public TimeSpan? Duration
         {
             get
             {
-                if (CompletionTime.HasValue && InitiatinTime.HasValue)
+                if (CompletionTime.HasValue && InitiationTime.HasValue)
                 {
-                    return CompletionTime.Value.Subtract(InitiatinTime.Value);
+                    return CompletionTime.Value.Subtract(InitiationTime.Value);
+                }
+                else if (InitiationTime.HasValue)
+                {
+                    return DateTime.UtcNow.Subtract(InitiationTime.Value);
                 }
                 return null;
             }
@@ -227,7 +231,7 @@
         {
             if (updatedState > JobTaskState.PENDING && updatedState <= JobTaskState.COMPLETED && TerminalTask != sender)
             {
-                this.InitiatinTime = DateTime.UtcNow;
+                this.InitiationTime = DateTime.UtcNow;
                 State = JobState.IN_PROGRESS;
             }
             else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
