@@ -184,13 +184,14 @@
             if (State < JobTaskState.COMPLETED)
             {
                 State++;
-                if (State == JobTaskState.IN_PROGRESS)
-                    InitiationTime = DateTime.UtcNow;
             }
 
             while (IsReadytoMoveToNextTask && State<JobTaskState.COMPLETED)
                 State++;
-            
+
+            if (State >= JobTaskState.IN_PROGRESS)
+                InitiationTime = InitiationTime ?? DateTime.UtcNow;
+
             if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();
             else if(State == JobTaskState.COMPLETED && !IsReadytoMoveToNextTask)

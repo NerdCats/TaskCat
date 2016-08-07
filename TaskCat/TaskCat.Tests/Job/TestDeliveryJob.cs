@@ -113,11 +113,7 @@ namespace TaskCat.Tests.Job
             Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
             Assert.IsNull(newOrder.OrderCart);
             Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
-            /*
-             * We started this job task as completed anyway, so its kind of expected this
-             * won't have Initiation time initiated to be honest :)
-             */
-            Assert.IsNull(job.Tasks.First().InitiationTime);
+            Assert.IsNotNull(job.Tasks.First().InitiationTime);
             Assert.IsNotNull(job.Tasks[1].InitiationTime);
         }
 

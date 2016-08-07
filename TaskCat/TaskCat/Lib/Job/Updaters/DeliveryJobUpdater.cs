@@ -70,6 +70,9 @@
             else if (jobTaskCurrentlyInProgress != null)
                 firstJobTaskTypeToUpdate = jobTaskCurrentlyInProgress.Type;
 
+            if (firstJobTaskTypeToUpdate == JobTaskTypes.SECURE_DELIVERY)
+                throw new NotSupportedException("Cant update order when secure delivery is in progress");
+
             switch (firstJobTaskTypeToUpdate)
             {
                 case JobTaskTypes.FETCH_DELIVERYMAN:
@@ -88,6 +91,7 @@
                         job.Order.OrderCart = order.OrderCart;
                     }
                     goto case JobTaskTypes.DELIVERY;
+                case JobTaskTypes.SECURE_DELIVERY:
                 case JobTaskTypes.DELIVERY:
                     DeliveryTask deliveryTask = job.Tasks[2] as DeliveryTask;
                     deliveryTask.From = order.From;
@@ -96,14 +100,7 @@
 
                     job.Order.From = order.From;
                     job.Order.To = order.To;
-
-                    if (order.Type == OrderTypes.ClassifiedDelivery)
-                    {
-                        goto case JobTaskTypes.SECURE_DELIVERY;
-                    }
                     break;
-                case JobTaskTypes.SECURE_DELIVERY:
-                    throw new NotSupportedException("Cant update order when secure delivery is in progress");
             }
 
             job.Name = order.Name;
