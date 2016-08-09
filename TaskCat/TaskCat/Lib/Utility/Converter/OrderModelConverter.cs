@@ -34,7 +34,7 @@
                     orderModel = new DeliveryOrder();
                     break;
                 case OrderTypes.ClassifiedDelivery:
-                    orderModel = new DeliveryOrder(type: OrderTypes.ClassifiedDelivery);
+                    orderModel = new ClassifiedDeliveryOrder();
                     break;
                 default:
                     throw new NotSupportedException(string.Concat("Order Entry type invalid/no supported - ", orderType));

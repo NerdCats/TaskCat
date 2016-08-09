@@ -52,6 +52,12 @@
             job.Order.ETA = order.ETA;
             job.Order.ETAMinutes = order.ETAMinutes;
 
+            if(order.Type == OrderTypes.ClassifiedDelivery)
+            {
+                (job.Order as ClassifiedDeliveryOrder).BuyerInfo = (order as ClassifiedDeliveryOrder).BuyerInfo;
+                (job.Order as ClassifiedDeliveryOrder).SellerInfo = (order as ClassifiedDeliveryOrder).SellerInfo;
+            }
+
             CompareLogic compareLogic = new CompareLogic();
             compareLogic.Config.ComparePrivateFields = true;
 

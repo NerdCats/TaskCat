@@ -53,7 +53,7 @@
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
                     throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
             }
-
+                
             if (model.UserId == null) model.UserId = currentUserId;
 
             Job createdJob;
