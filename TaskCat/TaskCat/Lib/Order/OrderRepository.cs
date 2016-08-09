@@ -61,15 +61,15 @@
                         break;
                     }
                 case OrderTypes.ClassifiedDelivery:
+                    {
+                        ClassifiedDeliveryOrder classifiedDeliveryOrderModel = model as ClassifiedDeliveryOrder;
+                        builder = GetDeliveryJobBuilder(userModel, classifiedDeliveryOrderModel);
+                        break;
+                    }
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderProcessor = new DeliveryOrderProcessor(
-                            orderCalculationService,
-                            serviceChargeCalculationService);
-                        var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
-                        orderProcessor.ProcessOrder(deliveryOrderModel);
-                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod);
+                        builder = GetDeliveryJobBuilder(userModel, deliveryOrderModel);
                         break;
                     }
                 default:
@@ -77,6 +77,18 @@
 
             }
             return await ConstructAndRegister(jobShop, builder);
+        }
+
+        private JobBuilder GetDeliveryJobBuilder(UserModel userModel, DeliveryOrder deliveryOrderModel)
+        {
+            JobBuilder builder;
+            orderProcessor = new DeliveryOrderProcessor(
+                      orderCalculationService,
+                      serviceChargeCalculationService);
+            var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
+            orderProcessor.ProcessOrder(deliveryOrderModel);
+            builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod);
+            return builder;
         }
 
         public async Task<Job> PostOrder(OrderModel model, string adminUserId)

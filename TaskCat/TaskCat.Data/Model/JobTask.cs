@@ -110,6 +110,10 @@
                 {
                     return CompletionTime.Value.Subtract(InitiationTime.Value);
                 }
+                else if (InitiationTime.HasValue)
+                {
+                    return DateTime.UtcNow.Subtract(InitiationTime.Value);
+                }
                 return null;
             }
         }
