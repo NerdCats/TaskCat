@@ -82,7 +82,7 @@
 
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (To != null && Asset != null) ? true : false;
+            IsReadytoMoveToNextTask = (To != null && Asset != null && State == JobTaskState.COMPLETED) ? true : false;
             UpdateStateParams();
         }
 

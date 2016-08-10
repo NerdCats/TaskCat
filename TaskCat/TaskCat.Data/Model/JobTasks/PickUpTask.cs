@@ -75,7 +75,7 @@
         {
             // INFO: The dependency for AssetLocation is taken off because right now we
             // dont have locations ensured
-            IsReadytoMoveToNextTask = (PickupLocation != null && Asset != null) ? true : false;
+            IsReadytoMoveToNextTask = (PickupLocation != null && Asset != null && State == JobTaskState.COMPLETED) ? true : false;
             UpdateStateParams();
         }
     }
