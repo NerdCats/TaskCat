@@ -114,7 +114,7 @@
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
             if (selectedTask == null) throw new ArgumentException("Invalid JobTask Id provided");
 
-            await ResolveAssetRef(taskPatch);
+            await ResolveAssetRef(taskPatch, selectedTask);
 
             taskPatch.ApplyTo(selectedTask);
             selectedTask.UpdateTask();
@@ -126,11 +126,14 @@
             return result;
         }
 
-        public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch)
+        public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobTask)
         {
             var assetRefReplaceOp = taskPatch.Operations.FirstOrDefault(x => x.op == "replace" && x.path == "/AssetRef");
             if (!(assetRefReplaceOp?.value is string)) return false;
             // INFO: Now we need to actually fetch the asset and get shit done
+            if (jobTask.State == JobTaskState.COMPLETED)
+                throw new InvalidOperationException($"Updating AssetRef of JobTask {jobTask.id} is not suppported as the task is in {jobTask.State} state");
+
             var asset = await _accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(assetRefReplaceOp.value.ToString());
             if (asset == null) return false;
             var assetModel = new AssetModel(asset);
