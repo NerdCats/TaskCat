@@ -15,6 +15,8 @@
     using Process;
     using Data.Lib.Payment;
     using Payment;
+    using Data.Model.Identity;
+    using Data.Model.Identity.Profile;
 
     public class OrderRepository : IOrderRepository
     {
@@ -63,6 +65,20 @@
                 case OrderTypes.ClassifiedDelivery:
                     {
                         ClassifiedDeliveryOrder classifiedDeliveryOrderModel = model as ClassifiedDeliveryOrder;
+                        if (string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.BuyerInfo?.UserRef))
+                        {
+                            var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.BuyerInfo.UserRef);
+                            classifiedDeliveryOrderModel.BuyerInfo.PhoneNumber = user.PhoneNumber;
+                            classifiedDeliveryOrderModel.BuyerInfo.Address = user.Profile.Address;
+                            classifiedDeliveryOrderModel.BuyerInfo.Name = GetNameFromProfile(classifiedDeliveryOrderModel, user);
+                        }
+                        if (string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.SellerInfo?.UserRef))
+                        {
+                            var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.SellerInfo.UserRef);
+                            classifiedDeliveryOrderModel.SellerInfo.PhoneNumber = user.PhoneNumber;
+                            classifiedDeliveryOrderModel.SellerInfo.Address = user.Profile.Address;
+                            classifiedDeliveryOrderModel.SellerInfo.Name = GetNameFromProfile(classifiedDeliveryOrderModel, user);
+                        }
                         builder = GetDeliveryJobBuilder(userModel, classifiedDeliveryOrderModel);
                         break;
                     }
@@ -77,6 +93,19 @@
 
             }
             return await ConstructAndRegister(jobShop, builder);
+        }
+
+        private string GetNameFromProfile(ClassifiedDeliveryOrder classifiedDeliveryOrderModel, Data.Entity.Identity.User user)
+        {
+            switch (user.Type)
+            {
+                case IdentityTypes.USER:
+                    return (user.Profile as UserProfile).FullName;
+                case IdentityTypes.ENTERPRISE:
+                    return (user.Profile as EnterpriseUserProfile).CompanyName;
+                default:
+                    return (user.Profile as AssetProfile).FullName;
+            }
         }
 
         private JobBuilder GetDeliveryJobBuilder(UserModel userModel, DeliveryOrder deliveryOrderModel)
