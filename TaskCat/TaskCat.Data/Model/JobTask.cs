@@ -176,30 +176,15 @@
            
         }
 
-        public virtual void MoveToNextState()
+        public virtual void UpdateStateParams()
         {
-            if (State == JobTaskState.IN_PROGRESS)
-            {
-                InitiationTime = InitiationTime ?? DateTime.UtcNow;
-                if (!IsReadytoMoveToNextTask)
-                    return;
-            }
-
-            if (State < JobTaskState.COMPLETED)
-            {
-                State++;
-            }
-
-            while (IsReadytoMoveToNextTask && State<JobTaskState.COMPLETED)
-                State++;
+            if (State == JobTaskState.PENDING) return;
 
             if (State >= JobTaskState.IN_PROGRESS)
                 InitiationTime = InitiationTime ?? DateTime.UtcNow;
 
-            if (State == JobTaskState.COMPLETED && IsReadytoMoveToNextTask)
-                NotifyJobTaskCompleted();
-            else if(State == JobTaskState.COMPLETED && !IsReadytoMoveToNextTask)
-                throw new InvalidOperationException("Job is not ready to move to next Task");            
+            if (IsReadytoMoveToNextTask)
+                NotifyJobTaskCompleted();       
         }
 
         protected virtual void NotifyJobTaskCompleted()
@@ -208,6 +193,7 @@
                 throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
 
             this.CompletionTime = DateTime.UtcNow;
+            State = JobTaskState.COMPLETED;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
             {

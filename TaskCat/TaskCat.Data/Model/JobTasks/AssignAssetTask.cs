@@ -21,7 +21,7 @@
             //FIXME: I really should use some attribute here to do this
             //this is just plain ghetto
             IsReadytoMoveToNextTask = (From != null && To != null && Asset != null) ? true : false;
-            MoveToNextState();
+            UpdateStateParams();
         }
 
         public override JobTaskResult SetResultToNextState()

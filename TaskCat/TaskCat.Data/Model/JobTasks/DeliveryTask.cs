@@ -83,7 +83,7 @@
         public override void UpdateTask()
         {
             IsReadytoMoveToNextTask = (To != null && Asset != null) ? true : false;
-            MoveToNextState();
+            UpdateStateParams();
         }
 
         public override JobTaskResult SetResultToNextState()
