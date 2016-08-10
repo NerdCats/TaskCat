@@ -17,6 +17,7 @@
     using Payment;
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
+    using Data.Entity.Identity;
 
     public class OrderRepository : IOrderRepository
     {
@@ -70,14 +71,14 @@
                             var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.BuyerInfo.UserRef);
                             classifiedDeliveryOrderModel.BuyerInfo.PhoneNumber = user.PhoneNumber;
                             classifiedDeliveryOrderModel.BuyerInfo.Address = user.Profile.Address;
-                            classifiedDeliveryOrderModel.BuyerInfo.Name = GetNameFromProfile(classifiedDeliveryOrderModel, user);
+                            classifiedDeliveryOrderModel.BuyerInfo.Name = GetNameFromProfile(user);
                         }
                         if (string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.SellerInfo?.UserRef))
                         {
                             var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.SellerInfo.UserRef);
                             classifiedDeliveryOrderModel.SellerInfo.PhoneNumber = user.PhoneNumber;
                             classifiedDeliveryOrderModel.SellerInfo.Address = user.Profile.Address;
-                            classifiedDeliveryOrderModel.SellerInfo.Name = GetNameFromProfile(classifiedDeliveryOrderModel, user);
+                            classifiedDeliveryOrderModel.SellerInfo.Name = GetNameFromProfile(user);
                         }
                         builder = GetDeliveryJobBuilder(userModel, classifiedDeliveryOrderModel);
                         break;
@@ -95,7 +96,7 @@
             return await ConstructAndRegister(jobShop, builder);
         }
 
-        private string GetNameFromProfile(ClassifiedDeliveryOrder classifiedDeliveryOrderModel, Data.Entity.Identity.User user)
+        private string GetNameFromProfile(User user)
         {
             switch (user.Type)
             {
