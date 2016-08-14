@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Invoice</title>      
+    <style>
+            body {
+                font-family: cursive;
+                margin: 0;
+            }
+            .center-block {
+                display: block;
+                width: 270px;
+            }
+            .gohq {
+                text-align: center;
+                font-size: 11px;
+            }
+            .gohq-div {
+                display: block;
+                margin: 0 auto;
+            }
+            .address {
+                word-wrap: break-word;
+                width: 270px !important;
+                font-size: 11px;
+                text-align: center;
+            }
+            .address-header {
+                text-align: center;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                display: block;
+                margin: 10px auto;
+            }
+            #logo {
+                width: 100px;
+                display: block;
+                margin: 10px auto;
+            }
+            .style-one {
+                border: 0;
+                height: 1px;
+                background: #333;
+                background-image: linear-gradient(to right, #ccc, #333, #ccc);
+            }
+            .tracking-help {
+                font-size: 10px;
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+            }
+            h4{
+                margin-bottom: -0px;
+            }
+            .date {
+                font-size: 11px;
+                display: block;
+                margin: 0 auto;
+                text-align: center;
+            }
+            table {
+                width: 270px;
+                border-collapse: collapse;
+                margin-top: 10px
+            }
+            td, th {
+                font-size: 11px;
+                border: 1px solid #999;
+                padding: 2px;
+                text-align: center;
+            }
+            .signature {
+                display: flex;
+                flex-direction: row;
+            }
+            .authorization {
+                font-size: 11px;
+                margin-top: 20px;
+            }
+            .authorization-div {
+                text-align: center;
+            }
+
+    </style>
+</head>
+<body>
+    @{        
+        var job = ViewBag.model;
+    }
+    <div class="center-block">
+
+        <img src="~/Content/img/logo.png" id="logo">
+        <div class="gohq-div">
+            <div class="gohq">H-28, R-20, Block-K, Banani, Dhaka</div>
+            <div class="gohq">Message us on WhatsApp 01735829687</div>
+        </div>
+
+        <hr class="style-one">
+        <div class="date">
+            <div>Job ID: @job.HRID</div>
+            <div>Shipping Date: 08/08/2016</div>
+            <div>Payment Method: @job.PaymentMethod</div>
+            <div>
+                Delivery Man:
+                @foreach (var x in @job.Assets)
+            { @x.Value.UserName }
+            </div>
+        </div>
+        <hr class="style-one">
+        <div>
+            <h3 class="address-header">Pickup Address</h3>
+            <div class="address">Name: M Plus Electronics</div>
+            <div class="address">Mobile:01922962787</div>
+            <div class="address">@job.Order.From.Address</div>
+        </div>
+        <hr class="style-one">
+        <div>
+            <h3 class="address-header">Shipping Address</h3>
+            <div class="address">Name: Mr. Rezvee</div>
+            <div class="address">Mobile: 01771117031</div>
+            <div class="address">@job.Order.To.Address</div>
+        </div>
+        <hr class="style-one">
+        <div>
+            <table>
+                <thead>
+                <th>Package Name</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Wght</th>
+                <th>Total (BDT)</th>
+                </thead>
+                <tbody>
+                    @foreach (var item in @job.Order.OrderCart.PackageList)
+                    {
+                        <tr>
+                            <td>@item.Item</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price</td>
+                            <td>@item.Weight</td>
+                            <td>@item.Total</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="1"></td>
+                        <td colspan="3">Service Charge(BDT)</td>
+                        <td>@job.Order.OrderCart.ServiceCharge</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td colspan="3">Net Total(BDT)</td>
+                        <td>@job.Order.OrderCart.TotalToPay</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr class="style-one">
+        <div class="signature">
+            <div class="authorization">
+                <p class="authorization-div"><strong>.....................</strong></p>
+                <p class="authorization-div"><strong>Authorized By</strong></p>
+            </div>
+            <div style="width:60px"></div>
+            <div class="authorization">
+                <p class="authorization-div"><strong>.....................</strong></p>
+                <p class="authorization-div"><strong>Recieved By</strong></p>
+            </div>
+        </div>
+        <hr class="style-one">
+        <div>
+            <span class="tracking-help">track this job from <br>www.gofetch.com/#/track/<strong>@job.HRID</strong></span>
+        </div>
+    </div>  
+    
+        @RenderBody()
+      
+</body>
+</html>
