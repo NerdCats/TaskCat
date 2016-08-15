@@ -6,10 +6,10 @@
     using System;
     using Utility;
     using Identity.Response;
-    using System.ComponentModel;
+    using Core;
 
     [BsonIgnoreExtraElements(Inherited = true)]
-    public abstract class JobTask : INotifyPropertyChanged
+    public abstract class JobTask : ObservableObject
     {
         protected string Name;
         public string id { get; protected set; }
@@ -17,8 +17,6 @@
         [JsonIgnore]
         [BsonIgnore]
         protected JobTask Predecessor;
-
-        public event PropertyChangingEventHandler PropertyChanged;
 
         //FIXME: The result type would definitelty not be string of course
         public delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);

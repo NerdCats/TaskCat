@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Domain
+﻿namespace TaskCat.Data.Core
 {
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
