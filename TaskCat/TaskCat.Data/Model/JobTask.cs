@@ -22,9 +22,6 @@
         public delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);
         public event JobTaskCompletedEventHandler JobTaskCompleted;
 
-        public delegate void JobTaskStateUpdatedEventHandler(JobTask sender, JobTaskState updatedState);
-        public event JobTaskStateUpdatedEventHandler JobTaskStateUpdated;
-
         public delegate void AssetUpdatedEventHandler(string AssetRef, AssetModel asset);
         public event AssetUpdatedEventHandler AssetUpdated;
 
@@ -55,12 +52,7 @@
             }
             set
             {
-                if (value != state)
-                {
-                    state = (JobTaskState)value;
-                    if (JobTaskStateUpdated != null)
-                        JobTaskStateUpdated(this, State);
-                }                
+                Set(ref state, value);           
             }
         }
         

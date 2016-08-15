@@ -68,6 +68,7 @@
             job.PaymentMethod = this.paymentMethod.Key;
             job.PaymentStatus = PaymentStatus.Pending;
 
+            job.EnsureJobTaskChangeEventsRegistered();
             job.EnsureTaskAssetEventsAssigned();
             job.EnsureInitialJobState();
 

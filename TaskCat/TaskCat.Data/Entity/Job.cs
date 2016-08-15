@@ -166,6 +166,20 @@
             this.HRID = hrid;
         }
 
+
+        public void EnsureJobTaskChangeEventsRegistered()
+        {
+            if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
+                throw new InvalidOperationException("Job Task initialized in COMPLETED state");
+
+            tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged); 
+        }
+
+        private void JobTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public void EnsureTaskAssetEventsAssigned()
         {
             if (this.Tasks != null && this.Tasks.Count > 0)
@@ -224,7 +238,7 @@
         {
             if (Tasks == null || Tasks.Count == 0)
                 throw new InvalidOperationException("Trying to set default behaviour for moving job state to in progress without the task building");
-            Tasks.First().JobTaskStateUpdated += Job_FirstJobTaskStateUpdated;
+            //Tasks.First().JobTaskStateUpdated += Job_FirstJobTaskStateUpdated;
         }
 
         private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
