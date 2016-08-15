@@ -58,7 +58,7 @@
 
             JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
-            JobPayload.SetupDefaultBehaviourForFirstJobTask();
+            JobPayload.EnsureJobTaskChangeEventsRegistered();
 
             return JobPayload;
         }

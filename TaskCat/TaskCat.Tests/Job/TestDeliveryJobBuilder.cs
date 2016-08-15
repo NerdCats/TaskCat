@@ -419,6 +419,7 @@
             };
 
             builder.Job.Tasks.First().Asset = SampleAssetModel;
+            builder.Job.Tasks.First().State = JobTaskState.IN_PROGRESS;
             builder.Job.Tasks.First().UpdateTask();
 
             Assert.That(builder.Job.State == JobState.IN_PROGRESS);

@@ -10,6 +10,7 @@
     using Model.Identity.Response;
     using System.Linq;
     using Model.Payment;
+    using System.ComponentModel;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity
@@ -175,9 +176,34 @@
             tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged); 
         }
 
-        private void JobTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.ModifiedTime = DateTime.UtcNow;
+            switch(e.PropertyName)
+            {
+                case "State":
+                    SetProperJobState(sender as JobTask);
+                    break;
+            }
+        }
+
+        private void SetProperJobState(JobTask jobTask)
+        {
+            if (jobTask.State >= JobTaskState.IN_PROGRESS
+                && jobTask.State < JobTaskState.COMPLETED
+                && state != JobState.IN_PROGRESS)
+            {
+                state = JobState.IN_PROGRESS;
+                this.InitiationTime = this.InitiationTime?? DateTime.UtcNow;
+            }
+            else if (jobTask.State == JobTaskState.CANCELLED)
+                state = JobState.CANCELLED;
+
+            if (this.tasks.All(x=>x.State == JobTaskState.COMPLETED))
+            {
+                this.CompletionTime = DateTime.UtcNow;
+                this.state = JobState.COMPLETED;
+            }
         }
 
         public void EnsureTaskAssetEventsAssigned()
@@ -190,14 +216,6 @@
                 }
                 IsAssetEventsHooked = true;
             }
-        }
-
-        public void EnsureInitialJobState()
-        {
-            if (Tasks.First().State == JobTaskState.COMPLETED)
-                throw new InvalidOperationException("Job Task initialized in COMPLETED state");
-            if (Tasks.First().State == JobTaskState.IN_PROGRESS)
-                State = JobState.IN_PROGRESS;
         }
 
         public void EnsureAssetModelsPropagated()
@@ -232,26 +250,6 @@
         {
             if (!Assets.ContainsKey(AssetRef))
                 Assets[AssetRef] = asset;
-        }
-
-        public void SetupDefaultBehaviourForFirstJobTask()
-        {
-            if (Tasks == null || Tasks.Count == 0)
-                throw new InvalidOperationException("Trying to set default behaviour for moving job state to in progress without the task building");
-            //Tasks.First().JobTaskStateUpdated += Job_FirstJobTaskStateUpdated;
-        }
-
-        private void Job_FirstJobTaskStateUpdated(JobTask sender, JobTaskState updatedState)
-        {
-            if (updatedState > JobTaskState.PENDING && updatedState <= JobTaskState.COMPLETED && TerminalTask != sender)
-            {
-                this.InitiationTime = DateTime.UtcNow;
-                State = JobState.IN_PROGRESS;
-            }
-            else if (updatedState == JobTaskState.IN_PROGRESS && TerminalTask == sender)
-                State = JobState.IN_PROGRESS;
-            else if (updatedState == JobTaskState.COMPLETED && TerminalTask == sender)
-                State = JobState.COMPLETED;
         }
     }
 }

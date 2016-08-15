@@ -99,8 +99,6 @@ namespace TaskCat.Tests.Job
             var updatedOrder = GetDummyOrder(orderType: OrderTypes.Delivery);
             updatedOrder.Name = orderName;
             updatedOrder.NoteToDeliveryMan = noteToDeliveryMan;
-            // INFO: Although we are assigning a cart here, our job is already in progress of delivery as
-            // we already gave everything to complete the pickup job and start the delivery job
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
@@ -111,7 +109,7 @@ namespace TaskCat.Tests.Job
             Assert.IsNotNull(result);
             Assert.AreEqual(orderName, job.Name);
             Assert.AreEqual(noteToDeliveryMan, newOrder.NoteToDeliveryMan);
-            Assert.IsNull(newOrder.OrderCart);
+            Assert.IsNotNull(newOrder.OrderCart);
             Assert.AreEqual(updatedOrder.RequiredChangeFor, newOrder.RequiredChangeFor);
             Assert.IsNotNull(job.Tasks.First().InitiationTime);
             Assert.IsNotNull(job.Tasks[1].InitiationTime);

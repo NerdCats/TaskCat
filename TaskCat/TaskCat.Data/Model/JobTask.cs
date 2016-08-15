@@ -177,15 +177,16 @@
                 InitiationTime = InitiationTime ?? DateTime.UtcNow;
 
             if (IsReadytoMoveToNextTask)
-                NotifyJobTaskCompleted();       
+                NotifyJobTaskCompleted();
         }
 
         protected virtual void NotifyJobTaskCompleted()
         {
             if (!IsReadytoMoveToNextTask)
                 throw new InvalidOperationException("JobTask is not ready to move to next task, yet COMPLETED STATE ACHIEVED");
-
+       
             this.CompletionTime = DateTime.UtcNow;
+            this.InitiationTime = this.InitiationTime ?? this.CompletionTime;
             State = JobTaskState.COMPLETED;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)

@@ -69,10 +69,8 @@
             job.PaymentStatus = PaymentStatus.Pending;
 
             job.EnsureJobTaskChangeEventsRegistered();
-            job.EnsureTaskAssetEventsAssigned();
-            job.EnsureInitialJobState();
 
-            job.SetupDefaultBehaviourForFirstJobTask();
+            job.EnsureTaskAssetEventsAssigned();
 
             if (order.JobTaskETAPreference?.Count > 0)
                 SetupJobTaskETAs(order);
