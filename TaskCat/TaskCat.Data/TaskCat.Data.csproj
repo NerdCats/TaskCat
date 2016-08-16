@@ -90,6 +90,8 @@
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
+    <Compile Include="Entity\Product.cs" />
+    <Compile Include="Entity\Store.cs" />
     <Compile Include="Lib\Core\ObservableObject.cs" />
     <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
     <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
