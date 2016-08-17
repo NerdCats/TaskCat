@@ -1,8 +1,8 @@
 ﻿namespace TaskCat.Data.Entity.Identity
 {
     using System.Collections.Generic;
-    using TaskCat.Data.Model.Identity.Profile;
-    using TaskCat.Data.Model.Identity.Registration;
+    using Model.Identity.Profile;
+    using Model.Identity.Registration;
 
     public class EnterpriseUser : User
     {
@@ -12,5 +12,7 @@
             this.Roles = new List<string>();
             Roles.Add(RoleNames.ROLE_ENTERPRISE);
         }
+
+        public bool IsVendor { get; set; }
     }
 }

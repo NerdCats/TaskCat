@@ -155,5 +155,10 @@
         /// Gets or sets the date and time of product update
         /// </summary>
         public DateTime ModifiedTime { get; set; }
+
+        /// <summary>
+        /// Picture Url of the product
+        /// </summary>
+        public string PicUrl { get; set; }
     }
 }
