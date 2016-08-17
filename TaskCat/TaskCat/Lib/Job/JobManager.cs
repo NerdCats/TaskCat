@@ -58,7 +58,7 @@
 
             JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
-            JobPayload.EnsureJobTaskChangeEventsRegistered();
+            JobPayload.EnsureJobTaskChangeEventsRegistered(isFetchingJobPayload: true);
 
             return JobPayload;
         }
