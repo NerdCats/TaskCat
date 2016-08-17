@@ -323,6 +323,7 @@
     <Compile Include="Controller\DropPointController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\StorageController.cs" />
+    <Compile Include="Controller\VendorController.cs" />
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
     <Compile Include="Lib\Auth\IAccountContext.cs" />
@@ -421,6 +422,7 @@
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
     <Compile Include="Lib\Utility\FileUtility.cs" />
     <Compile Include="Lib\Utility\HashMaker.cs" />
+    <Compile Include="Lib\Utility\IdentityExtensions.cs" />
     <Compile Include="Lib\Utility\IPagingHelper.cs" />
     <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
     <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
@@ -428,6 +430,7 @@
     <Compile Include="Lib\Utility\SettingsHelper.cs" />
     <Compile Include="Lib\Utility\UrlExtensions.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
+    <Compile Include="Lib\Vendor\IVendorService.cs" />
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
