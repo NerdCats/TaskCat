@@ -168,11 +168,13 @@
         }
 
 
-        public void EnsureJobTaskChangeEventsRegistered()
+        public void EnsureJobTaskChangeEventsRegistered(bool isFetchingJobPayload = false)
         {
-            if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
-                throw new InvalidOperationException("Job Task initialized in COMPLETED state");
-
+            if (!isFetchingJobPayload)
+            {
+                if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
+                    throw new InvalidOperationException("Job Task initialized in COMPLETED state");
+            }
             tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged); 
         }
 
