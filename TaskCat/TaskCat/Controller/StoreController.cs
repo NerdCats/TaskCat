@@ -52,7 +52,7 @@
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
         [HttpPut]
-        public void Put([FromBody]Store store)
+        public async Task<IHttpActionResult> Put([FromBody]Store store)
         {
             var authorizedId = this.User.Identity.GetUserId();
             if (!User.IsAdmin())
@@ -63,13 +63,24 @@
                 store.DisplayOrder = AppConstants.DefaultStoreOrder;
             }
 
-            throw new NotImplementedException();
+            var result = await service.Update(store);
+            return Json(result);
         }
 
-        // DELETE: api/Store/5
-        public void Delete(int id)
+        [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(string id)
         {
-            throw new NotImplementedException();
+            var authorizedId = this.User.Identity.GetUserId();
+            if (!User.IsAdmin())
+            {
+                var jobUserId = (await service.Get(id)).EnterpriseUserId;
+                if (authorizedId != jobUserId)
+                    throw new InvalidOperationException($"User {authorizedId} is not authorized to delete a store for user {jobUserId}");                
+            }
+
+            var result = await service.Delete(id);
+            return Json(result);
         }
     }
 }
