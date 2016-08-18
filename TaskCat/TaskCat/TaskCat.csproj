@@ -431,6 +431,7 @@
     <Compile Include="Lib\Utility\UrlExtensions.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Lib\Vendor\IVendorService.cs" />
+    <Compile Include="Lib\Vendor\VendorService.cs" />
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />

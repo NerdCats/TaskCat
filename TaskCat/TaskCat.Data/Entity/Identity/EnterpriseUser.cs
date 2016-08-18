@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Entity.Identity
 {
+    using System;
     using System.Collections.Generic;
     using Model.Identity.Profile;
     using Model.Identity.Registration;
@@ -14,5 +15,6 @@
         }
 
         public bool IsVendor { get; set; }
+        public DateTime? VendorSubscriptionDate { get; set; }
     }
 }

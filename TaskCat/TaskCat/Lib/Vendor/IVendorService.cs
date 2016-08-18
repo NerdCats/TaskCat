@@ -4,6 +4,6 @@
 
     public interface IVendorService
     {
-        Task<bool> Subscribe(string userId);
+        Task<SubscriptionResult> Subscribe(string userId);
     }
 }
