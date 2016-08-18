@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Data.Entity
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// Represents a store
@@ -10,12 +11,9 @@
         /// <summary>
         /// Gets or sets the store name
         /// </summary>
+        /// 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Store name is not provided")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Web url of the Store
-        /// </summary>
-        public string WebUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the store URL
@@ -30,6 +28,8 @@
         /// <summary>
         /// Gets or sets the enterprise user id associated with it
         /// </summary>
+        /// 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Enterprise User Id not provided")]
         public string EnterpriseUserId { get; set; }
 
         /// <summary>
