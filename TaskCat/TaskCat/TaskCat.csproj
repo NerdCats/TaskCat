@@ -401,7 +401,7 @@
     <Compile Include="Lib\Storage\IBlobService.cs" />
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
-    <Compile Include="Lib\Store\IStoreInterface.cs" />
+    <Compile Include="Lib\Store\IStoreService.cs" />
     <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
     <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />

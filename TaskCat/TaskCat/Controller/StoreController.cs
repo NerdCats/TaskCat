@@ -41,18 +41,28 @@
             if (!User.IsAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
-                    throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {store.EnterpriseUserId}");
+                    throw new InvalidOperationException($"User {authorizedId} is not authorized to create a store for user {store.EnterpriseUserId}");
 
                 store.DisplayOrder = AppConstants.DefaultStoreOrder;
             }
 
             var result = await service.Insert(store);
-            return Content<Store>(HttpStatusCode.Created, store, new JsonMediaTypeFormatter());
+            return Content(HttpStatusCode.Created, store, new JsonMediaTypeFormatter());
         }
 
-        // PUT: api/Store/5
-        public void Put(int id, [FromBody]string value)
+        [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
+        [HttpPut]
+        public void Put([FromBody]Store store)
         {
+            var authorizedId = this.User.Identity.GetUserId();
+            if (!User.IsAdmin())
+            {
+                if (authorizedId != store.EnterpriseUserId)
+                    throw new InvalidOperationException($"User {authorizedId} is not authorized to update a store for user {store.EnterpriseUserId}");
+
+                store.DisplayOrder = AppConstants.DefaultStoreOrder;
+            }
+
             throw new NotImplementedException();
         }
 
