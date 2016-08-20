@@ -12,6 +12,12 @@
     using System.Net;
     using Lib.Constants;
     using System.ComponentModel.DataAnnotations;
+    using System.Net.Http;
+    using Lib.Utility.Odata;
+    using System.Linq;
+    using Model.Pagination;
+    using LinqToQuerystring;
+    using MongoDB.Driver;
 
     public class StoreController : ApiController
     {
@@ -22,10 +28,38 @@
             this.service = service;
         }
 
-        // GET: api/Store
-        public IEnumerable<string> Get()
+        [HttpGet]
+        [Route("api/ProductCategory/odata")]
+        public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            return new string[] { "value1", "value2" };
+            if (pageSize == 0)
+                return BadRequest("Page size cant be 0");
+            if (page < 0)
+                return BadRequest("Page index less than 0 provided");
+
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
+
+            var queryParams = this.Request.GetQueryNameValuePairs();
+            queryParams.VerifyQuery(new List<string>() {
+                    OdataOptionExceptions.InlineCount,
+                    OdataOptionExceptions.Skip,
+                    OdataOptionExceptions.Top
+                });
+
+            var odataQuery = queryParams.GetOdataQuery(new List<string>() {
+                    "pageSize",
+                    "page",
+                    "envelope"
+                });
+
+            IQueryable<Store> productCategories = service.Collection.AsQueryable();
+            var queryResult = productCategories.LinqToQuerystring(queryString: odataQuery)
+                .Skip(page * pageSize)
+                .Take(pageSize);
+
+            if (envelope)
+                return Json(new PageEnvelope<Store>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Json(queryResult);
         }
 
         [HttpGet]
