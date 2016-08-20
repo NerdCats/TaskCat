@@ -106,6 +106,17 @@
         }
         #endregion
 
+        #region Store
+        private IMongoCollection<Store> _stores;
+        public IMongoCollection<Store> Stores
+        {
+            get
+            {
+                return _stores;
+            }
+        }
+        #endregion
+
         public DbContext()
         {
             InitiateDatabase();
@@ -136,6 +147,7 @@
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
             _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
+            _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }

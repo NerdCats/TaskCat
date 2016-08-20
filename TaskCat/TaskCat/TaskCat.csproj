@@ -402,6 +402,7 @@
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
     <Compile Include="Lib\Store\IStoreService.cs" />
+    <Compile Include="Lib\Store\StoreService.cs" />
     <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
     <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />

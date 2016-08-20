@@ -11,5 +11,6 @@
         public const string HRIDCollectionName = "HRIDs";
 
         public const string DropPointCollectionName = "DropPoints";
+        public const string StoreColletionName = "Stores";
     }
 }

@@ -23,6 +23,6 @@
         IMongoCollection<AssetLocation> AssetLocations { get; }
         IMongoCollection<HRIDEntity> HRIDs { get; }
         IMongoCollection<DropPoint> DropPoints { get; }
-
+        IMongoCollection<Store> Stores { get; }
     }
 }
