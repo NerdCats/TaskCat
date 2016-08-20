@@ -51,9 +51,16 @@
             return store;
         }
 
-        public Task<Store> Update(Store obj)
+        public async Task<Store> Update(Store store)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(store.Id)) throw new ArgumentNullException(nameof(store.Id));
+            if (String.IsNullOrWhiteSpace(store.EnterpriseUserId)) throw new ArgumentNullException(nameof(store.EnterpriseUserId));
+            
+
+            var result = await Collection.FindOneAndReplaceAsync(x => x.Id == store.Id && x.EnterpriseUserId == store.EnterpriseUserId, store);
+            if (result == null)
+                throw new EntityUpdateException(typeof(Store), store.Id);
+            return result;
         }
     }
 }
