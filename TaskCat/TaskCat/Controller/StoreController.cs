@@ -11,6 +11,7 @@
     using System.Net.Http.Formatting;
     using System.Net;
     using Lib.Constants;
+    using System.ComponentModel.DataAnnotations;
 
     public class StoreController : ApiController
     {
@@ -28,7 +29,8 @@
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> Get(string id)
+        public async Task<IHttpActionResult> Get(
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]string id)
         {
             var stores = await service.Get(id);
             return Json(stores);
@@ -38,6 +40,7 @@
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]Store store)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
             if (!User.IsAdmin())
             {
@@ -55,6 +58,7 @@
         [HttpPut]
         public async Task<IHttpActionResult> Put([FromBody]Store store)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
             if (!User.IsAdmin())
             {
@@ -70,7 +74,8 @@
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
         [HttpDelete]
-        public async Task<IHttpActionResult> Delete(string id)
+        public async Task<IHttpActionResult> Delete(
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]string id)
         {
             var authorizedId = this.User.Identity.GetUserId();
             if (!User.IsAdmin())
