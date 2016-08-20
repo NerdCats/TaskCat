@@ -47,6 +47,8 @@
 
         public async Task<Store> Insert(Store store)
         {
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            
             await Collection.InsertOneAsync(store);
             return store;
         }
