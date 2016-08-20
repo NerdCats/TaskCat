@@ -27,13 +27,14 @@
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Store/5
-        public string Get(int id)
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(string id)
         {
-            return "value";
+            var stores = await service.Get(id);
+            return Json(stores);
         }
 
-        [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
+        [Authorize(Roles = "Administrator, Enterprise, BackOcffficeAdmin")]
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]Store store)
         {
