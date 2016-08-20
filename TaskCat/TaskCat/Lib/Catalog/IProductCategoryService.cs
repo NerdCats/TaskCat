@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Cataglog
+﻿namespace TaskCat.Lib.Catalog
 {
     using Data.Entity;
     using Domain;

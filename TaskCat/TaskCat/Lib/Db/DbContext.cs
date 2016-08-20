@@ -106,13 +106,22 @@
         }
         #endregion
 
-        #region Store
+        #region Catalog
         private IMongoCollection<Store> _stores;
         public IMongoCollection<Store> Stores
         {
             get
             {
                 return _stores;
+            }
+        }
+
+        private IMongoCollection<ProductCategory> _productCategories;
+        public IMongoCollection<ProductCategory> ProductCategories
+        {
+            get
+            {
+                return _productCategories;
             }
         }
         #endregion
@@ -148,6 +157,7 @@
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
             _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
             _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
+            _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }

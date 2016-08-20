@@ -24,5 +24,6 @@
         IMongoCollection<HRIDEntity> HRIDs { get; }
         IMongoCollection<DropPoint> DropPoints { get; }
         IMongoCollection<Store> Stores { get; }
+        IMongoCollection<ProductCategory> ProductCategories { get; }
     }
 }
