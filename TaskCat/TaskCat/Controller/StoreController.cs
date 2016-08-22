@@ -66,6 +66,7 @@
         public async Task<IHttpActionResult> Get(
             [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]string id)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var store = await service.Get(id);
             return Json(store);
         }
@@ -111,6 +112,7 @@
         public async Task<IHttpActionResult> Delete(
             [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]string id)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
             if (!User.IsAdmin())
             {

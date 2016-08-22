@@ -80,6 +80,7 @@
         [HttpPut]
         public async Task<IHttpActionResult> Put([FromBody]ProductCategory category)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             if (string.IsNullOrWhiteSpace(category.Id))
                 return BadRequest("Product Category Id not provided");
 
