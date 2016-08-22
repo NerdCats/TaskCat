@@ -5,6 +5,7 @@
 
     public interface IRepository<T>
     {
+        IMongoCollection<T> Collection { get; }
         Task<T> Insert(T obj);
         Task<T> Delete(string id);
         Task<T> Get(string id);

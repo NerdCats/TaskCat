@@ -66,8 +66,8 @@
         public async Task<IHttpActionResult> Get(
             [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]string id)
         {
-            var stores = await service.Get(id);
-            return Json(stores);
+            var store = await service.Get(id);
+            return Json(store);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOcffficeAdmin")]

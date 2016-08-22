@@ -16,7 +16,7 @@
     using System.Threading.Tasks;
     using System.Web.Http;
 
-    [Authorize(Roles = "Administrator, BackOcffficeAdmin")]
+    [Authorize(Roles = "Administrator, BackOfficeAdmin")]
     public class ProductCategoryController : ApiController
     {
         private IProductCategoryService service;

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// Represents a product
@@ -11,11 +12,15 @@
         /// <summary>
         /// Gets or sets the name
         /// </summary>
+        /// 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Product name is not provided")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the short description
         /// </summary>
+        /// 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Short description for the product not provided")]
         public string ShortDescription { get; set; }
 
         /// <summary>
@@ -26,6 +31,8 @@
         /// <summary>
         /// Gets or sets the store id
         /// </summary>
+        /// 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Store Id not provided")]
         public string StoreId { get; set; }
 
         /// <summary>
@@ -36,6 +43,7 @@
         /// <summary>
         /// Gets or sets the meta keywords
         /// </summary>
+        /// 
         public List<string> Tags { get; set; }
 
         /// <summary>
@@ -67,26 +75,34 @@
         /// <summary>
         /// Gets or sets the price
         /// </summary>
+        /// 
+        [Range(0.0d, 999999999, ErrorMessage = "Price  must be between 1 and 999999999")]
         public decimal Price { get; set; }
 
         /// <summary>
         /// Gets or sets the old price
         /// </summary>
+        /// 
+        [Range(0.0d, 999999999, ErrorMessage = "Old Price  must be between 1 and 999999999")]
         public decimal OldPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the product special price
         /// </summary>
+        /// 
+        [Range(0.0d, 999999999, ErrorMessage = "Special Price  must be between 1 and 999999999")]
         public decimal? SpecialPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the start date and time of the special price
         /// </summary>
+        /// 
         public DateTime? SpecialPriceStartDateTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the end date and time of the special price
         /// </summary>
+        /// 
         public DateTime? SpecialPriceEndDateTimeUtc { get; set; }
 
         /// <summary>
