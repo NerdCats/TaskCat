@@ -93,6 +93,7 @@
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductCategory.cs" />
     <Compile Include="Entity\Store.cs" />
+    <Compile Include="Entity\VendorProfile.cs" />
     <Compile Include="Lib\Core\ObservableObject.cs" />
     <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
     <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Model\Person\PersonInfo.cs" />
     <Compile Include="Model\ShadowCat\AssetLocationWithDistance.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
+    <Compile Include="Model\Vendor\ProfitSharingMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Attributes\RequiredIfAttribute.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
