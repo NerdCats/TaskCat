@@ -19,6 +19,9 @@
         {
             var user = (await accountManager.FindByIdAsync(userId) as EnterpriseUser);
 
+
+
+
             if (user == null || user.Type!= IdentityTypes.ENTERPRISE)
                 throw new NotSupportedException($"User {userId} is not an enterprise user");
 
