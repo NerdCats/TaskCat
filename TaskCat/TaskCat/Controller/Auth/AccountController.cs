@@ -327,7 +327,7 @@
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             var queryParams = this.Request.GetQueryNameValuePairs();
             queryParams.VerifyQuery(new List<string>() {
@@ -343,10 +343,15 @@
                 });
 
             var users = await accountContext.FindAllAsModel();
-            var queryResult = users.LinqToQuerystring(odataQuery).Skip(page * pageSize).Take(pageSize);
+            var queryTotal = users.LinqToQuerystring(queryString: odataQuery);
+            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<UserModel>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            {
+                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
+                return Json(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+            }
+
             return Json(queryResult);
         }
 
