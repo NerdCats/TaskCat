@@ -1,20 +1,22 @@
 ﻿namespace TaskCat.Data.Model.Vendor
 {
-    public class FlatRateProfitSharingPreference : ProfitSharingPreference
+    using System;
+
+    public class PricePercentageProfitSharingPreference : ProfitSharingPreference
     {
-        public decimal FlatRate { get; set; } = 50;
+        public int Percentage { get; set; }
 
         protected internal override ProfitSharingMethod Method
         {
             get
             {
-                return ProfitSharingMethod.FLAT_RATE;
+                throw new NotImplementedException();
             }
         }
 
         protected internal override decimal Calculate(decimal totalPrice)
         {
-            return FlatRate;
+            return totalPrice * Percentage;
         }
     }
 }
