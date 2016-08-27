@@ -1,6 +1,6 @@
-﻿namespace TaskCat.Data.Model.Vendor
+﻿namespace TaskCat.Data.Model.Vendor.ProfitSharing
 {
-    public class FlatRateProfitSharingPreference : ProfitSharingPreference
+    public class FlatRateStrategy : ProfitSharingStrategy
     {
         public decimal FlatRate { get; set; } = 50;
 

@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Data.Entity
 {
-    using Model.Vendor;
+    using Model.Vendor.ProfitSharing;
 
     public class VendorProfile : DbEntity
     {

@@ -177,10 +177,10 @@
     <Compile Include="Model\Person\PersonInfo.cs" />
     <Compile Include="Model\ShadowCat\AssetLocationWithDistance.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
-    <Compile Include="Model\Vendor\FlatRateProfitSharingPreference.cs" />
-    <Compile Include="Model\Vendor\ProfitSharingPreference.cs" />
-    <Compile Include="Model\Vendor\PricePercentageProfitSharingPreference.cs" />
-    <Compile Include="Model\Vendor\ProfitSharingMethod.cs" />
+    <Compile Include="Model\Vendor\ProfitSharing\FlatRateStrategy.cs" />
+    <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingStrategy.cs" />
+    <Compile Include="Model\Vendor\ProfitSharing\PricePercentageStrategy.cs" />
+    <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Attributes\RequiredIfAttribute.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />

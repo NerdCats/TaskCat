@@ -1,15 +1,15 @@
-﻿namespace TaskCat.Data.Model.Vendor
+﻿namespace TaskCat.Data.Model.Vendor.ProfitSharing
 {
     using MongoDB.Bson.Serialization.Attributes;
 
-    [BsonKnownTypes(typeof(FlatRateProfitSharingPreference))]
-    public abstract class ProfitSharingPreference
+    [BsonKnownTypes(typeof(FlatRateStrategy))]
+    public abstract class ProfitSharingStrategy
     {
         internal abstract protected ProfitSharingMethod Method { get; }
 
         internal protected abstract decimal Calculate(decimal totalPrice);
 
-        public ProfitSharingPreference()
+        public ProfitSharingStrategy()
         {
         }
     }

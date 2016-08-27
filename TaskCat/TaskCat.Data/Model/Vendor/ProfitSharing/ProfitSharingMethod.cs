@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Vendor
+﻿namespace TaskCat.Data.Model.Vendor.ProfitSharing
 {
     public enum ProfitSharingMethod
     {
