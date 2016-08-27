@@ -13,5 +13,6 @@
         public const string DropPointCollectionName = "DropPoints";
         public const string StoreColletionName = "Stores";
         public const string ProductCategoryCollectionName = "ProductCategories";
+        public const string VendorProfileCollectionName = "VendorProfiles";
     }
 }

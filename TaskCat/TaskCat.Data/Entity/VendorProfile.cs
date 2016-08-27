@@ -4,6 +4,7 @@
 
     public class VendorProfile : DbEntity
     {
-        public ProfitSharingMethod Method { get; set; }
+        public ProfitSharingStrategy Strategy { get; set; }
+        public decimal FixedDeliveryCharge { get; set; }
     }
 }

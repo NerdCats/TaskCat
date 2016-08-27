@@ -124,6 +124,15 @@
                 return _productCategories;
             }
         }
+
+        private IMongoCollection<VendorProfile> _vendorProfiles;
+        public IMongoCollection<VendorProfile> VendorProfiles
+        {
+            get
+            {
+                return _vendorProfiles;
+            }
+        }
         #endregion
 
         public DbContext()
@@ -158,6 +167,7 @@
             _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
             _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
             _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
+            _vendorProfiles = Database.GetCollection<VendorProfile>(CollectionNames.VendorProfileCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }

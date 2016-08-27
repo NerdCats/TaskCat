@@ -4,7 +4,6 @@
     using Data.Entity;
     using Data.Entity.Identity;
     using Data.Entity.ShadowCat;
-    using AspNet.Identity.MongoDB;
     using System;
 
     public interface IDbContext : IDisposable
@@ -25,5 +24,6 @@
         IMongoCollection<DropPoint> DropPoints { get; }
         IMongoCollection<Store> Stores { get; }
         IMongoCollection<ProductCategory> ProductCategories { get; }
+        IMongoCollection<VendorProfile> VendorProfiles { get; }
     }
 }
