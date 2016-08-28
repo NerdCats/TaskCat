@@ -152,6 +152,7 @@
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
             IndexFacade.EnsureDropPointIndex(_dropPoints);
+            IndexFacade.EnsureVendorProfileIndex(_vendorProfiles);
         }
 
         private void InitiateCollections()

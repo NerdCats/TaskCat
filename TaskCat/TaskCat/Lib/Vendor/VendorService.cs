@@ -8,6 +8,7 @@
     using MongoDB.Driver;
     using Data.Entity;
     using Db;
+    using Exceptions;
 
     public class VendorService : IVendorService
     {
@@ -37,29 +38,38 @@
             return obj;
         }
 
-        public async Task<SubscriptionResult> Subscribe(string userId, VendorProfile profile)
+        public async Task<SubscriptionResult> Subscribe(VendorProfile profile)
         {
-            var user = (await accountManager.FindByIdAsync(userId) as EnterpriseUser);
+            var user = (await accountManager.FindByIdAsync(profile.UserId) as EnterpriseUser);
+            if (!string.IsNullOrWhiteSpace(user.VendorProfileId))
+                throw new InvalidOperationException($"{user.Id} is already a vendor");
 
-            if (user == null || user.Type!= IdentityTypes.ENTERPRISE)
-                throw new NotSupportedException($"User {userId} is not an enterprise user");
+            if (user == null || user.Type != IdentityTypes.ENTERPRISE)
+                throw new NotSupportedException($"User {profile.UserId} is not an enterprise user");
 
-            if (!user.IsVendor)
+            if (string.IsNullOrWhiteSpace(user.VendorProfileId))
             {
-                user.IsVendor = true;
                 user.VendorSubscriptionDate = DateTime.UtcNow;
                 var result = await accountManager.UpdateAsync(user);
                 var insertionResult = await Insert(profile);
+                user.VendorProfileId = profile.Id;
                 if (result.Succeeded && insertionResult != null)
                     return SubscriptionResult.SUCCESS;
                 else return SubscriptionResult.FAILED;
             }
-            return SubscriptionResult.NOT_MODIFIED; 
+            return SubscriptionResult.NOT_MODIFIED;
         }
 
-        public Task<VendorProfile> Update(VendorProfile obj)
+        public async Task<VendorProfile> Update(VendorProfile profile)
         {
-            throw new NotImplementedException();
+            var user = (await accountManager.FindByIdAsync(profile.UserId) as EnterpriseUser);
+            if (string.IsNullOrWhiteSpace(user.VendorProfileId))
+                throw new InvalidOperationException($"{user.Id} is not a vendor, please subscribe as a vendor first");
+
+            var result = await Collection.FindOneAndReplaceAsync(x => x.UserId == profile.UserId && x.Id == profile.Id, profile);
+            if (result == null)
+                throw new EntityUpdateException(typeof(VendorProfile), result.Id);
+            return result;
         }
     }
 }

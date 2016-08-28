@@ -6,6 +6,6 @@
 
     public interface IVendorService : IRepository<VendorProfile>
     {
-        Task<SubscriptionResult> Subscribe(string userId, VendorProfile profile);
+        Task<SubscriptionResult> Subscribe(VendorProfile profile);
     }
 }

@@ -22,15 +22,18 @@
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
         [Route("Subscribe")]
         [HttpPost]
-        public async Task<IHttpActionResult> Subscribe([FromBody]VendorProfile profile, [FromUri]string userId = null)
+        public async Task<IHttpActionResult> Subscribe([FromBody]VendorProfile profile)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (profile == null) throw new ArgumentNullException("Invalid/Null VendorProfile provided");
 
             var authorizedId = User.Identity.GetUserId();
-            if (!User.IsAdmin() && !string.IsNullOrEmpty(userId) && authorizedId != userId)
-                throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {userId}");
+            if (!User.IsAdmin() && !string.IsNullOrEmpty(profile.UserId) && authorizedId != profile.UserId)
+                throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {profile.UserId}");
 
-            var result = await service.Subscribe(userId, profile);
+            var result = await service.Subscribe(profile);
 
             switch (result)
             {

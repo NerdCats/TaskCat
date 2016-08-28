@@ -5,7 +5,7 @@
     using Newtonsoft.Json.Linq;
     using System;
     using Data.Model.Identity.Registration;
-    using Data.Model.Geocoding;
+
     public class RegistrationModelConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)

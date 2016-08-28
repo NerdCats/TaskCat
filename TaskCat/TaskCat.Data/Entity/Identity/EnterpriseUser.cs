@@ -14,7 +14,7 @@
             Roles.Add(RoleNames.ROLE_ENTERPRISE);
         }
 
-        public bool IsVendor { get; set; }
+        public string VendorProfileId { get; set; }
         public DateTime? VendorSubscriptionDate { get; set; }
     }
 }

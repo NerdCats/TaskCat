@@ -90,5 +90,14 @@
             dropPointCollection.Indexes.CreateOne(Builders<DropPoint>.IndexKeys.Geo2DSphere(x => x.Address.Point), geoIndexOptions);
 
         }
+
+        public static void EnsureVendorProfileIndex(IMongoCollection<VendorProfile> vendorProfileCollection)
+        {
+            var UniqueIndexOptions = new CreateIndexOptions();
+            UniqueIndexOptions.Unique = true;
+
+            vendorProfileCollection.Indexes.CreateOne(Builders<VendorProfile>.IndexKeys.Ascending(x => x.UserId), UniqueIndexOptions);
+            vendorProfileCollection.Indexes.CreateOne(Builders<VendorProfile>.IndexKeys.Descending(x => x.UserId), UniqueIndexOptions);
+        }
     }
 }
