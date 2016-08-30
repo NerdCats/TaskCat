@@ -10,17 +10,19 @@
 
     public class ProductCategoryService : IProductCategoryService
     {
+        private IDbContext dbContext;
+
         public IMongoCollection<ProductCategory> Collection { get; set; }
 
         public ProductCategoryService(IDbContext dbContext)
         {
+            this.dbContext = dbContext;
             this.Collection = dbContext.ProductCategories;
         }
 
         public async Task<ProductCategory> Delete(string id)
         {
             if (String.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
-
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
             if (result == null)
                 throw new EntityDeleteException(typeof(ProductCategory), result.Id);

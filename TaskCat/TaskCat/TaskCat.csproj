@@ -331,7 +331,7 @@
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
     <Compile Include="Lib\Auth\IAccountContext.cs" />
     <Compile Include="Lib\Catalog\IProductCategoryService.cs" />
-    <Compile Include="Lib\Catalog\IProductService.cs" />
+    <Compile Include="Lib\Catalog\ProductService.cs" />
     <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="App\Startup.cs" />

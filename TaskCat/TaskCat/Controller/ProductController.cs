@@ -21,10 +21,10 @@
 
     public class ProductController : ApiController
     {
-        private IProductService productService;
+        private ProductService productService;
         private IStoreService storeService;
 
-        public ProductController(IProductService productService, IStoreService storeService)
+        public ProductController(ProductService productService, IStoreService storeService)
         {
             this.productService = productService;
             this.storeService = storeService;

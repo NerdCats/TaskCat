@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using MongoDB.Driver;
 
-    public class IProductService : IRepository<Product>
+    public class ProductService : IRepository<Product>
     {
         public IMongoCollection<Product> Collection { get;  }
 
