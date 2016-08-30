@@ -22,14 +22,20 @@
 
         public IMongoCollection<VendorProfile> Collection { get; }
 
-        public Task<VendorProfile> Delete(string id)
+        public async Task<VendorProfile> Delete(string id)
         {
-            throw new NotImplementedException();
+            var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+            if (result == null)
+                throw new EntityNotFoundException(typeof(VendorProfile), id);
+            return result;
         }
 
-        public Task<VendorProfile> Get(string id)
+        public async Task<VendorProfile> Get(string id)
         {
-            throw new NotImplementedException();
+            var result = await Collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            if (result == null)
+                throw new EntityNotFoundException(typeof(VendorProfile), id);
+            return result;
         }
 
         public async Task<VendorProfile> Insert(VendorProfile obj)
