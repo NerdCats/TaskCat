@@ -19,20 +19,20 @@
 
         public async Task<Store> Delete(string id)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
             if (result == null)
-                throw new EntityDeleteException(typeof(Store), result.Id);
+                throw new EntityDeleteException(typeof(Store), id);
             return result;
         }
 
         public async Task<Store> Get(string id)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -55,7 +55,7 @@
 
         public async Task<Store> Update(Store store)
         {
-            if (String.IsNullOrWhiteSpace(store.Id)) throw new ArgumentNullException(nameof(store.Id));
+            if (string.IsNullOrWhiteSpace(store.Id)) throw new ArgumentNullException(nameof(store.Id));
             if (String.IsNullOrWhiteSpace(store.EnterpriseUserId)) throw new ArgumentNullException(nameof(store.EnterpriseUserId));
             
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == store.Id && x.EnterpriseUserId == store.EnterpriseUserId, store);

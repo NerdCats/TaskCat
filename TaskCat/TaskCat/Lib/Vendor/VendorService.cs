@@ -74,7 +74,7 @@
 
             var result = await Collection.FindOneAndReplaceAsync(x => x.UserId == profile.UserId && x.Id == profile.Id, profile);
             if (result == null)
-                throw new EntityUpdateException(typeof(VendorProfile), result.Id);
+                throw new EntityUpdateException(typeof(VendorProfile), profile.Id);
             return result;
         }
     }

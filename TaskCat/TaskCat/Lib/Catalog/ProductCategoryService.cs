@@ -25,7 +25,7 @@
             if (String.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
             if (result == null)
-                throw new EntityDeleteException(typeof(ProductCategory), result.Id);
+                throw new EntityDeleteException(typeof(ProductCategory), id);
             return result;
         }
 

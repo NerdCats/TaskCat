@@ -21,7 +21,7 @@
 
         public async Task<DropPoint> Get(string id)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -36,12 +36,12 @@
 
         public async Task<DropPoint> Get(string id, string userId)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
-            if (String.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -49,36 +49,36 @@
             var result = (await Collection.Find(x => x.Id == id && x.UserId == userId).ToListAsync()).FirstOrDefault();
             if (result == null)
             {
-                throw new EntityNotFoundException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, id));
+                throw new EntityNotFoundException($"DropPoint with user id {userId} and id {id} is invalid");
             }
             return result;
         }
 
         public async Task<DropPoint> Delete(string id)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
             if (result == null)
-                throw new EntityDeleteException(typeof(DropPoint), result.Id);
+                throw new EntityDeleteException(typeof(DropPoint), id);
             return result;
         }
 
         public async Task<DropPoint> Delete(string id, string userId)
         {
-            if (String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            if (String.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 throw new ArgumentNullException(nameof(userId));
             }
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id && x.UserId == userId);
             if (result == null)
-                throw new EntityDeleteException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, id));
+                throw new EntityDeleteException($"DropPoint with user id {userId} and id {id} is invalid");
             return result;
         }
 
@@ -90,7 +90,7 @@
 
         public async Task<DropPoint> Update(DropPoint obj)
         {
-            if (String.IsNullOrWhiteSpace(obj.Id))
+            if (string.IsNullOrWhiteSpace(obj.Id))
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
@@ -102,28 +102,28 @@
 
         public async Task<DropPoint> Update(DropPoint obj, string userId)
         {
-            if (String.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            if (String.IsNullOrWhiteSpace(obj.Id))
+            if (string.IsNullOrWhiteSpace(obj.Id))
             {
                 throw new ArgumentNullException(nameof(obj.Id));
             }
 
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id && x.UserId == userId, obj);
             if (result == null)
-                throw new EntityUpdateException(string.Format("DropPoint with user id {0} and id {1} is invalid", userId, obj.Id));
+                throw new EntityUpdateException($"DropPoint with user id {userId} and id {obj.Id} is invalid");
             return result;
         }
 
         public async Task<IEnumerable<DropPoint>> SearchDropPoints(string userId, string query)
         {
-            if (String.IsNullOrWhiteSpace(userId))
+            if (string.IsNullOrWhiteSpace(userId))
                 throw new ArgumentNullException(nameof(userId));
 
-            if (String.IsNullOrWhiteSpace(query))
+            if (string.IsNullOrWhiteSpace(query))
                 throw new ArgumentNullException(nameof(query));
 
             var userIdFilter = Builders<DropPoint>.Filter.Where(x => x.UserId == userId);

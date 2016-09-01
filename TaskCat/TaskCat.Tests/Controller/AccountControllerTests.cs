@@ -7,7 +7,6 @@
     using TaskCat.Lib.Auth;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
-    using System.Net.Http;
     using TaskCat.Lib.Email;
     using System.Net;
     using System.Threading.Tasks;
