@@ -24,6 +24,12 @@
         {
             if (String.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+            var pullFilter = Builders<Product>.Update.PullFilter(x => x.ProductCategories, y => y.Id == id);
+            var productUpdateResult = await dbContext.Products.UpdateManyAsync(x => x.ProductCategories != null, pullFilter);
+
+            // We have to kind of do something here to be hoenst. As we are moving code off Products here, 
+            // we need to make sure this goes well 
+
             if (result == null)
                 throw new EntityDeleteException(typeof(ProductCategory), id);
             return result;
