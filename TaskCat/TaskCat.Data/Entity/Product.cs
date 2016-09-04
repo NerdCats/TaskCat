@@ -176,5 +176,10 @@
         /// Picture Url of the product
         /// </summary>
         public string PicUrl { get; set; }
+
+        /// <summary>
+        /// Categories for a product
+        /// </summary>
+        public List<ProductCategory> Categories { get; set; }
     }
 }

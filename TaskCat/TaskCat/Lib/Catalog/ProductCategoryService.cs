@@ -24,6 +24,10 @@
         {
             if (String.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+
+            var updateFilter = Builders<Product>.Update.PullFilter(p=>p.Categories, f => f.Id == id);
+            var updateResult = await dbContext.Products.UpdateManyAsync(x => true, updateFilter);
+
             if (result == null)
                 throw new EntityDeleteException(typeof(ProductCategory), id);
             return result;
@@ -55,6 +59,12 @@
 
             obj.LastModified = DateTime.UtcNow;
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id , obj);
+
+            var productUpdateFilter = Builders<Product>.Filter.ElemMatch(x => x.Categories, x => x.Id == obj.Id);
+            
+            var productUpdate = Builders<Product>.Update.Set($"{nameof(Product.Categories)}.$", obj);
+            await dbContext.Products.UpdateManyAsync(productUpdateFilter, productUpdate);
+
             if (result == null)
                 throw new EntityUpdateException(typeof(ProductCategory), obj.Id);
             return result;

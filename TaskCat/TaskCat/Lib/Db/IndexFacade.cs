@@ -91,6 +91,15 @@
 
         }
 
+        public static void EnsureProductCategoriesIndex(IMongoCollection<ProductCategory> productCategoryCollection)
+        {
+            var UniqueIndexOptions = new CreateIndexOptions();
+            UniqueIndexOptions.Unique = true;
+
+            productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Ascending(c => c.Name), UniqueIndexOptions);
+            productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Descending(c => c.Name), UniqueIndexOptions);
+        }
+
         public static void EnsureVendorProfileIndex(IMongoCollection<VendorProfile> vendorProfileCollection)
         {
             var UniqueIndexOptions = new CreateIndexOptions();
