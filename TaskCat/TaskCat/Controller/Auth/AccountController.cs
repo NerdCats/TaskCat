@@ -288,7 +288,7 @@
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize = 25;
+            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             if (envelope)
                 return Json(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request));
