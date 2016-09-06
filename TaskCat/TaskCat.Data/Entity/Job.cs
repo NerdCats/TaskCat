@@ -70,8 +70,10 @@
         {
             get
             {
-                if (this.Order.ETA.HasValue && this.State==JobState.IN_PROGRESS)
+                if (this.Order.ETA.HasValue && this.State == JobState.IN_PROGRESS)
                     return DateTime.UtcNow.Subtract(this.Order.ETA.Value).TotalSeconds > 0;
+                else if (this.Order.ETA.HasValue && this.CompletionTime.HasValue)
+                    return CompletionTime > this.Order.ETA;
                 return false;
             }
         }
@@ -175,13 +177,13 @@
                 if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
-            tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged); 
+            tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             this.ModifiedTime = DateTime.UtcNow;
-            switch(e.PropertyName)
+            switch (e.PropertyName)
             {
                 case "State":
                     SetProperJobState(sender as JobTask);
@@ -196,12 +198,12 @@
                 && state != JobState.IN_PROGRESS)
             {
                 state = JobState.IN_PROGRESS;
-                this.InitiationTime = this.InitiationTime?? DateTime.UtcNow;
+                this.InitiationTime = this.InitiationTime ?? DateTime.UtcNow;
             }
             else if (jobTask.State == JobTaskState.CANCELLED)
                 state = JobState.CANCELLED;
 
-            if (this.tasks.All(x=>x.State == JobTaskState.COMPLETED))
+            if (this.tasks.All(x => x.State == JobTaskState.COMPLETED))
             {
                 this.CompletionTime = DateTime.UtcNow;
                 this.state = JobState.COMPLETED;

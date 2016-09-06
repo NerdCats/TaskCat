@@ -25,6 +25,7 @@
             }
 
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+
             if (result == null)
                 throw new EntityDeleteException(typeof(Store), id);
             return result;

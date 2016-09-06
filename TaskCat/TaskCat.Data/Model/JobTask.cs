@@ -130,6 +130,8 @@
             {
                 if (this.ETA.HasValue && this.State == JobTaskState.IN_PROGRESS)
                     return DateTime.UtcNow.Subtract(this.ETA.Value).TotalSeconds > 0;
+                else if (this.ETA.HasValue && this.CompletionTime.HasValue)
+                    return CompletionTime > ETA;
                 return false;
             }
         }
