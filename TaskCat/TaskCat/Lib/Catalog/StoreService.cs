@@ -7,8 +7,9 @@
     using Db;
     using Exceptions;
     using System.Linq;
+    using Domain;
 
-    public class StoreService : IStoreService
+    public class StoreService : IRepository<Store>
     {
         public IMongoCollection<Store> Collection { get; set; }
 

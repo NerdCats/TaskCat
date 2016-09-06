@@ -3,7 +3,6 @@
     using Autofac;
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
-    using System.Configuration;
     using Lib.Asset;
     using Lib.Job;
     using Lib.Db;
@@ -24,6 +23,10 @@
     using Owin;
     using Microsoft.Owin.Security.DataProtection;
     using Lib.DropPoint;
+    using Data.Entity;
+    using Lib.Domain;
+    using Lib.Catalog;
+    using Lib.Vendor;
 
     public class AutofacContainerBuilder
     {
@@ -84,6 +87,15 @@
             builder.RegisterType<DropPointService>().AsImplementedInterfaces<IDropPointService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
+            #region Vendor
+            builder.RegisterType<VendorService>().AsImplementedInterfaces<IVendorService, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region Catalog
+            builder.RegisterType<ProductCategoryService>().AsImplementedInterfaces<IRepository<ProductCategory>, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<ProductService>().AsImplementedInterfaces<IRepository<Product>, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<StoreService>().AsImplementedInterfaces<IRepository<Store>, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
 
             builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
 

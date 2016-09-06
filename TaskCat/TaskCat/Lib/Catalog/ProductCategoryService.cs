@@ -7,8 +7,9 @@
     using Data.Entity;
     using Db;
     using Exceptions;
+    using Domain;
 
-    public class ProductCategoryService : IProductCategoryService
+    public class ProductCategoryService : IRepository<ProductCategory>
     {
         private IDbContext dbContext;
 
