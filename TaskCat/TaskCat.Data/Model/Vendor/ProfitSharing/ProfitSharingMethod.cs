@@ -9,10 +9,6 @@
         /// <summary>
         /// Depicts a scenario where the vendor pays a percentage from the total cost
         /// </summary>
-        PRICE_PERCENTAGE,
-        /// <summary>
-        /// Depicts a scenario where the vendor pays a percentage from the price with a total flat rate
-        /// </summary>
-        PRICE_PERCENTAGE_WITH_FLAT_RATE  
+        PRICE_PERCENTAGE
     }
 }
