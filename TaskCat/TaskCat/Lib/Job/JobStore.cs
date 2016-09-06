@@ -47,13 +47,13 @@
         internal async Task<QueryResult<Job>> FindJobs(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo, SortDirection sortByCreateTimeDirection)
         {
             var FindContext = fromDateTime == null ?
-                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo) :
-                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State <= jobStateToFetchUpTo && x.CreateTime >= fromDateTime);
+                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo) :
+                _context.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo && x.CreateTime >= fromDateTime);
             var orderContext = sortByCreateTimeDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
             return new QueryResult<Job>()
             {
-                Result = await orderContext.Skip(start).Limit(limit).ToListAsync(),
-                Total = await orderContext.CountAsync()
+                Total = await orderContext.CountAsync(),
+                Result = await orderContext.Skip(start).Limit(limit).ToListAsync()                
             };
         }
 
