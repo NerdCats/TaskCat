@@ -464,7 +464,6 @@
         /// return a FileUploadModel 
         /// </returns>
         [HttpPost]
-        [AllowAnonymous]
         [Authorize(Roles = "User, Asset")]
         [Route("avatar")]
         public async Task<IHttpActionResult> UploadAvatar()

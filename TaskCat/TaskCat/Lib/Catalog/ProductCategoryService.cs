@@ -24,11 +24,9 @@
         {
             if (String.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
-            var pullFilter = Builders<Product>.Update.PullFilter(x => x.ProductCategories, y => y.Id == id);
-            var productUpdateResult = await dbContext.Products.UpdateManyAsync(x => x.ProductCategories != null, pullFilter);
 
-            // We have to kind of do something here to be hoenst. As we are moving code off Products here, 
-            // we need to make sure this goes well 
+            var updateFilter = Builders<Product>.Update.PullFilter(p=>p.Categories, f => f.Id == id);
+            var updateResult = await dbContext.Products.UpdateManyAsync(x => true, updateFilter);
 
             if (result == null)
                 throw new EntityDeleteException(typeof(ProductCategory), id);
@@ -61,6 +59,12 @@
 
             obj.LastModified = DateTime.UtcNow;
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id , obj);
+
+            var productUpdateFilter = Builders<Product>.Filter.ElemMatch(x => x.Categories, x => x.Id == obj.Id);
+            
+            var productUpdate = Builders<Product>.Update.Set($"{nameof(Product.Categories)}.$", obj);
+            await dbContext.Products.UpdateManyAsync(productUpdateFilter, productUpdate);
+
             if (result == null)
                 throw new EntityUpdateException(typeof(ProductCategory), obj.Id);
             return result;

@@ -13,9 +13,11 @@
     public class VendorService : IVendorService
     {
         private AccountManager accountManager;
+        private IDbContext dbContext;
 
         public VendorService(AccountManager accountManager, IDbContext context)
         {
+            this.dbContext = context;
             this.accountManager = accountManager;
             this.Collection = context.VendorProfiles;
         }
@@ -25,6 +27,11 @@
         public async Task<VendorProfile> Delete(string id)
         {
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
+
+            var updateAccountFilter = Builders<User>.Filter.Where(x => x.Type == IdentityTypes.ENTERPRISE && (x as EnterpriseUser).VendorProfileId == id);
+            var updateAccount = Builders<User>.Update.Set(nameof(EnterpriseUser.VendorProfileId), default(string));
+            await dbContext.Users.UpdateOneAsync(updateAccountFilter, updateAccount);
+
             if (result == null)
                 throw new EntityNotFoundException(typeof(VendorProfile), id);
             return result;

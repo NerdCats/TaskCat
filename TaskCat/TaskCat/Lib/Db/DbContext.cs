@@ -161,6 +161,7 @@
             IndexFacade.EnsureHRIDIndex(_hrids);
             IndexFacade.EnsureDropPointIndex(_dropPoints);
             IndexFacade.EnsureVendorProfileIndex(_vendorProfiles);
+            IndexFacade.EnsureProductCategoriesIndex(_productCategories);
         }
 
         private void InitiateCollections()

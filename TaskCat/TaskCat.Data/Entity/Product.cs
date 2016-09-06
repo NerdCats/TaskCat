@@ -178,8 +178,8 @@
         public string PicUrl { get; set; }
 
         /// <summary>
-        /// Product Categories
+        /// Categories for a product
         /// </summary>
-        public List<ProductCategory> ProductCategories { get; set; }
+        public List<ProductCategory> Categories { get; set; }
     }
 }
