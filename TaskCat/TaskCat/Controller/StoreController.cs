@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Web.Http;
     using Data.Entity;
-    using Lib.Catalog;
     using Lib.Utility;
     using System;
     using System.Threading.Tasks;
@@ -18,12 +17,13 @@
     using Model.Pagination;
     using LinqToQuerystring;
     using MongoDB.Driver;
+    using Lib.Domain;
 
     public class StoreController : ApiController
     {
-        private IStoreService service;
+        private IRepository<Store> service;
 
-        public StoreController(IStoreService service)
+        public StoreController(IRepository<Store> service)
         {
             this.service = service;
         }

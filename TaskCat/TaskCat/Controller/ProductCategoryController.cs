@@ -3,6 +3,7 @@
     using Data.Entity;
     using Lib.Catalog;
     using Lib.Constants;
+    using Lib.Domain;
     using Lib.Utility.Odata;
     using LinqToQuerystring;
     using Model.Pagination;
@@ -19,9 +20,9 @@
     [Authorize(Roles = "Administrator, BackOfficeAdmin")]
     public class ProductCategoryController : ApiController
     {
-        private IProductCategoryService service;
+        private IRepository<ProductCategory> service;
 
-        public ProductCategoryController(IProductCategoryService service)
+        public ProductCategoryController(IRepository<ProductCategory> service)
         {
             this.service = service;
         }

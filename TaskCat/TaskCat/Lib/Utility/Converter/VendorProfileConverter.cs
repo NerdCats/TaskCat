@@ -32,9 +32,6 @@
                 case ProfitSharingMethod.PRICE_PERCENTAGE:
                     strategy = new PricePercentageStrategy();
                     break;
-                case ProfitSharingMethod.PRICE_PERCENTAGE_WITH_FLAT_RATE:
-                    strategy = new PricePercentageStrategy();
-                    break;
                 default:
                     throw new NotImplementedException($"{profitSharingMethod.ToString()} is invalid/not supported");
             }

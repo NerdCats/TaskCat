@@ -37,7 +37,7 @@
                     orderModel = new ClassifiedDeliveryOrder();
                     break;
                 default:
-                    throw new NotSupportedException(string.Concat("Order Entry type invalid/no supported - ", orderType));
+                    throw new NotSupportedException(string.Concat("Order Entry type invalid/not supported - ", orderType));
             }
 
             serializer.Populate(obj.CreateReader(), orderModel);

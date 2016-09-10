@@ -3,6 +3,7 @@
     using Data.Entity;
     using Lib.Catalog;
     using Lib.Constants;
+    using Lib.Domain;
     using Lib.Utility;
     using Lib.Utility.Odata;
     using LinqToQuerystring;
@@ -22,9 +23,9 @@
     public class ProductController : ApiController
     {
         private ProductService productService;
-        private IStoreService storeService;
+        private IRepository<Store> storeService;
 
-        public ProductController(ProductService productService, IStoreService storeService)
+        public ProductController(ProductService productService, IRepository<Store> storeService)
         {
             this.productService = productService;
             this.storeService = storeService;
