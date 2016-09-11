@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Entity
 {
+    using Model.Vendor;
     using Model.Vendor.ProfitSharing;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,6 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "UserId not provided")]
         public string UserId { get; set; }
 
-        public List<string> OrderTypes;
+        public List<VendorOrderPreference> AllowedOrderTypes;
     }
 }
