@@ -44,13 +44,13 @@
         public string Type { get; set; }
 
         
-        private string _payloadType = "default";
+        private string _variant = "default";
         /// <summary>
         /// This type would be used for multiple models for single order purpose
         /// All the requests now support json, at some point, we might have to support
         /// Form submits
         /// </summary>
-        public string PayloadType { get { return _payloadType; } set { _payloadType = value; } }
+        public string Variant { get { return _variant; } set { _variant = value; } }
 
         
         private string _userId;

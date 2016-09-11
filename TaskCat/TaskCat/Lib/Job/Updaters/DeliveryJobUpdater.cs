@@ -41,9 +41,9 @@
                 throw new NotSupportedException("Job and updated order type mismatch");
             }
 
-            if (!string.Equals(job.Order.PayloadType, order.PayloadType))
+            if (!string.Equals(job.Order.Variant, order.Variant))
             {
-                throw new NotSupportedException("Order payload type changed, order payload type is not updateable");
+                throw new NotSupportedException("Order variant type changed, order variant type is not updateable");
             }
 
             // Checking whether the new orders are okay or not

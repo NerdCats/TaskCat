@@ -3,6 +3,6 @@
     public class VendorOrderPreference
     {
         public string OrderType { get; set; }
-        public string PayloadType { get; set; } = "default";
+        public string Variant { get; set; } = "default";
     }
 }

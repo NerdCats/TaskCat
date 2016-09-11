@@ -49,7 +49,7 @@
             Assert.AreEqual(ToLocation, order.To);
             Assert.AreEqual(null, order.Name);
             Assert.AreEqual(PackageDescription, order.Description);
-            Assert.AreEqual("default", order.PayloadType);
+            Assert.AreEqual("default", order.Variant);
             Assert.AreEqual(JobTaskTypes.DELIVERY, order.Type);
             Assert.Null(order.ETA);
             Assert.Null(order.ETAMinutes);
@@ -93,7 +93,7 @@
             Assert.AreEqual(FromLocation, order.From);
             Assert.AreEqual(ToLocation, order.To);
             Assert.AreEqual(orderName, order.Name);
-            Assert.AreEqual("default", order.PayloadType);
+            Assert.AreEqual("default", order.Variant);
             Assert.AreEqual(JobTaskTypes.DELIVERY, order.Type);
             Assert.Null(order.ETA);
             Assert.Null(order.ETAMinutes);

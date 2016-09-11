@@ -52,7 +52,7 @@
             job.Tasks.Add(deliveryTask);
             deliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
-            if (order.Type == OrderTypes.ClassifiedDelivery)
+            if (order.Type == OrderTypes.ClassifiedDelivery && order.Variant == DeliveryOrderVariants.Default)
             {
                 SecureDeliveryTask secureDeliveryTask = new SecureDeliveryTask(order.To, order.From);
                 secureDeliveryTask.SetPredecessor(deliveryTask);
@@ -61,7 +61,9 @@
 
                 job.TerminalTask = secureDeliveryTask;
             }
-            else if (order.Type == OrderTypes.Delivery)
+            else if (
+                (order.Type == OrderTypes.ClassifiedDelivery && order.Variant == DeliveryOrderVariants.EnterpriseDelivery)
+                || order.Type == OrderTypes.Delivery)
             {
                 job.TerminalTask = deliveryTask;
             }

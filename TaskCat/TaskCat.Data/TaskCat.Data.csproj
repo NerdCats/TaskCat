@@ -165,8 +165,9 @@
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\Operation\UpdateResult.cs" />
     <Compile Include="Model\OrderModel.cs" />
-    <Compile Include="Model\Order\Delivery\ClassifiedDeliveryOrder.cs" />
+    <Compile Include="Model\Order\Delivery\ClassifiedDelivery.cs" />
     <Compile Include="Model\Order\Delivery\DeliveryOrder.cs" />
+    <Compile Include="Model\Order\Delivery\DeliveryOrderVariants.cs" />
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
     <Compile Include="Model\Order\OrderDetails.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />
