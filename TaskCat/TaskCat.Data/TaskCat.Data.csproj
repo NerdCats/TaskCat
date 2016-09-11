@@ -165,8 +165,8 @@
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\Operation\UpdateResult.cs" />
     <Compile Include="Model\OrderModel.cs" />
-    <Compile Include="Model\Order\ClassifiedDeliveryOrder.cs" />
-    <Compile Include="Model\Order\DeliveryOrder.cs" />
+    <Compile Include="Model\Order\Delivery\ClassifiedDeliveryOrder.cs" />
+    <Compile Include="Model\Order\Delivery\DeliveryOrder.cs" />
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
     <Compile Include="Model\Order\OrderDetails.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />
@@ -181,6 +181,7 @@
     <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingStrategy.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\PricePercentageStrategy.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingMethod.cs" />
+    <Compile Include="Model\Vendor\VendorOrderPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\Attributes\RequiredIfAttribute.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />

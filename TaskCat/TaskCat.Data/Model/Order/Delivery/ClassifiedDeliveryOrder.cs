@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Model.Order
 {
+    using Delivery;
     using Person;
     using System.ComponentModel.DataAnnotations;
 

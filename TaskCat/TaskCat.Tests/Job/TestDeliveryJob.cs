@@ -1,6 +1,4 @@
-﻿using TaskCat.Data.Model.Identity;
-
-namespace TaskCat.Tests.Job
+﻿namespace TaskCat.Tests.Job
 {
     using Moq;
     using NUnit.Framework;
@@ -25,6 +23,8 @@ namespace TaskCat.Tests.Job
     using Data.Model.Inventory;
     using System.Collections.Generic;
     using System;
+    using Data.Model.Order.Delivery;
+    using TaskCat.Data.Model.Identity;
 
     [TestFixture]
     public class TestDeliveryJob

@@ -5,6 +5,7 @@
     using Newtonsoft.Json.Linq;
     using System;
     using Data.Model;
+    using Data.Model.Order.Delivery;
 
     internal class OrderModelConverter : JsonConverter
     {

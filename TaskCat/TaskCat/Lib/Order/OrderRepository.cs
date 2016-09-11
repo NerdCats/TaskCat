@@ -18,6 +18,7 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
+    using Data.Model.Order.Delivery;
 
     public class OrderRepository : IOrderRepository
     {

@@ -1,13 +1,13 @@
 ﻿namespace TaskCat.Tests.Order
 {
     using NUnit.Framework;
-    using Data.Model.Order;
     using Data.Model.GeoJson;
     using Data.Lib.Constants;
     using System.Linq;
     using System.Collections.Generic;
     using Data.Model.Geocoding;
     using Data.Model.Inventory;
+    using Data.Model.Order.Delivery;
 
     [TestFixture(TestOf = typeof(DeliveryOrder))]
     public class DeliveryOrderTests

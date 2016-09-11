@@ -6,6 +6,7 @@
     using Data.Model.Order;
     using Data.Model.Inventory;
     using System.Collections.Generic;
+    using Data.Model.Order.Delivery;
 
     public class DeliveryOrderProcessor : IOrderProcessor
     {

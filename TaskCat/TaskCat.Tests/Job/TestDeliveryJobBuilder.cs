@@ -14,10 +14,11 @@
     using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
     using System.Collections.Generic;
-    using TaskCat.Data.Model.JobTasks.Preference;
+    using Data.Model.JobTasks.Preference;
     using System;
     using Data.Lib.Constants;
     using System.ComponentModel.DataAnnotations;
+    using Data.Model.Order.Delivery;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJobBuilder

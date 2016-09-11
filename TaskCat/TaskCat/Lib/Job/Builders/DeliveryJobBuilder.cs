@@ -10,6 +10,7 @@
     using Data.Model.Payment;
     using System;
     using System.Linq;
+    using Data.Model.Order.Delivery;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

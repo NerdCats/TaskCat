@@ -3,6 +3,7 @@
     using Data.Model.Geocoding;
     using Data.Model.Inventory;
     using Data.Model.Order;
+    using Data.Model.Order.Delivery;
     using NUnit.Framework;
     using System.Collections.Generic;
     using TaskCat.Lib.Order;

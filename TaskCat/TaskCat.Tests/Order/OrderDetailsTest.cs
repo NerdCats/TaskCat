@@ -1,10 +1,10 @@
 ﻿namespace TaskCat.Tests.Order
 {
-    using Data.Model.Order;
     using Data.Model.Inventory;
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
+    using Data.Model.Order.Delivery;
 
     [TestFixture(TestOf = typeof(OrderDetails))]
     public class OrderDetailsTest

@@ -4,9 +4,9 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Geocoding;
-    using Order;
     using JobTasks.Preference;
     using System.Collections.Generic;
+    using Order.Delivery;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
