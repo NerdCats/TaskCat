@@ -14,6 +14,14 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "UserId not provided")]
         public string UserId { get; set; }
 
+        public bool IsAllowedAllOrderTypes
+        {
+            get
+            {
+                return AllowedOrderTypes == null
+                    || AllowedOrderTypes?.Count == 0;
+            }
+        }
         public List<VendorOrderPreference> AllowedOrderTypes;
     }
 }
