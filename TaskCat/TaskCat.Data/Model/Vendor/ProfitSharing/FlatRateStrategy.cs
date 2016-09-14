@@ -12,9 +12,13 @@
             }
         }
 
-        protected internal override decimal Calculate(decimal totalPrice)
+        protected internal override ProfitShareResult Calculate(decimal totalPrice)
         {
-            return FlatRate;
+            return new ProfitShareResult()
+            {
+                Profit = FlatRate,
+                VendorShare = totalPrice - FlatRate
+            };
         }
     }
 }

@@ -7,6 +7,6 @@
     {
         internal abstract protected ProfitSharingMethod Method { get; }
 
-        internal protected abstract decimal Calculate(decimal totalPrice);
+        internal protected abstract ProfitShareResult Calculate(decimal totalPrice);
     }
 }

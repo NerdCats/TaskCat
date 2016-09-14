@@ -178,6 +178,7 @@
     <Compile Include="Model\ShadowCat\AssetLocationWithDistance.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\FlatRateStrategy.cs" />
+    <Compile Include="Model\Vendor\ProfitSharing\ProfitShareResult.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingStrategy.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\PricePercentageStrategy.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\ProfitSharingMethod.cs" />

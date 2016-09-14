@@ -24,9 +24,14 @@
             }
         }
 
-        protected internal override decimal Calculate(decimal totalPrice)
+        protected internal override ProfitShareResult Calculate(decimal totalPrice)
         {
-            return totalPrice * (Percentage / 100);
+            var profit = totalPrice * (Percentage / 100);
+            return new ProfitShareResult()
+            {
+                Profit = profit,
+                VendorShare = totalPrice - profit
+            };
         }
     }
 }
