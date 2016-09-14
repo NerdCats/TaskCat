@@ -4,6 +4,7 @@ pull_requests:
 branches:
   only:
   - Release
+  - master
 configuration: Release
 clone_depth: 10
 assembly_info:
