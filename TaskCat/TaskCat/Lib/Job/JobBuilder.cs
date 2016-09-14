@@ -4,6 +4,7 @@
     using Data.Entity;
     using Data.Model.Identity.Response;
     using HRID;
+    using System;
 
     public abstract class JobBuilder
     {
@@ -20,6 +21,9 @@
 
         public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : this(order, userModel, hridService)
         {
+            if (adminUserModel == null)
+                throw new ArgumentNullException(nameof(adminUserModel));
+
             job.JobServedBy = adminUserModel;
         }
     }
