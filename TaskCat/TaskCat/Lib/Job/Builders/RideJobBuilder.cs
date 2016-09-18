@@ -14,12 +14,12 @@
     public class RideJobBuilder : JobBuilder
     {
         private RideOrder _order;
-        public RideJobBuilder(RideOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel, hridService, new FlatRateStrategy())
+        public RideJobBuilder(RideOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel, hridService)
         {
             this._order = order;
         }
 
-        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService, new FlatRateStrategy())
+        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService)
         {
             this._order = order;
         }
