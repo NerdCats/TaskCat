@@ -10,6 +10,7 @@
     using Data.Model.Payment;
     using System;
     using System.Linq;
+    using Data.Model.Vendor.ProfitSharing;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -17,14 +18,17 @@
     {
         private IPaymentMethod paymentMethod;
         private DeliveryOrder order;
+        private ProfitSharingStrategy profitSharingStrategy;
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel, hridService)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod, ProfitSharingStrategy profitSharingStrategy = null) 
+            : base(order, userModel, hridService, profitSharingStrategy)
         {
             this.order = order;
             this.paymentMethod = paymentMethod;
         }
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, IPaymentMethod paymentMethod) : base(order, userModel, adminUserModel, hridService)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, IPaymentMethod paymentMethod, ProfitSharingStrategy profitSharingStrategy = null) 
+            : base(order, userModel, adminUserModel, hridService, profitSharingStrategy)
         {
             this.order = order;
             this.paymentMethod = paymentMethod;

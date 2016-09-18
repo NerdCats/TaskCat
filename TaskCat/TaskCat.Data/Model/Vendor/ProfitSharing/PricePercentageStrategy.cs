@@ -16,7 +16,7 @@
             }
         }
 
-        protected internal override ProfitSharingMethod Method
+        public ProfitSharingMethod Method
         {
             get
             {
@@ -24,7 +24,7 @@
             }
         }
 
-        protected internal override ProfitShareResult Calculate(decimal totalPrice)
+        public override ProfitShareResult Calculate(decimal totalPrice)
         {
             var profit = totalPrice * (Percentage / 100);
             return new ProfitShareResult()

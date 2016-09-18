@@ -18,6 +18,7 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
+    using Data.Model.Vendor.ProfitSharing;
 
     public class OrderRepository : IOrderRepository
     {
@@ -111,6 +112,7 @@
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
 
             }
+
             return await ConstructAndRegister(jobShop, builder);
         }
 
@@ -135,9 +137,12 @@
                       serviceChargeCalculationService);
             var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
             orderProcessor.ProcessOrder(deliveryOrderModel);
+
+            // Resolve appropriate profit sharing strategy here
+
             builder = adminUserModel == null ?
-                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod)
-                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod);
+                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod, new FlatRateStrategy())
+                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod, new FlatRateStrategy());
             return builder;
         }
 

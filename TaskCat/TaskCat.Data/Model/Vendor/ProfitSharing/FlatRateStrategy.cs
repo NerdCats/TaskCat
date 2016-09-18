@@ -4,7 +4,7 @@
     {
         public decimal FlatRate { get; set; } = 50;
 
-        protected internal override ProfitSharingMethod Method
+        public ProfitSharingMethod Method
         {
             get
             {
@@ -12,7 +12,7 @@
             }
         }
 
-        protected internal override ProfitShareResult Calculate(decimal totalPrice)
+        public override ProfitShareResult Calculate(decimal totalPrice)
         {
             return new ProfitShareResult()
             {

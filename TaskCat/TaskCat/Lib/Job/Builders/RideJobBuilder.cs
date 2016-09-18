@@ -8,17 +8,18 @@
     using HRID;
     using System;
     using Data.Entity;
+    using Data.Model.Vendor.ProfitSharing;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class RideJobBuilder : JobBuilder
     {
         private RideOrder _order;
-        public RideJobBuilder(RideOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel, hridService)
+        public RideJobBuilder(RideOrder order, UserModel userModel, IHRIDService hridService) : base(order, userModel, hridService, new FlatRateStrategy())
         {
             this._order = order;
         }
 
-        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService)
+        public RideJobBuilder(RideOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService) : base(order, userModel, adminUserModel, hridService, new FlatRateStrategy())
         {
             this._order = order;
         }
