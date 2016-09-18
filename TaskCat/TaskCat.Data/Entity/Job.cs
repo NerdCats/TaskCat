@@ -131,7 +131,7 @@
             }
         }
 
-        public VendorProfile VendorProfile { get; set; }
+        public Vendor Vendor { get; set; }
         public ProfitShareResult ProfitShareResult { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)

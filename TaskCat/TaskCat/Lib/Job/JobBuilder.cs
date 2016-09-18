@@ -14,16 +14,16 @@
 
         public abstract void BuildJob();
         
-        public JobBuilder(OrderModel order, UserModel userModel, IHRIDService hridService, VendorProfile vendorProfile = null)
+        public JobBuilder(OrderModel order, UserModel userModel, IHRIDService hridService, Vendor vendor = null)
         {
             job = new Job(order, hridService.NextId("Job"));
             job.User = userModel;
-            job.VendorProfile = vendorProfile;
-            job.ProfitShareResult = vendorProfile?.Strategy?.Calculate(order.OrderCart.TotalToPay.Value);
+            job.Vendor = vendor;
+            job.ProfitShareResult = vendor?.Strategy?.Calculate(order.OrderCart.TotalToPay.Value);
         }
 
-        public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, VendorProfile vendorProfile = null) 
-            : this(order, userModel, hridService, vendorProfile)
+        public JobBuilder(OrderModel order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, Vendor vendor = null) 
+            : this(order, userModel, hridService, vendor)
         {
             if (adminUserModel == null)
                 throw new ArgumentNullException(nameof(adminUserModel));

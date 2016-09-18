@@ -4,8 +4,8 @@
     using Domain;
     using System.Threading.Tasks;
 
-    public interface IVendorService : IRepository<VendorProfile>
+    public interface IVendorService : IRepository<Vendor>
     {
-        Task<SubscriptionResult> Subscribe(VendorProfile profile);
+        Task<SubscriptionResult> Subscribe(Vendor vendor);
     }
 }

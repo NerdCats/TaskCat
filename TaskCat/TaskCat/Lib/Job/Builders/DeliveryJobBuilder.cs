@@ -21,15 +21,15 @@
         private DeliveryOrder order;
         private ProfitSharingStrategy profitSharingStrategy;
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod, VendorProfile vendorProfile = null) 
-            : base(order, userModel, hridService, vendorProfile)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, IHRIDService hridService, IPaymentMethod paymentMethod, Vendor vendor = null) 
+            : base(order, userModel, hridService, vendor)
         {
             this.order = order;
             this.paymentMethod = paymentMethod;
         }
 
-        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, IPaymentMethod paymentMethod, VendorProfile vendorProfile = null) 
-            : base(order, userModel, adminUserModel, hridService, vendorProfile)
+        public DeliveryJobBuilder(DeliveryOrder order, UserModel userModel, UserModel adminUserModel, IHRIDService hridService, IPaymentMethod paymentMethod, Vendor vendor = null) 
+            : base(order, userModel, adminUserModel, hridService, vendor)
         {
             this.order = order;
             this.paymentMethod = paymentMethod;

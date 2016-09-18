@@ -100,13 +100,13 @@
             productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Descending(c => c.Name), UniqueIndexOptions);
         }
 
-        public static void EnsureVendorProfileIndex(IMongoCollection<VendorProfile> vendorProfileCollection)
+        public static void EnsureVendorIndex(IMongoCollection<Vendor> vendorProfileCollection)
         {
             var UniqueIndexOptions = new CreateIndexOptions();
             UniqueIndexOptions.Unique = true;
 
-            vendorProfileCollection.Indexes.CreateOne(Builders<VendorProfile>.IndexKeys.Ascending(x => x.UserId), UniqueIndexOptions);
-            vendorProfileCollection.Indexes.CreateOne(Builders<VendorProfile>.IndexKeys.Descending(x => x.UserId), UniqueIndexOptions);
+            vendorProfileCollection.Indexes.CreateOne(Builders<Vendor>.IndexKeys.Ascending(x => x.UserId), UniqueIndexOptions);
+            vendorProfileCollection.Indexes.CreateOne(Builders<Vendor>.IndexKeys.Descending(x => x.UserId), UniqueIndexOptions);
         }
     }
 }

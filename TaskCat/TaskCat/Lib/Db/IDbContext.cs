@@ -24,7 +24,7 @@
         IMongoCollection<DropPoint> DropPoints { get; }
         IMongoCollection<Store> Stores { get; }
         IMongoCollection<ProductCategory> ProductCategories { get; }
-        IMongoCollection<VendorProfile> VendorProfiles { get; }
+        IMongoCollection<Vendor> Vendors { get; }
         IMongoCollection<Product> Products { get; }
     }
 }

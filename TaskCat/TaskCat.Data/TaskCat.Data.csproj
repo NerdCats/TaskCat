@@ -93,7 +93,7 @@
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductCategory.cs" />
     <Compile Include="Entity\Store.cs" />
-    <Compile Include="Entity\VendorProfile.cs" />
+    <Compile Include="Entity\Vendor.cs" />
     <Compile Include="Lib\Core\ObservableObject.cs" />
     <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
     <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
