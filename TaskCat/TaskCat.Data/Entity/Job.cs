@@ -131,7 +131,7 @@
             }
         }
 
-        public ProfitSharingStrategy ProfitSharingStrategy { get; set; }
+        public VendorProfile VendorProfile { get; set; }
         public ProfitShareResult ProfitShareResult { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)

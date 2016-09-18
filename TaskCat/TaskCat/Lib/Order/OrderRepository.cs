@@ -18,7 +18,6 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
-    using Data.Model.Vendor.ProfitSharing;
 
     public class OrderRepository : IOrderRepository
     {
@@ -141,8 +140,8 @@
             // Resolve appropriate profit sharing strategy here
 
             builder = adminUserModel == null ?
-                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod, new FlatRateStrategy())
-                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod, new FlatRateStrategy());
+                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod)
+                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod);
             return builder;
         }
 
