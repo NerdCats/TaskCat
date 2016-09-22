@@ -51,31 +51,31 @@
                     "envelope"
                 });
 
-            IQueryable<VendorProfile> profiles = service.Collection.AsQueryable();
+            IQueryable<Vendor> profiles = service.Collection.AsQueryable();
             var queryResult = profiles.LinqToQuerystring(queryString: odataQuery)
                 .Skip(page * pageSize)
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<VendorProfile>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+                return Json(new PageEnvelope<Vendor>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
             return Json(queryResult);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
         [Route("Subscribe")]
         [HttpPost]
-        public async Task<IHttpActionResult> Subscribe([FromBody]VendorProfile profile)
+        public async Task<IHttpActionResult> Subscribe([FromBody]Vendor vendor)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (profile == null) throw new ArgumentNullException("Invalid/Null VendorProfile provided");
+            if (vendor == null) throw new ArgumentNullException("Invalid/Null Vendor provided");
 
             var authorizedId = User.Identity.GetUserId();
-            if (!User.IsAdmin() && !string.IsNullOrEmpty(profile.UserId) && authorizedId != profile.UserId)
-                throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {profile.UserId}");
+            if (!User.IsAdmin() && !string.IsNullOrEmpty(vendor.UserId) && authorizedId != vendor.UserId)
+                throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {vendor.UserId}");
 
-            var result = await service.Subscribe(profile);
+            var result = await service.Subscribe(vendor);
 
             switch (result)
             {
@@ -111,12 +111,12 @@
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("{id}")]
         [HttpPut]
-        public async Task<IHttpActionResult> Update([FromBody]VendorProfile profile)
+        public async Task<IHttpActionResult> Update([FromBody]Vendor vendor)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await service.Update(profile);
+            var result = await service.Update(vendor);
             return Json(result);
         }
     }

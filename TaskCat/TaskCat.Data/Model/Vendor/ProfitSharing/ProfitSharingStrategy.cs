@@ -5,8 +5,8 @@
     [BsonKnownTypes(typeof(FlatRateStrategy), typeof(PricePercentageStrategy))]
     public abstract class ProfitSharingStrategy
     {
-        internal abstract protected ProfitSharingMethod Method { get; }
+        public ProfitSharingMethod Method { get; }
 
-        internal protected abstract decimal Calculate(decimal totalPrice);
+        public abstract ProfitShareResult Calculate(decimal totalPrice);
     }
 }

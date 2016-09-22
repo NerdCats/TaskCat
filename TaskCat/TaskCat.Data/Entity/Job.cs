@@ -11,6 +11,7 @@
     using System.Linq;
     using Model.Payment;
     using System.ComponentModel;
+    using Model.Vendor.ProfitSharing;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity
@@ -129,6 +130,9 @@
                 return IsDeleted || State == JobState.CANCELLED;
             }
         }
+
+        public Vendor Vendor { get; set; }
+        public ProfitShareResult ProfitShareResult { get; set; }
 
         private void _terminalTask_JobTaskCompleted(JobTask sender, JobTaskResult result)
         {

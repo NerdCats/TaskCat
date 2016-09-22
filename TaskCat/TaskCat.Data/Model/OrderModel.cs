@@ -30,6 +30,7 @@
         /// </summary>
         [Required]
         public DefaultAddress From { get; set; }
+
         /// <summary>
         // The place the package should be delivered to, this is the delivery location
         /// </summary>
@@ -61,6 +62,11 @@
         public string UserId { get { return _userId; } set { _userId = value; } }
 
         /// <summary>
+        /// VendorId that the order belongs to
+        /// </summary>
+        public string VendorId { get; set; }
+
+        /// <summary>
         /// Location where the order was originated from
         /// </summary>
         public DefaultAddress OrderLocation { get; set; }
@@ -80,6 +86,7 @@
         }
 
         private double? _ETAMinutes;
+
         /// <summary>
         /// ETA to be described as minutes 
         /// </summary>

@@ -69,7 +69,6 @@
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
-
         }
 
         /// <summary>

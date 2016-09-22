@@ -125,12 +125,12 @@
             }
         }
 
-        private IMongoCollection<VendorProfile> _vendorProfiles;
-        public IMongoCollection<VendorProfile> VendorProfiles
+        private IMongoCollection<Vendor> _vendors;
+        public IMongoCollection<Vendor> Vendors
         {
             get
             {
-                return _vendorProfiles;
+                return _vendors;
             }
         }
 
@@ -160,7 +160,7 @@
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
             IndexFacade.EnsureDropPointIndex(_dropPoints);
-            IndexFacade.EnsureVendorProfileIndex(_vendorProfiles);
+            IndexFacade.EnsureVendorIndex(_vendors);
             IndexFacade.EnsureProductCategoriesIndex(_productCategories);
         }
 
@@ -178,7 +178,7 @@
 
             _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
             _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
-            _vendorProfiles = Database.GetCollection<VendorProfile>(CollectionNames.VendorProfileCollectionName);
+            _vendors = Database.GetCollection<Vendor>(CollectionNames.VendorCollectionName);
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);

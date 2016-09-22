@@ -37,7 +37,7 @@
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorProfileConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorConverter());
             config.Formatters.JsonFormatter.Indent = true;
 
             

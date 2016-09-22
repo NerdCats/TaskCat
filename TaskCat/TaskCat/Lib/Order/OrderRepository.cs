@@ -19,6 +19,7 @@
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
     using Data.Model.Order.Delivery;
+    using Vendor;
 
     public class OrderRepository : IOrderRepository
     {
@@ -30,27 +31,53 @@
         IServiceChargeCalculationService serviceChargeCalculationService;
         IOrderProcessor orderProcessor;
         IPaymentService paymentService;
+        private IVendorService vendorService;
 
         public OrderRepository(
             IJobManager manager,
             SupportedOrderStore supportedOrderStore,
             AccountManager accountManager,
             IHRIDService hridService,
-            IPaymentManager paymentManager
+            IPaymentManager paymentManager,
+            IVendorService vendorService
             )
         {
             this.manager = manager;
             this.supportedOrderStore = supportedOrderStore;
             this.accountManager = accountManager;
             this.hridService = hridService;
+            this.vendorService = vendorService;
+
             orderCalculationService = new DefaultOrderCalculationService();
             serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
             paymentService = new PaymentService(paymentManager);
         }
 
+        public async Task<Job> PostOrder(OrderModel model, string adminUserId)
+        {
+            return await PostOrderToJob(model, adminUserId);
+        }
+
         public async Task<Job> PostOrder(OrderModel model)
         {
+            return await PostOrderToJob(model);
+        }
+
+        private async Task<Job> PostOrderToJob(OrderModel model, string adminUserId = null)
+        {
             UserModel userModel = new UserModel(await accountManager.FindByIdAsync(model.UserId));
+            UserModel adminUserModel = null;
+
+            Vendor vendor = default(Vendor);
+            if (!string.IsNullOrWhiteSpace(model.VendorId))
+            {
+                vendor = await vendorService.Get(model.VendorId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(adminUserId))
+            {
+                adminUserModel = new UserModel(await accountManager.FindByIdAsync(adminUserId));
+            }
 
             JobShop jobShop = new JobShop();
             JobBuilder builder;
@@ -61,7 +88,9 @@
                     {
                         RideOrder rideOrderModel = model as RideOrder;
                         Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                        builder = new RideJobBuilder(rideOrderModel, userModel, hridService);
+                        builder = adminUserModel == null ?
+                            new RideJobBuilder(rideOrderModel, userModel, hridService)
+                            : new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
                         break;
                     }
                 case OrderTypes.ClassifiedDelivery:
@@ -81,18 +110,17 @@
                             classifiedDeliveryOrderModel.SellerInfo.Address = user.Profile.Address;
                             classifiedDeliveryOrderModel.SellerInfo.Name = GetNameFromProfile(user);
                         }
-                        builder = GetDeliveryJobBuilder(userModel, classifiedDeliveryOrderModel);
+                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, classifiedDeliveryOrderModel, vendor);
                         break;
                     }
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        builder = GetDeliveryJobBuilder(userModel, deliveryOrderModel);
+                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, deliveryOrderModel, vendor);
                         break;
                     }
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
-
             }
             return await ConstructAndRegister(jobShop, builder);
         }
@@ -110,7 +138,7 @@
             }
         }
 
-        private JobBuilder GetDeliveryJobBuilder(UserModel userModel, DeliveryOrder deliveryOrderModel)
+        private JobBuilder GetDeliveryJobBuilder(UserModel userModel, UserModel adminUserModel, DeliveryOrder deliveryOrderModel, Vendor vendor)
         {
             JobBuilder builder;
             orderProcessor = new DeliveryOrderProcessor(
@@ -118,43 +146,13 @@
                       serviceChargeCalculationService);
             var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
             orderProcessor.ProcessOrder(deliveryOrderModel);
-            builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod);
+
+            // Resolve appropriate profit sharing strategy here
+
+            builder = adminUserModel == null ?
+                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod, vendor)
+                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod, vendor);
             return builder;
-        }
-
-        public async Task<Job> PostOrder(OrderModel model, string adminUserId)
-        {
-            UserModel userModel = new UserModel(await accountManager.FindByIdAsync(model.UserId));
-            UserModel adminUserModel = new UserModel(await accountManager.FindByIdAsync(adminUserId));
-
-            JobShop jobShop = new JobShop();
-            JobBuilder builder;
-
-            switch (model.Type)
-            {
-                case OrderTypes.Ride:
-                    {
-                        RideOrder rideOrderModel = model as RideOrder;
-                        Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                        builder = new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
-                        break;
-                    }
-                case OrderTypes.Delivery:
-                    {
-                        DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        orderProcessor = new DeliveryOrderProcessor(
-                                orderCalculationService,
-                                serviceChargeCalculationService);
-                        var paymentMethod = paymentService.GetPaymentMethodByKey(deliveryOrderModel.PaymentMethod);
-                        orderProcessor.ProcessOrder(deliveryOrderModel);
-                        builder = new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod);
-                        break;
-                    }
-                default:
-                    throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
-
-            }
-            return await ConstructAndRegister(jobShop, builder);
         }
 
         private async Task<Job> ConstructAndRegister(JobShop jobShop, JobBuilder builder)

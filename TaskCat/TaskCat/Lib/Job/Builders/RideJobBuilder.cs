@@ -8,6 +8,7 @@
     using HRID;
     using System;
     using Data.Entity;
+    using Data.Model.Vendor.ProfitSharing;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class RideJobBuilder : JobBuilder

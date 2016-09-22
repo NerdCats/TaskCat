@@ -12,7 +12,7 @@
     public class InvoiceBase
     {
         public string InvoiceId { get; set; }
-        // FIXME: Would be fixed after Vendor profile is introduced
+        // FIXME: Would be fixed after Vendor is introduced
         [Required]
         public string Vendor { get; set; }
 

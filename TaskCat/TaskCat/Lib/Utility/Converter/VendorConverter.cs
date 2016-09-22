@@ -5,7 +5,7 @@
     using Newtonsoft.Json.Linq;
     using System;
 
-    public class VendorProfileConverter : JsonConverter
+    public class VendorConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

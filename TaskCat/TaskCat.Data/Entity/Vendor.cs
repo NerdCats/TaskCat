@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class VendorProfile : DbEntity
+    public class Vendor : DbEntity
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Profit Sharing Strategy not provided")]
         public ProfitSharingStrategy Strategy { get; set; }

@@ -11,6 +11,9 @@
         /// </summary>
         public string NoteToDeliveryMan { get; set; }
 
+        /// <summary>
+        /// Define the exact amount of changes required from the delivery man
+        /// </summary>
         public decimal RequiredChangeFor { get; set; }
 
         public DeliveryOrder(string name = null, string type = OrderTypes.Delivery) : base(name, type)
