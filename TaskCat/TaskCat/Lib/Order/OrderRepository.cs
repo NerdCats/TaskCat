@@ -18,6 +18,7 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
+    using Vendor;
 
     public class OrderRepository : IOrderRepository
     {
@@ -29,19 +30,23 @@
         IServiceChargeCalculationService serviceChargeCalculationService;
         IOrderProcessor orderProcessor;
         IPaymentService paymentService;
+        private IVendorService vendorService;
 
         public OrderRepository(
             IJobManager manager,
             SupportedOrderStore supportedOrderStore,
             AccountManager accountManager,
             IHRIDService hridService,
-            IPaymentManager paymentManager
+            IPaymentManager paymentManager,
+            IVendorService vendorService
             )
         {
             this.manager = manager;
             this.supportedOrderStore = supportedOrderStore;
             this.accountManager = accountManager;
             this.hridService = hridService;
+            this.vendorService = vendorService;
+
             orderCalculationService = new DefaultOrderCalculationService();
             serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
             paymentService = new PaymentService(paymentManager);
@@ -61,6 +66,12 @@
         {
             UserModel userModel = new UserModel(await accountManager.FindByIdAsync(model.UserId));
             UserModel adminUserModel = null;
+
+            Vendor vendor = default(Vendor);
+            if (!string.IsNullOrWhiteSpace(model.VendorId))
+            {
+                vendor = await vendorService.Get(model.VendorId);
+            }
 
             if (!string.IsNullOrWhiteSpace(adminUserId))
             {
@@ -98,20 +109,18 @@
                             classifiedDeliveryOrderModel.SellerInfo.Address = user.Profile.Address;
                             classifiedDeliveryOrderModel.SellerInfo.Name = GetNameFromProfile(user);
                         }
-                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, classifiedDeliveryOrderModel);
+                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, classifiedDeliveryOrderModel, vendor);
                         break;
                     }
                 case OrderTypes.Delivery:
                     {
                         DeliveryOrder deliveryOrderModel = model as DeliveryOrder;
-                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, deliveryOrderModel);
+                        builder = GetDeliveryJobBuilder(userModel, adminUserModel, deliveryOrderModel, vendor);
                         break;
                     }
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
-
             }
-
             return await ConstructAndRegister(jobShop, builder);
         }
 
@@ -128,7 +137,7 @@
             }
         }
 
-        private JobBuilder GetDeliveryJobBuilder(UserModel userModel, UserModel adminUserModel, DeliveryOrder deliveryOrderModel)
+        private JobBuilder GetDeliveryJobBuilder(UserModel userModel, UserModel adminUserModel, DeliveryOrder deliveryOrderModel, Vendor vendor)
         {
             JobBuilder builder;
             orderProcessor = new DeliveryOrderProcessor(
@@ -140,8 +149,8 @@
             // Resolve appropriate profit sharing strategy here
 
             builder = adminUserModel == null ?
-                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod)
-                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod);
+                new DeliveryJobBuilder(deliveryOrderModel, userModel, hridService, paymentMethod, vendor)
+                : new DeliveryJobBuilder(deliveryOrderModel, userModel, adminUserModel, hridService, paymentMethod, vendor);
             return builder;
         }
 
