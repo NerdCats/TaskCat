@@ -27,21 +27,10 @@
 
             config.DependencyResolver = resolver;
 
-            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
-            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-            config.Formatters.JsonFormatter.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            ConfigureFormatters(config);
 
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorConverter());
-            config.Formatters.JsonFormatter.Indent = true;
-
-            
-            config.EnableSwagger("docs/{apiVersion}/", c => {
+            config.EnableSwagger("docs/{apiVersion}/", c =>
+            {
 
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory + @"bin\";
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
@@ -50,8 +39,25 @@
                 c.IncludeXmlComments(commentsFile);
                 c.DescribeAllEnumsAsStrings();
                 c.SingleApiVersion("v1", "TaskCat Core Api");
-            } ).EnableSwaggerUi();
+            }).EnableSwaggerUi();
 
+        }
+
+        private static void ConfigureFormatters(HttpConfiguration config)
+        {
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
+            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            config.Formatters.JsonFormatter.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new OrderModelConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorConverter());
+            config.Formatters.JsonFormatter.Indent = true;
         }
     }
 }
