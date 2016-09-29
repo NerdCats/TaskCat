@@ -57,11 +57,11 @@
 
             if (IsUserAdminOrBackendOfficeAdmin())
             {
-                return Json(await service.Get(id));
+                return Ok(await service.Get(id));
             }
             else
             {
-                return Json(await service.Get(id, userId));
+                return Ok(await service.Get(id, userId));
             }
         }
 
@@ -77,7 +77,7 @@
         [ResponseType(typeof(List<string>))]
         public IHttpActionResult GetDropPointNameSuggestions()
         {
-            return Json(DropPointNameSuggestions.Values);
+            return Ok(DropPointNameSuggestions.Values);
         }
 
         /// <summary>
@@ -129,8 +129,8 @@
             var queryResult = await service.SearchDropPoints(userId, query);
 
             if (envelope)
-                return Json(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         /// <summary>
@@ -181,8 +181,8 @@
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@
             if (string.IsNullOrWhiteSpace(value.UserId))
                 value.UserId = authorizedId;
             var result = await service.Insert(value);
-            return Json(result);
+            return Ok(result);
         }
 
         private bool IsUserAdminOrBackendOfficeAdmin()
@@ -257,11 +257,11 @@
          
             if(IsUserAdminOrBackendOfficeAdmin())
             {
-                return Json(await service.Update(value));
+                return Ok(await service.Update(value));
             }
             else
             {
-                return Json(await service.Update(value, value.UserId));
+                return Ok(await service.Update(value, value.UserId));
             }
             
         }
@@ -296,11 +296,11 @@
 
             if (IsUserAdminOrBackendOfficeAdmin())
             {
-                return Json(await service.Delete(id));
+                return Ok(await service.Delete(id));
             }
             else
             {
-                return Json(await service.Delete(id, userId));
+                return Ok(await service.Delete(id, userId));
             }
         }
     }

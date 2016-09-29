@@ -79,13 +79,13 @@
                 else
                     job = await repository.GetJobByHrid(id);
 
-                return Json(job);
+                return Ok(job);
             }
             else
             {
                 Job job = null;
                 job = await repository.GetJobByHrid(id);
-                return Json(job);
+                return Ok(job);
             }
         }
 
@@ -121,8 +121,8 @@
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             if (envelope)
-                return Json(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
-            return Json(await repository.GetJobs(type, page, pageSize));
+                return Ok(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
+            return Ok(await repository.GetJobs(type, page, pageSize));
         }
 
         /// <summary>
@@ -189,10 +189,10 @@
             if (envelope)
             {
                 Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);                
-                return Json(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+                return Ok(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
             }
                 
-            return Json(queryResult);
+            return Ok(queryResult);
         }
 
         private bool IsUserOrEnterpriseUserOnly()
@@ -285,7 +285,7 @@
         public async Task<IHttpActionResult> Post(JobModel model)
         {
             Job job = await repository.PostJob(model);
-            return Json(job);
+            return Ok(job);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@
                 RecipientUsername = job.User.UserName
             });
 
-            return Json(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@
         public async Task<IHttpActionResult> Claim(string jobId)
         {
             ReplaceOneResult result = await repository.Claim(jobId, this.User.Identity.GetUserId());
-            return Json(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -355,7 +355,7 @@
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
             ReplaceOneResult result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
-            return Json(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -370,7 +370,7 @@
         {
             if (request == null) return BadRequest("null request encountered");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            return Json(await repository.CancelJob(request));
+            return Ok(await repository.CancelJob(request));
         }
 
         /// <summary>
@@ -388,7 +388,7 @@
         [Route("api/Job/restore/{jobId}")]
         public async Task<IHttpActionResult> RestoreJob(string jobId)
         {
-            return Json(await repository.RestoreJob(jobId));
+            return Ok(await repository.RestoreJob(jobId));
         }
 
         /// <summary>
@@ -433,7 +433,7 @@
             }
 
             ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
-            return Json(result);
+            return Ok(result);
         }
     }
 }

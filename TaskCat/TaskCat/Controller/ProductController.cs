@@ -61,8 +61,8 @@
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Product>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<Product>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         [HttpGet]
@@ -71,7 +71,7 @@
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var product = await productService.Get(id);
-            return Json(product);
+            return Ok(product);
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Enterprise")]
@@ -107,7 +107,7 @@
             }
 
             var result = await productService.Update(value);
-            return Json(result);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Enterprise")]
@@ -127,7 +127,7 @@
             }
 
             var result = await productService.Delete(id);
-            return Json(result);
+            return Ok(result);
         }
     }
 }

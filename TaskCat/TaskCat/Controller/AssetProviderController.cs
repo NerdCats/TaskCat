@@ -60,7 +60,7 @@
             };
 
             var result = await provider.FindEligibleAssets(request);
-            return Json(result);
+            return Ok(result);
         }
     }
 }

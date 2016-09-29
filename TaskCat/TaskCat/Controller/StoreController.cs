@@ -58,8 +58,8 @@
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Store>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<Store>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var store = await service.Get(id);
-            return Json(store);
+            return Ok(store);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOcffficeAdmin")]
@@ -104,7 +104,7 @@
             }
 
             var result = await service.Update(store);
-            return Json(result);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
@@ -122,7 +122,7 @@
             }
 
             var result = await service.Delete(id);
-            return Json(result);
+            return Ok(result);
         }
     }
 }

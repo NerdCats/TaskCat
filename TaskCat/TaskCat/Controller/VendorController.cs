@@ -57,8 +57,8 @@
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<Vendor>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<Vendor>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
@@ -96,7 +96,7 @@
         public async Task<IHttpActionResult> Get(string id)
         {
             var result = await service.Get(id);
-            return Json(result);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -105,7 +105,7 @@
         public async Task<IHttpActionResult> Delete(string id)
         {
             var result = await service.Delete(id);
-            return Json(result);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -117,7 +117,7 @@
                 return BadRequest(ModelState);
 
             var result = await service.Update(vendor);
-            return Json(result);
+            return Ok(result);
         }
     }
 }

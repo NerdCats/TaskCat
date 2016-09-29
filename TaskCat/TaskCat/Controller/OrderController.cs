@@ -62,10 +62,10 @@
             {
                 case OrderCreationOptions.CREATE:
                     createdJob = await _repository.PostOrder(model);
-                    return Json(createdJob);
+                    return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await _repository.PostOrder(model, currentUserId);
-                    return Json(createdJob);
+                    return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
@@ -85,7 +85,7 @@
         public async Task<IHttpActionResult> GetAllSupportedOrder()
         {
             var supportedOrderList = await _repository.GetAllSupportedOrder();
-            return Json(supportedOrderList);
+            return Ok(supportedOrderList);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@
                 return BadRequest(ModelState);
 
             await _repository.PostSupportedOrder(supportedOrder);
-            return Json(supportedOrder);
+            return Ok(supportedOrder);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@
         public async Task<IHttpActionResult> GetSupportedOrder(string id)
         {
              var supportedOrder = await _repository.GetSupportedOrder(id);
-             return Json(supportedOrder);         
+             return Ok(supportedOrder);         
         }
 
         /// <summary>
@@ -148,7 +148,7 @@
                 return BadRequest(ModelState);
 
             var updatedSupportedOrder = await _repository.UpdateSupportedOrder(order);
-            return Json(updatedSupportedOrder);
+            return Ok(updatedSupportedOrder);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@
         public async Task<IHttpActionResult> DeleteSupportedOrder(string id)
         {
             var deletedSupportedOrder = await _repository.DeleteSupportedOrder(id);
-            return Json(deletedSupportedOrder);
+            return Ok(deletedSupportedOrder);
         }
 
     }

@@ -143,7 +143,7 @@
             if (!result.Success)
                 return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
             else
-                return Json(result);
+                return Ok(result);
 
         }
 
@@ -210,7 +210,7 @@
                     userModel.IsUserAuthenticated = true;
             }
 
-            return Json(userModel);
+            return Ok(userModel);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@
             }
 
             var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request);
-            return Json(result);
+            return Ok(result);
         }
 
 
@@ -291,9 +291,9 @@
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             if (envelope)
-                return Json(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request));
+                return Ok(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request));
             else
-                return Json(await accountContext.FindAllAsModel(page, pageSize));
+                return Ok(await accountContext.FindAllAsModel(page, pageSize));
         }
 
         /// <summary>
@@ -349,10 +349,10 @@
             if (envelope)
             {
                 Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
-                return Json(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+                return Ok(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
             }
 
-            return Json(queryResult);
+            return Ok(queryResult);
         }
 
         /// <summary>
@@ -367,7 +367,7 @@
         [Route("profile")]
         public async Task<IHttpActionResult> Update(IdentityProfile model)
         {
-            return Json(await accountContext.Update(model, this.User.Identity.Name));
+            return Ok(await accountContext.Update(model, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -375,7 +375,7 @@
         [Route("profile/{id}")]
         public async Task<IHttpActionResult> Update([FromBody]IdentityProfile model, [FromUri]string id)
         {
-            return Json(await accountContext.UpdateById(model, id));
+            return Ok(await accountContext.UpdateById(model, id));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
@@ -383,7 +383,7 @@
         [Route("password")]
         public async Task<IHttpActionResult> UpdatePassword(PasswordUpdateModel model)
         {
-            return Json(await accountContext.UpdatePassword(model, this.User.Identity.Name));
+            return Ok(await accountContext.UpdatePassword(model, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
@@ -391,7 +391,7 @@
         [Route("username")]
         public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername)
         {
-            return Json(await accountContext.UpdateUsername(newUsername, this.User.Identity.Name));
+            return Ok(await accountContext.UpdateUsername(newUsername, this.User.Identity.Name));
         }
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
@@ -399,7 +399,7 @@
         [Route("username/{userId}")]
         public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername, string userId)
         {
-            return Json(await accountContext.UpdateUsernameById(userId, newUsername));
+            return Ok(await accountContext.UpdateUsernameById(userId, newUsername));
         }
 
         /// <summary>
@@ -446,7 +446,7 @@
                     }, new JsonMediaTypeFormatter());
             }
 
-            return Json(new AvailibilityResponse(property, suggestedValue, result));
+            return Ok(new AvailibilityResponse(property, suggestedValue, result));
         }
 
         [HttpPut]
@@ -454,7 +454,7 @@
         [Route("contacts")]
         public async Task<IHttpActionResult> UpdateContacts(ContactUpdateModel model)
         {
-            return Json(await accountContext.UpdateContacts(model, this.User.Identity.Name));
+            return Ok(await accountContext.UpdateContacts(model, this.User.Identity.Name));
         }
 
         /// <summary>

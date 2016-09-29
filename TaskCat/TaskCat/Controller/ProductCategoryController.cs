@@ -57,8 +57,8 @@
                 .Take(pageSize);
 
             if (envelope)
-                return Json(new PageEnvelope<ProductCategory>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Json(queryResult);
+                return Ok(new PageEnvelope<ProductCategory>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            return Ok(queryResult);
         }
 
         [HttpGet]
@@ -67,7 +67,7 @@
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await service.Get(id);
-            return Json(result);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -87,7 +87,7 @@
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await service.Update(category);
-            return Json(result);
+            return Ok(result);
         }
 
         [HttpDelete]
@@ -96,7 +96,7 @@
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await service.Delete(id);
-            return Json(result);
+            return Ok(result);
         }
     }
 }
