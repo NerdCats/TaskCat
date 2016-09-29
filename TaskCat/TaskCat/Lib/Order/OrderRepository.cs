@@ -96,14 +96,14 @@
                 case OrderTypes.ClassifiedDelivery:
                     {
                         ClassifiedDeliveryOrder classifiedDeliveryOrderModel = model as ClassifiedDeliveryOrder;
-                        if (string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.BuyerInfo?.UserRef))
+                        if (!string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.BuyerInfo?.UserRef))
                         {
                             var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.BuyerInfo.UserRef);
                             classifiedDeliveryOrderModel.BuyerInfo.PhoneNumber = user.PhoneNumber;
                             classifiedDeliveryOrderModel.BuyerInfo.Address = user.Profile.Address;
                             classifiedDeliveryOrderModel.BuyerInfo.Name = GetNameFromProfile(user);
                         }
-                        if (string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.SellerInfo?.UserRef))
+                        if (!string.IsNullOrWhiteSpace(classifiedDeliveryOrderModel.SellerInfo?.UserRef))
                         {
                             var user = await accountManager.FindByIdAsync(classifiedDeliveryOrderModel.SellerInfo.UserRef);
                             classifiedDeliveryOrderModel.SellerInfo.PhoneNumber = user.PhoneNumber;
