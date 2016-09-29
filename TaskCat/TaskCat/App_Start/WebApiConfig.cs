@@ -5,6 +5,7 @@
     using Swashbuckle.Application;
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
@@ -50,6 +51,10 @@
             config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             config.Formatters.JsonFormatter.SerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
             config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+            var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
+            if (appXmlType != null)
+                config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
