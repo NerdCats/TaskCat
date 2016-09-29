@@ -59,9 +59,9 @@
             Controller.User = IIPrincipalMock.Object;
 
             var result = await Controller.Post(DropPoint);
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
@@ -105,9 +105,9 @@
 
             Controller.User = IIPrincipalMock.Object;
             var result = await Controller.Post(DropPoint);
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.Name, convertedResult.Content.Name);
@@ -135,10 +135,10 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Search("test_query", testUserId);
-            Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<PageEnvelope<DropPoint>>>(result);
             Assert.IsNotNull(result);
 
-            var convertedResult = result as JsonResult<PageEnvelope<DropPoint>>;
+            var convertedResult = result as OkNegotiatedContentResult<PageEnvelope<DropPoint>>;
             Assert.AreEqual(1, convertedResult.Content.data.Count());
             Assert.AreEqual(DropPoint, convertedResult.Content.data.First());
         }
@@ -165,9 +165,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Search("test_query", testUserId);
-            Assert.IsInstanceOf<JsonResult<PageEnvelope<DropPoint>>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<PageEnvelope<DropPoint>>>(result);
             
-            var convertedResult = result as JsonResult<PageEnvelope<DropPoint>>;
+            var convertedResult = result as OkNegotiatedContentResult<PageEnvelope<DropPoint>>;
             Assert.IsNotNull(convertedResult);
             Assert.AreEqual(1, convertedResult.Content.data.Count());
             Assert.AreEqual(DropPoint, convertedResult.Content.data.First());
@@ -222,9 +222,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Put(DropPoint);
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
             
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -285,9 +285,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Put(DropPoint);
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -319,9 +319,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Get("test_dropPoint_id");
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -380,9 +380,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Get("test_dropPoint_id", "23456");
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -414,9 +414,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Delete("test_dropPoint_id");
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);
@@ -475,9 +475,9 @@
             Controller.Request = httpRequestMock.Object;
 
             var result = await Controller.Delete("test_dropPoint_id", "23456");
-            Assert.IsInstanceOf<JsonResult<DropPoint>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<DropPoint>>(result);
 
-            var convertedResult = result as JsonResult<DropPoint>;
+            var convertedResult = result as OkNegotiatedContentResult<DropPoint>;
             Assert.IsNotNull(convertedResult.Content);
             Assert.AreEqual(DropPoint.Address, convertedResult.Content.Address);
             Assert.AreEqual(DropPoint.UserId, convertedResult.Content.UserId);

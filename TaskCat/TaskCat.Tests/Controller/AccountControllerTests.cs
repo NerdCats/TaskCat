@@ -28,10 +28,10 @@
             AccountController accountController = new AccountController(accountContextMock.Object);
             var result = await accountController.ResendConfirmationEmail("123");
 
-            Assert.IsInstanceOf<JsonResult<SendEmailResponse>>(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<SendEmailResponse>>(result);
             Assert.IsNotNull(result);
 
-            JsonResult<SendEmailResponse> convertedResult = result as JsonResult<SendEmailResponse>;
+            var convertedResult = result as OkNegotiatedContentResult<SendEmailResponse>;
             Assert.IsNotNull(convertedResult.Content);
 
             Assert.IsTrue(convertedResult.Content.Success);
