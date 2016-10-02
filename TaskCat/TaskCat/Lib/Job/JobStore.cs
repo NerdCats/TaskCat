@@ -11,13 +11,17 @@
     using System.Web.OData.Query;
     using Data.Model.Operation;
     using LinqToQuerystring;
+    using MongoDB.Driver.Linq;
 
     public class JobStore
     {
         private IDbContext _context;
+        private IMongoQueryable<Job> _jobs;
+
         public JobStore(IDbContext context)
         {
             _context = context;
+            _jobs = context.Jobs.AsQueryable();
         }
         internal async Task<Job> CreateOne(Job createdJob)
         {
@@ -62,7 +66,7 @@
             return await Task.Run(() =>
             {
                 IQueryable queryResult;
-                queryResult = query.ApplyTo(_context.Jobs.AsQueryable(), AllowedQueryOptions.OrderBy);
+                queryResult = query.ApplyTo(_jobs, AllowedQueryOptions.OrderBy);
                 if (query.OrderBy != null)
                     queryResult = queryResult.LinqToQuerystring(typeof(Job), "$orderby=" + query.OrderBy.RawValue) as IQueryable<Job>;
 
