@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using Data.Model.Geocoding;
     using Data.Model.Inventory;
-    using Data.Model.Order.Delivery;
+    using Data.Model.Order;
 
     [TestFixture(TestOf = typeof(DeliveryOrder))]
     public class DeliveryOrderTests
