@@ -13,9 +13,6 @@
 
         }
 
-        public DefaultAddress From { get; set; }
-        public DefaultAddress To { get; set; }
-
         /// <summary>
         /// Basically a list of vehicles users want to avail and all of these options 
         /// are basically

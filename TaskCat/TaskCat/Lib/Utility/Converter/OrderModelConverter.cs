@@ -5,7 +5,6 @@
     using Newtonsoft.Json.Linq;
     using System;
     using Data.Model;
-    using Data.Model.Order.Delivery;
 
     internal class OrderModelConverter : JsonConverter
     {
@@ -26,20 +25,7 @@
             }
 
             string orderType = type.Value<string>();
-            switch (orderType)
-            {
-                case OrderTypes.Ride:
-                    orderModel = new RideOrder();
-                    break;
-                case OrderTypes.Delivery:
-                    orderModel = new DeliveryOrder();
-                    break;
-                case OrderTypes.ClassifiedDelivery:
-                    orderModel = new ClassifiedDeliveryOrder();
-                    break;
-                default:
-                    throw new NotSupportedException(string.Concat("Order Entry type invalid/not supported - ", orderType));
-            }
+            orderModel = OrderTypeResolver.CreateOrderInstance(orderType);
 
             serializer.Populate(obj.CreateReader(), orderModel);
             return orderModel;

@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Order.Delivery
+﻿namespace TaskCat.Data.Model.Order
 {
     using MongoDB.Bson.Serialization.Attributes;
     using System;

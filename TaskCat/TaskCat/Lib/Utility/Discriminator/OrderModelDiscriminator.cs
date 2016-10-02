@@ -4,10 +4,11 @@
     using System;
     using MongoDB.Bson;
     using MongoDB.Bson.IO;
-    using TaskCat.Data.Model;
+    using Data.Model;
 
     public class OrderModelDiscriminator : IDiscriminatorConvention
     {
+        private string orderType = "Type";    
         public string ElementName
         {
             get { return "_t"; }
@@ -22,11 +23,11 @@
 
                 var bookmark = bsonReader.GetBookmark();
                 bsonReader.ReadStartDocument();
-                if (bsonReader.FindElement(ElementName))
+                if (bsonReader.FindElement(orderType))
                 {
                     var value = bsonReader.ReadString();
 
-                    ret = Type.GetType(value);
+                    ret = OrderTypeResolver.ResolveOrderType(value);
 
                     if (ret == null)
                         throw new Exception("Could not find type " + value);

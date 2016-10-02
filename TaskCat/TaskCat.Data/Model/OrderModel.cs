@@ -7,7 +7,9 @@
     using JobTasks.Preference;
     using System.Collections.Generic;
     using Order.Delivery;
+    using Order;
 
+    [BsonKnownTypes(typeof(RideOrder), typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
@@ -41,10 +43,10 @@
         /// Order type that defines the type of the order 
         /// and the job that follows
         /// </summary>
-        [Required(ErrorMessage ="Order Type not provided" )]
+        [Required(ErrorMessage = "Order Type not provided")]
         public string Type { get; set; }
 
-        
+
         private string _variant = "default";
         /// <summary>
         /// This type would be used for multiple models for single order purpose
@@ -53,7 +55,7 @@
         /// </summary>
         public string Variant { get { return _variant; } set { _variant = value; } }
 
-        
+
         private string _userId;
         /// <summary>
         /// UserId that the order is created for
@@ -90,13 +92,16 @@
         /// <summary>
         /// ETA to be described as minutes 
         /// </summary>
-        public double? ETAMinutes {
-            get {
+        public double? ETAMinutes
+        {
+            get
+            {
                 return _ETAMinutes;
             }
-            set {
+            set
+            {
                 _ETAMinutes = value;
-                if(value!=null)
+                if (value != null)
                     ETA = DateTime.Now.Add(TimeSpan.FromMinutes(value.Value));
             }
         }
