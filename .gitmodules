@@ -1,1 +1,4 @@
 
+[submodule "TaskCat.Migrations/DotNetMongoMigrations"]
+	path = TaskCat.Migrations/DotNetMongoMigrations
+	url = https://github.com/NerdCats/DotNetMongoMigrations
