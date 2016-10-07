@@ -1,0 +1,36 @@
+﻿namespace TaskCat.Lib.Utility
+{
+    using Data.Model;
+    using Data.Model.Order;
+    using System;
+
+    public class OrderTypeResolver
+    {  
+        public static OrderModel CreateOrderInstance(string orderType)
+        {
+            OrderModel orderModel = default(OrderModel);
+            switch (orderType)
+            {
+                case OrderTypes.Ride:
+                    orderModel = new RideOrder();
+                    break;
+                case OrderTypes.Delivery:
+                    orderModel = new DeliveryOrder();
+                    break;
+                case OrderTypes.ClassifiedDelivery:
+                    orderModel = new ClassifiedDeliveryOrder();
+                    break;
+                default:
+                    throw new NotSupportedException(string.Concat("Order Entry type invalid/not supported - ", orderType));
+            }
+
+            return orderModel;
+        }
+
+        public static Type ResolveOrderType(string orderType)
+        {
+            var order = CreateOrderInstance(orderType);
+            return order.GetType();
+        }
+    }
+}

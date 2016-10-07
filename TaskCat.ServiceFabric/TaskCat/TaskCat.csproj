@@ -1,51 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3239D40E-E8FF-462A-8E91-1203055C6E55}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{37FC1ED0-B917-40E7-BE85-1129BAFA63D9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TaskCat</RootNamespace>
     <AssemblyName>TaskCat</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <StyleCopTreatErrorsAsWarnings>True</StyleCopTreatErrorsAsWarnings>
-    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\TaskCat.XML</DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
-    <DocumentationFile>bin\TaskCat.XML</DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AdditionalFileItemNames>$(AdditionalFileItemNames);None</AdditionalFileItemNames>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -85,7 +73,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=3.5.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
-      <HintPath>..\packages\CompareNETObjects.3.05.0.0\lib\net45\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+      <HintPath>..\packages\CompareNETObjects.3.05.0.0\lib\net452\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LinqToQuerystring, Version=0.6.5.38651, Culture=neutral, processorArchitecture=MSIL">
@@ -108,11 +96,6 @@
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
       <Private>True</Private>
@@ -153,12 +136,12 @@
       <HintPath>..\packages\Microsoft.Owin.Diagnostics.3.0.1\lib\net45\Microsoft.Owin.Diagnostics.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.3.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Hosting, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Hosting.3.0.1\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -177,12 +160,28 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Spatial, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Spatial.7.0.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
+    <Reference Include="Microsoft.ServiceFabric.Data, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.Data.2.1.163\lib\net45\Microsoft.ServiceFabric.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    <Reference Include="Microsoft.ServiceFabric.Data.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.Data.2.1.163\lib\net45\Microsoft.ServiceFabric.Data.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceFabric.Internal, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.5.1.163\lib\net45\Microsoft.ServiceFabric.Internal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceFabric.Internal.Strings, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.5.1.163\lib\net45\Microsoft.ServiceFabric.Internal.Strings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceFabric.Services, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.Services.2.1.163\lib\net45\Microsoft.ServiceFabric.Services.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Spatial, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Spatial.7.0.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=7.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -201,8 +200,8 @@
       <HintPath>..\packages\MongoDB.Driver.Core.2.3.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -213,10 +212,6 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PhoneNumbers, Version=7.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\libphonenumber-csharp.7.5.1\lib\PhoneNumbers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="RazorEngine, Version=3.9.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <HintPath>..\packages\RazorEngine.3.9.0\lib\net45\RazorEngine.dll</HintPath>
       <Private>True</Private>
@@ -225,40 +220,39 @@
       <HintPath>..\packages\SendWithUs.Client.0.4.1\lib\portable-net45+win+wp80\SendWithUs.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ServiceFabricServiceModel, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.Services.2.1.163\lib\net45\ServiceFabricServiceModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.4.0\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Fabric, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <HintPath>..\packages\Microsoft.ServiceFabric.5.1.163\lib\net45\System.Fabric.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
@@ -267,8 +261,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http.SelfHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.SelfHost.5.2.3\lib\net45\System.Web.Http.SelfHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.OData, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.OData.6.0.0\lib\net45\System.Web.OData.dll</HintPath>
       <Private>True</Private>
@@ -277,47 +273,6 @@
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include=".config\local\SMTPMailSettings.json" />
-    <Content Include="App_Data\EmailTemplates\Welcome.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="packages.config" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include=".config\local\ProprietorSettings.json" />
-    <Content Include=".config\local\SendWithUsSettings.json" />
-    <Content Include=".config\local\EmailTemplatePathSettings.json" />
-    <Content Include=".config\local\ExternalLoginSettings.json" />
-    <Content Include=".config\local\ClientSettings.json" />
-    <Content Include=".config\production\ClientSettings.json" />
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Properties\PublishProfiles\AzureVM.pubxml" />
-    <None Include="Properties\PublishProfiles\gofetch - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\gofetchtaskcat - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\TaskCatDev - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\TaskCatDev - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\TaskCatDevApp - Web Deploy.pubxml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
@@ -326,9 +281,15 @@
     <Compile Include="App\Settings\ExternalLoginSettings.cs" />
     <Compile Include="App\Settings\ProprietorSettings.cs" />
     <Compile Include="App\Settings\SMTPMailSettings.cs" />
+    <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controller\AssetProviderController.cs" />
+    <Compile Include="Controller\Auth\AccountController.cs" />
+    <Compile Include="Controller\Auth\RefreshTokensController.cs" />
     <Compile Include="Controller\DropPointController.cs" />
+    <Compile Include="Controller\JobController.cs" />
+    <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\ProductCategoryController.cs" />
     <Compile Include="Controller\ProductController.cs" />
@@ -336,47 +297,45 @@
     <Compile Include="Controller\StoreController.cs" />
     <Compile Include="Controller\VendorController.cs" />
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
-    <Compile Include="Lib\Asset\IAssetProvider.cs" />
-    <Compile Include="Lib\Auth\IAccountContext.cs" />
-    <Compile Include="Lib\Catalog\ProductService.cs" />
-    <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
-    <Compile Include="Lib\Constants\AppConstants.cs" />
-    <Compile Include="App\Startup.cs" />
-    <Compile Include="App_Start\BsonSerializerConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controller\Auth\AccountController.cs" />
-    <Compile Include="Controller\Auth\RefreshTokensController.cs" />
-    <Compile Include="Controller\JobController.cs" />
-    <Compile Include="Controller\OrderController.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
-    <Compile Include="Lib\Auth\AccountStore.cs" />
+    <Compile Include="Lib\Asset\IAssetProvider.cs" />
     <Compile Include="Lib\Auth\AccountContext.cs" />
-    <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Auth\AccountManager.cs" />
+    <Compile Include="Lib\Auth\AccountStore.cs" />
+    <Compile Include="Lib\Auth\IAccountContext.cs" />
+    <Compile Include="Lib\Auth\RoleManager.cs" />
+    <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
+    <Compile Include="Lib\Catalog\ProductService.cs" />
+    <Compile Include="Lib\Catalog\StoreService.cs" />
+    <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
+    <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
+    <Compile Include="Lib\Db\DbContext.cs" />
+    <Compile Include="Lib\Db\IDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
     <Compile Include="Lib\Domain\IRepository.cs" />
     <Compile Include="Lib\DropPoint\DropPointNameSuggestions.cs" />
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />
+    <Compile Include="Lib\Email\IEmailService.cs" />
+    <Compile Include="Lib\Email\IEmailTemplateParser.cs" />
     <Compile Include="Lib\Email\Model\EmailInvoice.cs" />
     <Compile Include="Lib\Email\Model\EmailInvoiceItem.cs" />
-    <Compile Include="Lib\Email\IEmailService.cs" />
     <Compile Include="Lib\Email\Model\IEmailPayload.cs" />
-    <Compile Include="Lib\Email\Model\WelcomeEmail.cs" />
-    <Compile Include="Lib\Email\IEmailTemplateParser.cs" />
-    <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
-    <Compile Include="Lib\Email\SendEmailRequest.cs" />
-    <Compile Include="Lib\Email\SendEmailResponse.cs" />
     <Compile Include="Lib\Email\Model\OrderEmail.cs" />
+    <Compile Include="Lib\Email\Model\WelcomeEmail.cs" />
+    <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
+    <Compile Include="Lib\Email\SendEMailRequest.cs" />
+    <Compile Include="Lib\Email\SendEmailResponse.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsMailService.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsSettings.cs" />
     <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
     <Compile Include="Lib\Exceptions\EntityDeleteException.cs" />
     <Compile Include="Lib\Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Lib\Exceptions\EntityUpdateException.cs" />
+    <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
     <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
     <Compile Include="Lib\Exceptions\SettingsException.cs" />
@@ -384,22 +343,32 @@
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
     <Compile Include="Lib\Identity\FacebookAuthProvider.cs" />
+    <Compile Include="Lib\Identity\TaskCatAuthorizationServerProvider.cs" />
+    <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
+    <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
     <Compile Include="Lib\Invoice\IPDFService.cs" />
-    <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Job\Builders\DeliveryJobBuilder.cs" />
-    <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
+    <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
     <Compile Include="Lib\Job\IJobManager.cs" />
+    <Compile Include="Lib\Job\IJobRepository.cs" />
+    <Compile Include="Lib\Job\JobBuilder.cs" />
+    <Compile Include="Lib\Job\JobManager.cs" />
+    <Compile Include="Lib\Job\JobRepository.cs" />
+    <Compile Include="Lib\Job\JobShop.cs" />
+    <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Job\JobUpdater.cs" />
     <Compile Include="Lib\Job\Updaters\DeliveryJobUpdater.cs" />
-    <Compile Include="Lib\Order\IOrderCalculationService.cs" />
-    <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
-    <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultDeliveryServiceChargeCalculationService.cs" />
-    <Compile Include="Lib\Order\SupportedOrderStore.cs" />
+    <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
+    <Compile Include="Lib\Order\IOrderCalculationService.cs" />
+    <Compile Include="Lib\Order\IOrderRepository.cs" />
+    <Compile Include="Lib\Order\IServiceChargeCalculationService.cs" />
+    <Compile Include="Lib\Order\OrderRepository.cs" />
     <Compile Include="Lib\Order\Process\DeliveryOrderProcessor.cs" />
     <Compile Include="Lib\Order\Process\IOrderProcessor.cs" />
+    <Compile Include="Lib\Order\SupportedOrderStore.cs" />
     <Compile Include="Lib\Owin\PreflightRequestsHandler.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentMethod.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentSettings.cs" />
@@ -413,26 +382,11 @@
     <Compile Include="Lib\Storage\IBlobService.cs" />
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
-    <Compile Include="Lib\Catalog\StoreService.cs" />
     <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
-    <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
-    <Compile Include="Lib\Db\CollectionNames.cs" />
-    <Compile Include="Lib\Db\DbContext.cs" />
-    <Compile Include="Lib\Db\IDbContext.cs" />
-    <Compile Include="Lib\Identity\TaskCatAuthorizationServerProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
-    <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
-    <Compile Include="Lib\Job\IJobRepository.cs" />
-    <Compile Include="Lib\Job\JobBuilder.cs" />
-    <Compile Include="Lib\Job\JobManager.cs" />
-    <Compile Include="Lib\Job\JobRepository.cs" />
-    <Compile Include="Lib\Job\JobShop.cs" />
-    <Compile Include="Lib\Job\JobStore.cs" />
-    <Compile Include="Lib\Order\IOrderRepository.cs" />
-    <Compile Include="Lib\Order\OrderRepository.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
+    <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\VendorConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
@@ -453,6 +407,7 @@
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
+    <Compile Include="Model\Identity\ExternalLoginData.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
@@ -461,67 +416,35 @@
     <Compile Include="Model\Storage\FileDeleteModel.cs" />
     <Compile Include="Model\Storage\FileDownloadModel.cs" />
     <Compile Include="Model\Storage\FileUploadModel.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="OwinCommunicationListener.cs" />
+    <Compile Include="TaskCat.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ServiceEventSource.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
+    <None Include="PackageRoot\Config\Settings.xml" />
+    <None Include="PackageRoot\ServiceManifest.xml" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\EmailTemplates\Welcome.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TaskCat\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>TaskCat.Program</StartupObject>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>23873</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:23873/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <servers defaultServer="SelfHostServer">
-            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:23873/" workingDir="" />
-          </servers>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="AfterBuild">
-    <Warning Condition="!Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')" Text="PxtlCa.XmlCommentMarkDownGenerator can't generate Markdown: Can't find Xml file matching assembly name.  Please confirm that your project file is configured to output the Xml documentation file in this build configuration." File="$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML" />
-    <MakeDir Directories="$(MSBuildProjectDirectory)\..\Docs" />
-    <Exec Command="&quot;$(SolutionDir)\packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6099.40769\Tools\PxtlCa.XmlCommentMarkDownGenerator.exe&quot; -i $(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML -o $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md" Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')" />
-    <Message Importance="high" Text="PxtlCa.XmlCommentMarkDownGenerator created file: $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md" Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')" />
-  </Target>
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.2\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-  </Target>
 </Project>
