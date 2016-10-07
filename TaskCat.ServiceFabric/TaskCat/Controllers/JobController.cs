@@ -1,37 +1,35 @@
-﻿namespace TaskCat.Controller
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Description;
+using LinqToQuerystring;
+using Marvin.JsonPatch;
+using Microsoft.AspNet.Identity;
+using MongoDB.Driver;
+using TaskCat.Data.Entity;
+using TaskCat.Data.Entity.Identity;
+using TaskCat.Data.Lib.Invoice.Response;
+using TaskCat.Data.Model;
+using TaskCat.Data.Model.Api;
+using TaskCat.Data.Model.Identity.Profile;
+using TaskCat.Data.Model.Operation;
+using TaskCat.Data.Model.Order;
+using TaskCat.Lib.Constants;
+using TaskCat.Lib.Email;
+using TaskCat.Lib.Invoice;
+using TaskCat.Lib.Invoice.Request;
+using TaskCat.Lib.Job;
+using TaskCat.Lib.Utility.Odata;
+using TaskCat.Model.Job;
+using TaskCat.Model.Pagination;
+
+namespace TaskCat.Controllers
 {
-    using Data.Entity;
-    using System;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Data.Model.Api;
-    using Lib.Job;
-    using Data.Model;
-    using Lib.Constants;
-    using Marvin.JsonPatch;
-    using MongoDB.Driver;
-    using Microsoft.AspNet.Identity;
-    using Data.Model.Order;
-    using Lib.Invoice;
-    using Lib.Invoice.Request;
-    using Data.Lib.Invoice.Response;
-    using Data.Model.Identity.Profile;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Collections.Generic;
-    using Lib.Utility.Odata;
-    using LinqToQuerystring;
-    using Model.Pagination;
-    using System.Web.Http.Description;
-    using Lib.Email;
-    using Data.Entity.Identity;
-    using Model.Job;
-    using Data.Model.Operation;
-    using Data.Model.Order.Delivery;
-
-
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>

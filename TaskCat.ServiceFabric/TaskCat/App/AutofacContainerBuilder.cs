@@ -1,4 +1,7 @@
-﻿namespace TaskCat.App
+﻿using Microsoft.Owin.Security.DataProtection;
+using TaskCat.Lib.DataProtection;
+
+namespace TaskCat.App
 {
     using Autofac;
     using Autofac.Builder;
@@ -21,7 +24,6 @@
     using Lib.Email;
     using Lib.Email.SMTP;
     using Owin;
-    using Microsoft.Owin.Security.DataProtection;
     using Lib.DropPoint;
     using Data.Entity;
     using Lib.Domain;
@@ -36,8 +38,8 @@
 
             #region Account
 
-            var provider = app.GetDataProtectionProvider();
-            builder.Register(c => app.GetDataProtectionProvider()).As<IDataProtectionProvider>().SingleInstance();
+            var machineKeyProtectionProvider = new MachineKeyDataProtectionProvider();
+            builder.Register(c => machineKeyProtectionProvider).As<IDataProtectionProvider>().SingleInstance();
             builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
             builder.RegisterType<AccountManager>().InstancePerLifetimeScope();

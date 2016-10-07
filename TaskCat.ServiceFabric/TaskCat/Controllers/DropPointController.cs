@@ -1,22 +1,22 @@
-﻿namespace TaskCat.Controller
-{
-    using Data.Entity;
-    using Data.Entity.Identity;
-    using Lib.Constants;
-    using Lib.DropPoint;
-    using Lib.Utility.Odata;
-    using LinqToQuerystring;
-    using Microsoft.AspNet.Identity;
-    using Model.Pagination;
-    using MongoDB.Driver;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Description;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Description;
+using LinqToQuerystring;
+using Microsoft.AspNet.Identity;
+using MongoDB.Driver;
+using TaskCat.Data.Entity;
+using TaskCat.Data.Entity.Identity;
+using TaskCat.Lib.Constants;
+using TaskCat.Lib.DropPoint;
+using TaskCat.Lib.Utility.Odata;
+using TaskCat.Model.Pagination;
 
+namespace TaskCat.Controllers
+{
     /// <summary>
     /// Registers and manages drop points for a certain user
     /// </summary>

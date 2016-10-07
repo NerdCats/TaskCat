@@ -1,22 +1,21 @@
-﻿namespace TaskCat.Controller
-{
-    using Data.Entity;
-    using Lib.Catalog;
-    using Lib.Constants;
-    using Lib.Domain;
-    using Lib.Utility.Odata;
-    using LinqToQuerystring;
-    using Model.Pagination;
-    using MongoDB.Driver;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Formatting;
-    using System.Threading.Tasks;
-    using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Threading.Tasks;
+using System.Web.Http;
+using LinqToQuerystring;
+using MongoDB.Driver;
+using TaskCat.Data.Entity;
+using TaskCat.Lib.Constants;
+using TaskCat.Lib.Domain;
+using TaskCat.Lib.Utility.Odata;
+using TaskCat.Model.Pagination;
 
+namespace TaskCat.Controllers
+{
     [Authorize(Roles = "Administrator, BackOfficeAdmin")]
     public class ProductCategoryController : ApiController
     {

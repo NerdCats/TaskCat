@@ -13,12 +13,13 @@
         {
             var settings = Settings.Get<EmailTemplatePathSettings>();
 
-            string path = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/EmailTemplates/");
+            // TODO: Need to fix this
+            //string path = System.Web.Hosting.HostingEnvironment.MapPath(@"~/App_Data/EmailTemplates/");
 
-            using (TextReader reader = new StreamReader(string.Concat(path, nameof(settings.Welcome), ".html")))
-            {
-                WelcomeEmailTemplate = reader.ReadToEnd();
-            }
+            //using (TextReader reader = new StreamReader(string.Concat(path, nameof(settings.Welcome), ".html")))
+            //{
+            //    WelcomeEmailTemplate = reader.ReadToEnd();
+            //}
 
             //TODO: Adding email templates here for razor templating for ourselves
             //Engine.Razor.AddTemplate(nameof(settings.Welcome), );

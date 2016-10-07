@@ -1,13 +1,13 @@
-﻿namespace TaskCat.Controller
-{
-    using Lib.Asset;
-    using Model.Asset;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Lib.Constants;
-    using Data.Model.Geocoding;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
+using TaskCat.Data.Model.Geocoding;
+using TaskCat.Lib.Asset;
+using TaskCat.Lib.Constants;
+using TaskCat.Model.Asset;
 
+namespace TaskCat.Controllers
+{
     /// <summary>
     /// Asset Providers are responsible for fetching eligible assets 
     /// for a certain job

@@ -1,22 +1,22 @@
-﻿namespace TaskCat.Controller
-{
-    using Lib.Vendor;
-    using Microsoft.AspNet.Identity;
-    using System.Web.Http;
-    using System;
-    using Lib.Utility;
-    using System.Threading.Tasks;
-    using System.Net;
-    using Data.Entity;
-    using Lib.Constants;
-    using System.Net.Http;
-    using System.Collections.Generic;
-    using Lib.Utility.Odata;
-    using System.Linq;
-    using MongoDB.Driver;
-    using LinqToQuerystring;
-    using Model.Pagination;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using LinqToQuerystring;
+using Microsoft.AspNet.Identity;
+using MongoDB.Driver;
+using TaskCat.Data.Entity;
+using TaskCat.Lib.Constants;
+using TaskCat.Lib.Utility;
+using TaskCat.Lib.Utility.Odata;
+using TaskCat.Lib.Vendor;
+using TaskCat.Model.Pagination;
 
+namespace TaskCat.Controllers
+{
     [RoutePrefix("api/Vendor")]
     public class VendorController : ApiController
     {

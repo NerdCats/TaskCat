@@ -95,18 +95,6 @@ namespace TaskCat
 
                 return context.Response.WriteAsync(string.Format($"Welcome to TaskCat '{version}', proudly baked by NerdCats"));
             });
-
-
-            //// Configure Web API for self-host. 
-            //HttpConfiguration config = new HttpConfiguration();
-
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
-
-            //app.UseWebApi(config);
         }
 
         private static void SetupMongoConventions()

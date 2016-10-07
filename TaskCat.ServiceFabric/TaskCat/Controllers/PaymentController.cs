@@ -1,15 +1,14 @@
-﻿namespace TaskCat.Controller
-{
-    using System.Web.Http;
-    using Lib.Payment;
-    using System.Web.Http.Description;
-    using Data.Lib.Payment;
-    using Lib.Job;
-    using System;
-    using System.Threading.Tasks;
-    using Data.Lib.Payment.Request;
-    using Lib.Exceptions;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Description;
+using TaskCat.Data.Lib.Payment;
+using TaskCat.Data.Lib.Payment.Request;
+using TaskCat.Lib.Exceptions;
+using TaskCat.Lib.Job;
+using TaskCat.Lib.Payment;
 
+namespace TaskCat.Controllers
+{
     /// <summary>
     /// <c>PaymentController</c> exposes all services provided by a <c>IPaymentManager</c>
     /// </summary>

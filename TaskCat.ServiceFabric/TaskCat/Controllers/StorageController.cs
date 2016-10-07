@@ -1,12 +1,12 @@
-﻿namespace TaskCat.Controller
-{
-    using System;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Lib.Storage;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using TaskCat.Lib.Storage;
 
+namespace TaskCat.Controllers
+{
     /// <summary>
     /// StorageController is the official controller to upload image and 
     /// other files to TaskCat storage service for various purpose

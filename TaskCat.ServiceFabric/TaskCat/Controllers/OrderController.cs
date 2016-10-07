@@ -1,17 +1,17 @@
-﻿namespace TaskCat.Controller
-{
-    using Data.Entity;
-    using Lib.Order;
-    using Microsoft.AspNet.Identity;
-    using System;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Data.Model;
-    using Data.Entity.Identity;
-    using Data.Model.Order;
-    using System.Web.Http.Description;
-    using Lib.Job;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Description;
+using Microsoft.AspNet.Identity;
+using TaskCat.Data.Entity;
+using TaskCat.Data.Entity.Identity;
+using TaskCat.Data.Model;
+using TaskCat.Data.Model.Order;
+using TaskCat.Lib.Job;
+using TaskCat.Lib.Order;
 
+namespace TaskCat.Controllers
+{
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
     {

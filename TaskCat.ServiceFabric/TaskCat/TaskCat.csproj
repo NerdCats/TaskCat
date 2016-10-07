@@ -284,18 +284,18 @@
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controller\AssetProviderController.cs" />
-    <Compile Include="Controller\Auth\AccountController.cs" />
-    <Compile Include="Controller\Auth\RefreshTokensController.cs" />
-    <Compile Include="Controller\DropPointController.cs" />
-    <Compile Include="Controller\JobController.cs" />
-    <Compile Include="Controller\OrderController.cs" />
-    <Compile Include="Controller\PaymentController.cs" />
-    <Compile Include="Controller\ProductCategoryController.cs" />
-    <Compile Include="Controller\ProductController.cs" />
-    <Compile Include="Controller\StorageController.cs" />
-    <Compile Include="Controller\StoreController.cs" />
-    <Compile Include="Controller\VendorController.cs" />
+    <Compile Include="Controllers\AssetProviderController.cs" />
+    <Compile Include="Controllers\Auth\AccountController.cs" />
+    <Compile Include="Controllers\Auth\RefreshTokensController.cs" />
+    <Compile Include="Controllers\DropPointController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Controllers\ProductCategoryController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\StorageController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
@@ -309,6 +309,8 @@
     <Compile Include="Lib\Catalog\StoreService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
+    <Compile Include="Lib\DataProtection\MachineKeyDataProtectionProvider.cs" />
+    <Compile Include="Lib\DataProtection\MachineKeyDataProtector.cs" />
     <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
@@ -417,7 +419,6 @@
     <Compile Include="Model\Storage\FileDownloadModel.cs" />
     <Compile Include="Model\Storage\FileUploadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="OwinCommunicationListener.cs" />
     <Compile Include="TaskCat.cs" />
     <Compile Include="Program.cs" />
@@ -425,13 +426,36 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".config\local\ClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\local\EmailTemplatePathSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\local\ExternalLoginSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\local\ProprietorSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\local\SendWithUsSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\local\SMTPMailSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include=".config\production\ClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="PackageRoot\Config\Settings.xml" />
     <None Include="PackageRoot\ServiceManifest.xml" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\EmailTemplates\Welcome.html" />
+    <Content Include="App_Data\EmailTemplates\Welcome.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TaskCat\TaskCat.Data\TaskCat.Data.csproj">

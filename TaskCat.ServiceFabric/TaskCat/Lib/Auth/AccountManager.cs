@@ -31,6 +31,7 @@
                 RequiredLength = 6
             };
         }
+
         public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : this(store)
         {
             //TODO: Define proper user token protection provider token here
