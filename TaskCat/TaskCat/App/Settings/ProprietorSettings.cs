@@ -19,7 +19,7 @@
         [Required]
         public string CultureCode { get; set; }
         public SocialLinks Socials { get; set; }
-        public string LogoUrl { get; set; }
+        public string oUrl { get; set; }
         public string Website { get; set; }
     }
 

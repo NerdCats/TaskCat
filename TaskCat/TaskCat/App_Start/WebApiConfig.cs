@@ -17,7 +17,6 @@
     {
         public static void Register(HttpConfiguration config, AutofacWebApiDependencyResolver resolver)
         {
-            config.EnableEnumPrefixFree(enumPrefixFree: true);
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
