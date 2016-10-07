@@ -5,11 +5,8 @@
     using NLog;
     using System.Configuration;
     using Data.Entity.Identity;
-    using MongoDB.Bson.Serialization.Conventions;
-    using MongoDB.Bson;
     using AspNet.Identity.MongoDB;
     using Data.Entity.ShadowCat;
-    using System;
 
     public class DbContext : IDbContext
     {
