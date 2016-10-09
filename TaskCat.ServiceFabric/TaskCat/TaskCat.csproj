@@ -473,4 +473,22 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+
+  <Target Name="AfterBuild">
+    <Warning
+      Condition="!Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')"
+      Text="PxtlCa.XmlCommentMarkDownGenerator can't generate Markdown: Can't find Xml file matching assembly name.  Please confirm that your project file is configured to output the Xml documentation file in this build configuration."
+      File="$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML"
+    />
+    <MakeDir Directories="$(MSBuildProjectDirectory)\..\Docs" />
+    <Exec
+      Command='"$(SolutionDir)\packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6099.40769\Tools\PxtlCa.XmlCommentMarkDownGenerator.exe" -i $(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML -o $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md'
+      Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')"
+    />
+    <Message
+      Importance="high"
+      Text="PxtlCa.XmlCommentMarkDownGenerator created file: $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md"
+      Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')"
+    />
+  </Target>
 </Project>
