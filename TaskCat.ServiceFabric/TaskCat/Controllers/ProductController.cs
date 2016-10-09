@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Controller
+﻿namespace TaskCat.Controllers
 {
     using Data.Entity;
     using Lib.Catalog;

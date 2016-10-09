@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Controller.Auth
+﻿namespace TaskCat.Controllers.Auth
 {
     using Data.Model;
     using Data.Model.Identity;

@@ -1,7 +1,0 @@
-﻿{
-  "Host": "smtp.gmail.com",
-  "Port": 587,
-  "Username": "noreply@gobd.co",
-  "Password": "Beattraffic1",
-  "EnableSSL": true
-}
