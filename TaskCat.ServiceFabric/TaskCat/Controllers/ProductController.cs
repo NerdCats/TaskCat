@@ -32,7 +32,7 @@
         }
 
         [HttpGet]
-        [Route("api/ProductCategory/odata")]
+        [Route("api/Product/odata")]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
