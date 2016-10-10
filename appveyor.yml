@@ -16,6 +16,7 @@ assembly_info:
 before_build:
 - cmd: nuget restore TaskCat\TaskCat.sln
 build:
+  project: TaskCat/TaskCat.sln
   publish_wap: true
   verbosity: minimal
 test_script:
