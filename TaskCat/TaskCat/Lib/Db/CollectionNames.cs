@@ -15,5 +15,7 @@
         public const string ProductCategoryCollectionName = "ProductCategories";
         public const string VendorCollectionName = "Vendors";
         public const string ProductCollectionName = "Products";
+
+        public const string CommentCollectionName = "Comments";
     }
 }

@@ -143,6 +143,14 @@
 
         #endregion
 
+        #region Comment
+        private IMongoCollection<Comment> _comments;
+        public IMongoCollection<Comment> Comments
+        {
+            get { return _comments; }
+        }
+        #endregion
+
         public DbContext()
         {
             InitiateDatabase();
@@ -180,6 +188,8 @@
             _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
             _vendors = Database.GetCollection<Vendor>(CollectionNames.VendorCollectionName);
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
+
+            _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
 
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }

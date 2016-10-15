@@ -320,6 +320,7 @@
     <Compile Include="App\Settings\SMTPMailSettings.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
     <Compile Include="Controller\AssetProviderController.cs" />
+    <Compile Include="Controller\CommentController.cs" />
     <Compile Include="Controller\DropPointController.cs" />
     <Compile Include="Controller\PaymentController.cs" />
     <Compile Include="Controller\ProductCategoryController.cs" />
@@ -332,6 +333,7 @@
     <Compile Include="Lib\Auth\IAccountContext.cs" />
     <Compile Include="Lib\Catalog\ProductService.cs" />
     <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
+    <Compile Include="Lib\Comments\CommentService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="App\Startup.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
