@@ -27,6 +27,7 @@
     using Lib.Domain;
     using Lib.Catalog;
     using Lib.Vendor;
+    using Lib.Comments;
 
     public class AutofacContainerBuilder
     {
@@ -95,6 +96,10 @@
             builder.RegisterType<ProductCategoryService>().AsImplementedInterfaces<IRepository<ProductCategory>, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<ProductService>().AsImplementedInterfaces<IRepository<Product>, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<StoreService>().AsImplementedInterfaces<IRepository<Store>, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region Comment
+            builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();

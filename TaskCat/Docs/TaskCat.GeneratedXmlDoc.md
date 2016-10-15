@@ -24,6 +24,35 @@
 
 
 ---
+## Type Controller.CommentController
+
+ Default controller to serve comments for any referenced entity 
+
+
+
+---
+#### Method Controller.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService)
+
+ Initializes a default instance of CommentController 
+
+|Name | Description |
+|-----|------|
+|service: | ICommentService to facilitate comment features |
+
+
+---
+#### Method Controller.CommentController.Get(System.String)
+
+ Get a single comment by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Comment id to be fetched.|
+**Returns**: Comment with specified id.
+
+
+
+---
 ## Type Controller.DropPointController
 
  Registers and manages drop points for a certain user 

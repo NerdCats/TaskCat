@@ -7,6 +7,7 @@
     using LinqToQuerystring;
     using Model.Pagination;
     using MongoDB.Driver;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -78,5 +79,11 @@
             return Ok(comment);
         }
 
+        [HttpGet]
+        [Route("api/Comment/{entityType}/{refId}")]
+        public async Task<IHttpActionResult> GetComments(string entityType, string refId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
