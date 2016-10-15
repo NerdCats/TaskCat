@@ -100,6 +100,23 @@
             productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Descending(c => c.Name), UniqueIndexOptions);
         }
 
+        internal static void EnsureComments(IMongoCollection<Comment> commentCollection)
+        {
+            var SparseIndexOptions = new CreateIndexOptions();
+            SparseIndexOptions.Sparse = true;
+
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.RefId));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.RefId));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.RefCommentId), SparseIndexOptions);
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.RefCommentId), SparseIndexOptions);
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.EntityType));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.EntityType));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.CreateTime));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.CreateTime));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.ModifiedTime));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.ModifiedTime));
+        }
+
         public static void EnsureVendorIndex(IMongoCollection<Vendor> vendorProfileCollection)
         {
             var UniqueIndexOptions = new CreateIndexOptions();

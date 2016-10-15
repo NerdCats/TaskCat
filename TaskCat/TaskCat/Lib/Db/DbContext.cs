@@ -170,6 +170,7 @@
             IndexFacade.EnsureDropPointIndex(_dropPoints);
             IndexFacade.EnsureVendorIndex(_vendors);
             IndexFacade.EnsureProductCategoriesIndex(_productCategories);
+            IndexFacade.EnsureComments(_comments);
         }
 
         private void InitiateCollections()
@@ -202,7 +203,6 @@
 
             var TaskCatDBName = ConfigurationManager.AppSettings["TaskCat.DbName"];
             Database = mongoClient.GetDatabase(string.IsNullOrWhiteSpace(TaskCatDBName) ? DatabaseNames.TASKCAT_DB : TaskCatDBName);
-
 
             var shadowCatConnectionString = ConfigurationManager.ConnectionStrings["ShadowCat.ConnectionString"].ConnectionString;
             if (string.Equals(connectionString, shadowCatConnectionString))
