@@ -4,6 +4,8 @@
     {
         public const string DefaultApiRoute = "DefaultApi";
         public const string DefaultOdataRoute = "DefaultOdata";
+        public const string CommentOdataRoute = "CommentOdata";
+        public const string DefaultCommentsRoute = "DefaultComments";
         public const string ConfirmEmailRoute = "ConfirmEmailRoute";
         public const string GetUserProfileByIdRoute = "GetUserProfileById";
 

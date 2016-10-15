@@ -7,7 +7,6 @@
     using LinqToQuerystring;
     using Model.Pagination;
     using MongoDB.Driver;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -33,8 +32,15 @@
             this.service = service;
         }
 
+        /// <summary>
+        /// Odata route to query comments
+        /// </summary>
+        /// <param name="pageSize">Page size to return results in. </param>
+        /// <param name="page">Page number to return. </param>
+        /// <param name="envelope">Boolean trigger to envelope or package the data in or not. </param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("api/Comment/odata")]
+        [Route("api/Comment/odata", Name = AppConstants.CommentOdataRoute)]
         public IHttpActionResult Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             if (pageSize == 0)
@@ -57,12 +63,15 @@
                 });
 
             IQueryable<Comment> comments = service.Collection.AsQueryable();
-            var queryResult = comments.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
+
+            var queryTotal = comments.LinqToQuerystring(queryString: odataQuery);
+            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
             if (envelope)
-                return Ok(new PageEnvelope<Comment>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
+            {
+                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
+                return Ok(new PageEnvelope<Comment>(queryTotal.LongCount(), page, pageSize, AppConstants.CommentOdataRoute, queryResult, this.Request, otherParams));
+            }
             return Ok(queryResult);
         }
 
@@ -79,11 +88,25 @@
             return Ok(comment);
         }
 
+        /// <summary>
+        /// Get comments by entity type and reference id which is ordered by create time. 
+        /// </summary>
+        /// <param name="entityType">Entity type the comment is associated with.</param>
+        /// <param name="refId">Reference Id for the comment.</param>
+        /// <param name="pageSize">Desired page size.</param>
+        /// <param name="page">Desired page number.</param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("api/Comment/{entityType}/{refId}")]
-        public async Task<IHttpActionResult> GetComments(string entityType, string refId)
+        [Route("api/Comment/{entityType}/{refId}", Name = AppConstants.DefaultCommentsRoute)]
+        public async Task<IHttpActionResult> GetComments(string entityType, string refId, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
-            throw new NotImplementedException();
+            if(service.IsValidEntityTypeForComment(entityType))
+            {
+                var comments = await service.GetByRefId(refId, entityType, pageSize, page);
+                return Ok(new PageEnvelope<Comment>(comments.Total, page, pageSize, AppConstants.DefaultCommentsRoute, comments.Result, this.Request));
+            }
+
+            return BadRequest("Wrong entity type provided");
         }
     }
 }

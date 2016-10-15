@@ -4,21 +4,33 @@
     using System.Threading.Tasks;
     using MongoDB.Driver;
     using Data.Entity;
-    using Domain;
     using Db;
     using System.Linq;
     using Exceptions;
+    using Data.Model.Operation;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Default implementation of ICommentService
+    /// </summary>
     public class CommentService : ICommentService
     {
         private IDbContext dbContext;
         public IMongoCollection<Comment> Collection { get; set; }
 
+        private readonly List<string> supportedEntityTypes = new List<string>();
+
         public CommentService(IDbContext dbContext)
         {
             this.dbContext = dbContext;
             this.Collection = dbContext.Comments;
+
+            InitiateSupportedEntityTypes();
+        }
+
+        private void InitiateSupportedEntityTypes()
+        {
+            supportedEntityTypes.Add(nameof(Job));
         }
 
         public async Task<Comment> Delete(string id)
@@ -31,7 +43,7 @@
             return result;
         }
 
-        public async Task<IEnumerable<Comment>> GetByRefId(string id, string entityType, int page, int pageSize)
+        public async Task<QueryResult<Comment>> GetByRefId(string id, string entityType, int page, int pageSize)
         {
             if (String.IsNullOrWhiteSpace(id))
                 throw new ArgumentNullException(nameof(id));
@@ -39,6 +51,7 @@
             if (String.IsNullOrWhiteSpace(entityType))
                 throw new ArgumentNullException(nameof(entityType));
 
+            var total = await Collection.Find(x => x.RefId == id && x.EntityType == entityType).CountAsync();
             var result = await Collection.Find(x => x.RefId == id && x.EntityType == entityType)
                 .SortByDescending(x => x.CreateTime)
                 .Skip(page * pageSize)
@@ -49,7 +62,8 @@
             {
                 throw new EntityNotFoundException(typeof(Comment), id);
             }
-            return result;
+
+            return new QueryResult<Comment>(result, total);
         }
 
         public async Task<Comment> Get(string id)
@@ -81,6 +95,11 @@
             if (result == null)
                 throw new EntityUpdateException(typeof(Comment), obj.Id);
             return result;
+        }
+
+        public bool IsValidEntityTypeForComment(string entityType)
+        {
+            return supportedEntityTypes.Contains(entityType);
         }
     }
 }
