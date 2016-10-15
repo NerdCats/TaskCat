@@ -8,6 +8,7 @@
     using Db;
     using System.Linq;
     using Exceptions;
+    using System.Collections.Generic;
 
     public class CommentService : IRepository<Comment>
     {
@@ -26,7 +27,28 @@
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
 
             if (result == null)
-                throw new EntityDeleteException(typeof(ProductCategory), id);
+                throw new EntityDeleteException(typeof(Comment), id);
+            return result;
+        }
+
+        public async Task<IEnumerable<Comment>> GetByRefId(string id, string entityType, int page, int pageSize)
+        {
+            if (String.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+
+            if (String.IsNullOrWhiteSpace(entityType))
+                throw new ArgumentNullException(nameof(entityType));
+
+            var result = await Collection.Find(x => x.RefId == id && x.EntityType == entityType)
+                .SortByDescending(x => x.CreateTime)
+                .Skip(page * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+
+            if (result == null)
+            {
+                throw new EntityNotFoundException(typeof(Comment), id);
+            }
             return result;
         }
 
@@ -36,7 +58,7 @@
             var result = (await Collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
             if (result == null)
             {
-                throw new EntityNotFoundException(typeof(ProductCategory), id);
+                throw new EntityNotFoundException(typeof(Comment), id);
             }
             return result;
         }
@@ -57,7 +79,7 @@
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == obj.Id, obj);
         
             if (result == null)
-                throw new EntityUpdateException(typeof(ProductCategory), obj.Id);
+                throw new EntityUpdateException(typeof(Comment), obj.Id);
             return result;
         }
     }
