@@ -112,7 +112,7 @@
         /// <summary>
         /// Post request to create a comment.
         /// </summary>
-        /// <param name="comment">Comment to be created</param>
+        /// <param name="comment">Comment to be created. </param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IHttpActionResult> Post(Comment comment)
@@ -126,6 +126,18 @@
                 return Created<Comment>($"{this.Request.RequestUri}{result.Id}", result);
             }
             return BadRequest("Wrong entity type provided");
+        }
+
+        /// <summary>
+        /// Delete request to delete a comment.
+        /// </summary>
+        /// <param name="id">Delete to be created.</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete (string id)
+        {
+            var result = await service.Delete(id);
+            return Ok<Comment>(result);
         }
     }
 }
