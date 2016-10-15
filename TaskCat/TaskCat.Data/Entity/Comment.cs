@@ -12,6 +12,6 @@
         public string RefCommentId { get; set; }
 
         public DateTime? CreateTime { get; set; }
-        public DateTime? ModifiedTime { get; set; }
+        public DateTime? LastModified { get; set; }
     }   
 }

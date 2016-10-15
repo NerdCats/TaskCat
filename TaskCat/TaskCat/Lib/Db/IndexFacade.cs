@@ -113,8 +113,8 @@
             commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.EntityType));
             commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.CreateTime));
             commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.CreateTime));
-            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.ModifiedTime));
-            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.ModifiedTime));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Ascending(x => x.LastModified));
+            commentCollection.Indexes.CreateOne(Builders<Comment>.IndexKeys.Descending(x => x.LastModified));
         }
 
         public static void EnsureVendorIndex(IMongoCollection<Vendor> vendorProfileCollection)
