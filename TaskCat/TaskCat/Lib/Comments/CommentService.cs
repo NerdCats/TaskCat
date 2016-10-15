@@ -10,7 +10,7 @@
     using Exceptions;
     using System.Collections.Generic;
 
-    public class CommentService : IRepository<Comment>
+    public class CommentService : ICommentService
     {
         private IDbContext dbContext;
         public IMongoCollection<Comment> Collection { get; set; }

@@ -595,6 +595,28 @@
 
 
 ---
+## Type Lib.Comments.ICommentService
+
+ Default implementation for Comment repository 
+
+
+
+---
+#### Method Lib.Comments.ICommentService.GetByRefId(System.String,System.String,System.Int32,System.Int32)
+
+ Get a comment feed based on a reference id and an entity type. 
+
+|Name | Description |
+|-----|------|
+|refId: |Reference Id for the comment.|
+|entityType: |Entity type for the comment reference.|
+|page: |Page number to be fetched.|
+|pageSize: |Page size to be used.|
+**Returns**: 
+
+
+
+---
 #### Method Lib.Exceptions.EntityDeleteException.#ctor(System.String)
 
  Base constructor to create a EntityDeleteException with a message 
