@@ -123,7 +123,7 @@
             if (service.IsValidEntityTypeForComment(comment.EntityType))
             {
                 var result = await service.Insert(comment);
-                return Created($"{this.Request.RequestUri}{result.Id}", result);
+                return Created<Comment>($"{this.Request.RequestUri}{result.Id}", result);
             }
             return BadRequest("Wrong entity type provided");
         }
