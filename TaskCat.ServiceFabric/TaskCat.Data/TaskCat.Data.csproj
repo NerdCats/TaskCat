@@ -103,6 +103,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Comment.cs" />
     <Compile Include="Entity\DropPoint.cs" />
     <Compile Include="Entity\HRIDEntity.cs" />
     <Compile Include="Entity\Identity\Asset.cs" />

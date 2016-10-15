@@ -169,6 +169,88 @@
 
 
 ---
+## Type Controllers.CommentController
+
+ Default controller to serve comments for any referenced entity 
+
+
+
+---
+#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService)
+
+ Initializes a default instance of CommentController 
+
+|Name | Description |
+|-----|------|
+|service: | ICommentService to facilitate comment features |
+
+
+---
+#### Method Controllers.CommentController.Get(System.Int32,System.Int32,System.Boolean)
+
+ Odata route to query comments 
+
+|Name | Description |
+|-----|------|
+|pageSize: |Page size to return results in. |
+|page: |Page number to return. |
+|envelope: |Boolean trigger to envelope or package the data in or not. |
+**Returns**: 
+
+
+
+---
+#### Method Controllers.CommentController.Get(System.String)
+
+ Get a single comment by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Comment id to be fetched.|
+**Returns**: Comment with specified id.
+
+
+
+---
+#### Method Controllers.CommentController.GetComments(System.String,System.String,System.Int32,System.Int32)
+
+ Get comments by entity type and reference id which is ordered by create time. 
+
+|Name | Description |
+|-----|------|
+|entityType: |Entity type the comment is associated with.|
+|refId: |Reference Id for the comment.|
+|pageSize: |Desired page size.|
+|page: |Desired page number.|
+**Returns**: 
+
+
+
+---
+#### Method Controllers.CommentController.Post(TaskCat.Data.Entity.Comment)
+
+ Post request to create a comment. 
+
+|Name | Description |
+|-----|------|
+|comment: |Comment to be created. |
+**Returns**: 
+
+
+
+---
+#### Method Controllers.CommentController.Delete(System.String)
+
+ Delete request to delete a comment. 
+
+|Name | Description |
+|-----|------|
+|id: |Delete to be created.|
+**Returns**: 
+
+
+
+---
 ## Type Controllers.DropPointController
 
  Registers and manages drop points for a certain user 
@@ -590,6 +672,47 @@
 |Name | Description |
 |-----|------|
 |assetRequest: ||
+**Returns**: 
+
+
+
+---
+## Type Lib.Comments.CommentService
+
+ Default implementation of ICommentService 
+
+
+
+---
+## Type Lib.Comments.ICommentService
+
+ Default implementation for Comment repository 
+
+
+
+---
+#### Method Lib.Comments.ICommentService.GetByRefId(System.String,System.String,System.Int32,System.Int32)
+
+ Get a comment feed based on a reference id and an entity type. 
+
+|Name | Description |
+|-----|------|
+|refId: |Reference Id for the comment.|
+|entityType: |Entity type for the comment reference.|
+|page: |Page number to be fetched.|
+|pageSize: |Page size to be used.|
+**Returns**: 
+
+
+
+---
+#### Method Lib.Comments.ICommentService.IsValidEntityTypeForComment(System.String)
+
+ Determines whether this entity type is valid for commenting 
+
+|Name | Description |
+|-----|------|
+|entityType: |Entity type for the comment reference.|
 **Returns**: 
 
 

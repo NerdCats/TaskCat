@@ -2,7 +2,7 @@
 {
     using Moq;
     using NUnit.Framework;
-    using TaskCat.Controllers.Auth;
+    using Controllers.Auth;
     using Data.Entity.Identity;
     using TaskCat.Lib.Auth;
     using Data.Model.Identity.Registration;

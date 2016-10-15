@@ -140,6 +140,14 @@
 
         #endregion
 
+        #region Comment
+        private IMongoCollection<Comment> _comments;
+        public IMongoCollection<Comment> Comments
+        {
+            get { return _comments; }
+        }
+        #endregion
+
         public DbContext()
         {
             InitiateDatabase();
@@ -159,6 +167,7 @@
             IndexFacade.EnsureDropPointIndex(_dropPoints);
             IndexFacade.EnsureVendorIndex(_vendors);
             IndexFacade.EnsureProductCategoriesIndex(_productCategories);
+            IndexFacade.EnsureComments(_comments);
         }
 
         private void InitiateCollections()
@@ -178,6 +187,8 @@
             _vendors = Database.GetCollection<Vendor>(CollectionNames.VendorCollectionName);
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
+            _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
+
             _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }
 
@@ -189,7 +200,6 @@
 
             var TaskCatDBName = ConfigurationManager.AppSettings["TaskCat.DbName"];
             Database = mongoClient.GetDatabase(string.IsNullOrWhiteSpace(TaskCatDBName) ? DatabaseNames.TASKCAT_DB : TaskCatDBName);
-
 
             var shadowCatConnectionString = ConfigurationManager.ConnectionStrings["ShadowCat.ConnectionString"].ConnectionString;
             if (string.Equals(connectionString, shadowCatConnectionString))
