@@ -108,5 +108,24 @@
 
             return BadRequest("Wrong entity type provided");
         }
+
+        /// <summary>
+        /// Post request to create a comment.
+        /// </summary>
+        /// <param name="comment">Comment to be created</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IHttpActionResult> Post(Comment comment)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (service.IsValidEntityTypeForComment(comment.EntityType))
+            {
+                var result = await service.Insert(comment);
+                return Created($"{this.Request.RequestUri}{result.Id}", result);
+            }
+            return BadRequest("Wrong entity type provided");
+        }
     }
 }
