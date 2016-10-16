@@ -22,10 +22,10 @@
 
     public class ProductController : ApiController
     {
-        private ProductService productService;
+        private IRepository<Product> productService;
         private IRepository<Store> storeService;
 
-        public ProductController(ProductService productService, IRepository<Store> storeService)
+        public ProductController(IRepository<Product> productService, IRepository<Store> storeService)
         {
             this.productService = productService;
             this.storeService = storeService;
