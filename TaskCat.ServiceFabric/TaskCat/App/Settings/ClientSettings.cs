@@ -7,5 +7,6 @@
         public string WebCatUrl { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "ConfirmEmailPath is missing in ClientSettings")]
         public string ConfirmEmailPath { get; set; }
+        public string HostingAddress { get; set; }
     }
 }

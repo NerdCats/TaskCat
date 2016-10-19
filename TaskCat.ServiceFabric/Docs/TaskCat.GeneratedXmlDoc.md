@@ -1210,22 +1210,6 @@
 
 
 ---
-## Type TaskCat
-
- The FabricRuntime creates an instance of this class for each service type instance. 
-
-
-
----
-#### Method TaskCat.CreateServiceInstanceListeners
-
- Optional override to create listeners (like tcp, http) for this service instance. 
-
-**Returns**: The collection of listeners.
-
-
-
----
 #### Method Program.Main
 
  This is the entry point of the service host process. 

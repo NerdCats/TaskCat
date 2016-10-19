@@ -16,5 +16,7 @@
         public const int DefaultAssetSearchLimit = 10;
 
         public const int DefaultStoreOrder = 999;
+
+        public const string DefaultHostingAddress = "http://localhost:80/";
     }
 }
