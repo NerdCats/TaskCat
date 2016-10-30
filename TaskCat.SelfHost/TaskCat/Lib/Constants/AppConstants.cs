@@ -17,6 +17,6 @@
 
         public const int DefaultStoreOrder = 999;
 
-        public const string DefaultHostingAddress = "http://localhost:80/";
+        public const string DefaultHostingAddress = "http://localhost:8177/";
     }
 }
