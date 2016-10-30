@@ -20,8 +20,9 @@ build:
   project: TaskCat.SelfHost/TaskCat.SelfHost.sln
   verbosity: minimal
 artifacts:
-- path: TaskCat.SelfHost\TaskCat\bin\$(configuration)\*.*
+- path: TaskCat.SelfHost\TaskCat\bin\$(configuration)
   name: TaskCat
+  type: zip
 test_script:
 - cmd: nunit3-console TaskCat.SelfHost\TaskCat.Tests\bin\Release\TaskCat.Tests.dll --result=TaskCatTestResults.xml;format=AppVeyor
 deploy:
