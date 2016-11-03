@@ -5,6 +5,7 @@ branches:
   only:
   - Release
   - master
+  - SelfHostService
   - SelfHostServiceProd
 configuration: Release
 clone_depth: 10
@@ -26,6 +27,10 @@ artifacts:
 test_script:
 - cmd: nunit3-console TaskCat.SelfHost\TaskCat.Tests\bin\Release\TaskCat.Tests.dll --result=TaskCatTestResults.xml;format=AppVeyor
 deploy:
+- provider: Environment
+  name: TaskCatDev
+  on:
+    branch: SelfHostService
 - provider: Environment
   name: TaskCatProd
   on:
