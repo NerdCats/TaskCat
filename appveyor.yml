@@ -5,7 +5,6 @@ branches:
   only:
   - Release
   - master
-  - SelfHostService
   - SelfHostServiceProd
 configuration: Release
 clone_depth: 10
