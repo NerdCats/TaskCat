@@ -1,4 +1,4 @@
-version: 0.2.0.{build}
+  version: 0.2.0.{build}
 pull_requests:
   do_not_increment_build_number: true
 branches:
@@ -6,6 +6,7 @@ branches:
   - Release
   - master
   - SelfHostService
+  - SelfHostServiceProd
 configuration: Release
 clone_depth: 10
 assembly_info:
@@ -27,9 +28,9 @@ test_script:
 - cmd: nunit3-console TaskCat.SelfHost\TaskCat.Tests\bin\Release\TaskCat.Tests.dll --result=TaskCatTestResults.xml;format=AppVeyor
 deploy:
 - provider: Environment
-  name: TaskCatDev
+  name: TaskCatProd
   on:
-    branch: SelfHostService
+    branch: SelfHostServiceProd
 notifications:
 - provider: Slack
   incoming_webhook: https://hooks.slack.com/services/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
