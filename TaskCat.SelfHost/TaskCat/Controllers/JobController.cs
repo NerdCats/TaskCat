@@ -10,6 +10,7 @@ using System.Web.Http.Description;
 using LinqToQuerystring;
 using Marvin.JsonPatch;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Data.Entity.Identity;
@@ -66,7 +67,7 @@ namespace TaskCat.Controllers
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest();
-            if (User.Identity.IsAuthenticated)
+            if (User != null && User.Identity.IsAuthenticated)
             {
                 //FIXME: In this way an asset can see every job he is assigned or
                 //not assigned to. Need to fix that

@@ -41,12 +41,12 @@
         public AccountContext(
             IDbContext dbContext,
             IEmailService mailService,
-            AccountManager accoutnManager,
+            AccountManager accountManager,
             IBlobService blobService,
             IJobManager jobManager)
         {
             this.dbContext = dbContext;
-            this.accountManager = accoutnManager;
+            this.accountManager = accountManager;
             this.blobService = blobService;
             this.jobManager = jobManager;
             this.mailService = mailService;

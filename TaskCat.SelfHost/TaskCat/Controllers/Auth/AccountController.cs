@@ -193,7 +193,7 @@
         [HttpGet]
         public async Task<IHttpActionResult> Profile(string userId = null)
         {
-            if (!this.User.Identity.IsAuthenticated && string.IsNullOrEmpty(userId))
+            if (this.User == null && string.IsNullOrEmpty(userId))
                 return BadRequest("To get a public profile, please provide a valid user Id");
 
             if (string.IsNullOrWhiteSpace(userId))
@@ -202,7 +202,7 @@
             var userModel = await accountContext.FindUserAsModel(userId);
             if (userModel == null) return NotFound();
 
-            if (this.User.Identity.IsAuthenticated)
+            if (this.User!=null && this.User.Identity.IsAuthenticated)
             {
                 if (this.User.IsInRole("Administrator") || this.User.IsInRole("BackOfficeAdmin"))
                     userModel.IsUserAuthenticated = true;
