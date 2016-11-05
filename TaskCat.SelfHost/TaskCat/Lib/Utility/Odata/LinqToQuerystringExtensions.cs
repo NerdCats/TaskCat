@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Text;
 
     internal static class LinqToQuerystringExtensions
@@ -35,6 +36,18 @@
                 sb.Append(item.Key + "=" + item.Value);
             }
             return sb.ToString();
+        }
+
+        public static string GetOdataQueryString(this HttpRequestMessage requestMessage, List<string> otherParamsException)
+        {
+            var queryParams = requestMessage.GetQueryNameValuePairs();
+            queryParams.VerifyQuery(new List<string>() {
+                    OdataOptionExceptions.InlineCount,
+                    OdataOptionExceptions.Skip,
+                    OdataOptionExceptions.Top
+                });
+
+            return queryParams.GetOdataQuery(otherParamsException);
         }
     }
 }
