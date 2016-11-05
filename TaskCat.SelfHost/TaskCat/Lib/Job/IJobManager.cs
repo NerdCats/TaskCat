@@ -14,7 +14,7 @@ namespace TaskCat.Lib.Job
     {
         Task<Data.Entity.Job> GetJob(string id);
         Task<Data.Entity.Job> GetJobByHRID(string hrid);
-        Task<IQueryable<Data.Entity.Job>> GetJobs();
+        IQueryable<Data.Entity.Job> GetJobs();
         Task<IEnumerable<Data.Entity.Job>> GetJobs(string type, int start, int limit);
         Task<QueryResult<Data.Entity.Job>> GetJobs(ODataQueryOptions<Data.Entity.Job> query, int start, int limit);
         Task<QueryResult<Data.Entity.Job>> GetJobsAssignedToUser(string userId, int start, int limit, DateTime? fromDateTime, JobState jobStateToFetchUpTo = JobState.IN_PROGRESS, SortDirection sortByCreateTimeDirection = SortDirection.Descending);

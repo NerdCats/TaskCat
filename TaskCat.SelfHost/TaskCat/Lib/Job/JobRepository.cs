@@ -37,9 +37,9 @@
             return await _manager.GetJob(id);
         }
 
-        public async Task<IQueryable<Job>> GetJobs()
+        public IQueryable<Job> GetJobs()
         {
-            return await _manager.GetJobs();
+            return _manager.GetJobs();
         }
 
         public async Task<Job> GetJobByHrid(string hrid)

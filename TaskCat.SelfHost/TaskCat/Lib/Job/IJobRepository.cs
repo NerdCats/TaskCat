@@ -15,7 +15,7 @@
     public interface IJobRepository
     {
         Task<Job> GetJob(string id);
-        Task<IQueryable<Job>> GetJobs();
+        IQueryable<Job> GetJobs();
         Task<Job> GetJobByHrid(string id);
         Task<Job> PostJob(JobModel model);
         Task<IEnumerable<Job>> GetJobs(string type, int start, int limit);

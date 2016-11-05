@@ -20,9 +20,9 @@
             this.store = store;
         }
 
-        public async Task<IQueryable<Job>> GetJobs()
+        public IQueryable<Job> GetJobs()
         {
-            return await store.FindAllAsIQueryable();
+            return store.FindAllAsIQueryable();
         }
 
         public async Task<Job> GetJob(string id)

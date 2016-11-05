@@ -28,6 +28,7 @@ using TaskCat.Lib.Job;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Job;
 using TaskCat.Model.Pagination;
+using System.Diagnostics;
 
 namespace TaskCat.Controllers
 {
@@ -171,7 +172,7 @@ namespace TaskCat.Controllers
                 });
 
             IQueryable<Job> jobs;
-            jobs = await repository.GetJobs();
+            jobs = repository.GetJobs();
 
             if (IsUserOrEnterpriseUserOnly())
             {
@@ -182,15 +183,19 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var queryTotal = jobs.LinqToQuerystring(queryString: odataQuery);
-            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
+            var queryTotal = Task.Run(()=> jobs.LinqToQuerystring(queryString: odataQuery).Count());
+            var queryResult = Task.Run(()=>jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize)
+                .Take(pageSize));
 
+            await Task.WhenAll(queryTotal, queryResult);
+        
             if (envelope)
             {
-                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);                
-                return Ok(new PageEnvelope<Job>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request, otherParams));
+                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
+                var result = new PageEnvelope<Job>(queryTotal.Result, page, pageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request, otherParams);
+                return Ok(result);
             }
-                
+
             return Ok(queryResult);
         }
 

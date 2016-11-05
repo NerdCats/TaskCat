@@ -79,12 +79,9 @@
             });
         }
 
-        internal async Task<IQueryable<Job>> FindAllAsIQueryable()
+        internal IQueryable<Job> FindAllAsIQueryable()
         {
-            return await Task.Run(() =>
-            {
-                return _context.Jobs.Find(x => true).ToEnumerable().AsQueryable();
-            });
+            return _context.Jobs.AsQueryable();
         }
 
         internal async Task<long> CountJobs()
