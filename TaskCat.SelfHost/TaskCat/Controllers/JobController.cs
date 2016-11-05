@@ -154,12 +154,7 @@ namespace TaskCat.Controllers
         {
             PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
 
-            var odataQuery = this.Request.GetOdataQueryString(
-                new List<string>() {
-                    "pageSize",
-                    "page",
-                    "envelope"
-                });
+            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
 
             IQueryable<Job> jobs = repository.GetJobs();
 
@@ -172,16 +167,17 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var queryTotal = Task.Run(()=> jobs.LinqToQuerystring(queryString: odataQuery).Count());
-            var queryResult = Task.Run(()=>jobs.LinqToQuerystring(queryString: odataQuery).Skip(page * pageSize)
+            var queryTotal = Task.Run(() => jobs.LinqToQuerystring(queryString: odataQuery).Count());
+            var queryResult = Task.Run(
+                () => jobs.LinqToQuerystring(queryString: odataQuery)
+                .Skip(page * pageSize)
                 .Take(pageSize));
 
             await Task.WhenAll(queryTotal, queryResult);
         
             if (envelope)
             {
-                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
-                var result = new PageEnvelope<Job>(queryTotal.Result, page, pageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request, otherParams);
+                var result = new PageEnvelope<Job>(queryTotal.Result, page, pageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
                 return Ok(result);
             }
 

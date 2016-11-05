@@ -16,9 +16,9 @@
         public virtual string GeneratePageUrl(string route, long page, long pageSize, IDictionary<string, string> otherParams = null)
         {
             Dictionary<string, object> routeParams = new Dictionary<string, object>();
-            routeParams.Add("page", page);
-            routeParams.Add("pageSize", pageSize);
-            routeParams.Add("envelope", true);
+            routeParams.Add(PagingQueryParameters.Page, page);
+            routeParams.Add(PagingQueryParameters.PageSize, pageSize);
+            routeParams.Add(PagingQueryParameters.Envelope, true);
 
             if (otherParams != null)
             {
