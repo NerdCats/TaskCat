@@ -33,7 +33,14 @@
             StringBuilder sb = new StringBuilder();
             foreach (var item in qParamDict)
             {
-                sb.Append(item.Key + "=" + item.Value);
+                if (string.IsNullOrEmpty(item.Value))
+                {
+                    sb.Append(item.Key);
+                }
+                else
+                {
+                    sb.Append(item.Key + "=" + item.Value);
+                }
             }
             return sb.ToString();
         }
