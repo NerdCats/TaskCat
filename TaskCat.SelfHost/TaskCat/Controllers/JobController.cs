@@ -30,6 +30,7 @@ using TaskCat.Model.Job;
 using TaskCat.Model.Pagination;
 using System.Diagnostics;
 using TaskCat.Lib.Utility;
+using TaskCat.Lib.Utility.ActionFilter;
 
 namespace TaskCat.Controllers
 {
@@ -147,14 +148,14 @@ namespace TaskCat.Controllers
         /// </returns>
         ///
         [Authorize]
-        [ResponseType(typeof(IEnumerable<Job>))]
+        [ResponseType(typeof(PageEnvelope<Job>))]
         [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
         [HttpGet]
-        public async Task<IHttpActionResult> ListOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [TaskCatOdataRoute]
+        public async Task<IHttpActionResult> ListOdata()
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
+            var odataRequestModel = this.Request.GetOdataRequestModel();
+            var odataQuery = odataRequestModel.OdataQueryString;
 
             IQueryable<Job> jobs = repository.GetJobs();
 
@@ -170,14 +171,14 @@ namespace TaskCat.Controllers
             var queryTotal = Task.Run(() => jobs.LinqToQuerystring(queryString: odataQuery).Count());
             var queryResult = Task.Run(
                 () => jobs.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize));
+                .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
+                .Take(odataRequestModel.PageSize));
 
             await Task.WhenAll(queryTotal, queryResult);
         
-            if (envelope)
+            if (odataRequestModel.Envelope)
             {
-                var result = new PageEnvelope<Job>(queryTotal.Result, page, pageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
+                var result = new PageEnvelope<Job>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
                 return Ok(result);
             }
 

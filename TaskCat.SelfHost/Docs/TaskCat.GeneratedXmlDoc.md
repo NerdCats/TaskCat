@@ -381,7 +381,7 @@
 
 
 ---
-#### Method Controllers.JobController.ListOdata(System.Int32,System.Int32,System.Boolean)
+#### Method Controllers.JobController.ListOdata
 
  Odata powered query to get jobs 
 

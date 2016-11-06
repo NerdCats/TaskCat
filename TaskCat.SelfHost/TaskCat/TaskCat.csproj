@@ -411,6 +411,7 @@
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
     <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
+    <Compile Include="Lib\Utility\ActionFilter\TaskCatOdataRouteAttribute.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
@@ -424,6 +425,7 @@
     <Compile Include="Lib\Utility\IPagingHelper.cs" />
     <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
     <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
+    <Compile Include="Lib\Utility\Odata\OdataRequestModel.cs" />
     <Compile Include="Lib\Utility\OrderTypeResolver.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\PagingQueryParameters.cs" />
