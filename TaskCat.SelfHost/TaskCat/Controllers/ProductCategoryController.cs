@@ -13,6 +13,7 @@ using TaskCat.Lib.Constants;
 using TaskCat.Lib.Domain;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Pagination;
+using TaskCat.Lib.Utility;
 
 namespace TaskCat.Controllers
 {
@@ -30,25 +31,9 @@ namespace TaskCat.Controllers
         [Route("api/ProductCategory/odata")]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            if (pageSize == 0)
-                return BadRequest("Page size cant be 0");
-            if (page < 0)
-                return BadRequest("Page index less than 0 provided");
+            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
-
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            queryParams.VerifyQuery(new List<string>() {
-                    OdataOptionExceptions.InlineCount,
-                    OdataOptionExceptions.Skip,
-                    OdataOptionExceptions.Top
-                });
-
-            var odataQuery = queryParams.GetOdataQuery(new List<string>() {
-                    "pageSize",
-                    "page",
-                    "envelope"
-                });
+            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
 
             IQueryable<ProductCategory> productCategories = service.Collection.AsQueryable();
             var queryResult = productCategories.LinqToQuerystring(queryString: odataQuery)

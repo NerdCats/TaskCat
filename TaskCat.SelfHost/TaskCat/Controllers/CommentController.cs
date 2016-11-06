@@ -3,6 +3,7 @@
     using Data.Entity;
     using Lib.Comments;
     using Lib.Constants;
+    using Lib.Utility;
     using Lib.Utility.Odata;
     using LinqToQuerystring;
     using Model.Pagination;
@@ -43,24 +44,9 @@
         [Route("api/Comment/odata", Name = AppConstants.CommentOdataRoute)]
         public IHttpActionResult Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            if (pageSize == 0)
-                return BadRequest("Page size cant be 0");
-            if (page < 0)
-                return BadRequest("Page index less than 0 provided");
+            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
 
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            queryParams.VerifyQuery(new List<string>() {
-                    OdataOptionExceptions.InlineCount,
-                    OdataOptionExceptions.Skip,
-                    OdataOptionExceptions.Top
-                });
-
-            var odataQuery = queryParams.GetOdataQuery(new List<string>() {
-                    "pageSize",
-                    "page",
-                    "envelope"
-                });
+            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
 
             IQueryable<Comment> comments = service.Collection.AsQueryable();
 
@@ -69,8 +55,7 @@
 
             if (envelope)
             {
-                Dictionary<string, string> otherParams = this.Request.GetQueryNameValuePairs().ToDictionary(x => x.Key, x => x.Value);
-                return Ok(new PageEnvelope<Comment>(queryTotal.LongCount(), page, pageSize, AppConstants.CommentOdataRoute, queryResult, this.Request, otherParams));
+                return Ok(new PageEnvelope<Comment>(queryTotal.LongCount(), page, pageSize, AppConstants.CommentOdataRoute, queryResult, this.Request));
             }
             return Ok(queryResult);
         }
