@@ -122,12 +122,16 @@
       <HintPath>..\packages\CompareNETObjects.3.05.0.0\lib\net452\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LinqToQuerystring, Version=0.6.5.38651, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToQueryStringNuget.1.0.1\lib\net35\LinqToQuerystring.dll</HintPath>
+    <Reference Include="LinqToQuerystring, Version=0.7.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToQuerystring.0.7.0.3\lib\net45\LinqToQuerystring.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Marvin.JsonPatch, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JsonPatch.NerdCats.Nuget.1.0.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
+    <Reference Include="LinqToQuerystring.WebApi2, Version=1.0.0.21, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToQuerystring.WebApi2.1.0.0.21\lib\net45\LinqToQuerystring.WebApi2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Marvin.JsonPatch, Version=0.7.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonPatch.0.7.6\lib\net45\Marvin.JsonPatch.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -226,8 +230,8 @@
       <HintPath>..\packages\MongoDB.Driver.Core.2.3.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -257,8 +261,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.18.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.18\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.18.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.18\lib\net45\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
@@ -518,5 +530,10 @@
     <MakeDir Directories="$(MSBuildProjectDirectory)\..\Docs" />
     <Exec Command="&quot;$(SolutionDir)\packages\PxtlCa.XmlCommentMarkDownGenerator.0.2.6099.40769\Tools\PxtlCa.XmlCommentMarkDownGenerator.exe&quot; -i $(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML -o $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md" Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')" />
     <Message Importance="high" Text="PxtlCa.XmlCommentMarkDownGenerator created file: $(MSBuildProjectDirectory)\..\Docs\$(AssemblyName).GeneratedXmlDoc.md" Condition="Exists('$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).XML')" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
 </Project>
