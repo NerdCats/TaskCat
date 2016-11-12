@@ -50,7 +50,7 @@
         {
             IQueryable<Comment> comments = service.Collection.AsQueryable();
 
-            var odataResult = await comments.ToOdataResponse(this.Request, AppConstants.JobsOdataRoute);
+            var odataResult = await comments.ToOdataResponse(this.Request, AppConstants.CommentOdataRoute);
             return Ok(odataResult);
         }
 
