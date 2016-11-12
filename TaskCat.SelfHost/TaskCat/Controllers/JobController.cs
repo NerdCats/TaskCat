@@ -149,7 +149,7 @@ namespace TaskCat.Controllers
         ///
         [Authorize]
         [ResponseType(typeof(PageEnvelope<Job>))]
-        [Route("api/Job/odata", Name = AppConstants.DefaultOdataRoute)]
+        [Route("api/Job/odata", Name = AppConstants.JobsOdataRoute)]
         [HttpGet]
         [TaskCatOdataRoute]
         public async Task<IHttpActionResult> ListOdata()
@@ -168,34 +168,8 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            if (odataRequestModel.CountOnly)
-            {
-                var queryTotal = jobs.LinqToQuerystring(queryString: odataQuery).Count();
-                if (odataRequestModel.Envelope)
-                {
-                    var result = new PageEnvelope<Job>(queryTotal, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, null, this.Request);
-                    return Ok(result);
-                }
-                return Ok(queryTotal);
-            }
-            else
-            {
-                var queryTotal = Task.Run(() => jobs.LinqToQuerystring(queryString: odataQuery).Count());
-                var queryResult = Task.Run(
-                    () => jobs.LinqToQuerystring(queryString: odataQuery)
-                    .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
-                    .Take(odataRequestModel.PageSize));
-
-                await Task.WhenAll(queryTotal, queryResult);
-
-                if (odataRequestModel.Envelope)
-                {
-                    var result = new PageEnvelope<Job>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
-                    return Ok(result);
-                }
-
-                return Ok(queryResult);
-            }
+            var odataResult = await jobs.ToOdataResponse(this.Request, AppConstants.JobsOdataRoute);
+            return Ok(odataResult);
         }
 
         private bool IsUserOrEnterpriseUserOnly()

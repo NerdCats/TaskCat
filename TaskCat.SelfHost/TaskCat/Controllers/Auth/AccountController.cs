@@ -332,7 +332,7 @@
 
             if (envelope)
             {
-                return Ok(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.DefaultOdataRoute, queryResult, this.Request));
+                return Ok(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.JobsOdataRoute, queryResult, this.Request));
             }
 
             return Ok(queryResult);

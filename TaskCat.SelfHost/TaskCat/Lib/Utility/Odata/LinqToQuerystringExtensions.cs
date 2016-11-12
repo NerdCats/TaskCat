@@ -1,10 +1,15 @@
 ﻿namespace TaskCat.Lib.Utility.Odata
 {
+    using LinqToQuerystring;
+    using Model.Pagination;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net.Http;
     using System.Text;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Results;
 
     internal static class LinqToQuerystringExtensions
     {
@@ -43,6 +48,39 @@
                 }
             }
             return sb.ToString();
+        }
+
+        public static async Task<object> ToOdataResponse<T>(this IQueryable<T> queryable, HttpRequestMessage request, string routeName)
+        {
+            var odataRequestModel = request.GetOdataRequestModel();
+            if (odataRequestModel.CountOnly)
+            {
+                var queryTotal = queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString).Count();
+                if (odataRequestModel.Envelope)
+                {
+                    var result = new PageEnvelope<T>(queryTotal, odataRequestModel.Page, odataRequestModel.PageSize, routeName, null, request);
+                    return result;
+                }
+                return queryTotal;
+            }
+            else
+            {
+                var queryTotal = Task.Run(() => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString).Count());
+                var queryResult = Task.Run(
+                    () => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString)
+                    .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
+                    .Take(odataRequestModel.PageSize));
+
+                await Task.WhenAll(queryTotal, queryResult);
+
+                if (odataRequestModel.Envelope)
+                {
+                    var result = new PageEnvelope<T>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, routeName, queryResult.Result, request);
+                    return result;
+                }
+
+                return queryResult;
+            }
         }
 
         public static string GetOdataQueryString(this HttpRequestMessage requestMessage, List<string> otherParamsException)
