@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,10 +6,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using LinqToQuerystring;
 using Marvin.JsonPatch;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Data.Entity.Identity;
@@ -28,8 +25,6 @@ using TaskCat.Lib.Job;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Job;
 using TaskCat.Model.Pagination;
-using System.Diagnostics;
-using TaskCat.Lib.Utility;
 using TaskCat.Lib.Utility.ActionFilter;
 
 namespace TaskCat.Controllers
@@ -154,9 +149,6 @@ namespace TaskCat.Controllers
         [TaskCatOdataRoute]
         public async Task<IHttpActionResult> ListOdata()
         {
-            var odataRequestModel = this.Request.GetOdataRequestModel();
-            var odataQuery = odataRequestModel.OdataQueryString;
-
             IQueryable<Job> jobs = repository.GetJobs();
 
             if (IsUserOrEnterpriseUserOnly())

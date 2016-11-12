@@ -4,16 +4,16 @@
     using Lib.Comments;
     using Lib.Constants;
     using Lib.Utility;
+    using Lib.Utility.ActionFilter;
     using Lib.Utility.Odata;
     using LinqToQuerystring;
     using Model.Pagination;
     using MongoDB.Driver;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using System.Web.Http;
+    using System.Web.Http.Description;
 
     /// <summary>
     /// Default controller to serve comments for any referenced entity
@@ -40,24 +40,18 @@
         /// <param name="page">Page number to return. </param>
         /// <param name="envelope">Boolean trigger to envelope or package the data in or not. </param>
         /// <returns></returns>
+        /// 
+        [Authorize]
+        [ResponseType(typeof(PageEnvelope<Comment>))]
         [HttpGet]
         [Route("api/Comment/odata", Name = AppConstants.CommentOdataRoute)]
-        public IHttpActionResult Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [TaskCatOdataRoute]
+        public async Task<IHttpActionResult> Get()
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
             IQueryable<Comment> comments = service.Collection.AsQueryable();
 
-            var queryTotal = comments.LinqToQuerystring(queryString: odataQuery);
-            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
-
-            if (envelope)
-            {
-                return Ok(new PageEnvelope<Comment>(queryTotal.LongCount(), page, pageSize, AppConstants.CommentOdataRoute, queryResult, this.Request));
-            }
-            return Ok(queryResult);
+            var odataResult = await comments.ToOdataResponse(this.Request, AppConstants.JobsOdataRoute);
+            return Ok(odataResult);
         }
 
         /// <summary>
