@@ -19,6 +19,7 @@
             int pageSize = AppConstants.DefaultPageSize;
             int page = 0;
             bool envelope = true;
+            bool countOnly = false;
 
             if (queryParams.ContainsKey(PagingQueryParameters.Page))
                 int.TryParse(queryParams[PagingQueryParameters.Page], out page);
@@ -31,12 +32,16 @@
             if (queryParams.ContainsKey(PagingQueryParameters.Envelope))
                 bool.TryParse(queryParams[PagingQueryParameters.Envelope], out envelope);
 
+            if (queryParams.ContainsKey(PagingQueryParameters.CountOnly))
+                countOnly = true;
+
             var odataQuery = request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
 
             request.Properties["OdataQueryString"] = odataQuery;
             request.Properties[PagingQueryParameters.Envelope] = envelope;
             request.Properties[PagingQueryParameters.Page] = page;
             request.Properties[PagingQueryParameters.PageSize] = pageSize;
+            request.Properties[PagingQueryParameters.CountOnly] = countOnly;
 
             odataRequestModel = new OdataRequestModel()
             {

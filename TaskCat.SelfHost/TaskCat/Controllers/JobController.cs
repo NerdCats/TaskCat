@@ -168,21 +168,34 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var queryTotal = Task.Run(() => jobs.LinqToQuerystring(queryString: odataQuery).Count());
-            var queryResult = Task.Run(
-                () => jobs.LinqToQuerystring(queryString: odataQuery)
-                .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
-                .Take(odataRequestModel.PageSize));
-
-            await Task.WhenAll(queryTotal, queryResult);
-        
-            if (odataRequestModel.Envelope)
+            if (odataRequestModel.CountOnly)
             {
-                var result = new PageEnvelope<Job>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
-                return Ok(result);
+                var queryTotal = jobs.LinqToQuerystring(queryString: odataQuery).Count();
+                if (odataRequestModel.Envelope)
+                {
+                    var result = new PageEnvelope<Job>(queryTotal, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, null, this.Request);
+                    return Ok(result);
+                }
+                return Ok(queryTotal);
             }
+            else
+            {
+                var queryTotal = Task.Run(() => jobs.LinqToQuerystring(queryString: odataQuery).Count());
+                var queryResult = Task.Run(
+                    () => jobs.LinqToQuerystring(queryString: odataQuery)
+                    .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
+                    .Take(odataRequestModel.PageSize));
 
-            return Ok(queryResult);
+                await Task.WhenAll(queryTotal, queryResult);
+
+                if (odataRequestModel.Envelope)
+                {
+                    var result = new PageEnvelope<Job>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, AppConstants.DefaultOdataRoute, queryResult.Result, this.Request);
+                    return Ok(result);
+                }
+
+                return Ok(queryResult);
+            }
         }
 
         private bool IsUserOrEnterpriseUserOnly()
@@ -411,11 +424,11 @@ namespace TaskCat.Controllers
             {
                 if (orderModel.UserId != null && orderModel.UserId != currentUserId)
                     throw new InvalidOperationException(string.Format(
-                        "Updating user id {0} is not authorized against user id {1}", 
+                        "Updating user id {0} is not authorized against user id {1}",
                         orderModel.UserId, this.User.Identity.GetUserId()));
             }
-            else if(this.User.IsInRole(RoleNames.ROLE_ASSET) 
-                && !this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR) 
+            else if (this.User.IsInRole(RoleNames.ROLE_ASSET)
+                && !this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (!job.Assets.Any(x => x.Key == currentUserId))

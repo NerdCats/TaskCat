@@ -74,12 +74,19 @@
             if (!requestMessage.Properties.ContainsKey(PagingQueryParameters.Envelope))
                 throw new ArgumentException($"Request doesn't contain {PagingQueryParameters.Envelope} property");
 
+            bool countOnly = false;
+            if (requestMessage.Properties.ContainsKey(PagingQueryParameters.CountOnly))
+            {
+                countOnly = (bool)requestMessage.Properties[PagingQueryParameters.CountOnly];
+            }
+
             return new OdataRequestModel()
             {
                 Envelope = (bool)requestMessage.Properties[PagingQueryParameters.Envelope],
                 Page = (int)requestMessage.Properties[PagingQueryParameters.Page],
                 PageSize = (int)requestMessage.Properties[PagingQueryParameters.PageSize],
-                OdataQueryString = (string)requestMessage.Properties["OdataQueryString"]
+                OdataQueryString = (string)requestMessage.Properties["OdataQueryString"],
+                CountOnly = countOnly
             };
         }
 
