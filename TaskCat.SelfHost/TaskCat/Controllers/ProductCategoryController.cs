@@ -33,7 +33,7 @@ namespace TaskCat.Controllers
         [HttpGet]
         [Route("api/ProductCategory/odata", Name = AppConstants.ProductCategoryRoute)]
         [TaskCatOdataRoute]
-        public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        public async Task<IHttpActionResult> Get()
         {
             IQueryable<ProductCategory> productCategories = service.Collection.AsQueryable();
 
