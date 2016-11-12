@@ -1,24 +1,21 @@
 ﻿namespace TaskCat.Controllers
 {
     using Data.Entity;
-    using Lib.Catalog;
     using Lib.Constants;
     using Lib.Domain;
     using Lib.Utility;
     using Lib.Utility.Odata;
-    using LinqToQuerystring;
     using Microsoft.AspNet.Identity;
     using Model.Pagination;
     using MongoDB.Driver;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Net;
-    using System.Net.Http;
     using System.Net.Http.Formatting;
     using System.Threading.Tasks;
     using System.Web.Http;
+    using System.Web.Http.Description;
 
     public class ProductController : ApiController
     {
@@ -32,21 +29,13 @@
         }
 
         [HttpGet]
-        [Route("api/Product/odata")]
-        public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [Route("api/Product/odata", Name = AppConstants.ProductOdataRoute)]
+        [ResponseType(typeof(PageEnvelope<Product>))]
+        public async Task<IHttpActionResult> Get()
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
             IQueryable<Product> products = productService.Collection.AsQueryable();
-            var queryResult = products.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
-
-            if (envelope)
-                return Ok(new PageEnvelope<Product>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Ok(queryResult);
+            var odataResult = await products.ToOdataResponse(this.Request, AppConstants.ProductOdataRoute);
+            return Ok(odataResult);
         }
 
         [HttpGet]
