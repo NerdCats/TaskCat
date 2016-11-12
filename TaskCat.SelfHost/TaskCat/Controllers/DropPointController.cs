@@ -15,6 +15,7 @@ using TaskCat.Lib.DropPoint;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Pagination;
 using TaskCat.Lib.Utility;
+using TaskCat.Lib.Utility.ActionFilter;
 
 namespace TaskCat.Controllers
 {
@@ -152,22 +153,16 @@ namespace TaskCat.Controllers
         /// </returns>
         /// 
         [HttpGet]
-        [Route("api/DropPoint/odata")]
+        [ResponseType(typeof(PageEnvelope<DropPoint>))]
+        [Route("api/DropPoint/odata", Name = AppConstants.DropPointOdataRoute)]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
-        public async Task<IHttpActionResult> GetOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
-        {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
+        [TaskCatOdataRoute]
+        public async Task<IHttpActionResult> GetOdata()
+        {          
             IQueryable<DropPoint> dropPoints = service.Collection.AsQueryable();
-            var queryResult = dropPoints.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
 
-            if (envelope)
-                return Ok(new PageEnvelope<DropPoint>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Ok(queryResult);
+            var odataResult = await dropPoints.ToOdataResponse(this.Request, AppConstants.DropPointOdataRoute);
+            return Ok(odataResult);
         }
 
         /// <summary>

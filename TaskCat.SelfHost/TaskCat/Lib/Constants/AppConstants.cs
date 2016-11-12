@@ -3,8 +3,11 @@
     public class AppConstants
     {
         public const string DefaultApiRoute = "DefaultApi";
+
         public const string JobsOdataRoute = "JobsOdata";
         public const string CommentOdataRoute = "CommentOdata";
+        public const string DropPointOdataRoute = "DropPointOdata";
+
         public const string DefaultCommentsRoute = "DefaultComments";
         public const string ConfirmEmailRoute = "ConfirmEmailRoute";
         public const string GetUserProfileByIdRoute = "GetUserProfileById";
