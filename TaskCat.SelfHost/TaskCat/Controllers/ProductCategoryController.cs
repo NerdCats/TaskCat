@@ -14,6 +14,8 @@ using TaskCat.Lib.Domain;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Pagination;
 using TaskCat.Lib.Utility;
+using System.Web.Http.Description;
+using TaskCat.Lib.Utility.ActionFilter;
 
 namespace TaskCat.Controllers
 {
@@ -27,22 +29,16 @@ namespace TaskCat.Controllers
             this.service = service;
         }
 
+        [ResponseType(typeof(PageEnvelope<ProductCategory>))]
         [HttpGet]
-        [Route("api/ProductCategory/odata")]
+        [Route("api/ProductCategory/odata", Name = AppConstants.ProductCategoryRoute)]
+        [TaskCatOdataRoute]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
             IQueryable<ProductCategory> productCategories = service.Collection.AsQueryable();
-            var queryResult = productCategories.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
 
-            if (envelope)
-                return Ok(new PageEnvelope<ProductCategory>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Ok(queryResult);
+            var odataResult = await productCategories.ToOdataResponse(this.Request, AppConstants.ProductCategoryRoute);
+            return Ok(odataResult);
         }
 
         [HttpGet]

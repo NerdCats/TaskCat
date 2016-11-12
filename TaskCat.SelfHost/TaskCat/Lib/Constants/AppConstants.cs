@@ -7,6 +7,7 @@
         public const string JobsOdataRoute = "JobsOdata";
         public const string CommentOdataRoute = "CommentOdata";
         public const string DropPointOdataRoute = "DropPointOdata";
+        public const string ProductCategoryRoute = "ProductCategoryOdata";
 
         public const string DefaultCommentsRoute = "DefaultComments";
         public const string ConfirmEmailRoute = "ConfirmEmailRoute";
