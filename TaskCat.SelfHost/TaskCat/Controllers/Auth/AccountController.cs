@@ -8,9 +8,7 @@
     using Lib.Auth;
     using Lib.Constants;
     using Lib.Utility.Odata;
-    using LinqToQuerystring;
     using Microsoft.AspNet.Identity;
-    using Model.Pagination;
     using MongoDB.Driver;
     using System;
     using System.Collections.Generic;
@@ -24,7 +22,6 @@
     using Model.Account;
     using Model.Response;
     using System.Net.Http.Formatting;
-    using Lib.Db;
     using Data.Entity.Identity;
     using Lib.Email;
 
@@ -319,23 +316,13 @@
         [ResponseType(typeof(UserModel))]
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
-        [Route("odata")]
-        public async Task<IHttpActionResult> GetAllOdata(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [Route("odata", Name = AppConstants.AccountOdataRoute)]
+        public async Task<IHttpActionResult> GetAllOdata()
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
             var users = await accountContext.FindAllAsModel();
-            var queryTotal = users.LinqToQuerystring(queryString: odataQuery);
-            var queryResult = queryTotal.Skip(page * pageSize).Take(pageSize);
 
-            if (envelope)
-            {
-                return Ok(new PageEnvelope<UserModel>(queryTotal.LongCount(), page, pageSize, AppConstants.JobsOdataRoute, queryResult, this.Request));
-            }
-
-            return Ok(queryResult);
+            var odataResult = await users.ToOdataResponse(this.Request, AppConstants.AccountOdataRoute);
+            return Ok(odataResult);
         }
 
         /// <summary>
