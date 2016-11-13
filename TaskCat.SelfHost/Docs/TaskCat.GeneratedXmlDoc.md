@@ -121,7 +121,7 @@
 
 
 ---
-#### Method Controllers.Auth.AccountController.GetAllOdata(System.Int32,System.Int32,System.Boolean)
+#### Method Controllers.Auth.AccountController.GetAllOdata
 
  Odata powered query to get users 
 
@@ -186,7 +186,7 @@
 
 
 ---
-#### Method Controllers.CommentController.Get(System.Int32,System.Int32,System.Boolean)
+#### Method Controllers.CommentController.Get
 
  Odata route to query comments 
 
@@ -296,7 +296,7 @@
 
 
 ---
-#### Method Controllers.DropPointController.GetOdata(System.Int32,System.Int32,System.Boolean)
+#### Method Controllers.DropPointController.GetOdata
 
  Odata endpoint for only Administrator and BackendOfficeAdmins to execute queries needed for components that needs a comprehensive list 
 
