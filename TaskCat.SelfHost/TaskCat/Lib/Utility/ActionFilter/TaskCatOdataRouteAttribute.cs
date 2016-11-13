@@ -38,8 +38,8 @@
             if (queryParams.ContainsKey(PagingQueryParameters.Envelope))
                 bool.TryParse(queryParams[PagingQueryParameters.Envelope], out envelope);
 
-            if (queryParams.ContainsKey(PagingQueryParameters.Envelope))
-                bool.TryParse(queryParams[PagingQueryParameters.Envelope], out envelope);
+            if (queryParams.ContainsKey(PagingQueryParameters.CountOnly))
+                countOnly = true;
 
             if (queryParams.ContainsKey("$select"))
                 containsSelect = true;
