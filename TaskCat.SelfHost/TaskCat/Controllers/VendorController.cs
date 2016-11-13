@@ -31,34 +31,9 @@ namespace TaskCat.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
-            if (pageSize == 0)
-                return BadRequest("Page size cant be 0");
-            if (page < 0)
-                return BadRequest("Page index less than 0 provided");
-
-            pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
-
-            var queryParams = this.Request.GetQueryNameValuePairs();
-            queryParams.VerifyQuery(new List<string>() {
-                    OdataOptionExceptions.InlineCount,
-                    OdataOptionExceptions.Skip,
-                    OdataOptionExceptions.Top
-                });
-
-            var odataQuery = queryParams.GetOdataQuery(new List<string>() {
-                    "pageSize",
-                    "page",
-                    "envelope"
-                });
-
             IQueryable<Vendor> profiles = service.Collection.AsQueryable();
-            var queryResult = profiles.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
-
-            if (envelope)
-                return Ok(new PageEnvelope<Vendor>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Ok(queryResult);
+            var odataResult = await profiles.ToOdataResponse(this.Request, AppConstants.DefaultApiRoute);
+            return Ok(odataResult);
         }
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
