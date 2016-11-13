@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using System.Web.Http;
-using LinqToQuerystring;
 using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
@@ -16,6 +13,8 @@ using TaskCat.Lib.Domain;
 using TaskCat.Lib.Utility;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Pagination;
+using TaskCat.Lib.Utility.ActionFilter;
+using System.Web.Http.Description;
 
 namespace TaskCat.Controllers
 {
@@ -28,22 +27,16 @@ namespace TaskCat.Controllers
             this.service = service;
         }
 
+        [ResponseType(typeof(PageEnvelope<Store>))]
         [HttpGet]
-        [Route("api/Store/odata")]
-        public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
+        [Route("api/Store/odata", Name = AppConstants.StoreOdataRoute)]
+        [TaskCatOdataRoute]
+        public async Task<IHttpActionResult> Get()
         {
-            PagingHelper.ValidatePageSize(AppConstants.MaxPageSize, pageSize, page);
-
-            var odataQuery = this.Request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
-
-            IQueryable<Store> productCategories = service.Collection.AsQueryable();
-            var queryResult = productCategories.LinqToQuerystring(queryString: odataQuery)
-                .Skip(page * pageSize)
-                .Take(pageSize);
-
-            if (envelope)
-                return Ok(new PageEnvelope<Store>(queryResult.LongCount(), page, pageSize, AppConstants.DefaultApiRoute, queryResult, this.Request));
-            return Ok(queryResult);
+            IQueryable<Store> stores = service.Collection.AsQueryable();
+            
+            var odataResult = await stores.ToOdataResponse(this.Request, AppConstants.StoreOdataRoute);
+            return Ok(odataResult);
         }
 
         [HttpGet]
