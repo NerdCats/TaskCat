@@ -4,6 +4,7 @@
     using Lib.Constants;
     using Lib.Domain;
     using Lib.Utility;
+    using Lib.Utility.ActionFilter;
     using Lib.Utility.Odata;
     using Microsoft.AspNet.Identity;
     using Model.Pagination;
@@ -31,6 +32,7 @@
         [HttpGet]
         [Route("api/Product/odata", Name = AppConstants.ProductOdataRoute)]
         [ResponseType(typeof(PageEnvelope<Product>))]
+        [TaskCatOdataRoute]
         public async Task<IHttpActionResult> Get()
         {
             IQueryable<Product> products = productService.Collection.AsQueryable();
