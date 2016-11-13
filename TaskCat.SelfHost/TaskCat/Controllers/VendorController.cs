@@ -14,6 +14,8 @@ using TaskCat.Lib.Utility;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Lib.Vendor;
 using TaskCat.Model.Pagination;
+using TaskCat.Lib.Utility.ActionFilter;
+using System.Web.Http.Description;
 
 namespace TaskCat.Controllers
 {
@@ -27,8 +29,10 @@ namespace TaskCat.Controllers
             this.service = service;
         }
 
+        [ResponseType(typeof(PageEnvelope<Vendor>))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpGet]
+        [TaskCatOdataRoute]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             IQueryable<Vendor> profiles = service.Collection.AsQueryable();

@@ -24,6 +24,7 @@
     using System.Net.Http.Formatting;
     using Data.Entity.Identity;
     using Lib.Email;
+    using Lib.Utility.ActionFilter;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -317,6 +318,7 @@
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata", Name = AppConstants.AccountOdataRoute)]
+        [TaskCatOdataRoute]
         public async Task<IHttpActionResult> GetAllOdata()
         {
             var users = await accountContext.FindAllAsModel();
