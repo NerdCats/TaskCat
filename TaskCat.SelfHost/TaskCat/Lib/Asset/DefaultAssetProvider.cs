@@ -8,8 +8,6 @@
     using Model.Asset;
     using Db;
     using System;
-    using MongoDB.Driver.GeoJsonObjectModel;
-    using MongoDB.Driver;
     using Data.Entity.ShadowCat;
     using System.Linq;
     using MongoDB.Bson;

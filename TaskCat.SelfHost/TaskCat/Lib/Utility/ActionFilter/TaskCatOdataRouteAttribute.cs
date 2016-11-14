@@ -6,12 +6,6 @@
     using System.Net.Http;
     using System.Web.Http.Controllers;
     using System.Web.Http.Filters;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using LinqToQuerystring;
-    using System.Net;
-    using System.Net.Http.Formatting;
-    using System;
 
     public class TaskCatOdataRouteAttribute : ActionFilterAttribute
     {

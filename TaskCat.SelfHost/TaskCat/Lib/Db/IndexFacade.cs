@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using Data.Entity;
     using Data.Entity.Identity;
-    using System;
 
     public class IndexFacade
     {

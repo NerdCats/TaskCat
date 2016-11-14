@@ -9,8 +9,6 @@
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Results;
 
     internal static class LinqToQuerystringExtensions
     {
