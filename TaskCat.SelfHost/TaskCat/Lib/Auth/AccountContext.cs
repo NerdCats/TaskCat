@@ -104,14 +104,6 @@
             return await accountManager.ConfirmEmailAsync(userId, code);
         }
 
-        public async Task<Client> FindClient(string clientId)
-        {
-            // FIXME: Im not sure whether we'd need a client manager or not, if there's no controller for it
-            // I dont see a reason though
-            var client = await dbContext.Clients.Find(x => x.Id == clientId).FirstOrDefaultAsync();
-            return client;
-        }
-
         public async Task<User> FindUser(string userName, string password)
         {
             return await accountManager.FindAsync(userName, password);

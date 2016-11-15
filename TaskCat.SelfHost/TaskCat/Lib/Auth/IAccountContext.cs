@@ -27,8 +27,7 @@
         Task<List<UserModel>> FindAllAsModel(int page, int pageSize);
         Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request);
         Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request);
-        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request);
-        Task<Client> FindClient(string clientId);
+        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request);     
         Task<RefreshToken> FindRefreshToken(string refreshTokenId);
         Task<User> FindUser(string userId);
         Task<User> FindUser(string userName, string password);
