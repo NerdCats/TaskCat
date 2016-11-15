@@ -14,10 +14,12 @@
     public class TaskCatAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         private readonly IAccountContext authRepository;
+        private IClientStore clientStore;
 
-        public TaskCatAuthorizationServerProvider(IAccountContext authRepository)
+        public TaskCatAuthorizationServerProvider(IAccountContext authRepository, IClientStore clientStore)
         {
             this.authRepository = authRepository;
+            this.clientStore = clientStore;
         }
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -41,7 +43,7 @@
                 return;
             }
 
-            client = await authRepository.FindClient(context.ClientId);
+            client = await clientStore.FindClient(context.ClientId);
 
             if (client == null)
             {

@@ -1,12 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskCat.Controllers.Auth
+﻿namespace TaskCat.Controllers.Auth
 {
-    public class ClientController
+    using Data.Entity.Identity;
+    using Data.Model;
+    using System;
+    using System.Net;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using TaskCat.Lib.Auth;
+
+    /// <summary>
+    /// Client (any client that works with TaskCat) related controller
+    /// </summary>
+    public class ClientController : ApiController
     {
+        private IClientStore store;
+
+        /// <summary>
+        /// Instantiates a instance of ClientController
+        /// </summary>
+        /// <param name="store"></param>
+        public ClientController(IClientStore store)
+        {
+            this.store = store;
+        }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Post(ClientModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Client newClient = await store.AddClient(model);
+            return Ok<Client>(newClient);
+        }
+
+        [HttpPost]
+        [Route("api/Client/{id}/activate")]
+        public async Task<IHttpActionResult> Activate([FromUri]string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"provided client id is null or empty");
+
+            var result = await store.Activate(id);
+            return Ok<Client>(result);
+        }
+
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException($"provided client id is null or empty");
+
+            var result = await store.DeleteClient(id);
+            if (result)
+                return StatusCode(HttpStatusCode.NoContent);
+            else
+                return StatusCode(HttpStatusCode.NotFound);
+        }
     }
 }

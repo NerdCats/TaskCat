@@ -169,6 +169,23 @@
 
 
 ---
+## Type Controllers.Auth.ClientController
+
+ Client (any client that works with TaskCat) related controller 
+
+
+
+---
+#### Method Controllers.Auth.ClientController.#ctor(TaskCat.Lib.Auth.IClientStore)
+
+ Instantiates a instance of ClientController 
+
+|Name | Description |
+|-----|------|
+|store: ||
+
+
+---
 ## Type Controllers.CommentController
 
  Default controller to serve comments for any referenced entity 
@@ -673,6 +690,126 @@
 |-----|------|
 |assetRequest: ||
 **Returns**: 
+
+
+
+---
+## Type Lib.Auth.ClientStore
+
+ Default implementation of IClientStore 
+
+
+
+---
+#### Method Lib.Auth.ClientStore.#ctor(TaskCat.Lib.Db.IDbContext)
+
+ Creates an instance of ClientStore. 
+
+|Name | Description |
+|-----|------|
+|dbContext: |Database context to create the store with.|
+
+
+---
+#### Method Lib.Auth.ClientStore.FindClient(System.String)
+
+ Find a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Id to serch the client against.|
+**Returns**: Client with the searched id.
+
+
+
+---
+#### Method Lib.Auth.ClientStore.AddClient(TaskCat.Data.Model.ClientModel)
+
+ Add a client to the database. 
+
+|Name | Description |
+|-----|------|
+|model: |Client model to create a client entry.|
+**Returns**: The new client that got created.
+
+
+
+---
+#### Method Lib.Auth.ClientStore.DeleteClient(System.String)
+
+ Delete a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Id for the client.|
+**Returns**: true if the client is deleted and false otherwise.
+
+
+
+---
+#### Method Lib.Auth.ClientStore.Activate(System.String)
+
+ Find a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Id to serch the client against.|
+**Returns**: Client with the searched id.
+
+
+
+---
+## Type Lib.Auth.IClientStore
+
+ Generic interface to define a database store for clients 
+
+
+
+---
+#### Method Lib.Auth.IClientStore.Activate(System.String)
+
+ Activate a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Client id.|
+**Returns**: 
+
+
+
+---
+#### Method Lib.Auth.IClientStore.AddClient(TaskCat.Data.Model.ClientModel)
+
+ Add a client to the database. 
+
+|Name | Description |
+|-----|------|
+|model: |Client model to create a client entry.|
+**Returns**: The new client that got created.
+
+
+
+---
+#### Method Lib.Auth.IClientStore.DeleteClient(System.String)
+
+ Delete a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Id for the client.|
+**Returns**: true if the client is deleted and false otherwise.
+
+
+
+---
+#### Method Lib.Auth.IClientStore.FindClient(System.String)
+
+ Find a client by id. 
+
+|Name | Description |
+|-----|------|
+|id: |Id to serch the client against.|
+**Returns**: Client with the searched id.
 
 
 

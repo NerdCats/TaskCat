@@ -330,6 +330,7 @@
     </Compile>
     <Compile Include="Controllers\AssetProviderController.cs" />
     <Compile Include="Controllers\Auth\AccountController.cs" />
+    <Compile Include="Controllers\Auth\ClientController.cs" />
     <Compile Include="Controllers\Auth\RefreshTokensController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DropPointController.cs" />
@@ -347,7 +348,9 @@
     <Compile Include="Lib\Auth\AccountContext.cs" />
     <Compile Include="Lib\Auth\AccountManager.cs" />
     <Compile Include="Lib\Auth\AccountStore.cs" />
+    <Compile Include="Lib\Auth\ClientStore.cs" />
     <Compile Include="Lib\Auth\IAccountContext.cs" />
+    <Compile Include="Lib\Auth\IClientStore.cs" />
     <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
     <Compile Include="Lib\Catalog\ProductService.cs" />
