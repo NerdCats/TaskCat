@@ -9,22 +9,39 @@
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using Data.Model.Identity;
     using Data.Model;
-
+    
+    /// <summary>
+    /// Default implementation of IClientStore
+    /// </summary>
     public class ClientStore : IClientStore
     {
         private readonly IDbContext dbContext;
 
+        /// <summary>
+        /// Creates an instance of ClientStore.
+        /// </summary>
+        /// <param name="dbContext">Database context to create the store with.</param>
         public ClientStore(IDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<Client> FindClient(string clientId)
+        /// <summary>
+        /// Find a client by id.
+        /// </summary>
+        /// <param name="id">Id to serch the client against.</param>
+        /// <returns>Client with the searched id.</returns>
+        public async Task<Client> FindClient(string id)
         {
-            var client = await dbContext.Clients.Find(x => x.Id == clientId).FirstOrDefaultAsync();
+            var client = await dbContext.Clients.Find(x => x.Id == id).FirstOrDefaultAsync();
             return client;
         }
 
+        /// <summary>
+        /// Add a client to the database.
+        /// </summary>
+        /// <param name="model">Client model to create a client entry.</param>
+        /// <returns>The new client that got created.</returns>
         public async Task<Client> AddClient(ClientModel model)
         {
             var clientId = Guid.NewGuid().ToString("N");
@@ -48,6 +65,11 @@
             return newClient;
         }
 
+        /// <summary>
+        /// Delete a client by id.
+        /// </summary>
+        /// <param name="id">Id for the client.</param>
+        /// <returns>true if the client is deleted and false otherwise.</returns>
         public async Task<bool> DeleteClient(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -57,6 +79,11 @@
             return result.IsAcknowledged;
         }
 
+        /// <summary>
+        /// Find a client by id.
+        /// </summary>
+        /// <param name="id">Id to serch the client against.</param>
+        /// <returns>Client with the searched id.</returns>
         public async Task<Client> Activate(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
