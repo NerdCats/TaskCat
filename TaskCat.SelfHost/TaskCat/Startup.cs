@@ -53,12 +53,6 @@ namespace TaskCat
                     break;
             }
 
-#if DEBUG
-            AppSettings.Precedence = new[] { "local", "production" };
-#else
-            AppSettings.Precedence = new[] { "production", "local" };
-#endif
-
             SetupMongoConventions();
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
