@@ -7,7 +7,6 @@
     using Data.Model.Identity.Response;
     using Lib.Auth;
     using Lib.Constants;
-    using Lib.Utility.Odata;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
     using System;
@@ -24,7 +23,8 @@
     using System.Net.Http.Formatting;
     using Data.Entity.Identity;
     using Lib.Email;
-    using Lib.Utility.ActionFilter;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -318,7 +318,7 @@
         [HttpGet]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("odata", Name = AppConstants.AccountOdataRoute)]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> GetAllOdata()
         {
             var users = await accountContext.FindAllAsModel();

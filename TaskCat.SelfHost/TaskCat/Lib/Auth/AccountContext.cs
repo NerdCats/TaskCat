@@ -13,12 +13,10 @@
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
     using System.Net.Http;
-    using Model.Pagination;
     using Constants;
     using Data.Model.Identity.Response;
     using Storage;
     using Model.Storage;
-    using Exceptions;
     using Job;
     using Data.Model.Operation;
     using Data.Model;
@@ -27,6 +25,8 @@
     using Email;
     using Its.Configuration;
     using App.Settings;
+    using Common.Exceptions;
+    using Common.Model.Pagination;
 
     public class AccountContext : IAccountContext
     {

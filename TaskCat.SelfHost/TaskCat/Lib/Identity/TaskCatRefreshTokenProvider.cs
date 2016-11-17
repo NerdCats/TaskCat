@@ -6,6 +6,7 @@
     using Auth;
     using Data.Entity.Identity;
     using Utility;
+    using Common.Utility;
 
     public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {

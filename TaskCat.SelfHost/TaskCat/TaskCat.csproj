@@ -388,14 +388,8 @@
     <Compile Include="Lib\Email\SendWithUs\SendWithUsMailService.cs" />
     <Compile Include="Lib\Email\SendWithUs\SendWithUsSettings.cs" />
     <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
-    <Compile Include="Lib\Exceptions\EntityDeleteException.cs" />
-    <Compile Include="Lib\Exceptions\EntityNotFoundException.cs" />
-    <Compile Include="Lib\Exceptions\EntityUpdateException.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
-    <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
-    <Compile Include="Lib\Exceptions\SettingsException.cs" />
-    <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
     <Compile Include="Lib\Identity\FacebookAuthProvider.cs" />
@@ -426,7 +420,6 @@
     <Compile Include="Lib\Order\Process\DeliveryOrderProcessor.cs" />
     <Compile Include="Lib\Order\Process\IOrderProcessor.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
-    <Compile Include="Lib\Owin\PreflightRequestsHandler.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentMethod.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentSettings.cs" />
     <Compile Include="Lib\Payment\COD\TransactMode.cs" />
@@ -439,8 +432,6 @@
     <Compile Include="Lib\Storage\IBlobService.cs" />
     <Compile Include="Lib\Storage\IStorageRepository.cs" />
     <Compile Include="Lib\Storage\StorageRepository.cs" />
-    <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
-    <Compile Include="Lib\Utility\ActionFilter\TaskCatOdataRouteAttribute.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
@@ -449,12 +440,8 @@
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
     <Compile Include="Lib\Utility\FileUtility.cs" />
-    <Compile Include="Lib\Utility\HashMaker.cs" />
     <Compile Include="Lib\Utility\IdentityExtensions.cs" />
     <Compile Include="Lib\Utility\IPagingHelper.cs" />
-    <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
-    <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
-    <Compile Include="Lib\Utility\Odata\OdataRequestModel.cs" />
     <Compile Include="Lib\Utility\OrderTypeResolver.cs" />
     <Compile Include="Lib\Utility\PagingHelper.cs" />
     <Compile Include="Lib\Utility\PagingQueryParameters.cs" />
@@ -469,8 +456,6 @@
     <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Identity\ExternalLoginData.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
-    <Compile Include="Model\Pagination\PageEnvelope.cs" />
-    <Compile Include="Model\Pagination\PaginationHeader.cs" />
     <Compile Include="Model\Response\ChallengeResult.cs" />
     <Compile Include="Model\Response\ErrorResponse.cs" />
     <Compile Include="Model\Storage\FileDeleteModel.cs" />
@@ -517,6 +502,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
+      <Project>{64b973ca-bd1a-451b-8336-1dc243e56c23}</Project>
+      <Name>TaskCat.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>

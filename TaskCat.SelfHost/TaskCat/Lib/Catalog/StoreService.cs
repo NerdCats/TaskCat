@@ -8,6 +8,7 @@
     using Exceptions;
     using System.Linq;
     using Domain;
+    using Common.Exceptions;
 
     public class StoreService : IRepository<Store>
     {

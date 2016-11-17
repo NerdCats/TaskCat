@@ -10,9 +10,9 @@ using TaskCat.Data.Entity;
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Lib.Constants;
 using TaskCat.Lib.DropPoint;
-using TaskCat.Lib.Utility.Odata;
-using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility.ActionFilter;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
 
 namespace TaskCat.Controllers
 {
@@ -153,12 +153,12 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<DropPoint>))]
         [Route("api/DropPoint/odata", Name = AppConstants.DropPointOdataRoute)]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> GetOdata()
         {          
             IQueryable<DropPoint> dropPoints = service.Collection.AsQueryable();
 
-            var odataResult = await dropPoints.ToOdataResponse(this.Request, AppConstants.DropPointOdataRoute);
+            var odataResult = await dropPoints.ToOdataResponse(Request, AppConstants.DropPointOdataRoute);
             return Ok(odataResult);
         }
 

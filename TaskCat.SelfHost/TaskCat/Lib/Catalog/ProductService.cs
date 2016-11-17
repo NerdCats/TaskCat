@@ -1,12 +1,12 @@
 ﻿namespace TaskCat.Lib.Catalog
 {
     using Data.Entity;
-    using Exceptions;
     using Domain;
     using System.Threading.Tasks;
     using MongoDB.Driver;
     using Db;
     using System;
+    using Common.Exceptions;
 
     public class ProductService : IRepository<Product>
     {

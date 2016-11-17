@@ -1,8 +1,8 @@
 ﻿namespace TaskCat.Lib.Identity
 {
     using Auth;
+    using Common.Exceptions;
     using Data.Entity.Identity;
-    using Exceptions;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.OAuth;
     using System.Collections.Generic;

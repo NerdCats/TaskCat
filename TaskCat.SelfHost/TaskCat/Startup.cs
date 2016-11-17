@@ -20,9 +20,6 @@ using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model.Identity;
 using TaskCat.Lib.Db;
 using TaskCat.Lib.Identity;
-using TaskCat.Lib.Owin;
-using TaskCat.Lib.Utility;
-using TaskCat.Lib.Utility.ActionFilter;
 using IContainer = Autofac.IContainer;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security;
@@ -30,6 +27,8 @@ using Its.Configuration;
 using TaskCat.Lib.Auth;
 using TaskCat.Data.Model;
 using Microsoft.Owin.Security.Jwt;
+using TaskCat.Common.Owin;
+using TaskCat.Common.Utility.ActionFilter;
 
 namespace TaskCat
 {
@@ -112,13 +111,15 @@ namespace TaskCat
 
         private static void ConfigureOAuth(IAppBuilder app, IContainer container)
         {
+            ConfigureResourceOAuth(app);
+
             var OAuthServerOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
-                AccessTokenFormat = new TaskCatJWTFormat(Settings.Get<ClientSettings>().AuthenticationIssuerName, container.Resolve<IClientStore>()),
+                AccessTokenFormat = new TaskCatJWTFormat(AppSettings.Get<ClientSettings>().AuthenticationIssuerName, container.Resolve<IClientStore>()),
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             };
 
@@ -138,6 +139,30 @@ namespace TaskCat
 
                 app.UseFacebookAuthentication(facebookAuthOptions);
             }
+        }
+
+        private static void ConfigureResourceOAuth(IAppBuilder app)
+        {
+            var issuer = AppSettings.Get<ClientSettings>().AuthenticationIssuerName;
+
+            // INFO: As this is a auth-server and api-server together, Im adding back all possible added clients in the system and
+            // allowing all of them to be able to access this api anyway
+
+
+            var audience = "GoFetchDevWebApp";
+            var secret = TextEncodings.Base64Url.Decode("U9JUz4rvs2rzmbvxj6NJIt_6uJ7TPgh8IbyrHHUUetk");
+
+            // Api controllers with an [Authorize] attribute will be validated with JWT
+            app.UseJwtBearerAuthentication(
+                new JwtBearerAuthenticationOptions
+                {
+                    AuthenticationMode = AuthenticationMode.Active,
+                    AllowedAudiences = new[] { audience },
+                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
+                    {
+                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
+                    }
+                });
         }
 
         private static void InitializeClients(IContainer container)

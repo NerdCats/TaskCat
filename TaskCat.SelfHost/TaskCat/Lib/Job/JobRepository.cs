@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using Data.Model.Api;
-    using Model.Pagination;
     using System.Net.Http;
     using Constants;
     using Data.Model;
@@ -20,6 +19,7 @@
     using Data.Model.Operation;
     using Model.Job;
     using Updaters;
+    using Common.Model.Pagination;
 
     public class JobRepository : IJobRepository
     {

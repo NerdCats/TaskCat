@@ -1,11 +1,11 @@
 ﻿namespace TaskCat.Controllers
 {
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
     using Data.Entity;
     using Lib.Comments;
     using Lib.Constants;
-    using Lib.Utility.ActionFilter;
-    using Lib.Utility.Odata;
-    using Model.Pagination;
     using MongoDB.Driver;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -43,7 +43,7 @@
         [ResponseType(typeof(PageEnvelope<Comment>))]
         [HttpGet]
         [Route("api/Comment/odata", Name = AppConstants.CommentOdataRoute)]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get()
         {
             IQueryable<Comment> comments = service.Collection.AsQueryable();

@@ -8,11 +8,11 @@ using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Constants;
 using TaskCat.Lib.Utility;
-using TaskCat.Lib.Utility.Odata;
 using TaskCat.Lib.Vendor;
-using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility.ActionFilter;
 using System.Web.Http.Description;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
 
 namespace TaskCat.Controllers
 {
@@ -29,7 +29,7 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<Vendor>))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpGet]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get(int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = true)
         {
             IQueryable<Vendor> profiles = service.Collection.AsQueryable();

@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.Utility
 {
-    using Exceptions;
+    using Common.Exceptions;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

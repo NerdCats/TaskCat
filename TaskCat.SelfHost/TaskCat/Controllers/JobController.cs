@@ -22,10 +22,10 @@ using TaskCat.Lib.Email;
 using TaskCat.Lib.Invoice;
 using TaskCat.Lib.Invoice.Request;
 using TaskCat.Lib.Job;
-using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Job;
-using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility.ActionFilter;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
 
 namespace TaskCat.Controllers
 {
@@ -146,9 +146,9 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<Job>))]
         [Route("api/Job/odata", Name = AppConstants.JobsOdataRoute)]
         [HttpGet]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> ListOdata()
-            {
+        {
             IQueryable<Job> jobs = repository.GetJobs();
 
             if (IsUserOrEnterpriseUserOnly())
@@ -160,7 +160,7 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var odataResult = await jobs.ToOdataResponse(this.Request, AppConstants.JobsOdataRoute);
+            var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
             return Ok(odataResult);
         }
 
