@@ -77,8 +77,7 @@ namespace TaskCat.App
             #endregion
 
             #region Auth
-            builder.RegisterType<TaskCatAuthorizationServerProvider>()
-                .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<TaskCatAuthorizationServerProvider>().AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
             builder.RegisterType<TaskCatRefreshTokenProvider>()
                 .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
