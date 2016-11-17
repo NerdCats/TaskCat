@@ -8,5 +8,7 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "ConfirmEmailPath is missing in ClientSettings")]
         public string ConfirmEmailPath { get; set; }
         public string HostingAddress { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "AuthenticationIssuerName is missing in ClientSettings")]
+        public string AuthenticationIssuerName { get; set; }
     }
 }

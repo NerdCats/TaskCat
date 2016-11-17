@@ -759,6 +759,15 @@
 
 
 ---
+#### Method Lib.Auth.ClientStore.GetClientsCount
+
+ Gets the existing client count from database. 
+
+**Returns**: Number of clients in the database.
+
+
+
+---
 ## Type Lib.Auth.IClientStore
 
  Generic interface to define a database store for clients 
@@ -810,6 +819,15 @@
 |-----|------|
 |id: |Id to serch the client against.|
 **Returns**: Client with the searched id.
+
+
+
+---
+#### Method Lib.Auth.IClientStore.GetClientsCount
+
+ Gets the existing client count from database. 
+
+**Returns**: Number of clients in the database.
 
 
 

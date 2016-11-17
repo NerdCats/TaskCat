@@ -10,16 +10,16 @@
     public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {
         private readonly IAccountContext authRepository;
+        private const string clientPropertyKey = "audience";
 
         public TaskCatRefreshTokenProvider(IAccountContext authRepository)
         {
             this.authRepository = authRepository;
         }
-
        
         public async Task CreateAsync(AuthenticationTokenCreateContext context)
         {
-            var clientid = context.Ticket.Properties.Dictionary["as:client_id"];
+            var clientid = context.Ticket.Properties.Dictionary[clientPropertyKey];
             if (string.IsNullOrEmpty(clientid))
             {
                 return;
@@ -50,8 +50,6 @@
                 context.SetToken(refreshTokenId);
             }
         }
-
-       
 
         public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {

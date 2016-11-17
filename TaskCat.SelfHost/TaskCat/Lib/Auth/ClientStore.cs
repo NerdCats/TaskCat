@@ -44,15 +44,13 @@
         /// <returns>The new client that got created.</returns>
         public async Task<Client> AddClient(ClientModel model)
         {
-            var clientId = Guid.NewGuid().ToString("N");
-
             var key = new byte[32];
             RNGCryptoServiceProvider.Create().GetBytes(key);
             var base64Secret = TextEncodings.Base64Url.Encode(key);
 
             Client newClient = new Client
             {
-                Id = clientId,
+                Id = model.Id,
                 Secret = base64Secret,
                 Active = model.Active,
                 Name = model.Name,
@@ -91,6 +89,16 @@
 
             var filter = Builders<Client>.Update.Set(x => x.Active, true);
             var result = await dbContext.Clients.FindOneAndUpdateAsync(x=>x.Id == id, filter);
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the existing client count from database.
+        /// </summary>
+        /// <returns>Number of clients in the database.</returns>
+        public async Task<long> GetClientsCount()
+        {
+            var result = await dbContext.Clients.CountAsync(Builders<Client>.Filter.Empty);
             return result;
         }
     }

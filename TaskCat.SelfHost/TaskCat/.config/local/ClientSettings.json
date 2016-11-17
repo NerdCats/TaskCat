@@ -1,5 +1,6 @@
 ﻿{
   "WebCatUrl": "http://localhost:3000/",
   "ConfirmEmailPath": "confirm",
-  "HostingAddress": ""
+  "HostingAddress": "",
+  "AuthenticationIssuerName":  "TaskCat.Auth"
 }

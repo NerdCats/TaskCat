@@ -24,6 +24,12 @@ using TaskCat.Lib.Owin;
 using TaskCat.Lib.Utility;
 using TaskCat.Lib.Utility.ActionFilter;
 using IContainer = Autofac.IContainer;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Microsoft.Owin.Security;
+using Its.Configuration;
+using TaskCat.Lib.Auth;
+using TaskCat.Data.Model;
+using Microsoft.Owin.Security.Jwt;
 
 namespace TaskCat
 {
@@ -91,7 +97,6 @@ namespace TaskCat
             app.Run(context =>
             {
                 context.Response.ContentType = "text/plain";
-
                 return context.Response.WriteAsync(string.Format($"Welcome to TaskCat '{version}', proudly baked by NerdCats"));
             });
         }
@@ -119,15 +124,13 @@ namespace TaskCat
                 TokenEndpointPath = new PathString("/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
+                AccessTokenFormat = new TaskCatJWTFormat(Settings.Get<ClientSettings>().AuthenticationIssuerName, container.Resolve<IClientStore>()),
                 RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
             };
-
 
             app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
             // Generating Token with Providers
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
-
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
             var externalLoginSettings = AppSettings.Get<ExternalLoginSettings>();
             if (externalLoginSettings != null && externalLoginSettings.Facebook != null)
@@ -145,68 +148,61 @@ namespace TaskCat
 
         private static void InitializeClients(IContainer container)
         {
-            var dbContext = container.Resolve<IDbContext>();
+            var clientStore = container.Resolve<IClientStore>();
+            var clientsCount = clientStore.GetClientsCount().GetAwaiter().GetResult();
 
-            //FIXME: I know, utter stupidity here, need a script to do this       
-            if (dbContext.Clients.Count(Builders<Client>.Filter.Empty) == 0)
+            if(clientsCount == 0)
             {
-                // Inserting clients if they are not initialized
-                dbContext.Clients.InsertOne(new Client
+                clientStore.AddClient(new ClientModel()
                 {
                     Id = "GoFetchWebApp",
-                    Secret = HashMaker.GetHash("GoFetchWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat, You are on Web",
+                    Active = true,
+                    AllowedOrigin = "*",
                     ApplicationType = ApplicationTypes.JavaScript,
-                    Active = false,
-                    RefreshTokenLifeTime = 7200,
-                    AllowedOrigin = "*"
-                });
+                    Name = "GoFetchWebApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
 
-                dbContext.Clients.InsertOne(new Client
+                clientStore.AddClient(new ClientModel()
                 {
                     Id = "GoFetchDevWebApp",
-                    Secret = HashMaker.GetHash("GoFetchDevWebApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat, You are on web and in development mode !",
-                    ApplicationType = ApplicationTypes.JavaScript,
                     Active = true,
-                    RefreshTokenLifeTime = 7200,
-                    AllowedOrigin = "*"
-                });
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.JavaScript,
+                    Name = "GoFetchDevWebApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
 
-                dbContext.Clients.InsertOne(new Client
+                clientStore.AddClient(new ClientModel()
                 {
                     Id = "GoFetchDevDroidApp",
-                    Secret = HashMaker.GetHash("GoFetchDevDroidApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat, You are one android and in development mode !",
-                    ApplicationType = ApplicationTypes.Android,
                     Active = true,
-                    RefreshTokenLifeTime = 7200,
-                    AllowedOrigin = "*"
-                });
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "GoFetchDevDroidApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
 
-                dbContext.Clients.InsertOne(new Client
+                clientStore.AddClient(new ClientModel()
                 {
                     Id = "GoFetchDevDroidAssetApp",
-                    Secret = HashMaker.GetHash("GoFetchDevDroidAssetApp@gobd"),
-                    Name = "Go Fetch App powered by TaskCat, You are one android asset and in development mode !",
-                    ApplicationType = ApplicationTypes.Android,
                     Active = true,
-                    RefreshTokenLifeTime = 7200,
-                    AllowedOrigin = "*"
-                });
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "GoFetchDevDroidAssetApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
 
-                dbContext.Clients.InsertOne(new Client
+                clientStore.AddClient(new ClientModel()
                 {
                     Id = "ConsoleApp",
-                    Secret = HashMaker.GetHash("ConsoleApp@gobd"),
-                    Name = "Console Application",
-                    ApplicationType = ApplicationTypes.NativeConfidential,
                     Active = true,
-                    RefreshTokenLifeTime = 14400,
-                    AllowedOrigin = "*"
-                });
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "ConsoleApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
             }
-
         }
 
         private static void InitializeRoles(IContainer container)

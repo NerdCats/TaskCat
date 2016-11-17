@@ -148,7 +148,7 @@ namespace TaskCat.Controllers
         [HttpGet]
         [TaskCatOdataRoute]
         public async Task<IHttpActionResult> ListOdata()
-        {
+            {
             IQueryable<Job> jobs = repository.GetJobs();
 
             if (IsUserOrEnterpriseUserOnly())

@@ -206,6 +206,10 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin.Security.Jwt, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Jwt.3.0.1\lib\net45\Microsoft.Owin.Security.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
@@ -395,7 +399,8 @@
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
     <Compile Include="Lib\Identity\FacebookAuthProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatAuthorizationServerProvider.cs" />
+    <Compile Include="Lib\Identity\TaskCatJWTFormat.cs" />
+    <Compile Include="Lib\Identity\TaskCatOAuthProvider.cs" />
     <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
     <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />

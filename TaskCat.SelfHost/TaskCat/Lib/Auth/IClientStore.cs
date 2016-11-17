@@ -36,5 +36,11 @@ namespace TaskCat.Lib.Auth
         /// <param name="id">Id to serch the client against.</param>
         /// <returns>Client with the searched id.</returns>
         Task<Client> FindClient(string id);
+
+        /// <summary>
+        /// Gets the existing client count from database.
+        /// </summary>
+        /// <returns>Number of clients in the database.</returns>
+        Task<long> GetClientsCount();
     }
 }

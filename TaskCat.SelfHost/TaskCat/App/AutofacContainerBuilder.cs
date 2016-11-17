@@ -30,6 +30,7 @@ namespace TaskCat.App
     using Lib.Catalog;
     using Lib.Vendor;
     using Lib.Comments;
+    using Microsoft.Owin.Security;
 
     public class AutofacContainerBuilder
     {
@@ -46,6 +47,7 @@ namespace TaskCat.App
             builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
             builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
             builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
+            builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
 
             #region Payment
@@ -77,7 +79,7 @@ namespace TaskCat.App
             #endregion
 
             #region Auth
-            builder.RegisterType<TaskCatAuthorizationServerProvider>()
+            builder.RegisterType<TaskCatOAuthProvider>()
                 .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
 
             builder.RegisterType<TaskCatRefreshTokenProvider>()

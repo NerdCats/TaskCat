@@ -35,7 +35,7 @@
             Client newClient = await store.AddClient(model);
             return Ok<Client>(newClient);
         }
-
+        
         [HttpPost]
         [Route("api/Client/{id}/activate")]
         public async Task<IHttpActionResult> Activate([FromUri]string id)
