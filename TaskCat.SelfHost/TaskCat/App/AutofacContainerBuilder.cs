@@ -41,11 +41,11 @@ namespace TaskCat.App
 
             var machineKeyProtectionProvider = new MachineKeyDataProtectionProvider();
             builder.Register(c => machineKeyProtectionProvider).As<IDataProtectionProvider>().SingleInstance();
-            builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
-            builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
+            builder.RegisterType<DbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
+            builder.RegisterType<AccountManager>().SingleInstance();
+            builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
+            builder.RegisterType<RoleManager>().SingleInstance();
             #endregion
 
             #region Payment
@@ -58,18 +58,18 @@ namespace TaskCat.App
             #endregion
 
             #region Job
-            builder.RegisterType<JobStore>().InstancePerLifetimeScope();
-            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<JobStore>().SingleInstance();
+            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Order
-            builder.RegisterType<SupportedOrderStore>().InstancePerLifetimeScope();
-            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<SupportedOrderStore>().SingleInstance();
+            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Storage
             builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
-            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Asset
