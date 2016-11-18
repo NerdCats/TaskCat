@@ -37,6 +37,7 @@
             builder.RegisterType<AccountManager>().SingleInstance();
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
             builder.RegisterType<RoleManager>().SingleInstance();
+            builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
 
             #region Payment
