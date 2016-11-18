@@ -46,7 +46,7 @@
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Stopping TaskCat Api Service");
         }
     }
 }

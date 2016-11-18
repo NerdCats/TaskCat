@@ -90,8 +90,6 @@ namespace TaskCat.Auth.Lib.Db
 
             var TaskCatDBName = ConfigurationManager.AppSettings["TaskCat.DbName"];
             Database = mongoClient.GetDatabase(string.IsNullOrWhiteSpace(TaskCatDBName) ? "taskcat" : TaskCatDBName);
-
-            var shadowCatConnectionString = ConfigurationManager.ConnectionStrings["ShadowCat.ConnectionString"].ConnectionString;
         }
     }
 }

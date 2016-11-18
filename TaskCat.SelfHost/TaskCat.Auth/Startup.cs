@@ -77,7 +77,7 @@
             var OAuthServerOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("auth/token"),
+                TokenEndpointPath = new PathString("/auth/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
                 Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
                 AccessTokenFormat = new TaskCatJWTFormat(AppSettings.Get<ClientSettings>().AuthenticationIssuerName, container.Resolve<IClientStore>()),
