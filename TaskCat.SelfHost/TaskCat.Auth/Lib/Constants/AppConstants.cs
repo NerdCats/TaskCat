@@ -2,7 +2,7 @@
 {
     public class AppConstants
     {
-        public const string DefaultHostingAddress = "http://localhost:1337/";
+        public const string DefaultHostingAddress = "http://localhost:8160/";
         public const string DefaultApiRoute = "DefaultApi";
         public const string AccountOdataRoute = "AccountOdata";
 

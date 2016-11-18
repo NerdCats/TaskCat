@@ -1,6 +1,4 @@
-﻿using Microsoft.Owin.Security.DataProtection;
-
-namespace TaskCat.App
+﻿namespace TaskCat.App
 {
     using Autofac;
     using Autofac.Builder;
@@ -34,11 +32,11 @@ namespace TaskCat.App
             var builder = new ContainerBuilder();
 
             #region Account
-            builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
-            builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
+            builder.RegisterType<DbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
+            builder.RegisterType<AccountManager>().SingleInstance();
+            builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
+            builder.RegisterType<RoleManager>().SingleInstance();
             builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
 
@@ -53,7 +51,7 @@ namespace TaskCat.App
 
             #region Job
             builder.RegisterType<JobStore>().InstancePerLifetimeScope();
-            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Order
