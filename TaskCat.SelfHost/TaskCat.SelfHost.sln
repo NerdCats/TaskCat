@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Auth", "TaskCat.Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Common", "TaskCat.Common\TaskCat.Common.csproj", "{64B973CA-BD1A-451B-8336-1DC243E56C23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Auth.Core", "TaskCat.Auth.Core\TaskCat.Auth.Core.csproj", "{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{64B973CA-BD1A-451B-8336-1DC243E56C23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64B973CA-BD1A-451B-8336-1DC243E56C23}.Release|x64.ActiveCfg = Release|Any CPU
 		{64B973CA-BD1A-451B-8336-1DC243E56C23}.Release|x64.Build.0 = Release|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

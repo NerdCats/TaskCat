@@ -1,31 +1,17 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
-using Autofac;
 using Autofac.Integration.WebApi;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Facebook;
-using Microsoft.Owin.Security.Infrastructure;
-using Microsoft.Owin.Security.OAuth;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Driver;
 using AppSettings = Its.Configuration.Settings;
 using Owin;
 using TaskCat.App;
 using TaskCat.App.Settings;
 using TaskCat.App_Start;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Model.Identity;
-using TaskCat.Lib.Db;
-using TaskCat.Lib.Identity;
-using IContainer = Autofac.IContainer;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security;
 using Its.Configuration;
-using TaskCat.Lib.Auth;
-using TaskCat.Data.Model;
 using Microsoft.Owin.Security.Jwt;
 using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
@@ -68,7 +54,8 @@ namespace TaskCat
 
             BsonSerializerConfig.Configure();
 
-            ConfigureOAuth(app, container);
+            // INFO: This is not done either
+            ConfigureResourceOAuth(app);
 
             WebApiConfig.Register(config, webApiDependencyResolver);
             config.Filters.Add(new ErrorDocumentFilter());
@@ -80,11 +67,6 @@ namespace TaskCat
             app.UseAutofacWebApi(config);
 
             EmailTemplatesConfig.Configure();
-
-            // FIXME: Need to move these with other startups
-            // This is not ideal
-            InitializeClients(container);
-            InitializeRoles(container);
 
             //FIXME: Can be a small middleware. No? Alright!
             app.Run(context =>
@@ -109,37 +91,6 @@ namespace TaskCat
             ConventionRegistry.Register("IgnoreNull", nullPack, type => true);
         }
 
-        private static void ConfigureOAuth(IAppBuilder app, IContainer container)
-        {
-            ConfigureResourceOAuth(app);
-
-            var OAuthServerOptions = new OAuthAuthorizationServerOptions
-            {
-                AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(2),
-                Provider = container.Resolve<IOAuthAuthorizationServerProvider>(),
-                AccessTokenFormat = new TaskCatJWTFormat(AppSettings.Get<ClientSettings>().AuthenticationIssuerName, container.Resolve<IClientStore>()),
-                RefreshTokenProvider = container.Resolve<IAuthenticationTokenProvider>()
-            };
-
-            app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
-            // Generating Token with Providers
-            app.UseOAuthAuthorizationServer(OAuthServerOptions);
-
-            var externalLoginSettings = AppSettings.Get<ExternalLoginSettings>();
-            if (externalLoginSettings != null && externalLoginSettings.Facebook != null)
-            {
-                var facebookAuthOptions = new FacebookAuthenticationOptions()
-                {
-                    AppId = externalLoginSettings.Facebook.AppId,
-                    AppSecret = externalLoginSettings.Facebook.AppSecret,
-                    Provider = new FacebookAuthProvider()
-                };
-
-                app.UseFacebookAuthentication(facebookAuthOptions);
-            }
-        }
 
         private static void ConfigureResourceOAuth(IAppBuilder app)
         {
@@ -163,98 +114,6 @@ namespace TaskCat
                         new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
                     }
                 });
-        }
-
-        private static void InitializeClients(IContainer container)
-        {
-            var clientStore = container.Resolve<IClientStore>();
-            var clientsCount = clientStore.GetClientsCount().GetAwaiter().GetResult();
-
-            if(clientsCount == 0)
-            {
-                clientStore.AddClient(new ClientModel()
-                {
-                    Id = "GoFetchWebApp",
-                    Active = true,
-                    AllowedOrigin = "*",
-                    ApplicationType = ApplicationTypes.JavaScript,
-                    Name = "GoFetchWebApp",
-                    RefreshTokenLifeTime = 7200
-                }).GetAwaiter().GetResult();
-
-                clientStore.AddClient(new ClientModel()
-                {
-                    Id = "GoFetchDevWebApp",
-                    Active = true,
-                    AllowedOrigin = "*",
-                    ApplicationType = ApplicationTypes.JavaScript,
-                    Name = "GoFetchDevWebApp",
-                    RefreshTokenLifeTime = 7200
-                }).GetAwaiter().GetResult();
-
-                clientStore.AddClient(new ClientModel()
-                {
-                    Id = "GoFetchDevDroidApp",
-                    Active = true,
-                    AllowedOrigin = "*",
-                    ApplicationType = ApplicationTypes.Android,
-                    Name = "GoFetchDevDroidApp",
-                    RefreshTokenLifeTime = 7200
-                }).GetAwaiter().GetResult();
-
-                clientStore.AddClient(new ClientModel()
-                {
-                    Id = "GoFetchDevDroidAssetApp",
-                    Active = true,
-                    AllowedOrigin = "*",
-                    ApplicationType = ApplicationTypes.Android,
-                    Name = "GoFetchDevDroidAssetApp",
-                    RefreshTokenLifeTime = 7200
-                }).GetAwaiter().GetResult();
-
-                clientStore.AddClient(new ClientModel()
-                {
-                    Id = "ConsoleApp",
-                    Active = true,
-                    AllowedOrigin = "*",
-                    ApplicationType = ApplicationTypes.Android,
-                    Name = "ConsoleApp",
-                    RefreshTokenLifeTime = 7200
-                }).GetAwaiter().GetResult();
-            }
-        }
-
-        private static void InitializeRoles(IContainer container)
-        {
-            var dbContext = container.Resolve<IDbContext>();
-
-            if (dbContext.Roles.Count(Builders<Role>.Filter.Empty) == 0)
-            {
-                dbContext.Roles.InsertOne(new Role()
-                {
-                    Name = RoleNames.ROLE_USER
-                });
-
-                dbContext.Roles.InsertOne(new Role()
-                {
-                    Name = RoleNames.ROLE_ENTERPRISE
-                });
-
-                dbContext.Roles.InsertOne(new Role()
-                {
-                    Name = RoleNames.ROLE_ADMINISTRATOR
-                });
-
-                dbContext.Roles.InsertOne(new Role()
-                {
-                    Name = RoleNames.ROLE_ASSET
-                });
-
-                dbContext.Roles.InsertOne(new Role()
-                {
-                    Name = RoleNames.ROLE_BACKOFFICEADMIN
-                });
-            }
         }
     }
 }

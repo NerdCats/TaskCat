@@ -77,14 +77,6 @@ namespace TaskCat.App
             builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>();
             #endregion
 
-            #region Auth
-            builder.RegisterType<TaskCatOAuthProvider>()
-                .AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
-
-            builder.RegisterType<TaskCatRefreshTokenProvider>()
-                .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
-            #endregion
-
             #region Hrid
             builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion

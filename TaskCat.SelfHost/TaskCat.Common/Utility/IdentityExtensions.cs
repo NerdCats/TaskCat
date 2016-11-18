@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Utility
+﻿namespace TaskCat.Common.Lib.Utility
 {
     using Data.Entity.Identity;
     using System.Security.Principal;

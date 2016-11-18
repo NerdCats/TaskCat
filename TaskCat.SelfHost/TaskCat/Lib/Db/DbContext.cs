@@ -18,40 +18,6 @@
         public IMongoDatabase Database { get; private set; }
         public IMongoDatabase ShadowCatDatabase { get; private set; }
 
-        #region Auth
-
-        private IMongoCollection<User> _users;
-        public IMongoCollection<User> Users
-        {
-            get { return _users; }
-        }
-
-        private IMongoCollection<Asset> _assets;
-        public IMongoCollection<Asset> Assets
-        {
-            get { return _assets; }
-        }
-
-        private IMongoCollection<Role> _roles;
-        public IMongoCollection<Role> Roles
-        {
-            get { return _roles; }
-        }
-
-        private IMongoCollection<Client> _clients;
-        public IMongoCollection<Client> Clients
-        {
-            get { return _clients; }
-        }
-
-        private IMongoCollection<RefreshToken> _refreshTokens;
-        public IMongoCollection<RefreshToken> RefreshTokens
-        {
-            get { return _refreshTokens; }
-        }
-
-        #endregion
-
         #region JobsAndOrders
 
         private IMongoCollection<Job> _jobs;
@@ -158,11 +124,6 @@
 
         private void EnsureIndexes()
         {
-            IndexChecks.EnsureUniqueIndexOnUserName(_users);
-            IndexChecks.EnsureUniqueIndexOnEmail(_users);
-            IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
-            IndexFacade.EnsureUniqueIndexOnPhoneNumber(_users);
-
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
             IndexFacade.EnsureDropPointIndex(_dropPoints);
@@ -173,12 +134,6 @@
 
         private void InitiateCollections()
         {
-            _users = Database.GetCollection<User>(CollectionNames.UsersCollectionName);
-            _assets = Database.GetCollection<Asset>(CollectionNames.UsersCollectionName);
-            _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
-            _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
-            _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
-
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);

@@ -332,9 +332,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controllers\AssetProviderController.cs" />
-    <Compile Include="Controllers\Auth\AccountController.cs" />
-    <Compile Include="Controllers\Auth\ClientController.cs" />
-    <Compile Include="Controllers\Auth\RefreshTokensController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DropPointController.cs" />
     <Compile Include="Controllers\JobController.cs" />
@@ -348,13 +345,6 @@
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
-    <Compile Include="Lib\Auth\AccountContext.cs" />
-    <Compile Include="Lib\Auth\AccountManager.cs" />
-    <Compile Include="Lib\Auth\AccountStore.cs" />
-    <Compile Include="Lib\Auth\ClientStore.cs" />
-    <Compile Include="Lib\Auth\IAccountContext.cs" />
-    <Compile Include="Lib\Auth\IClientStore.cs" />
-    <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
     <Compile Include="Lib\Catalog\ProductService.cs" />
     <Compile Include="Lib\Catalog\StoreService.cs" />
@@ -379,10 +369,6 @@
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
-    <Compile Include="Lib\Identity\FacebookAuthProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatJWTFormat.cs" />
-    <Compile Include="Lib\Identity\TaskCatOAuthProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
     <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
@@ -418,17 +404,12 @@
     <Compile Include="Lib\Utility\Converter\VendorConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
-    <Compile Include="Lib\Utility\IdentityExtensions.cs" />
     <Compile Include="Lib\Utility\OrderTypeResolver.cs" />
-    <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Lib\Vendor\IVendorService.cs" />
     <Compile Include="Lib\Vendor\SubscriptionResult.cs" />
     <Compile Include="Lib\Vendor\VendorService.cs" />
-    <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
-    <Compile Include="Model\Identity\AccountResult.cs" />
-    <Compile Include="Model\Identity\ExternalLoginData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Startup.cs" />
