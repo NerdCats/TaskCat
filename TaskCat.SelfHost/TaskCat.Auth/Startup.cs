@@ -19,6 +19,7 @@
     using Microsoft.Owin.Security.Facebook;
     using Lib.JWT;
     using Lib.Provider;
+    using Common.Utility.ActionFilter;
 
     public static class Startup
     {

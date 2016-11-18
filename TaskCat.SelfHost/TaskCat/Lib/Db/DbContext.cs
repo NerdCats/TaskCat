@@ -7,6 +7,7 @@
     using Data.Entity.Identity;
     using AspNet.Identity.MongoDB;
     using Data.Entity.ShadowCat;
+    using Common.Db;
 
     public class DbContext : IDbContext
     {

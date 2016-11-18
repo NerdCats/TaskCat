@@ -9,6 +9,9 @@
     using FluentEmail;
     using App_Start;
     using Model;
+    using Common.Settings;
+    using Common.Email;
+    using Common.Email.Model;
 
     public class SMTPMailService : IEmailService, IDisposable
     {

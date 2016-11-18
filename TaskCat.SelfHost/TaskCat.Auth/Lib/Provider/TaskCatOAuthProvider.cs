@@ -1,8 +1,7 @@
 ﻿namespace TaskCat.Auth.Lib.Provider
 {
-    using Auth;
     using Data.Entity.Identity;
-    using Exceptions;
+    using Common.Exceptions;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.OAuth;
     using System.Collections.Generic;

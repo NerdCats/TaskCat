@@ -2,7 +2,9 @@
 {
     using Autofac;
     using Data.Entity.Identity;
+    using Lib;
     using Lib.Db;
+    using Microsoft.AspNet.Identity;
     using Owin;
     public class AutofacContainerBuilder
     {

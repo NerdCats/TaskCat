@@ -16,12 +16,10 @@ namespace TaskCat.App
     using Microsoft.Owin.Security.OAuth;
     using Microsoft.Owin.Security.Infrastructure;
     using Lib.Auth;
-    using Lib.Storage;
     using Lib.AssetProvider;
     using Lib.HRID;
     using Lib.Payment;
     using Data.Lib.Payment;
-    using Lib.Email;
     using Lib.Email.SMTP;
     using Owin;
     using Lib.DropPoint;
@@ -30,7 +28,8 @@ namespace TaskCat.App
     using Lib.Catalog;
     using Lib.Vendor;
     using Lib.Comments;
-    using Microsoft.Owin.Security;
+    using Common.Email;
+    using Common.Storage;
 
     public class AutofacContainerBuilder
     {

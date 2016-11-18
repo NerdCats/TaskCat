@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Auth.Lib.Db
 {
+    using Data.Entity;
     using Data.Entity.Identity;
     using MongoDB.Driver;
 
@@ -10,5 +11,6 @@
         IMongoCollection<Role> Roles { get; }
         IMongoCollection<Client> Clients { get; }
         IMongoCollection<RefreshToken> RefreshTokens { get; }
+        IMongoCollection<Job> Jobs { get; }
     }
 }

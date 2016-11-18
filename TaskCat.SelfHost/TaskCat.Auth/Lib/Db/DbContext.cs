@@ -3,6 +3,8 @@ using MongoDB.Driver;
 using TaskCat.Data.Entity.Identity;
 using System.Configuration;
 using AspNet.Identity.MongoDB;
+using TaskCat.Data.Entity;
+using TaskCat.Common.Db;
 
 namespace TaskCat.Auth.Lib.Db
 {
@@ -47,6 +49,12 @@ namespace TaskCat.Auth.Lib.Db
 
         #endregion
 
+        private IMongoCollection<Job> _jobs;
+        public IMongoCollection<Job> Jobs
+        {
+            get { return _jobs; }
+        }
+
         public DbContext()
         {
             InitiateDatabase();
@@ -70,6 +78,8 @@ namespace TaskCat.Auth.Lib.Db
             _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
             _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
+
+            _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
         }
 
         private void InitiateDatabase()

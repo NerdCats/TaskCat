@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Auth
+﻿namespace TaskCat.Auth.Lib
 {
     using System;
     using System.Collections.Generic;
@@ -15,15 +15,14 @@
     using System.Net.Http;
     using Constants;
     using Data.Model.Identity.Response;
-    using Job;
     using Data.Model.Operation;
     using Data.Model;
-    using Utility;
-    using Model.Identity;
     using Its.Configuration;
-    using App.Settings;
     using Common.Exceptions;
     using Common.Model.Pagination;
+    using Model;
+    using Settings;
+    using Utility;
     using Common.Utility;
     using Common.Email;
     using Common.Storage;
@@ -35,20 +34,17 @@
         private readonly IDbContext dbContext;
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
-        private readonly IJobManager jobManager;
         private readonly IEmailService mailService;
 
         public AccountContext(
             IDbContext dbContext,
             IEmailService mailService,
             AccountManager accountManager,
-            IBlobService blobService,
-            IJobManager jobManager)
+            IBlobService blobService)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
-            this.jobManager = jobManager;
             this.mailService = mailService;
         }
 
@@ -310,7 +306,19 @@
 
         public async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
         {
-            QueryResult<Job> data = await jobManager.GetJobsAssignedToUser(userId, page * pageSize, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection);
+            // INFO: When the job microservice and its classes gets to be generic, we should really refactor this one too
+            // And we can use multithreading here to get the job done faster
+
+            var FindContext = dateTimeUpto == null ?
+                dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo) :
+                dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo && x.CreateTime >= dateTimeUpto);
+            var orderContext = dateTimeSortDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
+            var data = new QueryResult<Job>()
+            {
+                Total = await orderContext.CountAsync(),
+                Result = await orderContext.Skip(page * pageSize).Limit(pageSize).ToListAsync()
+            };
+
             return new PageEnvelope<Job>(data.Total, page, pageSize, AppConstants.DefaultApiRoute, data.Result, request);
         }
 

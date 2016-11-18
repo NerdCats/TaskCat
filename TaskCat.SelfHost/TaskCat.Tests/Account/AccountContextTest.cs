@@ -14,11 +14,11 @@
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using Common.Email;
     using TaskCat.Lib.Auth;
     using TaskCat.Lib.Db;
-    using TaskCat.Lib.Email;
     using TaskCat.Lib.Job;
-    using TaskCat.Lib.Storage;
+    using Common.Storage;
 
     [TestFixture]
     public class AccountContextTest

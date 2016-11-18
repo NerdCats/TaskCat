@@ -25,6 +25,7 @@
     using Lib.Email;
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
+    using Common.Email;
 
     /// <summary>
     /// Account (User And Asset related Controller)

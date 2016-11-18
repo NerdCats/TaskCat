@@ -192,10 +192,20 @@
     <Compile Include="ConsoleApplicationInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Lib\AccountContext.cs" />
+    <Compile Include="Lib\AccountManager.cs" />
+    <Compile Include="Lib\AccountStore.cs" />
+    <Compile Include="Lib\ClientStore.cs" />
+    <Compile Include="Lib\IAccountContext.cs" />
+    <Compile Include="Lib\IClientStore.cs" />
+    <Compile Include="Lib\Utility\UserModelExtensions.cs" />
+    <Compile Include="Model\AccountResult.cs" />
+    <Compile Include="Model\ExternalLoginData.cs" />
+    <Compile Include="Lib\RoleManager.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
-    <Compile Include="Lib\Db\CollectionNames.cs" />
     <Compile Include="Lib\Db\DbContext.cs" />
     <Compile Include="Lib\Db\IDbContext.cs" />
+    <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Provider\FacebookAuthProvider.cs" />
     <Compile Include="Lib\JWT\TaskCatJWTFormat.cs" />
     <Compile Include="Lib\Provider\TaskCatOAuthProvider.cs" />

@@ -26,6 +26,7 @@ using TaskCat.Model.Job;
 using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
+using TaskCat.Common.Email;
 
 namespace TaskCat.Controllers
 {

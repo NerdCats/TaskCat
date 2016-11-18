@@ -116,6 +116,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
+      <Project>{64B973CA-BD1A-451B-8336-1DC243E56C23}</Project>
+      <Name>TaskCat.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>

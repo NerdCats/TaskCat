@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Auth
+﻿namespace TaskCat.Auth.Lib
 {
     using System;
     using System.Collections.Generic;
@@ -13,8 +13,8 @@
     using Data.Model.Identity.Profile;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Response;
-    using Model.Identity;
     using Common.Model.Pagination;
+    using Model;
     using Common.Email;
     using Common.Model.Storage;
 
