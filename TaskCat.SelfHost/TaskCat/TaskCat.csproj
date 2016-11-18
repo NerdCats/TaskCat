@@ -349,12 +349,9 @@
     <Compile Include="Lib\Comments\CommentService.cs" />
     <Compile Include="Lib\Comments\ICommentService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
-    <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
-    <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\ApiDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
-    <Compile Include="Lib\Domain\IRepository.cs" />
     <Compile Include="Lib\DropPoint\DropPointNameSuggestions.cs" />
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />

@@ -7,11 +7,11 @@ using System.Web.Http;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Domain;
 using System.Web.Http.Description;
 using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
+using TaskCat.Common.Domain;
 
 namespace TaskCat.Controllers
 {

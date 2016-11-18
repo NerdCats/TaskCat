@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Lib.Domain
+﻿namespace TaskCat.Common.Domain
 {
     using MongoDB.Driver;
     using System.Threading.Tasks;

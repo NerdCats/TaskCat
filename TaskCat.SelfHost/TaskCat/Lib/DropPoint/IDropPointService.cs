@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.DropPoint
 {
-    using Domain;
+    using Common.Domain;
     using Data.Entity;
     using MongoDB.Driver;
     using System.Threading.Tasks;

@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using MongoDB.Driver;
     using Data.Entity;
-    using Domain;
+    using Common.Domain;
     using Common.Exceptions;
     using Common.Db;
 

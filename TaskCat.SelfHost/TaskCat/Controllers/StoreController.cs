@@ -9,13 +9,12 @@ using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Domain;
-using TaskCat.Lib.Utility;
 using System.Web.Http.Description;
 using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Lib.Utility;
+using TaskCat.Common.Domain;
 
 namespace TaskCat.Controllers
 {

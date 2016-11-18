@@ -16,7 +16,6 @@
     using Owin;
     using Lib.DropPoint;
     using Data.Entity;
-    using Lib.Domain;
     using Lib.Catalog;
     using Lib.Vendor;
     using Lib.Comments;
@@ -24,6 +23,7 @@
     using Common.Storage;
     using Common.Db;
     using Account.Core;
+    using Common.Domain;
 
     public class AutofacContainerBuilder
     {

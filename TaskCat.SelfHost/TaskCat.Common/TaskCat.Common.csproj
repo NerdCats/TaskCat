@@ -123,6 +123,7 @@
     <Compile Include="Db\DatabaseNames.cs" />
     <Compile Include="Db\DbContext.cs" />
     <Compile Include="Db\IDbContext.cs" />
+    <Compile Include="Domain\IRepository.cs" />
     <Compile Include="Email\IEmailService.cs" />
     <Compile Include="Email\IEmailTemplateParser.cs" />
     <Compile Include="Email\Model\EmailInvoice.cs" />
