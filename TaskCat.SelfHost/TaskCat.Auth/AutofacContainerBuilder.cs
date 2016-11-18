@@ -11,6 +11,11 @@
     using Microsoft.Owin.Security.Infrastructure;
     using Microsoft.Owin.Security.OAuth;
     using Owin;
+    using Common.Email.SMTP;
+    using Common.Storage;
+    using Common.Email;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Settings;
 
     public class AutofacContainerBuilder
     {
@@ -26,6 +31,16 @@
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
             builder.RegisterType<RoleManager>().SingleInstance();
             builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
+            #endregion
+
+            #region Mail
+            var mailService = new SMTPMailService(AppSettings.Get<SMTPMailSettings>(), AppSettings.Get<ProprietorSettings>());
+            builder.Register(m => mailService).As<IEmailService>().SingleInstance();
+            #endregion
+
+            #region Storage
+            builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Auth

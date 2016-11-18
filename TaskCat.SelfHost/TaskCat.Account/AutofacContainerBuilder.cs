@@ -11,6 +11,8 @@
     using Common.Storage;
     using Data.Entity.Identity;
     using Common.Email.SMTP;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Settings;
 
     public class AutofacContainerBuilder
     {
@@ -29,7 +31,8 @@
             #endregion
 
             #region Mail
-            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IEmailService, ConcreteReflectionActivatorData>().SingleInstance();
+            var mailService = new SMTPMailService(AppSettings.Get<SMTPMailSettings>(), AppSettings.Get<ProprietorSettings>());
+            builder.Register(m => mailService).As<IEmailService>().SingleInstance();
             #endregion
 
             #region Storage
