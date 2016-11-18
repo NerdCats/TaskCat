@@ -573,25 +573,6 @@
 
 
 ---
-## Type Lib.DataProtection.MachineKeyDataProtectionProvider
-
- Used to provide the data protection services that are derived from the MachineKey API. It is the best choice of data protection when you application is hosted by ASP.NET and all servers in the farm are running with the same Machine Key values. 
-
-
-
----
-#### Method Lib.DataProtection.MachineKeyDataProtectionProvider.Create(System.String[])
-
- Returns a new instance of IDataProtection for the provider. 
-
-|Name | Description |
-|-----|------|
-|purposes: |Additional entropy used to ensure protected data may only be unprotected for the correct purposes.|
-**Returns**: An instance of a data protection service
-
-
-
----
 ## Type Lib.Exceptions.OrderCalculationException
 
  Generic Exception to define a calculation exception for IOrderCalculationService 

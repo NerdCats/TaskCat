@@ -352,8 +352,6 @@
     <Compile Include="Lib\Comments\ICommentService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
-    <Compile Include="Lib\DataProtection\MachineKeyDataProtectionProvider.cs" />
-    <Compile Include="Lib\DataProtection\MachineKeyDataProtector.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
     <Compile Include="Lib\Db\ApiDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />

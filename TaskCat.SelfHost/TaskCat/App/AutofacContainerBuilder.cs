@@ -1,5 +1,4 @@
 ﻿using Microsoft.Owin.Security.DataProtection;
-using TaskCat.Lib.DataProtection;
 
 namespace TaskCat.App
 {
@@ -8,7 +7,6 @@ namespace TaskCat.App
     using Autofac.Integration.WebApi;
     using Lib.Asset;
     using Lib.Job;
-    using Lib.Db;
     using Lib.Order;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
@@ -36,9 +34,6 @@ namespace TaskCat.App
             var builder = new ContainerBuilder();
 
             #region Account
-
-            var machineKeyProtectionProvider = new MachineKeyDataProtectionProvider();
-            builder.Register(c => machineKeyProtectionProvider).As<IDataProtectionProvider>().SingleInstance();
             builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
             builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
