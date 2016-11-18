@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model;
 
@@ -42,5 +43,11 @@ namespace TaskCat.Auth.Core
         /// </summary>
         /// <returns>Number of clients in the database.</returns>
         Task<long> GetClientsCount();
+
+        /// <summary>
+        /// Get all the clients/audiences listed in the database
+        /// </summary>
+        /// <returns>The IEnumerable of clients listed in the database</returns>
+        Task<IEnumerable<Client>> GetAllClients();
     }
 }

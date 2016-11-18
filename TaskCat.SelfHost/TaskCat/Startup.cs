@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Web.Http;
+using Autofac;
 using Autofac.Integration.WebApi;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
@@ -11,8 +13,8 @@ using TaskCat.App.Settings;
 using TaskCat.App_Start;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security;
-using Its.Configuration;
 using Microsoft.Owin.Security.Jwt;
+using TaskCat.Auth.Core;
 using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
 
@@ -55,7 +57,7 @@ namespace TaskCat
             BsonSerializerConfig.Configure();
 
             // INFO: This is not done either
-            ConfigureResourceOAuth(app);
+            ConfigureResourceOAuth(app, container);
 
             WebApiConfig.Register(config, webApiDependencyResolver);
             config.Filters.Add(new ErrorDocumentFilter());
@@ -92,27 +94,27 @@ namespace TaskCat
         }
 
 
-        private static void ConfigureResourceOAuth(IAppBuilder app)
+        private static void ConfigureResourceOAuth(IAppBuilder app, IContainer container)
         {
-            var issuer = AppSettings.Get<ClientSettings>().AuthenticationIssuerName;
-
             // INFO: As this is a auth-server and api-server together, Im adding back all possible added clients in the system and
             // allowing all of them to be able to access this api anyway
 
+            var issuer = AppSettings.Get<ClientSettings>().AuthenticationIssuerName;
+            var clientStore = container.Resolve<IClientStore>();
 
-            var audience = "GoFetchDevWebApp";
-            var secret = TextEncodings.Base64Url.Decode("U9JUz4rvs2rzmbvxj6NJIt_6uJ7TPgh8IbyrHHUUetk");
+            var allClients = clientStore.GetAllClients().GetAwaiter().GetResult();
+            var allowedAudiences = allClients.Select(x => x.Id);
+            var issuerSecurityTokenProviders =
+                allClients.Select(
+                    x => new SymmetricKeyIssuerSecurityTokenProvider(issuer, TextEncodings.Base64Url.Decode(x.Secret)));
 
             // Api controllers with an [Authorize] attribute will be validated with JWT
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
                 {
                     AuthenticationMode = AuthenticationMode.Active,
-                    AllowedAudiences = new[] { audience },
-                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
-                    {
-                        new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
-                    }
+                    AllowedAudiences = allowedAudiences,
+                    IssuerSecurityTokenProviders = issuerSecurityTokenProviders
                 });
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Auth.Core
+﻿using System.Collections.Generic;
+
+namespace TaskCat.Auth.Core
 {
     using MongoDB.Driver;
     using System.Threading.Tasks;
@@ -99,6 +101,16 @@
         public async Task<long> GetClientsCount()
         {
             var result = await dbContext.Clients.CountAsync(Builders<Client>.Filter.Empty);
+            return result;
+        }
+
+        /// <summary>
+        /// Get all the clients/audiences listed in the database
+        /// </summary>
+        /// <returns>The IEnumerable of clients listed in the database</returns>
+        public async Task<IEnumerable<Client>> GetAllClients()
+        {
+            var result = await dbContext.Clients.Find(Builders<Client>.Filter.Empty).ToListAsync();
             return result;
         }
     }
