@@ -104,6 +104,14 @@
 
             var userMock = new Mock<User>(new RegistrationModelBase() { UserName = "test_username" });
 
+            AppSettings.Set<ClientSettings>(new ClientSettings()
+            {
+                AuthenticationIssuerName = "Test_Auth_Issuer",
+                ConfirmEmailPath = "Test_Confirm_Email_Path",
+                HostingAddress = "",
+                WebCatUrl = "http://test-webcat.com"
+            });
+
             var clientSettings = AppSettings.Get<ClientSettings>();
             clientSettings.Validate();
 
