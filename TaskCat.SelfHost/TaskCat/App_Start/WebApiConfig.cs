@@ -29,7 +29,7 @@
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("docs/{apiVersion}/", c =>
+            config.EnableSwagger("api/docs/{apiVersion}/", c =>
             {
 
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;

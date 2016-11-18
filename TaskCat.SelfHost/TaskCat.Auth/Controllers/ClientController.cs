@@ -38,7 +38,7 @@
         }
         
         [HttpPost]
-        [Route("api/Client/{id}/activate")]
+        [Route("api/auth/Client/{id}/activate")]
         public async Task<IHttpActionResult> Activate([FromUri]string id)
         {
             if (string.IsNullOrWhiteSpace(id))

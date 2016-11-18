@@ -19,7 +19,7 @@
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "auth/{controller}/{id}",
+                routeTemplate: "api/auth/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
@@ -27,7 +27,7 @@
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("docs/{apiVersion}/", c =>
+            config.EnableSwagger("api/auth/docs/{apiVersion}/", c =>
             {
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";

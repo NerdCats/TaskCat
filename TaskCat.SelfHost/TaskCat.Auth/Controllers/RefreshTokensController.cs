@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using Core;
 
-    [RoutePrefix("api/RefreshTokens")]
+    [RoutePrefix("api/auth/RefreshTokens")]
     public class RefreshTokensController : ApiController
     {
         private readonly IAccountContext authRepository = null;
