@@ -1,6 +1,8 @@
 ﻿namespace TaskCat.Auth
 {
     using Autofac;
+    using Data.Entity.Identity;
+    using Lib.Db;
     using Owin;
     public class AutofacContainerBuilder
     {
@@ -10,11 +12,11 @@
 
             #region Account
 
-            builder.RegisterType<DbContext>().As<IDbContext>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountStore>().As<IUserStore<User>>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountManager>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountContext>().As<IAccountContext>().InstancePerLifetimeScope();
-            builder.RegisterType<RoleManager>().InstancePerLifetimeScope();
+            builder.RegisterType<DbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
+            builder.RegisterType<AccountManager>().SingleInstance();
+            builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
+            builder.RegisterType<RoleManager>().SingleInstance();
             builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
         }

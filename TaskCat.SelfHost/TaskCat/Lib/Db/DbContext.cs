@@ -160,8 +160,8 @@
             IndexChecks.EnsureUniqueIndexOnUserName(_users);
             IndexChecks.EnsureUniqueIndexOnEmail(_users);
             IndexChecks.EnsureUniqueIndexOnRoleName(_roles);
-
             IndexFacade.EnsureUniqueIndexOnPhoneNumber(_users);
+
             IndexFacade.EnsureJobIndexes(_jobs);
             IndexFacade.EnsureHRIDIndex(_hrids);
             IndexFacade.EnsureDropPointIndex(_dropPoints);
@@ -177,6 +177,7 @@
             _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
             _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
             _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
+
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);

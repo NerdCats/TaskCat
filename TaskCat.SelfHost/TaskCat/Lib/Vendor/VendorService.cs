@@ -9,6 +9,7 @@
     using Data.Entity;
     using Db;
     using Exceptions;
+    using Common.Exceptions;
 
     public class VendorService : IVendorService
     {

@@ -3,7 +3,7 @@
     using Data.Entity.Identity;
     using MongoDB.Driver;
 
-    public class IDbContext
+    public interface IDbContext
     {
         IMongoDatabase Database { get; }
         IMongoCollection<User> Users { get; }

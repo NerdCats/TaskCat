@@ -11,7 +11,6 @@
     using Data.Model.Identity.Response;
     using Microsoft.AspNet.Identity;
     using Utility;
-    using Exceptions;
     using Db;
     using Common.Exceptions;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

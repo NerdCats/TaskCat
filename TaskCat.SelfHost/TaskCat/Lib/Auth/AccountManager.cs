@@ -12,6 +12,7 @@
     using Exceptions;
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security.DataProtection;
+    using Common.Exceptions;
 
     public class AccountManager : UserManager<User>
     {
