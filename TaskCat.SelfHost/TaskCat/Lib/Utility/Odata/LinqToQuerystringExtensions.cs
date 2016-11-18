@@ -7,9 +7,8 @@
     using System.Linq;
     using System.Net.Http;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Results;
 
     internal static class LinqToQuerystringExtensions
     {
@@ -38,13 +37,16 @@
             StringBuilder sb = new StringBuilder();
             foreach (var item in qParamDict)
             {
-                if (string.IsNullOrEmpty(item.Value))
+                if (item.Key.StartsWith("$"))
                 {
-                    sb.Append(item.Key);
-                }
-                else
-                {
-                    sb.Append(item.Key + "=" + item.Value);
+                    if (string.IsNullOrEmpty(item.Value))
+                    {
+                        sb.Append(item.Key);
+                    }
+                    else
+                    {
+                        sb.Append(item.Key + "=" + item.Value);
+                    }
                 }
             }
             return sb.ToString();
@@ -65,21 +67,51 @@
             }
             else
             {
-                var queryTotal = Task.Run(() => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString).Count());
-                var queryResult = Task.Run(
-                    () => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString)
-                    .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
-                    .Take(odataRequestModel.PageSize));
-
-                await Task.WhenAll(queryTotal, queryResult);
-
-                if (odataRequestModel.Envelope)
+                if (odataRequestModel.ContainsSelect)
                 {
-                    var result = new PageEnvelope<T>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, routeName, queryResult.Result, request);
-                    return result;
-                }
+                    var queryTotal = Task.Run(() => {
+                        // delete the select first when Im counting
+                        Regex selectParamRegex = new Regex(@"\$select=[a-zA-Z,\/]*");
+                        var newQueryStringForCount = selectParamRegex.Replace(odataRequestModel.OdataQueryString, "");
+                        var countResult = queryable.LinqToQuerystring(queryString: newQueryStringForCount).Count();
+                        return countResult;
+                    });
 
-                return queryResult;
+                    var newQueryString = odataRequestModel.OdataQueryString + $"$skip={odataRequestModel.Page * odataRequestModel.PageSize}$top={odataRequestModel.PageSize}";
+                    var queryResult = Task.Run(() => {
+                        var result = queryable.LinqToQuerystring(typeof(T), queryString: newQueryString) as IQueryable<Dictionary<string, object>>;
+                        return result;
+                    });
+
+                    await Task.WhenAll(queryTotal, queryResult);
+
+                    if (odataRequestModel.Envelope)
+                    {
+                        var result = new PageEnvelope<Dictionary<string, object>>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, routeName, queryResult.Result, request);
+                        return result;
+                    }
+
+                    return queryResult;
+                }
+                else
+                {
+                    var queryTotal = Task.Run(() => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString).Count());
+                    var queryResult = Task.Run(
+                        () => queryable.LinqToQuerystring(queryString: odataRequestModel.OdataQueryString)
+                            .Skip(odataRequestModel.Page * odataRequestModel.PageSize)
+                            .Take(odataRequestModel.PageSize)
+                        );
+
+                    await Task.WhenAll(queryTotal, queryResult);
+
+                    if (odataRequestModel.Envelope)
+                    {
+                        var result = new PageEnvelope<T>(queryTotal.Result, odataRequestModel.Page, odataRequestModel.PageSize, routeName, queryResult.Result, request);
+                        return result;
+                    }
+
+                    return queryResult;
+                }
             }
         }
 
@@ -118,13 +150,20 @@
                 countOnly = (bool)requestMessage.Properties[PagingQueryParameters.CountOnly];
             }
 
+            bool containsSelect = false;
+            if (requestMessage.Properties.ContainsKey("ContainsSelect"))
+            {
+                containsSelect = (bool)requestMessage.Properties["ContainsSelect"];
+            }
+
             return new OdataRequestModel()
             {
                 Envelope = (bool)requestMessage.Properties[PagingQueryParameters.Envelope],
                 Page = (int)requestMessage.Properties[PagingQueryParameters.Page],
                 PageSize = (int)requestMessage.Properties[PagingQueryParameters.PageSize],
                 OdataQueryString = (string)requestMessage.Properties["OdataQueryString"],
-                CountOnly = countOnly
+                CountOnly = countOnly,
+                ContainsSelect = containsSelect
             };
         }
 

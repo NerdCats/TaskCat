@@ -6,16 +6,9 @@
     using System.Net.Http;
     using System.Web.Http.Controllers;
     using System.Web.Http.Filters;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using LinqToQuerystring;
-    using System.Net;
-    using System.Net.Http.Formatting;
-    using System;
 
     public class TaskCatOdataRouteAttribute : ActionFilterAttribute
     {
-        public OdataRequestModel odataRequestModel { get; set; }
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
@@ -26,6 +19,7 @@
             int page = 0;
             bool envelope = true;
             bool countOnly = false;
+            bool containsSelect = false;
 
             if (queryParams.ContainsKey(PagingQueryParameters.Page))
                 int.TryParse(queryParams[PagingQueryParameters.Page], out page);
@@ -41,6 +35,9 @@
             if (queryParams.ContainsKey(PagingQueryParameters.CountOnly))
                 countOnly = true;
 
+            if (queryParams.ContainsKey("$select"))
+                containsSelect = true;
+
             var odataQuery = request.GetOdataQueryString(PagingQueryParameters.DefaultPagingParams);
 
             request.Properties["OdataQueryString"] = odataQuery;
@@ -48,14 +45,7 @@
             request.Properties[PagingQueryParameters.Page] = page;
             request.Properties[PagingQueryParameters.PageSize] = pageSize;
             request.Properties[PagingQueryParameters.CountOnly] = countOnly;
-
-            odataRequestModel = new OdataRequestModel()
-            {
-                Envelope = envelope,
-                OdataQueryString = odataQuery,
-                Page = page,
-                PageSize = pageSize
-            };
+            request.Properties["ContainsSelect"] = containsSelect;
         }
     }
 }

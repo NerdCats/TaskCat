@@ -32,7 +32,7 @@ namespace TaskCat
             config.EnableSwagger("docs/{apiVersion}/", c =>
             {
 
-                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory + @"bin\";
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
                 var commentsFile = Path.Combine(baseDirectory, commentsFileName);
 

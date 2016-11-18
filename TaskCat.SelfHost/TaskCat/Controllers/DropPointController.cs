@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using LinqToQuerystring;
 using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
@@ -14,7 +12,6 @@ using TaskCat.Lib.Constants;
 using TaskCat.Lib.DropPoint;
 using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility;
 using TaskCat.Lib.Utility.ActionFilter;
 
 namespace TaskCat.Controllers
