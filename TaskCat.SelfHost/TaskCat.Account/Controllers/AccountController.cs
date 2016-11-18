@@ -34,7 +34,7 @@
     /// Account (User And Asset related Controller)
     /// </summary>
     /// 
-    [RoutePrefix("api/auth/Account")]
+    [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private readonly IAccountContext accountContext = null;
