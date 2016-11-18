@@ -72,7 +72,7 @@
             app.Run(context =>
             {
                 context.Response.ContentType = "text/plain";
-                return context.Response.WriteAsync(string.Format($"Welcome to TaskCat '{version}', proudly baked by NerdCats"));
+                return context.Response.WriteAsync(string.Format($"Welcome to TaskCat Auth '{version}', proudly baked by NerdCats"));
             });
         }
 
