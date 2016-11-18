@@ -200,7 +200,6 @@ namespace TaskCat.Common.Db
 
         public void Dispose()
         {
-            //TODO: Need to write this;
         }
     }
 }

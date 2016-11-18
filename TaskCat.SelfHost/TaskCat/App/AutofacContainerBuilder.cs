@@ -56,16 +56,16 @@
 
             #region Order
             builder.RegisterType<SupportedOrderStore>().InstancePerLifetimeScope();
-            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<OrderRepository>().AsImplementedInterfaces<IOrderRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Storage
             builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
-            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Asset
-            builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>();
+            builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Hrid
@@ -90,7 +90,7 @@
             builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
-            builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
+            builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>().SingleInstance();
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();

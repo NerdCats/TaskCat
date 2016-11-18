@@ -39,7 +39,7 @@
 
             #region Storage
             builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
-            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().InstancePerLifetimeScope();
+            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Auth
