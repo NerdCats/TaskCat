@@ -12,6 +12,7 @@
     using Data.Model.Operation;
     using LinqToQuerystring;
     using MongoDB.Driver.Linq;
+    using Common.Db;
 
     public class JobStore
     {

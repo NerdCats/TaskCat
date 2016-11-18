@@ -1,22 +1,52 @@
-﻿namespace TaskCat.Lib.Db
-{
-    using Data.Entity;
-    using MongoDB.Driver;
-    using NLog;
-    using System.Configuration;
-    using Data.Entity.Identity;
-    using AspNet.Identity.MongoDB;
-    using Data.Entity.ShadowCat;
-    using Common.Db;
+﻿using MongoDB.Driver;
+using System.Configuration;
+using TaskCat.Data.Entity;
+using TaskCat.Data.Entity.Identity;
+using TaskCat.Data.Entity.ShadowCat;
 
-    public class DbContext : IDbContext
+namespace TaskCat.Common.Db
+{
+    public class DbContext: IDbContext
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
         private MongoClient mongoClient;
         private MongoClient shadowCatMongoClient;
 
         public IMongoDatabase Database { get; private set; }
         public IMongoDatabase ShadowCatDatabase { get; private set; }
+
+        #region Auth
+
+        private IMongoCollection<User> _users;
+        public IMongoCollection<User> Users
+        {
+            get { return _users; }
+        }
+
+        private IMongoCollection<Asset> _assets;
+        public IMongoCollection<Asset> Assets
+        {
+            get { return _assets; }
+        }
+
+        private IMongoCollection<Role> _roles;
+        public IMongoCollection<Role> Roles
+        {
+            get { return _roles; }
+        }
+
+        private IMongoCollection<Client> _clients;
+        public IMongoCollection<Client> Clients
+        {
+            get { return _clients; }
+        }
+
+        private IMongoCollection<RefreshToken> _refreshTokens;
+        public IMongoCollection<RefreshToken> RefreshTokens
+        {
+            get { return _refreshTokens; }
+        }
+
+        #endregion
 
         #region JobsAndOrders
 
@@ -102,7 +132,7 @@
 
         public IMongoCollection<Product> Products
         {
-            get { return _products;}
+            get { return _products; }
         }
 
         #endregion
@@ -119,17 +149,6 @@
         {
             InitiateDatabase();
             InitiateCollections();
-            EnsureIndexes();
-        }
-
-        private void EnsureIndexes()
-        {
-            IndexFacade.EnsureJobIndexes(_jobs);
-            IndexFacade.EnsureHRIDIndex(_hrids);
-            IndexFacade.EnsureDropPointIndex(_dropPoints);
-            IndexFacade.EnsureVendorIndex(_vendors);
-            IndexFacade.EnsureProductCategoriesIndex(_productCategories);
-            IndexFacade.EnsureComments(_comments);
         }
 
         private void InitiateCollections()

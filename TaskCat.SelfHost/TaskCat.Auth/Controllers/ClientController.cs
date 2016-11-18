@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Auth.Controllers
 {
+    using Core;
     using Data.Entity.Identity;
     using Data.Model;
     using Lib;

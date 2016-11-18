@@ -1,15 +1,15 @@
-﻿namespace TaskCat.Auth.Lib
+﻿namespace TaskCat.Auth.Core
 {
-    using Db;
     using MongoDB.Driver;
     using System.Threading.Tasks;
     using Data.Entity.Identity;
     using System;
     using System.Security.Cryptography;
-    using Microsoft.Owin.Security.DataHandler.Encoder;
     using Data.Model.Identity;
     using Data.Model;
-    
+    using Common.Db;
+    using Microsoft.Owin.Security.DataHandler.Encoder;
+
     /// <summary>
     /// Default implementation of IClientStore
     /// </summary>

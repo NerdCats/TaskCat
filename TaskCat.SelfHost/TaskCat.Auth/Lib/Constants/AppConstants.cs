@@ -9,6 +9,7 @@
         public const string DefaultCommentsRoute = "DefaultComments";
         public const string ConfirmEmailRoute = "ConfirmEmailRoute";
         public const string GetUserProfileByIdRoute = "GetUserProfileById";
+        public const string JobsAssignedToUserRoute = "JobsAssignedToUserRoute";
 
         public const int DefaultPageSize = 10;
         public const int MaxPageSize = 50;

@@ -7,7 +7,6 @@
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
     using Data.Entity.Identity;
-    using TaskCat.Lib.Auth;
     using System.Threading.Tasks;
     using Data.Model.Order;
     using Data.Model.Geocoding;
@@ -25,6 +24,7 @@
     using System;
     using Data.Model.Order.Delivery;
     using TaskCat.Data.Model.Identity;
+    using Auth.Core;
 
     [TestFixture]
     public class TestDeliveryJob

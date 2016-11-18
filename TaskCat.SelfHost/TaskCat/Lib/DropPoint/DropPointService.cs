@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using MongoDB.Bson;
     using Common.Exceptions;
+    using Common.Db;
 
     public class DropPointService : IDropPointService
     {

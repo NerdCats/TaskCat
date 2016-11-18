@@ -12,10 +12,6 @@ namespace TaskCat.App
     using Lib.Order;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
-    using Lib.Identity;
-    using Microsoft.Owin.Security.OAuth;
-    using Microsoft.Owin.Security.Infrastructure;
-    using Lib.Auth;
     using Lib.AssetProvider;
     using Lib.HRID;
     using Lib.Payment;
@@ -30,6 +26,8 @@ namespace TaskCat.App
     using Lib.Comments;
     using Common.Email;
     using Common.Storage;
+    using Common.Db;
+    using Auth.Core;
 
     public class AutofacContainerBuilder
     {

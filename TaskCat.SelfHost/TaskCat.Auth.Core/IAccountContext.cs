@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib
+﻿namespace TaskCat.Auth.Core
 {
     using System;
     using System.Collections.Generic;
@@ -25,9 +25,9 @@
         Task<List<User>> FindAll(int page, int pageSize);
         Task<IQueryable<UserModel>> FindAllAsModel();
         Task<List<UserModel>> FindAllAsModel(int page, int pageSize);
-        Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request);
-        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request);
-        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request);     
+        Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request, string routeName);
+        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute);
+        Task<PageEnvelope<Data.Entity.Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute);     
         Task<RefreshToken> FindRefreshToken(string refreshTokenId);
         Task<User> FindUser(string userId);
         Task<User> FindUser(string userName, string password);
@@ -38,7 +38,7 @@
         Task<bool> IsEmailAvailable(string email);
         Task<bool> IsPhoneNumberAvailable(string phoneNumber);
         Task<bool> IsUsernameAvailable(string suggestedUsername);
-        Task<SendEmailResponse> NotifyUserCreationByMail(User user);
+        Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath);
         Task<AccountResult> RegisterUser(RegistrationModelBase model);
         Task<bool> RemoveRefreshToken(string hashedTokenId);
         Task<bool> RemoveRefreshToken(RefreshToken refreshToken);

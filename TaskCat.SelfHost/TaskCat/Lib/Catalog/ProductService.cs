@@ -4,9 +4,9 @@
     using Domain;
     using System.Threading.Tasks;
     using MongoDB.Driver;
-    using Db;
     using System;
     using Common.Exceptions;
+    using Common.Db;
 
     public class ProductService : IRepository<Product>
     {

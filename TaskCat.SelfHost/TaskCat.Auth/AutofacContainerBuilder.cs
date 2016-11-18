@@ -3,8 +3,10 @@
     using Autofac;
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
+    using Common.Db;
     using Common.Email;
     using Common.Storage;
+    using Core;
     using Data.Entity.Identity;
     using Lib;
     using Lib.Db;

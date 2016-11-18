@@ -2,7 +2,7 @@
 {
     using System.Web.Http;
     using System.Threading.Tasks;
-    using Lib;
+    using Core;
 
     [RoutePrefix("api/RefreshTokens")]
     public class RefreshTokensController : ApiController

@@ -1,9 +1,9 @@
-﻿namespace TaskCat.Auth.Lib
+﻿namespace TaskCat.Auth.Core
 {
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
-    using Db;
     using AspNet.Identity.MongoDB;
+    using Common.Db;
 
     public class RoleManager : RoleManager<Role>
     {

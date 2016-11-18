@@ -15,10 +15,11 @@
     using System.Net;
     using System.Threading.Tasks;
     using Common.Email;
-    using TaskCat.Lib.Auth;
-    using TaskCat.Lib.Db;
-    using TaskCat.Lib.Job;
     using Common.Storage;
+    using Common.Db;
+    using Auth.Core;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Utility;
 
     [TestFixture]
     public class AccountContextTest
@@ -28,7 +29,6 @@
         Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
         Mock<AccountManager> accountManagerMock;
         Mock<IBlobService> blobServiceMock = new Mock<IBlobService>();
-        Mock<IJobManager> jobManagerMock = new Mock<IJobManager>();
 
         [SetUp]
         public void SetUp()
@@ -54,8 +54,7 @@
                 dbContextMock.Object,
                 mailServiceMock.Object,
                 accountManagerMock.Object,
-                blobServiceMock.Object,
-                jobManagerMock.Object);
+                blobServiceMock.Object);
 
             var registerModel = new UserRegistrationModel()
             {
@@ -99,14 +98,16 @@
                 dbContextMock.Object,
                 mailServiceMock.Object,
                 accountManagerMock.Object,
-                blobServiceMock.Object,
-                jobManagerMock.Object);
+                blobServiceMock.Object);
 
             Environment.SetEnvironmentVariable("Its.Configuration.Settings.Precedence", "local|production");
 
             var userMock = new Mock<User>(new RegistrationModelBase() { UserName = "test_username" });
 
-            var result = await accountContext.NotifyUserCreationByMail(userMock.Object);
+            var clientSettings = AppSettings.Get<ClientSettings>();
+            clientSettings.Validate();
+
+            var result = await accountContext.NotifyUserCreationByMail(userMock.Object, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
         }

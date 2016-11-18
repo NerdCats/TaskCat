@@ -1,10 +1,10 @@
-﻿namespace TaskCat.Auth.Lib.Utility
+﻿namespace TaskCat.Auth.Core.Utility
 {
     using Data.Model.Identity.Response;
     using Data.Entity.Identity;
     using Data.Model.Identity;
 
-    internal static class UserModelExtensions
+    public static class UserModelExtensions
     {
         public static UserModel ToModel(this User user, bool isUserAuthenticated)
         {

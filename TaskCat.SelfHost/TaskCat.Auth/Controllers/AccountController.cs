@@ -16,15 +16,18 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Description;
-    using Lib.Utility;
     using System.Net.Http.Formatting;
     using Data.Entity.Identity;
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Common.Email;
-    using Lib;
     using Common.Model.Response;
-    using Model.Account;
+    using Core.Model.Account;
+    using Core;
+    using Core.Utility;
+    using AppSettings = Its.Configuration.Settings;
+    using Settings;
+    using Common.Utility;
 
     /// <summary>
     /// Account (User And Asset related Controller)
@@ -70,7 +73,10 @@
                 return GetErrorResult(result.Result);
             }
 
-            await accountContext.NotifyUserCreationByMail(result.User);
+            var clientSettings = AppSettings.Get<ClientSettings>();
+            clientSettings.Validate();
+
+            await accountContext.NotifyUserCreationByMail(result.User, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
 
             return Created<UserModel>(Url.Link(AppConstants.GetUserProfileByIdRoute, new { userId = result.User.Id }), result.User.ToModel(isUserAuthenticated: false));
         }
@@ -136,13 +142,15 @@
                     new JsonMediaTypeFormatter());
             }
 
-            var result = await accountContext.NotifyUserCreationByMail(user);
+            var clientSettings = AppSettings.Get<ClientSettings>();
+            clientSettings.Validate();
+
+            var result = await accountContext.NotifyUserCreationByMail(user, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
 
             if (!result.Success)
                 return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());
             else
                 return Ok(result);
-
         }
 
         protected IHttpActionResult GetErrorResult(IdentityResult result)
@@ -238,7 +246,7 @@
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
         [HttpGet]
-        [Route("{userId?}/jobs")]
+        [Route("{userId?}/jobs", Name = AppConstants.JobsAssignedToUserRoute)]
         public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, string fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
         {
             DateTime? fromdt = null;
@@ -256,7 +264,7 @@
                 userId = this.User.Identity.GetUserId();
             }
 
-            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request);
+            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request, AppConstants.JobsAssignedToUserRoute);
             return Ok(result);
         }
 
@@ -289,7 +297,7 @@
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             if (envelope)
-                return Ok(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request));
+                return Ok(await accountContext.FindAllEnvelopedAsModel(page, pageSize, this.Request, AppConstants.DefaultApiRoute));
             else
                 return Ok(await accountContext.FindAllAsModel(page, pageSize));
         }

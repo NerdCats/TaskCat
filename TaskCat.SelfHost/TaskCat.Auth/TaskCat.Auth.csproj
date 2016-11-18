@@ -216,22 +216,10 @@
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\RefreshTokensController.cs" />
     <Compile Include="EmailTemplatesConfig.cs" />
-    <Compile Include="Lib\AccountContext.cs" />
-    <Compile Include="Lib\AccountManager.cs" />
-    <Compile Include="Lib\AccountStore.cs" />
-    <Compile Include="Lib\ClientStore.cs" />
-    <Compile Include="Lib\IAccountContext.cs" />
-    <Compile Include="Lib\IClientStore.cs" />
     <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
-    <Compile Include="Lib\Utility\UserModelExtensions.cs" />
-    <Compile Include="Model\AccountResult.cs" />
-    <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
-    <Compile Include="Model\ExternalLoginData.cs" />
-    <Compile Include="Lib\RoleManager.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
-    <Compile Include="Lib\Db\DbContext.cs" />
-    <Compile Include="Lib\Db\IDbContext.cs" />
+    <Compile Include="Lib\Db\AuthDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Provider\FacebookAuthProvider.cs" />
     <Compile Include="Lib\JWT\TaskCatJWTFormat.cs" />
@@ -273,6 +261,10 @@
     <Folder Include=".config\production\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Auth.Core.csproj">
+      <Project>{96d1f5bc-2a40-411f-a8ab-c7ad07f981df}</Project>
+      <Name>TaskCat.Auth.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
       <Project>{64B973CA-BD1A-451B-8336-1DC243E56C23}</Project>
       <Name>TaskCat.Common</Name>

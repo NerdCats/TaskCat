@@ -26,6 +26,8 @@
     using Lib.Db;
     using Data.Entity.Identity;
     using MongoDB.Driver;
+    using Common.Db;
+    using Core;
 
     public static class Startup
     {

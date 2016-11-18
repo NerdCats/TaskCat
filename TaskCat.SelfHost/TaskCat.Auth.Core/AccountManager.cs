@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib
+﻿namespace TaskCat.Auth.Core
 {
     using Microsoft.AspNet.Identity;
     using System;
@@ -10,8 +10,8 @@
     using Data.Model.Identity.Response;
     using MongoDB.Driver;
     using Common.Exceptions;
-    using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security.DataProtection;
+    using Microsoft.AspNet.Identity.Owin;
 
     public class AccountManager : UserManager<User>
     {

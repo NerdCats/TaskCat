@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Data.Model.Identity.Response;
-    using Auth;
     using Asset;
     using Model.Asset;
     using Db;
@@ -13,6 +12,8 @@
     using MongoDB.Bson;
     using Data.Model.ShadowCat;
     using MongoDB.Bson.Serialization;
+    using Auth.Core;
+    using Common.Db;
 
     /// <summary>
     /// Default implementation of asset provider, essentially provides assets

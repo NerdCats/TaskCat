@@ -5,6 +5,7 @@
     using Db;
     using MongoDB.Driver;
     using Common.Exceptions;
+    using Common.Db;
 
     public class HRIDService : IHRIDService
     {

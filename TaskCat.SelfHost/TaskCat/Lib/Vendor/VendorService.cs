@@ -10,6 +10,8 @@
     using Db;
     using Exceptions;
     using Common.Exceptions;
+    using Common.Db;
+    using Auth.Core;
 
     public class VendorService : IVendorService
     {

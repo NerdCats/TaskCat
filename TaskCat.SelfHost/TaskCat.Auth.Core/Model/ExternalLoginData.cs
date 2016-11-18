@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Model
+﻿namespace TaskCat.Auth.Core.Model
 {
     using Microsoft.AspNet.Identity;
     using System;

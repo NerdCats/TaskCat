@@ -6,6 +6,7 @@
     using Data.Entity.Identity;
     using Thinktecture.IdentityModel.Tokens;
     using System.IdentityModel.Tokens;
+    using Core;
 
     public class TaskCatJWTFormat : ISecureDataFormat<AuthenticationTicket>
     {

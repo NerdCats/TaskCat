@@ -355,8 +355,7 @@
     <Compile Include="Lib\DataProtection\MachineKeyDataProtectionProvider.cs" />
     <Compile Include="Lib\DataProtection\MachineKeyDataProtector.cs" />
     <Compile Include="Lib\Db\DatabaseNames.cs" />
-    <Compile Include="Lib\Db\DbContext.cs" />
-    <Compile Include="Lib\Db\IDbContext.cs" />
+    <Compile Include="Lib\Db\ApiDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
     <Compile Include="Lib\Domain\IRepository.cs" />
@@ -451,6 +450,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Auth.Core.csproj">
+      <Project>{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}</Project>
+      <Name>TaskCat.Auth.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
       <Project>{64b973ca-bd1a-451b-8336-1dc243e56c23}</Project>
       <Name>TaskCat.Common</Name>

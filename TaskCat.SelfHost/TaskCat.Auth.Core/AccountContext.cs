@@ -1,11 +1,10 @@
-﻿namespace TaskCat.Auth.Lib
+﻿namespace TaskCat.Auth.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Data.Entity.Identity;
-    using Db;
     using Microsoft.AspNet.Identity;
     using Data.Model.Identity;
     using MongoDB.Driver;
@@ -13,20 +12,18 @@
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
     using System.Net.Http;
-    using Constants;
     using Data.Model.Identity.Response;
     using Data.Model.Operation;
     using Data.Model;
-    using Its.Configuration;
     using Common.Exceptions;
     using Common.Model.Pagination;
-    using Model;
-    using Settings;
     using Utility;
     using Common.Utility;
     using Common.Email;
     using Common.Storage;
     using Common.Model.Storage;
+    using Common.Db;
+    using Model;
 
     public class AccountContext : IAccountContext
     {
@@ -77,15 +74,12 @@
             return creationResult;
         }
 
-        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user)
+        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath)
         {
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-            var clientSettings = Settings.Get<ClientSettings>();
-            clientSettings.Validate();
-
             var confirmEmailRouteParams = new Dictionary<string, string>() { { "userId", user.Id }, { "code", code } };
-            var confirmationUrl = string.Concat(clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, confirmEmailRouteParams.ToQuerystring());
+            var confirmationUrl = string.Concat(webcatUrl, confirmEmailPath, confirmEmailRouteParams.ToQuerystring());
 
             var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest()
             {
@@ -150,12 +144,12 @@
             return await accountManager.FindAllAsModel(page * pageSize, pageSize);
         }
 
-        public async Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request)
+        public async Task<PageEnvelope<UserModel>> FindAllEnvelopedAsModel(int page, int pageSize, HttpRequestMessage request, string routeName)
         {
             var data = await FindAllAsModel(page, pageSize);
             var total = await accountManager.GetTotalUserCount();
 
-            return new PageEnvelope<UserModel>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request);
+            return new PageEnvelope<UserModel>(total, page, pageSize, routeName, data, request);
         }
 
         public async Task<IdentityResult> Update(IdentityProfile profile, string userName)
@@ -304,7 +298,7 @@
             return user.ToModel(true);
         }
 
-        public async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
+        public async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute)
         {
             // INFO: When the job microservice and its classes gets to be generic, we should really refactor this one too
             // And we can use multithreading here to get the job done faster
@@ -319,13 +313,13 @@
                 Result = await orderContext.Skip(page * pageSize).Limit(pageSize).ToListAsync()
             };
 
-            return new PageEnvelope<Job>(data.Total, page, pageSize, AppConstants.DefaultApiRoute, data.Result, request);
+            return new PageEnvelope<Job>(data.Total, page, pageSize, apiRoute, data.Result, request);
         }
 
-        public async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request)
+        public async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute)
         {
             var user = await accountManager.FindByNameAsync(userName);
-            return await FindAssignedJobs(user.Id, page, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection, request);
+            return await FindAssignedJobs(user.Id, page, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection, request, apiRoute);
         }
 
         public async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)

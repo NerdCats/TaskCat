@@ -2,7 +2,7 @@
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model;
 
-namespace TaskCat.Auth.Lib
+namespace TaskCat.Auth.Core
 {
     /// <summary>
     /// Generic interface to define a database store for clients

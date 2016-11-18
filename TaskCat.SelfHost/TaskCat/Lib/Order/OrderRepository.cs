@@ -9,7 +9,6 @@
     using Data.Model;
     using Data.Model.Order;
     using System.ComponentModel.DataAnnotations;
-    using Auth;
     using Data.Model.Identity.Response;
     using HRID;
     using Process;
@@ -18,8 +17,8 @@
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
-    using Data.Model.Order.Delivery;
     using Vendor;
+    using Auth.Core;
 
     public class OrderRepository : IOrderRepository
     {

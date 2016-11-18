@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Data.Entity.Identity;
     using Common.Utility;
+    using Core;
 
     public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {

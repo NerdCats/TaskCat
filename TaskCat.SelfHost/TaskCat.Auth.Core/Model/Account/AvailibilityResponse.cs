@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Model.Account
+﻿namespace TaskCat.Auth.Core.Model.Account
 {
     public class AvailibilityResponse
     {

@@ -10,7 +10,6 @@
     using Constants;
     using Data.Model;
     using MongoDB.Driver;
-    using Auth;
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
     using Order;
@@ -20,6 +19,7 @@
     using Model.Job;
     using Updaters;
     using Common.Model.Pagination;
+    using Auth.Core;
 
     public class JobRepository : IJobRepository
     {
