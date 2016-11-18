@@ -6,11 +6,12 @@
     using Microsoft.AspNet.Identity;
     using Owin;
     using Core;
-    using Lib.Email.SMTP;
     using Common.Db;
     using Common.Email;
     using Common.Storage;
     using Data.Entity.Identity;
+    using Common.Email.SMTP;
+
     public class AutofacContainerBuilder
     {
         public IContainer BuildContainer(IAppBuilder app)

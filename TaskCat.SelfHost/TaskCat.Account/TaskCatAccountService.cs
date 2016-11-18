@@ -40,7 +40,7 @@
 
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Hosted TaskCat Auth Service on {listeningAddress}");
+            Console.WriteLine($"Hosted TaskCat Account Service on {listeningAddress}");
             Console.ForegroundColor = oldColor;
         }
 

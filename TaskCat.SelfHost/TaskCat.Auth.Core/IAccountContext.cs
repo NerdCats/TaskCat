@@ -38,7 +38,7 @@
         Task<bool> IsEmailAvailable(string email);
         Task<bool> IsPhoneNumberAvailable(string phoneNumber);
         Task<bool> IsUsernameAvailable(string suggestedUsername);
-        Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath);
+        Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath, string emailTemplatePath);
         Task<AccountResult> RegisterUser(RegistrationModelBase model);
         Task<bool> RemoveRefreshToken(string hashedTokenId);
         Task<bool> RemoveRefreshToken(RefreshToken refreshToken);

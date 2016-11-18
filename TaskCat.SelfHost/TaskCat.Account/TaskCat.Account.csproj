@@ -191,11 +191,9 @@
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
     <Compile Include="Lib\Db\AccountDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
-    <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\EmailTemplatePathSettings.cs" />
-    <Compile Include="Settings\SMTPMailSettings.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="TaskCatAccountService.cs" />
     <Compile Include="WebApiConfig.cs" />

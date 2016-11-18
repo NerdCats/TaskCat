@@ -77,7 +77,7 @@
             var clientSettings = AppSettings.Get<ClientSettings>();
             clientSettings.Validate();
 
-            await accountContext.NotifyUserCreationByMail(result.User, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
+            await accountContext.NotifyUserCreationByMail(result.User, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, EmailTemplatesConfig.WelcomeEmailTemplate);
 
             return Created<UserModel>(Url.Link(AppConstants.GetUserProfileByIdRoute, new { userId = result.User.Id }), result.User.ToModel(isUserAuthenticated: false));
         }
@@ -146,7 +146,7 @@
             var clientSettings = AppSettings.Get<ClientSettings>();
             clientSettings.Validate();
 
-            var result = await accountContext.NotifyUserCreationByMail(user, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
+            var result = await accountContext.NotifyUserCreationByMail(user, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, EmailTemplatesConfig.WelcomeEmailTemplate);
 
             if (!result.Success)
                 return Content(HttpStatusCode.InternalServerError, result, new JsonMediaTypeFormatter());

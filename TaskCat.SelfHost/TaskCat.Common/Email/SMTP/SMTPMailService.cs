@@ -1,17 +1,13 @@
-﻿namespace TaskCat.Lib.Email.SMTP
+﻿namespace TaskCat.Common.Email.SMTP
 {
     using System;
     using System.Net.Mail;
     using System.Threading.Tasks;
-    using App.Settings;
-    using Its.Configuration;
     using System.Net;
     using FluentEmail;
-    using App_Start;
+    using Settings;
+    using Email;
     using Model;
-    using Common.Settings;
-    using Common.Email;
-    using Common.Email.Model;
 
     public class SMTPMailService : IEmailService, IDisposable
     {
@@ -19,10 +15,10 @@
         private SmtpClient smtpclient;
         private ProprietorSettings propSettings;
 
-        public SMTPMailService()
+        public SMTPMailService(SMTPMailSettings smtpMailSettings, ProprietorSettings proprietorSettings)
         {
-            settings = Settings.Get<SMTPMailSettings>();
-            propSettings = Settings.Get<ProprietorSettings>();
+            settings = smtpMailSettings;
+            propSettings = proprietorSettings;
             smtpclient = new SmtpClient(settings.Host, settings.Port)
             {
                 Credentials = new NetworkCredential(settings.Username, settings.Password),
@@ -47,14 +43,14 @@
             throw new NotImplementedException();
         }
 
-        public async Task<SendEmailResponse> SendWelcomeMail(SendWelcomeEmailRequest request)
+        public async Task<SendEmailResponse> SendWelcomeMail(SendWelcomeEmailRequest request, string templatePath)
         {
             var email = Email
                .From(settings.Username, propSettings.Name)
                .UsingClient(smtpclient)
                .To(request.RecipientEmail)
                .Subject("Welcome to " + propSettings.Name)
-               .UsingTemplate(EmailTemplatesConfig.WelcomeEmailTemplate, new WelcomeEmail()
+               .UsingTemplate(templatePath, new WelcomeEmail()
                {
                    Name = request.RecipientUsername,
                    ConfirmationUrl = request.ConfirmationUrl,

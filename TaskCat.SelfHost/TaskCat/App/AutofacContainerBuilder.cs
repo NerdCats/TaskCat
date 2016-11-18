@@ -12,7 +12,6 @@
     using Lib.HRID;
     using Lib.Payment;
     using Data.Lib.Payment;
-    using Lib.Email.SMTP;
     using Owin;
     using Lib.DropPoint;
     using Data.Entity;
@@ -24,6 +23,7 @@
     using Common.Db;
     using Account.Core;
     using Common.Domain;
+    using Common.Email.SMTP;
 
     public class AutofacContainerBuilder
     {

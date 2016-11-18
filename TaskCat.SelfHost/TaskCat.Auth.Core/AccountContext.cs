@@ -74,19 +74,19 @@
             return creationResult;
         }
 
-        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath)
+        public async Task<SendEmailResponse> NotifyUserCreationByMail(User user, string webcatUrl, string confirmEmailPath, string emailTemplatePath)
         {
             string code = await this.accountManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
             var confirmEmailRouteParams = new Dictionary<string, string>() { { "userId", user.Id }, { "code", code } };
-            var confirmationUrl = string.Concat(webcatUrl, confirmEmailPath, confirmEmailRouteParams.ToQuerystring());
+            var confirmationUrl = string.Concat(webcatUrl, confirmEmailPath, confirmEmailRouteParams.ToQuerystring());           
 
             var result = await mailService.SendWelcomeMail(new SendWelcomeEmailRequest()
             {
                 RecipientEmail = user.Email,
                 RecipientUsername = user.UserName,
                 ConfirmationUrl = confirmationUrl.ToString()
-            });
+            }, emailTemplatePath);
             return result;
         }
 

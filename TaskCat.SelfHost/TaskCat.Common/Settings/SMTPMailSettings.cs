@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Settings
+﻿namespace TaskCat.Common.Settings
 {
     public class SMTPMailSettings
     {

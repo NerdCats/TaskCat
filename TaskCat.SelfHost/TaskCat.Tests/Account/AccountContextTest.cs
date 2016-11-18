@@ -21,6 +21,7 @@
     using AppSettings = Its.Configuration.Settings;
     using Common.Utility;
     using Common.Settings;
+    using TaskCat.Account;
 
     [TestFixture]
     public class AccountContextTest
@@ -92,7 +93,7 @@
             accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
             mailServiceMock.Setup(x => x.SendWelcomeMail(
-                It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(
+                It.IsAny<SendWelcomeEmailRequest>(), It.IsAny<string>())).ReturnsAsync(
                 new SendEmailResponse(HttpStatusCode.OK));
 
             var accountContext = new AccountContext(
@@ -116,7 +117,7 @@
             var clientSettings = AppSettings.Get<ClientSettings>();
             clientSettings.Validate();
 
-            var result = await accountContext.NotifyUserCreationByMail(userMock.Object, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath);
+            var result = await accountContext.NotifyUserCreationByMail(userMock.Object, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, EmailTemplatesConfig.WelcomeEmailTemplate);
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
         }

@@ -322,7 +322,6 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="App\Settings\EmailTemplatePathSettings.cs" />
-    <Compile Include="App\Settings\SMTPMailSettings.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -356,7 +355,6 @@
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
-    <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
