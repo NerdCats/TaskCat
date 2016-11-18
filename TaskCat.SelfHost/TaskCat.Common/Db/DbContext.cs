@@ -6,7 +6,7 @@ using TaskCat.Data.Entity.ShadowCat;
 
 namespace TaskCat.Common.Db
 {
-    public class DbContext: IDbContext
+    public class DbContext : IDbContext
     {
         private MongoClient mongoClient;
         private MongoClient shadowCatMongoClient;
@@ -153,6 +153,11 @@ namespace TaskCat.Common.Db
 
         private void InitiateCollections()
         {
+            _users = Database.GetCollection<User>(CollectionNames.UsersCollectionName);
+            _assets = Database.GetCollection<Asset>(CollectionNames.UsersCollectionName);
+            _roles = Database.GetCollection<Role>(CollectionNames.RolesCollectionName);
+            _clients = Database.GetCollection<Client>(CollectionNames.ClientsCollectionName);
+            _refreshTokens = Database.GetCollection<RefreshToken>(CollectionNames.RefreshTokensCollectionName);
             _jobs = Database.GetCollection<Job>(CollectionNames.JobsCollectionName);
             _supportedOrders = Database.GetCollection<SupportedOrder>(CollectionNames.SupportedOrderCollectionName);
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
@@ -165,7 +170,8 @@ namespace TaskCat.Common.Db
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
 
-            _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings.Get("ShadowCat.LocationCacheCollectionName")))
+                _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);
         }
 
         private void InitiateDatabase()
