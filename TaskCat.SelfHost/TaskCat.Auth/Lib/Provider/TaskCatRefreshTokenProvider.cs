@@ -3,7 +3,6 @@
     using Microsoft.Owin.Security.Infrastructure;
     using System;
     using System.Threading.Tasks;
-    using Auth;
     using Data.Entity.Identity;
     using Common.Utility;
 

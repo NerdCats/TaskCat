@@ -38,10 +38,12 @@
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
+            app.UseErrorPage();
+
             var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
-
+            
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             var config = new HttpConfiguration();

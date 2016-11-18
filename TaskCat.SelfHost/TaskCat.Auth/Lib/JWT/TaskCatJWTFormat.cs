@@ -3,9 +3,9 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using System;
-    using System.IdentityModel.Tokens;
-    using TaskCat.Data.Entity.Identity;
+    using Data.Entity.Identity;
     using Thinktecture.IdentityModel.Tokens;
+    using System.IdentityModel.Tokens;
 
     public class TaskCatJWTFormat : ISecureDataFormat<AuthenticationTicket>
     {
