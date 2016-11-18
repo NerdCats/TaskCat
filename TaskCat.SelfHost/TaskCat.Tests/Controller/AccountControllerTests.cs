@@ -11,6 +11,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Http.Results;
+    using Common.Email;
 
     [TestFixture]
     public class AccountControllerTests

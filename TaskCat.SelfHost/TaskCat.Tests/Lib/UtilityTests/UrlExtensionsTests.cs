@@ -1,9 +1,9 @@
 ﻿namespace TaskCat.Tests.Lib.UtilityTests
 {
+    using Common.Utility;
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Web;
-    using TaskCat.Lib.Utility;
 
     [TestFixture(TestOf = typeof(UrlExtensions))]
     public class UrlExtensionsTests

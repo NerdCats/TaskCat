@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Auth
 {
     using Autofac;
+    using Autofac.Integration.WebApi;
     using Data.Entity.Identity;
     using Lib;
     using Lib.Db;
@@ -21,6 +22,9 @@
             builder.RegisterType<RoleManager>().SingleInstance();
             builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
+
+            builder.RegisterApiControllers(typeof(Startup).Assembly);
+            return builder.Build();
         }
     }
 }

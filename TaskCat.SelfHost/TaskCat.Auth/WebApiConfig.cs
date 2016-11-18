@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Auth
 {
     using Autofac.Integration.WebApi;
+    using Common.Utility.Converter;
     using Newtonsoft.Json;
     using Swashbuckle.Application;
     using System;

@@ -116,6 +116,7 @@
     <Compile Include="Model\Storage\FileDeleteModel.cs" />
     <Compile Include="Model\Storage\FileDownloadModel.cs" />
     <Compile Include="Model\Storage\FileUploadModel.cs" />
+    <Compile Include="Utility\Converter\RegistrationModelConverter.cs" />
     <Compile Include="Settings\ProprietorSettings.cs" />
     <Compile Include="Storage\BlobHelper.cs" />
     <Compile Include="Storage\BlobService.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Storage\IBlobService.cs" />
     <Compile Include="Storage\IStorageRepository.cs" />
     <Compile Include="Storage\StorageRepository.cs" />
+    <Compile Include="Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Utility\UrlExtensions.cs" />
     <Compile Include="Utility\FileUtility.cs" />
     <Compile Include="Utility\SettingsHelper.cs" />
@@ -148,6 +150,9 @@
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

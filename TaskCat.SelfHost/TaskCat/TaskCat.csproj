@@ -415,8 +415,6 @@
     <Compile Include="Lib\Payment\PaymentService.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\VendorConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
@@ -428,9 +426,9 @@
     <Compile Include="Lib\Vendor\VendorService.cs" />
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
+    <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Identity\ExternalLoginData.cs" />
-    <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Response\ChallengeResult.cs" />
     <Compile Include="Model\Response\ErrorResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

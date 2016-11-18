@@ -20,6 +20,12 @@
     using Lib.JWT;
     using Lib.Provider;
     using Common.Utility.ActionFilter;
+    using Lib;
+    using Data.Model;
+    using Data.Model.Identity;
+    using Lib.Db;
+    using Data.Entity.Identity;
+    using MongoDB.Driver;
 
     public static class Startup
     {
@@ -109,6 +115,98 @@
             nullPack.Add(new IgnoreIfNullConvention(true));
 
             ConventionRegistry.Register("IgnoreNull", nullPack, type => true);
+        }
+
+        private static void InitializeRoles(IContainer container)
+        {
+            var dbContext = container.Resolve<IDbContext>();
+
+            if (dbContext.Roles.Count(Builders<Role>.Filter.Empty) == 0)
+            {
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_USER
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_ENTERPRISE
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_ADMINISTRATOR
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_ASSET
+                });
+
+                dbContext.Roles.InsertOne(new Role()
+                {
+                    Name = RoleNames.ROLE_BACKOFFICEADMIN
+                });
+            }
+        }
+
+        private static void InitializeClients(IContainer container)
+        {
+            var clientStore = container.Resolve<IClientStore>();
+            var clientsCount = clientStore.GetClientsCount().GetAwaiter().GetResult();
+
+            if (clientsCount == 0)
+            {
+                clientStore.AddClient(new ClientModel()
+                {
+                    Id = "GoFetchWebApp",
+                    Active = true,
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.JavaScript,
+                    Name = "GoFetchWebApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
+
+                clientStore.AddClient(new ClientModel()
+                {
+                    Id = "GoFetchDevWebApp",
+                    Active = true,
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.JavaScript,
+                    Name = "GoFetchDevWebApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
+
+                clientStore.AddClient(new ClientModel()
+                {
+                    Id = "GoFetchDevDroidApp",
+                    Active = true,
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "GoFetchDevDroidApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
+
+                clientStore.AddClient(new ClientModel()
+                {
+                    Id = "GoFetchDevDroidAssetApp",
+                    Active = true,
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "GoFetchDevDroidAssetApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
+
+                clientStore.AddClient(new ClientModel()
+                {
+                    Id = "ConsoleApp",
+                    Active = true,
+                    AllowedOrigin = "*",
+                    ApplicationType = ApplicationTypes.Android,
+                    Name = "ConsoleApp",
+                    RefreshTokenLifeTime = 7200
+                }).GetAwaiter().GetResult();
+            }
         }
     }
 }

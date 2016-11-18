@@ -1,30 +1,34 @@
-﻿namespace TaskCat.Lib.Utility.Converter
+﻿namespace TaskCat.Common.Utility.Converter
 {
     using Data.Model.Identity;
+    using Data.Model.Identity.Profile;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
-    using Data.Model.Identity.Registration;
 
-    public class RegistrationModelConverter : JsonConverter
+    public class UserProfileConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(RegistrationModelBase);
+            return objectType == typeof(IdentityProfile);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var obj = JObject.Load(reader);
-            RegistrationModelBase model;
+            IdentityProfile model;
 
             var type = obj["Type"];
             if (type == null)
             {
-                obj["Type"] = ((IdentityTypes)0).ToString();
-                type = obj["Type"];
+                type = ((IdentityTypes)0).ToString();
+            }
+            else
+            {
+                obj["Type"].Remove();
             }
 
+           
             string modelType = type.Value<string>();
             IdentityTypes actualType;
             if (!Enum.TryParse<IdentityTypes>(modelType, out actualType))
@@ -33,13 +37,13 @@
             switch (actualType)
             {
                 case IdentityTypes.USER:
-                    model = new UserRegistrationModel();
+                    model = new UserProfile();
                     break;
                 case IdentityTypes.ENTERPRISE:
-                    model = new EnterpriseUserRegistrationModel();
+                    model = new EnterpriseUserProfile();
                     break;
                 default:
-                    model = new AssetRegistrationModel();
+                    model = new AssetProfile();
                     break;
             }
 

@@ -308,7 +308,7 @@
 |pageSize: | page size to return result in |
 |page: | page number |
 |envelope: | Defines whether the result should be sent back as a paged result or not |
-**Returns**:  Returns either a [[|T:TaskCat.Model.Pagination.PageEnvelope`1]] or a [[|T:System.Collections.Generic.List`1]]
+**Returns**:  Returns either a [[|T:TaskCat.Common.Model.Pagination.PageEnvelope`1]] or a [[|T:System.Collections.Generic.List`1]]
 
 
 
@@ -322,7 +322,7 @@
 |pageSize: | page size |
 |page: | page number |
 |envelope: | Defines whether the result should be sent back as a paged result or not |
-**Returns**:  Returns either a [[|T:TaskCat.Model.Pagination.PageEnvelope`1]] or a [[|T:System.Collections.Generic.List`1]]
+**Returns**:  Returns either a [[|T:TaskCat.Common.Model.Pagination.PageEnvelope`1]] or a [[|T:System.Collections.Generic.List`1]]
 
 
 
@@ -637,7 +637,7 @@
 
 
 ---
-#### Method Controllers.StorageController.#ctor(TaskCat.Lib.Storage.IStorageRepository)
+#### Method Controllers.StorageController.#ctor(TaskCat.Common.Storage.IStorageRepository)
 
  StorageController Constructor 
 
@@ -892,156 +892,9 @@
 
 
 ---
-#### Method Lib.Exceptions.EntityDeleteException.#ctor(System.String)
-
- Base constructor to create a EntityDeleteException with a message 
-
-|Name | Description |
-|-----|------|
-|message: ||
-
-
----
-#### Method Lib.Exceptions.EntityDeleteException.#ctor(System.String,System.String)
-
- Initiate a EntityDeleteException with a message generated from entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityDeleteException.#ctor(System.Type,System.String)
-
- Initiate a EntityDeleteException with a message generated from entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityDeleteException.#ctor(System.String,System.Exception)
-
- Initiate EntityDeleteException with an inner exception 
-
-|Name | Description |
-|-----|------|
-|description: ||
-|inner: ||
-
-
----
-#### Method Lib.Exceptions.EntityNotFoundException.#ctor(System.String)
-
- Base constructor to create a EntityNotFoundException with a message 
-
-|Name | Description |
-|-----|------|
-|message: |Exception message that describes what element is missing|
-
-
----
-#### Method Lib.Exceptions.EntityNotFoundException.#ctor(System.String,System.String)
-
- Initiate a EntityNotFoundException with a message generated from stringified entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityNotFoundException.#ctor(System.Type,System.String)
-
- Initiate a EntityNotFoundException with a message generated from entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityNotFoundException.#ctor(System.String,System.Exception)
-
- Initiate EntityNotFoundException with an inner exception 
-
-|Name | Description |
-|-----|------|
-|description: ||
-|inner: ||
-
-
----
-#### Method Lib.Exceptions.EntityNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
-
- Initiate EntityNotFoundException with serialization info and context 
-
-|Name | Description |
-|-----|------|
-|info: ||
-|context: ||
-
-
----
-#### Method Lib.Exceptions.EntityUpdateException.#ctor(System.String)
-
- Base constructor to create a EntityUpdateException with a message 
-
-|Name | Description |
-|-----|------|
-|message: ||
-
-
----
-#### Method Lib.Exceptions.EntityUpdateException.#ctor(System.String,System.String)
-
- Initiate a EntityUpdateException with a message generated from entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityUpdateException.#ctor(System.Type,System.String)
-
- Initiate a EntityUpdateException with a message generated from entityType 
-
-|Name | Description |
-|-----|------|
-|entityType: ||
-|identifier: ||
-
-
----
-#### Method Lib.Exceptions.EntityUpdateException.#ctor(System.String,System.Exception)
-
- Initiate EntityUpdateException with an inner exception 
-
-|Name | Description |
-|-----|------|
-|description: ||
-|inner: ||
-
-
----
 ## Type Lib.Exceptions.OrderCalculationException
 
  Generic Exception to define a calculation exception for IOrderCalculationService 
-
-
-
----
-## Type Lib.Exceptions.ServerErrorException
-
- Represents an error with the details described as an ErrorDocument 
 
 
 
@@ -1130,75 +983,6 @@
 
 
 ---
-## Type Lib.Storage.IBlobService
-
- Interface to define a Blob Storage Service 
-
-
-
----
-#### Method Lib.Storage.IBlobService.UploadBlob(System.Net.Http.HttpContent,System.String,System.Collections.Generic.IEnumerable{System.String})
-
- Upload single blob data from HttpContent 
-
-|Name | Description |
-|-----|------|
-|content: ||
-|filterPropertyName: ||
-|supportedFileTypes: ||
-**Returns**: 
-
-
-
----
-#### Method Lib.Storage.IBlobService.UploadBlobs(System.Net.Http.HttpContent)
-
- Upload Blobs data from HttpContent 
-
-|Name | Description |
-|-----|------|
-|content: ||
-**Returns**: 
-
-
-
----
-#### Method Lib.Storage.IBlobService.DownloadBlob(System.String)
-
- Download a file from Blob with a blob name 
-
-|Name | Description |
-|-----|------|
-|blobName: ||
-**Returns**: 
-
-
-
----
-#### Method Lib.Storage.IBlobService.TryDeleteBlob(System.String)
-
- Tries to delete a blob/file from storage 
-
-|Name | Description |
-|-----|------|
-|fileName: ||
-**Returns**: 
-
-
-
----
-#### Method Lib.Storage.IBlobService.DeleteBlob(System.String)
-
- Deletes a blob/file from storage with proper status 
-
-|Name | Description |
-|-----|------|
-|fileName: ||
-**Returns**:  Returns a FileDeleteModel object with proper deletion status 
-
-
-
----
 ## Type Lib.Utility.IdentityExtensions
 
  Extension methods to help with Identity entities 
@@ -1270,97 +1054,6 @@
 #### Field Model.Asset.SearchStrategy.DEEP
 
  DEEP asset searches would search Asset with preference, multiple zonal search and what not 
-
-
-
----
-## Type Model.Storage.FileDeleteModel
-
- Model to delete a file in Storage Service 
-
-
-
----
-## Type Model.Storage.DeletionStatus
-
- Represents status of file deletion from storage service 
-
-
-
----
-## Type Model.Storage.FileDownloadModel
-
- Model to download a file from a Storage Service 
-
-
-
----
-#### Property Model.Storage.FileDownloadModel.BlobStream
-
- Blob stream of the file 
-
-
-
----
-#### Property Model.Storage.FileDownloadModel.BlobFileName
-
- Filename that is used to save the file in the blob 
-
-
-
----
-#### Property Model.Storage.FileDownloadModel.BlobContentType
-
- Content Type of the blob 
-
-
-
----
-#### Property Model.Storage.FileDownloadModel.BlobLength
-
- Blob Length 
-
-
-
----
-## Type Model.Storage.FileUploadModel
-
- Model to upload files to a Storage Service 
-
-
-
----
-#### Property Model.Storage.FileUploadModel.FileName
-
- Desired File Name 
-
-
-
----
-#### Property Model.Storage.FileUploadModel.FileUrl
-
- Url the file is being uploaded from 
-
-
-
----
-#### Property Model.Storage.FileUploadModel.FileSizeInBytes
-
- File Size in Bytes 
-
-
-
----
-#### Property Model.Storage.FileUploadModel.FileSizeInKb
-
- File Size in Kilobytes 
-
-
-
----
-#### Property Model.Storage.FileUploadModel.FileSizeInMb
-
- File Size in Megabytes 
 
 
 

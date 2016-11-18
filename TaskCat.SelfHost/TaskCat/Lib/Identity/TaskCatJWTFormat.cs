@@ -1,12 +1,11 @@
-﻿
-namespace TaskCat.Lib.Identity
+﻿namespace TaskCat.Lib.Identity
 {
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using System;
     using System.IdentityModel.Tokens;
     using TaskCat.Data.Entity.Identity;
-    using TaskCat.Lib.Auth;
+    using Auth;
     using Thinktecture.IdentityModel.Tokens;
 
     public class TaskCatJWTFormat : ISecureDataFormat<AuthenticationTicket>

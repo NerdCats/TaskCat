@@ -3,6 +3,7 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using System;
+    using System.IdentityModel.Tokens;
     using TaskCat.Data.Entity.Identity;
     using Thinktecture.IdentityModel.Tokens;
 
