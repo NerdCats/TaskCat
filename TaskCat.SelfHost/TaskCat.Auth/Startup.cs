@@ -28,6 +28,10 @@
     using MongoDB.Driver;
     using Common.Db;
     using Core;
+    using System.Linq;
+    using Microsoft.Owin.Security.Jwt;
+    using Microsoft.Owin.Security.DataHandler.Encoder;
+    using Microsoft.Owin.Security;
 
     public static class Startup
     {
@@ -78,6 +82,8 @@
 
         private static void ConfigureOAuth(IAppBuilder app, IContainer container)
         {
+            ConfigureResourceOAuth(app, container);
+
             var OAuthServerOptions = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
@@ -104,6 +110,30 @@
 
                 app.UseFacebookAuthentication(facebookAuthOptions);
             }
+        }
+
+        private static void ConfigureResourceOAuth(IAppBuilder app, IContainer container)
+        {
+            // INFO: As this is a auth-server and api-server together, Im adding back all possible added clients in the system and
+            // allowing all of them to be able to access this api anyway
+
+            var issuer = AppSettings.Get<ClientSettings>().AuthenticationIssuerName;
+            var clientStore = container.Resolve<IClientStore>();
+
+            var allClients = clientStore.GetAllClients().GetAwaiter().GetResult();
+            var allowedAudiences = allClients.Select(x => x.Id);
+            var issuerSecurityTokenProviders =
+                allClients.Select(
+                    x => new SymmetricKeyIssuerSecurityTokenProvider(issuer, TextEncodings.Base64Url.Decode(x.Secret)));
+
+            // Api controllers with an [Authorize] attribute will be validated with JWT
+            app.UseJwtBearerAuthentication(
+                new JwtBearerAuthenticationOptions
+                {
+                    AuthenticationMode = AuthenticationMode.Active,
+                    AllowedAudiences = allowedAudiences,
+                    IssuerSecurityTokenProviders = issuerSecurityTokenProviders
+                });
         }
 
         private static void SetupMongoConventions()

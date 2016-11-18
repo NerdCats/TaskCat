@@ -307,6 +307,7 @@
                 dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo) :
                 dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo && x.CreateTime >= dateTimeUpto);
             var orderContext = dateTimeSortDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
+
             var data = new QueryResult<Job>()
             {
                 Total = await orderContext.CountAsync(),
