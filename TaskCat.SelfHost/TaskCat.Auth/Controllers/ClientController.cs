@@ -1,9 +1,8 @@
-﻿namespace TaskCat.Account.Controllers
+﻿namespace TaskCat.Auth.Controllers
 {
-    using Core;
+    using Account.Core;
     using Data.Entity.Identity;
     using Data.Model;
-    using Lib;
     using System;
     using System.Net;
     using System.Threading.Tasks;

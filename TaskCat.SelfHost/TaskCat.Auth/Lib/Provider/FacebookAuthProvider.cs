@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Lib.Provider
+﻿namespace TaskCat.Auth.Lib.Provider
 {
     using Microsoft.Owin.Security.Facebook;
     using System.Security.Claims;

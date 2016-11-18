@@ -1,8 +1,8 @@
-﻿namespace TaskCat.Account.Controllers
+﻿namespace TaskCat.Auth.Controllers
 {
     using System.Web.Http;
     using System.Threading.Tasks;
-    using Core;
+    using Account.Core;
 
     [RoutePrefix("api/auth/RefreshTokens")]
     public class RefreshTokensController : ApiController

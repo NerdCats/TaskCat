@@ -1,11 +1,11 @@
-﻿namespace TaskCat.Account.Lib.Provider
+﻿namespace TaskCat.Auth.Lib.Provider
 {
     using Microsoft.Owin.Security.Infrastructure;
     using System;
     using System.Threading.Tasks;
     using Data.Entity.Identity;
     using Common.Utility;
-    using Core;
+    using Account.Core;
 
     public class TaskCatRefreshTokenProvider : IAuthenticationTokenProvider
     {

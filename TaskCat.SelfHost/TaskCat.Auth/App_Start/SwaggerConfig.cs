@@ -1,11 +1,11 @@
 using System.Web.Http;
 using WebActivatorEx;
-using TaskCat.Account;
 using Swashbuckle.Application;
+using TaskCat.Auth;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
-namespace TaskCat.Account
+namespace TaskCat.Auth
 {
     public class SwaggerConfig
     {

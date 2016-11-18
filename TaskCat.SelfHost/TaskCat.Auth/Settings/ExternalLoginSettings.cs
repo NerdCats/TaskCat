@@ -1,4 +1,4 @@
-﻿namespace TaskCat.App.Settings
+﻿namespace TaskCat.Auth.Settings
 {
     public class ExternalLoginSettings
     {

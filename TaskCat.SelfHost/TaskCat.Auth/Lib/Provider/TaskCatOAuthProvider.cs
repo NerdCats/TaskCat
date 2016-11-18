@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Lib.Provider
+﻿namespace TaskCat.Auth.Lib.Provider
 {
     using Data.Entity.Identity;
     using Common.Exceptions;
@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using Core;
+    using Account.Core;
 
     public class TaskCatOAuthProvider : OAuthAuthorizationServerProvider
     {

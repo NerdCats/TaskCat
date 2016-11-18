@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Lib.Constants
+﻿namespace TaskCat.Auth.Lib.Constants
 {
     public class AppConstants
     {

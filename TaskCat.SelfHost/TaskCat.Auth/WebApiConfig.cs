@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account
+﻿namespace TaskCat.Auth
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;

@@ -1,12 +1,10 @@
-﻿namespace TaskCat.Account
+﻿namespace TaskCat.Auth
 {
     using Autofac;
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
     using Common.Db;
-    using Common.Email;
-    using Common.Storage;
-    using Core;
+    using Account.Core;
     using Data.Entity.Identity;
     using Lib.Provider;
     using Microsoft.AspNet.Identity;

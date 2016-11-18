@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Lib.JWT
+﻿namespace TaskCat.Auth.Lib.JWT
 {
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;
@@ -6,7 +6,7 @@
     using Data.Entity.Identity;
     using Thinktecture.IdentityModel.Tokens;
     using System.IdentityModel.Tokens;
-    using Core;
+    using Account.Core;
 
     public class TaskCatJWTFormat : ISecureDataFormat<AuthenticationTicket>
     {

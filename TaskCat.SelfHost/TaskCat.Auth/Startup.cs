@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account
+﻿namespace TaskCat.Auth
 {
     using Autofac.Integration.WebApi;
     using MongoDB.Bson;
@@ -14,7 +14,6 @@
     using Microsoft.Owin.Security.Infrastructure;
     using Its.Configuration;
     using AppSettings = Its.Configuration.Settings;
-    using App.Settings;
     using Microsoft.Owin.Security.Facebook;
     using Lib.JWT;
     using Lib.Provider;
@@ -24,12 +23,13 @@
     using Data.Entity.Identity;
     using MongoDB.Driver;
     using Common.Db;
-    using Core;
     using System.Linq;
     using Microsoft.Owin.Security.Jwt;
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using Microsoft.Owin.Security;
     using Common.Settings;
+    using Settings;
+    using Account.Core;
 
     public static class Startup
     {
