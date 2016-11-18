@@ -1,4 +1,6 @@
 ﻿{
   "WebCatUrl": "http://webcatdevel.azurewebsites.net/",
-  "ConfirmEmailPath": "confirm"
+  "ConfirmEmailPath": "confirm",
+  "HostingAddress": "",
+  "AuthenticationIssuerName": "TaskCat.Auth"
 }

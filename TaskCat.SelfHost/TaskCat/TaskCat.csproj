@@ -440,9 +440,6 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="deploy.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
