@@ -4,10 +4,10 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using MongoDB.Driver;
-    using Db;
-    using Exceptions;
     using System.Linq;
     using Domain;
+    using Common.Exceptions;
+    using Common.Db;
 
     public class StoreService : IRepository<Store>
     {

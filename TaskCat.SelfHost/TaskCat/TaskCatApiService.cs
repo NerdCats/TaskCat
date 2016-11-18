@@ -14,7 +14,14 @@
 
         public TaskCatApiService()
         {
-           this.listeningAddress = string.IsNullOrWhiteSpace(Settings.Get<ClientSettings>().HostingAddress)
+
+#if DEBUG
+            Settings.Precedence = new[] { "local", "production" };
+#else
+            Settings.Precedence = new[] { "production", "local" };
+#endif
+
+            this.listeningAddress = string.IsNullOrWhiteSpace(Settings.Get<ClientSettings>().HostingAddress)
                 ? AppConstants.DefaultHostingAddress : Settings.Get<ClientSettings>().HostingAddress;
         }
 

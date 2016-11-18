@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
     using MongoDB.Driver;
     using Data.Entity;
-    using Db;
-    using Exceptions;
     using Domain;
+    using Common.Exceptions;
+    using Common.Db;
 
     public class ProductCategoryService : IRepository<ProductCategory>
     {

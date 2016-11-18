@@ -14,10 +14,9 @@
     using System.Security.Claims;
     using Data.Entity.Identity;
     using System.Collections.Generic;
-    using TaskCat.Model.Pagination;
     using System.Net.Http;
     using System.Linq;
-    using Controllers;
+    using Common.Model.Pagination;
 
     [TestFixture]
     public class DropPointControllerTest

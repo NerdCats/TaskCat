@@ -116,6 +116,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Auth.Core.csproj">
+      <Project>{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}</Project>
+      <Name>TaskCat.Auth.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskCat.Auth\TaskCat.Auth.csproj">
+      <Project>{DEB05661-5FD5-4AED-A526-337C5D731EDA}</Project>
+      <Name>TaskCat.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
+      <Project>{64B973CA-BD1A-451B-8336-1DC243E56C23}</Project>
+      <Name>TaskCat.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>

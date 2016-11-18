@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using Data.Model.Api;
-    using Model.Pagination;
     using System.Net.Http;
     using Data.Model;
     using MongoDB.Driver;
@@ -12,6 +11,8 @@
     using System.Linq;
     using Data.Model.Operation;
     using Model.Job;
+    using Common.Model.Pagination;
+
     public interface IJobRepository
     {
         Task<Job> GetJob(string id);

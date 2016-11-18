@@ -1,8 +1,7 @@
-﻿using TaskCat.Lib.Utility.Converter;
-
-namespace TaskCat
+﻿namespace TaskCat
 {
     using Autofac.Integration.WebApi;
+    using Common.Utility.Converter;
     using Newtonsoft.Json;
     using Swashbuckle.Application;
     using System;
@@ -11,6 +10,7 @@ namespace TaskCat
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
+    using TaskCat.Lib.Utility.Converter;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class WebApiConfig

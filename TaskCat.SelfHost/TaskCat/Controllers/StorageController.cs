@@ -3,7 +3,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using TaskCat.Lib.Storage;
+using TaskCat.Common.Model.Storage;
+using TaskCat.Common.Storage;
+using TaskCat.Lib.Constants;
 
 namespace TaskCat.Controllers
 {
@@ -44,7 +46,7 @@ namespace TaskCat.Controllers
                     return StatusCode(HttpStatusCode.UnsupportedMediaType);
                 }
 
-                var result = await _repository.UploadImage(Request.Content);
+                var result = await _repository.UploadImage(Request.Content, StorageConstants.SupportedImageFormats);
 
                 if (result != null)
                 {
@@ -81,11 +83,11 @@ namespace TaskCat.Controllers
             var result = await _repository.DeleteImage(fileName);
             switch(result.Status)
             {
-                case Model.Storage.DeletionStatus.FAILED:
+                case DeletionStatus.FAILED:
                     return Content(HttpStatusCode.InternalServerError, result);
-                case Model.Storage.DeletionStatus.FILENOTFOUND:
+                case DeletionStatus.FILENOTFOUND:
                     return Content(HttpStatusCode.BadRequest, result);
-                case Model.Storage.DeletionStatus.SUCCESSFUL:
+                case DeletionStatus.SUCCESSFUL:
                     return Ok(result);
                 default:
                     return Content(HttpStatusCode.NotImplemented, "Deletion Status Not Supported yet");
