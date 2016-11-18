@@ -87,6 +87,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -113,6 +117,8 @@
     <Compile Include="Exceptions\UpdateFailedException.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />
+    <Compile Include="Model\Response\ChallengeResult.cs" />
+    <Compile Include="Model\Response\ErrorResponse.cs" />
     <Compile Include="Model\Storage\FileDeleteModel.cs" />
     <Compile Include="Model\Storage\FileDownloadModel.cs" />
     <Compile Include="Model\Storage\FileUploadModel.cs" />

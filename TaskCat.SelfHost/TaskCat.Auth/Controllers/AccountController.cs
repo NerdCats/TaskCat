@@ -1,11 +1,10 @@
-﻿namespace TaskCat.Controllers.Auth
+﻿namespace TaskCat.Auth.Controllers
 {
     using Data.Model;
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Response;
-    using Lib.Auth;
     using Lib.Constants;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
@@ -18,13 +17,14 @@
     using System.Web.Http;
     using System.Web.Http.Description;
     using Lib.Utility;
-    using Model.Account;
     using System.Net.Http.Formatting;
     using Data.Entity.Identity;
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Common.Email;
+    using Lib;
     using Common.Model.Response;
+    using Model.Account;
 
     /// <summary>
     /// Account (User And Asset related Controller)

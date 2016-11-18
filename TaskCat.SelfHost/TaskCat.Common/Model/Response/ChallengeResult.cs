@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Model.Response
+﻿namespace TaskCat.Common.Model.Response
 {
     using System.Net;
     using System.Net.Http;

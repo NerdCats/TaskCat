@@ -429,8 +429,6 @@
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
     <Compile Include="Model\Identity\AccountResult.cs" />
     <Compile Include="Model\Identity\ExternalLoginData.cs" />
-    <Compile Include="Model\Response\ChallengeResult.cs" />
-    <Compile Include="Model\Response\ErrorResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Startup.cs" />

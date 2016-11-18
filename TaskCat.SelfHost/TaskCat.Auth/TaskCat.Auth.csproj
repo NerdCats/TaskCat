@@ -196,6 +196,9 @@
     <Compile Include="ConsoleApplicationInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\RefreshTokensController.cs" />
     <Compile Include="EmailTemplatesConfig.cs" />
     <Compile Include="Lib\AccountContext.cs" />
     <Compile Include="Lib\AccountManager.cs" />
@@ -205,6 +208,8 @@
     <Compile Include="Lib\IClientStore.cs" />
     <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Model\AccountResult.cs" />
+    <Compile Include="Model\Account\AvailibilityResponse.cs" />
+    <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
     <Compile Include="Model\ExternalLoginData.cs" />
     <Compile Include="Lib\RoleManager.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
