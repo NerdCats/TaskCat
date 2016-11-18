@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib.Db
+﻿namespace TaskCat.Account.Lib.Db
 {
     using MongoDB.Driver;
     using TaskCat.Data.Entity.Identity;

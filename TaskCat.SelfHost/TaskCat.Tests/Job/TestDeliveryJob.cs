@@ -24,7 +24,7 @@
     using System;
     using Data.Model.Order.Delivery;
     using TaskCat.Data.Model.Identity;
-    using Auth.Core;
+    using TaskCat.Account.Core;
 
     [TestFixture]
     public class TestDeliveryJob

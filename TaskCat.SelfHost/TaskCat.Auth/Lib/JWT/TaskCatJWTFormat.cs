@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib.JWT
+﻿namespace TaskCat.Account.Lib.JWT
 {
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;

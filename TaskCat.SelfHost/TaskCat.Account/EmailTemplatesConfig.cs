@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth
+﻿namespace TaskCat.Account
 {
     using System.Reflection;
     using AppSettings = Its.Configuration.Settings;

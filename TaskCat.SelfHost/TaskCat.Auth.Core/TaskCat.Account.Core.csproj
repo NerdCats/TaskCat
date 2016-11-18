@@ -7,7 +7,7 @@
     <ProjectGuid>{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskCat.Auth.Core</RootNamespace>
+    <RootNamespace>TaskCat.Account.Core</RootNamespace>
     <AssemblyName>TaskCat.Auth.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

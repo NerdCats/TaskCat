@@ -138,6 +138,7 @@
     <Compile Include="Exceptions\ServerErrorException.cs" />
     <Compile Include="Exceptions\SettingsException.cs" />
     <Compile Include="Exceptions\UpdateFailedException.cs" />
+    <Compile Include="Settings\ClientSettings.cs" />
     <Compile Include="Utility\IdentityExtensions.cs" />
     <Compile Include="Model\Pagination\PageEnvelope.cs" />
     <Compile Include="Model\Pagination\PaginationHeader.cs" />

@@ -12,7 +12,7 @@
     using MongoDB.Bson;
     using Data.Model.ShadowCat;
     using MongoDB.Bson.Serialization;
-    using Auth.Core;
+    using Account.Core;
     using Common.Db;
 
     /// <summary>

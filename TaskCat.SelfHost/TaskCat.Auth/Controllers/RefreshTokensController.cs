@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Controllers
+﻿namespace TaskCat.Account.Controllers
 {
     using System.Web.Http;
     using System.Threading.Tasks;

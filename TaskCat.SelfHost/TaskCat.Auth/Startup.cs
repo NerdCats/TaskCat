@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth
+﻿namespace TaskCat.Account
 {
     using Autofac.Integration.WebApi;
     using MongoDB.Bson;
@@ -6,7 +6,7 @@
     using Owin;
     using System.Reflection;
     using System.Web.Http;
-    using TaskCat.Common.Owin;
+    using Common.Owin;
     using Autofac;
     using System;
     using Microsoft.Owin.Security.OAuth;
@@ -14,16 +14,13 @@
     using Microsoft.Owin.Security.Infrastructure;
     using Its.Configuration;
     using AppSettings = Its.Configuration.Settings;
-    using Settings;
     using App.Settings;
     using Microsoft.Owin.Security.Facebook;
     using Lib.JWT;
     using Lib.Provider;
     using Common.Utility.ActionFilter;
-    using Lib;
     using Data.Model;
     using Data.Model.Identity;
-    using Lib.Db;
     using Data.Entity.Identity;
     using MongoDB.Driver;
     using Common.Db;
@@ -32,10 +29,10 @@
     using Microsoft.Owin.Security.Jwt;
     using Microsoft.Owin.Security.DataHandler.Encoder;
     using Microsoft.Owin.Security;
+    using Common.Settings;
 
     public static class Startup
     {
-
         public static void ConfigureApp(IAppBuilder app)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -64,8 +61,6 @@
 
             app.UseWebApi(config);
             app.UseAutofacWebApi(config);
-
-            EmailTemplatesConfig.Configure();
 
             // FIXME: Need to move these with other startups
             // This is not ideal

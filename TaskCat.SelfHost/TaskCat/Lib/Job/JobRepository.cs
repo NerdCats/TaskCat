@@ -19,7 +19,7 @@
     using Model.Job;
     using Updaters;
     using Common.Model.Pagination;
-    using Auth.Core;
+    using Account.Core;
 
     public class JobRepository : IJobRepository
     {

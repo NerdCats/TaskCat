@@ -1,4 +1,4 @@
-﻿namespace TaskCat.App.Settings
+﻿namespace TaskCat.Common.Settings
 {
     using System.ComponentModel.DataAnnotations;
     public class ClientSettings

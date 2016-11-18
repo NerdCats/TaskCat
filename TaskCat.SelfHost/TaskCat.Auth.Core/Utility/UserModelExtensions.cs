@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Core.Utility
+﻿namespace TaskCat.Account.Core.Utility
 {
     using Data.Model.Identity.Response;
     using Data.Entity.Identity;

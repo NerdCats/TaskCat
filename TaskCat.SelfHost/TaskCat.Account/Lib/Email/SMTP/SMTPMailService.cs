@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib.Email.SMTP
+﻿namespace TaskCat.Account.Lib.Email.SMTP
 {
     using System;
     using System.Net.Mail;

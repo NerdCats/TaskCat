@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Core
+﻿namespace TaskCat.Account.Core
 {
     using AspNet.Identity.MongoDB;
     using System;

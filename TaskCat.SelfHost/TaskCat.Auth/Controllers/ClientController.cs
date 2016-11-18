@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Controllers
+﻿namespace TaskCat.Account.Controllers
 {
     using Core;
     using Data.Entity.Identity;

@@ -17,9 +17,10 @@
     using Common.Email;
     using Common.Storage;
     using Common.Db;
-    using Auth.Core;
+    using TaskCat.Account.Core;
     using AppSettings = Its.Configuration.Settings;
     using Common.Utility;
+    using Common.Settings;
 
     [TestFixture]
     public class AccountContextTest

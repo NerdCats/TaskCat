@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Core
+﻿namespace TaskCat.Account.Core
 {
     using System;
     using System.Collections.Generic;

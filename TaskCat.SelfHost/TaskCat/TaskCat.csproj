@@ -321,9 +321,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
-    <Compile Include="App\Settings\ClientSettings.cs" />
     <Compile Include="App\Settings\EmailTemplatePathSettings.cs" />
-    <Compile Include="App\Settings\ExternalLoginSettings.cs" />
     <Compile Include="App\Settings\SMTPMailSettings.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
@@ -448,9 +446,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Auth.Core.csproj">
+    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Account.Core.csproj">
       <Project>{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}</Project>
-      <Name>TaskCat.Auth.Core</Name>
+      <Name>TaskCat.Account.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
       <Project>{64b973ca-bd1a-451b-8336-1dc243e56c23}</Project>

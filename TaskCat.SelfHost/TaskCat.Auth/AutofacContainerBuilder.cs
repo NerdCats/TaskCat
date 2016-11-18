@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth
+﻿namespace TaskCat.Account
 {
     using Autofac;
     using Autofac.Builder;
@@ -8,9 +8,6 @@
     using Common.Storage;
     using Core;
     using Data.Entity.Identity;
-    using Lib;
-    using Lib.Db;
-    using Lib.Email.SMTP;
     using Lib.Provider;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security.Infrastructure;
@@ -31,15 +28,6 @@
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
             builder.RegisterType<RoleManager>().SingleInstance();
             builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
-            #endregion
-
-            #region Mail
-            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IEmailService, ConcreteReflectionActivatorData>().SingleInstance();
-            #endregion
-
-            #region Storage
-            builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
-            builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Auth

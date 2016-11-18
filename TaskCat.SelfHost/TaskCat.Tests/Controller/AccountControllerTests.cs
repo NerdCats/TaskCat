@@ -9,8 +9,8 @@
     using System.Threading.Tasks;
     using System.Web.Http.Results;
     using Common.Email;
-    using Auth.Core;
-    using Auth.Controllers;
+    using TaskCat.Account.Core;
+    using TaskCat.Account.Controllers;
 
     [TestFixture]
     public class AccountControllerTests

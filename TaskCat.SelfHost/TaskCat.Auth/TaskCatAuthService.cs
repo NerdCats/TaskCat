@@ -1,11 +1,11 @@
-﻿namespace TaskCat.Auth
+﻿namespace TaskCat.Account
 {
     using System;
     using Dichotomy;
     using AppSettings = Its.Configuration.Settings;
     using Microsoft.Owin.Hosting;
-    using Settings;
     using Lib.Constants;
+    using Common.Settings;
 
     public class TaskCatAuthService : IDichotomyService
     {
@@ -46,7 +46,7 @@
 
         public void Stop()
         {
-            Console.WriteLine("Stopping TaskCat Api Service");
+            Console.WriteLine("Stopping TaskCat Auth Service");
         }
     }
 }

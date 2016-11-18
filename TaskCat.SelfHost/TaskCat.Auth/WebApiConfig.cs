@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth
+﻿namespace TaskCat.Account
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;
@@ -35,7 +35,7 @@
 
                 c.IncludeXmlComments(commentsFile);
                 c.DescribeAllEnumsAsStrings();
-                c.SingleApiVersion("v1", "TaskCat Core Api");
+                c.SingleApiVersion("v1", "TaskCat Auth Api");
             }).EnableSwaggerUi();
 
         }

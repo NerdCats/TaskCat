@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TaskCat.Data.Entity.Identity;
 using TaskCat.Data.Model;
 
-namespace TaskCat.Auth.Core
+namespace TaskCat.Account.Core
 {
     /// <summary>
     /// Generic interface to define a database store for clients

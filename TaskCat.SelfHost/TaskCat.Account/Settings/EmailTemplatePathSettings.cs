@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Settings
+﻿namespace TaskCat.Account.Settings
 {
     public class EmailTemplatePathSettings
     {

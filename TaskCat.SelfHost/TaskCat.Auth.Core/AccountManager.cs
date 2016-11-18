@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Core
+﻿namespace TaskCat.Account.Core
 {
     using Microsoft.AspNet.Identity;
     using System;

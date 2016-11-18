@@ -18,7 +18,7 @@
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
     using Vendor;
-    using Auth.Core;
+    using Account.Core;
 
     public class OrderRepository : IOrderRepository
     {

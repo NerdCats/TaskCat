@@ -6,6 +6,7 @@
     using Lib.Constants;
     using Its.Configuration;
     using App.Settings;
+    using Common.Settings;
 
     public class TaskCatApiService : IDichotomyService
     {

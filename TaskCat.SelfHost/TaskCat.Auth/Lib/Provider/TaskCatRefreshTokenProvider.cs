@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Lib.Provider
+﻿namespace TaskCat.Account.Lib.Provider
 {
     using Microsoft.Owin.Security.Infrastructure;
     using System;

@@ -23,7 +23,7 @@
     using Common.Email;
     using Common.Storage;
     using Common.Db;
-    using Auth.Core;
+    using Account.Core;
 
     public class AutofacContainerBuilder
     {

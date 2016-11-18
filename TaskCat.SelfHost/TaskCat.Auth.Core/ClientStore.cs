@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TaskCat.Auth.Core
+namespace TaskCat.Account.Core
 {
     using MongoDB.Driver;
     using System.Threading.Tasks;

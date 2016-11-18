@@ -9,14 +9,14 @@ using MongoDB.Bson.Serialization.Conventions;
 using AppSettings = Its.Configuration.Settings;
 using Owin;
 using TaskCat.App;
-using TaskCat.App.Settings;
 using TaskCat.App_Start;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Jwt;
-using TaskCat.Auth.Core;
+using TaskCat.Account.Core;
 using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Settings;
 
 namespace TaskCat
 {

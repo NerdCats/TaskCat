@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Auth.Controllers
+﻿namespace TaskCat.Account.Controllers
 {
     using Data.Model;
     using Data.Model.Identity;
@@ -28,6 +28,7 @@
     using AppSettings = Its.Configuration.Settings;
     using Settings;
     using Common.Utility;
+    using Common.Settings;
 
     /// <summary>
     /// Account (User And Asset related Controller)

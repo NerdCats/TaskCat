@@ -2,7 +2,7 @@
 using Dichotomy.Configuration;
 using Dichotomy.Helpers;
 
-namespace TaskCat.Auth
+namespace TaskCat.Account
 {
     public class Program
     {
