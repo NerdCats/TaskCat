@@ -13,6 +13,7 @@
     using Common.Email.SMTP;
     using AppSettings = Its.Configuration.Settings;
     using Common.Settings;
+    using Lib.Db;
 
     public class AutofacContainerBuilder
     {
@@ -22,7 +23,7 @@
 
             #region Account
 
-            builder.RegisterType<DbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<AccountDbContext>().As<IDbContext>().SingleInstance();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
             builder.RegisterType<AccountManager>().SingleInstance();
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
