@@ -40,7 +40,7 @@
             var expires = data.Properties.ExpiresUtc;
 
             var token = new JwtSecurityToken(issuer, clientId, data.Identity.Claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingKey);
-            var handler = new JwtSecurityTokenHandler();
+            var handler = new JwtSecurityTokenHandler();     
             var jwt = handler.WriteToken(token);
 
             return jwt;
