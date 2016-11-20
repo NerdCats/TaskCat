@@ -3,5 +3,5 @@
   "ConfirmEmailPath": "confirm",
   "HostingAddress": "",
   "AuthenticationIssuerName": "TaskCat.Auth",
-  "ServiceBusUrl": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU="
+  "ServiceBusConnectionString": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU="
 }

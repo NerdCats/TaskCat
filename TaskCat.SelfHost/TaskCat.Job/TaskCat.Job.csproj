@@ -87,6 +87,7 @@
     <Compile Include="ConsoleApplicationInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Lib\Constants\AppConstants.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskCatAuthService.cs" />
@@ -94,6 +95,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
+      <Project>{64b973ca-bd1a-451b-8336-1dc243e56c23}</Project>
+      <Name>TaskCat.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
+      <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
+      <Name>TaskCat.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

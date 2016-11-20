@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Account.Core", "Tas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Account", "TaskCat.Account\TaskCat.Account.csproj", "{34C727D8-FD09-4A6A-A633-38BE69C114F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Job", "TaskCat.Job\TaskCat.Job.csproj", "{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,14 @@ Global
 		{34C727D8-FD09-4A6A-A633-38BE69C114F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34C727D8-FD09-4A6A-A633-38BE69C114F4}.Release|x64.ActiveCfg = Release|Any CPU
 		{34C727D8-FD09-4A6A-A633-38BE69C114F4}.Release|x64.Build.0 = Release|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Debug|x64.Build.0 = Debug|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FC3045B-E26D-4016-8F9D-C1068B8FCCC9}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

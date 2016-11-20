@@ -14,6 +14,7 @@
     using AppSettings = Its.Configuration.Settings;
     using Common.Settings;
     using Lib.Db;
+    using Microsoft.ServiceBus;
 
     public class AutofacContainerBuilder
     {
@@ -39,6 +40,10 @@
             #region Storage
             builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion
+
+            #region ServiceBus
+            NamespaceManager namespaceManager = NamespaceManager.CreateFromConnectionString(AppSettings.Get<ClientSettings>().ServiceBusConnectionString);
             #endregion
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);
