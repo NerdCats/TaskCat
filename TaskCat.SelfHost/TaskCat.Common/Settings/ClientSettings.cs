@@ -12,5 +12,6 @@
         public string AuthenticationIssuerName { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "ServiceBusConnectionString is missing in ClientSettings")]
         public string ServiceBusConnectionString { get; set; }
+        public string AccountUpdateTopic { get; set; }
     }
 }

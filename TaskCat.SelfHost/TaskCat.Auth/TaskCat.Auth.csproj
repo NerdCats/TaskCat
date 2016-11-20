@@ -244,12 +244,13 @@
     <Content Include=".config\local\EmailTemplatePathSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include=".config\production\ClientSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include=".config\production\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Account.Core.csproj">
       <Project>{96d1f5bc-2a40-411f-a8ab-c7ad07f981df}</Project>

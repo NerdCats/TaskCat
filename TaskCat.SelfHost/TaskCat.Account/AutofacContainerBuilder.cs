@@ -14,7 +14,7 @@
     using AppSettings = Its.Configuration.Settings;
     using Common.Settings;
     using Lib.Db;
-    using Microsoft.ServiceBus;
+    using Lib.ServiceBus;
 
     public class AutofacContainerBuilder
     {
@@ -43,7 +43,8 @@
             #endregion
 
             #region ServiceBus
-            NamespaceManager namespaceManager = NamespaceManager.CreateFromConnectionString(AppSettings.Get<ClientSettings>().ServiceBusConnectionString);
+            ServiceBusClient serviceBusClient = new ServiceBusClient(AppSettings.Get<ClientSettings>());
+            builder.Register(s => serviceBusClient).As<IServiceBusClient>().SingleInstance();
             #endregion
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);
