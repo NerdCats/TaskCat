@@ -24,6 +24,9 @@
     using Common.Model.Storage;
     using Common.Db;
     using Model;
+    using Lib.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
+    using MongoDB.Bson;
 
     public class AccountContext : IAccountContext
     {
@@ -32,17 +35,20 @@
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
         private readonly IEmailService mailService;
+        private readonly IServiceBusClient serviceBusClient;
 
         public AccountContext(
             IDbContext dbContext,
             IEmailService mailService,
             AccountManager accountManager,
-            IBlobService blobService)
+            IBlobService blobService,
+            IServiceBusClient serviceBusClient = null)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
             this.mailService = mailService;
+            this.serviceBusClient = serviceBusClient;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
@@ -243,7 +249,25 @@
             if (await IsUsernameAvailable(newUserName))
             {
                 user.UserName = newUserName;
-                return await accountManager.UpdateAsync(user);
+                var result = await accountManager.UpdateAsync(user).ConfigureAwait(continueOnCapturedContext: false);
+                if (result.Succeeded && serviceBusClient?.AccountUpdateTopicClient != null)
+                {
+                    // INFO: This is definitely temporary, when GFETCH-250 finishes this would be done by another microservice.
+                    var updateFilter = Builders<Job>.Update
+                        .Set(x => x.User.UserName, newUserName)
+                        .Set(x=> x.ModifiedTime, DateTime.UtcNow);
+
+                    var jobUpdateResult = await dbContext.Jobs.UpdateManyAsync(x=>x.User.UserName == oldUserName, updateFilter);
+                    if (!jobUpdateResult.IsAcknowledged)
+                    {
+                        // TODO: Log it or do something about it as this means the propagation failed
+                    }
+                    return result;
+                }
+                else
+                {
+                    throw new ServerErrorException($"Failed to update username for {oldUserName}");
+                }
             }
             else
             {

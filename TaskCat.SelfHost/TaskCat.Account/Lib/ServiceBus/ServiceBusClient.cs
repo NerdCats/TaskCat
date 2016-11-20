@@ -1,6 +1,7 @@
 ﻿namespace TaskCat.Account.Lib.ServiceBus
 {
     using Common.Settings;
+    using Core.Lib.ServiceBus;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
     using System;

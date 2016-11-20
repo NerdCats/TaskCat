@@ -195,7 +195,7 @@
         /// </returns>
         /// 
         [AllowAnonymous]
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Authorize]
         [Route("Profile/{userId?}", Name = AppConstants.GetUserProfileByIdRoute)]
         [HttpGet]
         public async Task<IHttpActionResult> Profile(string userId = null)
@@ -343,7 +343,7 @@
         /// Model 
         /// </param>
         /// <returns></returns>
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Authorize]
         [HttpPut]
         [Route("profile")]
         public async Task<IHttpActionResult> Update(IdentityProfile model)
@@ -359,7 +359,7 @@
             return Ok(await accountContext.UpdateById(model, id));
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Authorize]
         [HttpPut]
         [Route("password")]
         public async Task<IHttpActionResult> UpdatePassword(PasswordUpdateModel model)
@@ -367,7 +367,7 @@
             return Ok(await accountContext.UpdatePassword(model, this.User.Identity.Name));
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, User, Asset")]
+        [Authorize]
         [HttpPut]
         [Route("username")]
         public async Task<IHttpActionResult> UpdateUsername([FromUri]string newUsername)

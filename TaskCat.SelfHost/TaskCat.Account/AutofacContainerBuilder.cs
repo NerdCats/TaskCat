@@ -15,6 +15,7 @@
     using Common.Settings;
     using Lib.Db;
     using Lib.ServiceBus;
+    using Core.Lib.ServiceBus;
 
     public class AutofacContainerBuilder
     {

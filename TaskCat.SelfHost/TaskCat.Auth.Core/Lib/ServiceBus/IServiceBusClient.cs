@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Account.Lib.ServiceBus
+﻿namespace TaskCat.Account.Core.Lib.ServiceBus
 {
     using Microsoft.ServiceBus.Messaging;
 
