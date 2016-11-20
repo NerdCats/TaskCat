@@ -2,5 +2,6 @@
   "WebCatUrl": "http://webcatdevel.azurewebsites.net/",
   "ConfirmEmailPath": "confirm",
   "HostingAddress": "",
-  "AuthenticationIssuerName": "TaskCat.Auth"
+  "AuthenticationIssuerName": "TaskCat.Auth",
+  "ServiceBusUrl": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU="
 }
