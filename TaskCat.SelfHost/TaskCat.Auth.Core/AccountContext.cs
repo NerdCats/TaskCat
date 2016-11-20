@@ -246,6 +246,17 @@
         public async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName)
         {
             var user = await accountManager.FindByNameAsync(oldUserName);
+            return await UpdateUsername(user, newUserName);
+        }
+
+        public async Task<IdentityResult> UpdateUsernameById(string userId, string newUserName)
+        {
+            var user = await accountManager.FindByIdAsync(userId);
+            return await UpdateUsername(user, newUserName);
+        }
+
+        private async Task<IdentityResult> UpdateUsername(User user, string newUserName)
+        {
             if (await IsUsernameAvailable(newUserName))
             {
                 user.UserName = newUserName;
@@ -255,9 +266,9 @@
                     // INFO: This is definitely temporary, when GFETCH-250 finishes this would be done by another microservice.
                     var updateFilter = Builders<Job>.Update
                         .Set(x => x.User.UserName, newUserName)
-                        .Set(x=> x.ModifiedTime, DateTime.UtcNow);
+                        .Set(x => x.ModifiedTime, DateTime.UtcNow);
 
-                    var jobUpdateResult = await dbContext.Jobs.UpdateManyAsync(x=>x.User.UserName == oldUserName, updateFilter);
+                    var jobUpdateResult = await dbContext.Jobs.UpdateManyAsync(x => x.User.UserId == user.Id, updateFilter);
                     if (!jobUpdateResult.IsAcknowledged)
                     {
                         // TODO: Log it or do something about it as this means the propagation failed
@@ -266,22 +277,8 @@
                 }
                 else
                 {
-                    throw new ServerErrorException($"Failed to update username for {oldUserName}");
+                    throw new ServerErrorException($"Failed to update username for {user.UserName} with id {user.Id}");
                 }
-            }
-            else
-            {
-                return new IdentityResult(new string[] { "UserName " + newUserName + " is already taken" });
-            }
-        }
-
-        public async Task<IdentityResult> UpdateUsernameById(string userId, string newUserName)
-        {
-            var user = await accountManager.FindByIdAsync(userId);
-            if (await IsUsernameAvailable(newUserName))
-            {
-                user.UserName = newUserName;
-                return await accountManager.UpdateAsync(user);
             }
             else
             {
