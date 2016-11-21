@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 
 namespace TaskCat.Common.WebApi
 {
+    /// <summary>
+    /// Default interface for a response compressor
+    /// </summary>
     public interface ICompressor
     {
         string EncodingType { get; }
