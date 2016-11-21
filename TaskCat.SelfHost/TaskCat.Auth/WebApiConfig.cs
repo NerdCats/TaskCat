@@ -10,6 +10,7 @@
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
+    using Common.WebApi;
 
     public static class WebApiConfig
     {
@@ -53,9 +54,7 @@
                 config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
+
             config.Formatters.JsonFormatter.Indent = true;
         }
     }

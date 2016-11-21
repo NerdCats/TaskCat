@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Account
+﻿using TaskCat.Common.WebApi;
+
+namespace TaskCat.Account
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;
@@ -56,6 +58,9 @@
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
+
+            config.MessageHandlers.Insert(0, new CompressionHandler());
+
             config.Formatters.JsonFormatter.Indent = true;
         }
     }
