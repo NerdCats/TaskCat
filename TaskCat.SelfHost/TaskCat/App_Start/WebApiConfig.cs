@@ -1,4 +1,6 @@
-﻿namespace TaskCat
+﻿using TaskCat.Common.WebApi;
+
+namespace TaskCat
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;
@@ -10,7 +12,7 @@
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
-    using TaskCat.Lib.Utility.Converter;
+    using Lib.Utility.Converter;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class WebApiConfig
@@ -61,6 +63,9 @@
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorConverter());
+
+            config.MessageHandlers.Insert(0, new CompressionHandler());
+
             config.Formatters.JsonFormatter.Indent = true;
         }
     }
