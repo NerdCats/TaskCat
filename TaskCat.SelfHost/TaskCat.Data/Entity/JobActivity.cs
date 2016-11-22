@@ -4,7 +4,7 @@
     public class JobActivity : DbEntity
     {
         public string JobId { get; set; }
-        public string  Operation { get; set; }
+        public string Operation { get; set; }
         public string Value { get; set; }
         public string Path { get; set; }
 
@@ -30,5 +30,12 @@
         public string Username { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class JobActivityOperatioNames
+    {
+        public const string Add = "Add";
+        public const string Update = "Update";
+        public const string Delete = "Delete";
     }
 }
