@@ -177,12 +177,13 @@ namespace TaskCat.Controllers
         [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> GetAssignedJobsByAssetId(string assetId = null)
         {
-            if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != User.Identity.Name)
+            var currentUserId = User.Identity.GetUserId();
+            if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != currentUserId)
             {
                 throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
             }
 
-            assetId = string.IsNullOrEmpty(assetId) ? User.Identity.GetUserId() : assetId;
+            assetId = string.IsNullOrEmpty(assetId) ? currentUserId : assetId;
             
             IQueryable<Job> jobs = repository.GetJobs().Where(x => x.Assets.ContainsKey(assetId)).AsQueryable();
 
