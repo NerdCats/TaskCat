@@ -76,6 +76,7 @@
                         var countResult = queryable.LinqToQuerystring(queryString: newQueryStringForCount).Count();
                         return countResult;
                     });
+                    
 
                     var newQueryString = odataRequestModel.OdataQueryString + $"$skip={odataRequestModel.Page * odataRequestModel.PageSize}$top={odataRequestModel.PageSize}";
                     var queryResult = Task.Run(() => {
