@@ -27,6 +27,7 @@ using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
+using System.IdentityModel.Claims;
 
 namespace TaskCat.Controllers
 {
@@ -160,6 +161,30 @@ namespace TaskCat.Controllers
 
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
+
+            var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
+            return Ok(odataResult);
+        }
+
+        /// <summary>
+        /// Get Jobs assigned to an asset with odata query features
+        /// </summary>
+        /// <param name="assetId">Related asset id</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
+        [Route("api/job/jobsbyasset/{assetId?}", Name = AppConstants.JobsByAssetOdataRoute)]
+        [HttpGet]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
+        public async Task<IHttpActionResult> GetAssignedJobsByAssetId(string assetId = null)
+        {
+            if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != User.Identity.Name)
+            {
+                throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
+            }
+
+            assetId = string.IsNullOrEmpty(assetId) ? User.Identity.GetUserId() : assetId;
+            
+            IQueryable<Job> jobs = repository.GetJobs().Where(x => x.Assets.ContainsKey(assetId)).AsQueryable();
 
             var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
             return Ok(odataResult);

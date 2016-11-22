@@ -254,6 +254,18 @@
 
 
 ---
+#### Method Controllers.JobController.GetAssignedJobsByAssetId(System.String)
+
+ Get Jobs assigned to an asset with odata query features 
+
+|Name | Description |
+|-----|------|
+|assetId: |Related asset id|
+**Returns**: 
+
+
+
+---
 #### Method Controllers.JobController.GenerateInvoiceForAJob(System.String)
 
  Generate an invoice against the job hrid given in here 

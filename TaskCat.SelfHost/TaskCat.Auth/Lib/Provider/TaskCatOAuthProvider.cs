@@ -83,9 +83,10 @@
             }
 
             var identity = new ClaimsIdentity("JWT");
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-            identity.AddClaim(new Claim("sub", user.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.Authentication, "true"));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+            identity.AddClaim(new Claim("sub", user.UserName));           
             identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
 
             foreach (var role in user.Roles)

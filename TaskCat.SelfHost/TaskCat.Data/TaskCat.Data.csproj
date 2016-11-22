@@ -109,6 +109,7 @@
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
+    <Compile Include="Entity\JobActivity.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductCategory.cs" />
     <Compile Include="Entity\Store.cs" />
