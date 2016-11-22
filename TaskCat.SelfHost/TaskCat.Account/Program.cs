@@ -8,7 +8,7 @@ namespace TaskCat.Account
     {
         static void Main(string[] args)
         {
-            ServiceManager.Initialize("TaskCatAccountService", "TaskCat Authentication Service", "This is the authentication service of TaskCat");
+            ServiceManager.Initialize("TaskCatAccountService", "TaskCat Account Service", "This is the account service of TaskCat");
 
             var config = new ConfigurationOptions("--");
             var runner = new Runner(new TaskCatAccountService(), config);

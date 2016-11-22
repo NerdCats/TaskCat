@@ -12,7 +12,6 @@
     using Microsoft.Owin.Security.OAuth;
     using Microsoft.Owin;
     using Microsoft.Owin.Security.Infrastructure;
-    using Its.Configuration;
     using AppSettings = Its.Configuration.Settings;
     using Microsoft.Owin.Security.Facebook;
     using Lib.JWT;
@@ -23,10 +22,6 @@
     using Data.Entity.Identity;
     using MongoDB.Driver;
     using Common.Db;
-    using System.Linq;
-    using Microsoft.Owin.Security.Jwt;
-    using Microsoft.Owin.Security.DataHandler.Encoder;
-    using Microsoft.Owin.Security;
     using Common.Settings;
     using Settings;
     using Account.Core;

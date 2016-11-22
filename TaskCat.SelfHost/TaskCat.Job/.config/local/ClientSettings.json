@@ -1,8 +1,0 @@
-﻿{
-  "WebCatUrl": "http://localhost:3000/",
-  "ConfirmEmailPath": "confirm",
-  "HostingAddress": "",
-  "AuthenticationIssuerName": "TaskCat.Auth",
-  "ServiceBusConnectionString": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W7RPzuTkjuRtajrTpc1rmh0e0fWg3KHNbXxxCHa/lKU=",
-  "AccountUpdateTopic": "AccountUpdateDev"
-}
