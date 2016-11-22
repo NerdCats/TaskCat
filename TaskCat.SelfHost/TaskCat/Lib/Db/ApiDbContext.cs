@@ -2,6 +2,7 @@
 {
     using NLog;
     using Common.Db;
+    using System.Threading.Tasks;
 
     public class ApiDbContext : DbContext
     {
@@ -14,13 +15,16 @@
 
         private void EnsureIndexes()
         {
-            IndexFacade.EnsureJobIndexes(this.Jobs);
-            IndexFacade.EnsureHRIDIndex(this.HRIDs);
-            IndexFacade.EnsureDropPointIndex(this.DropPoints);
-            IndexFacade.EnsureVendorIndex(this.Vendors);
-            IndexFacade.EnsureProductCategoriesIndex(this.ProductCategories);
-            IndexFacade.EnsureCommentIndexes(this.Comments);
-            IndexFacade.EnsureJobActivityIndexes(this.JobActivityCollection);
+            Task.Factory.StartNew(() =>
+            {
+                IndexFacade.EnsureJobIndexes(this.Jobs);
+                IndexFacade.EnsureHRIDIndex(this.HRIDs);
+                IndexFacade.EnsureDropPointIndex(this.DropPoints);
+                IndexFacade.EnsureVendorIndex(this.Vendors);
+                IndexFacade.EnsureProductCategoriesIndex(this.ProductCategories);
+                IndexFacade.EnsureCommentIndexes(this.Comments);
+                IndexFacade.EnsureJobActivityIndexes(this.JobActivityCollection);
+            });
         }
 
         public void Dispose()
