@@ -31,11 +31,12 @@
 
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer(IAppBuilder app, Subject<JobActivity> activitySubject)
+        public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
 
-            builder.Register(x => activitySubject).As<Subject<JobActivity>>().SingleInstance();
+            var jobActivitySubject = new Subject<JobActivity>();
+            builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
 
             #region Account
             builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();

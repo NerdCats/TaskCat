@@ -27,7 +27,7 @@ namespace TaskCat
     {
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
-        public static void ConfigureApp(IAppBuilder app, Subject<JobActivity> activitySubject)
+        public static void ConfigureApp(IAppBuilder app, IContainer container)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
@@ -45,9 +45,6 @@ namespace TaskCat
 
             SetupMongoConventions();
 
-            AutofacContainerBuilder builder = new AutofacContainerBuilder();
-
-            var container = builder.BuildContainer(app, activitySubject);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
 
