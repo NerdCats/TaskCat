@@ -19,7 +19,8 @@
             IndexFacade.EnsureDropPointIndex(this.DropPoints);
             IndexFacade.EnsureVendorIndex(this.Vendors);
             IndexFacade.EnsureProductCategoriesIndex(this.ProductCategories);
-            IndexFacade.EnsureComments(this.Comments);
+            IndexFacade.EnsureCommentIndexes(this.Comments);
+            IndexFacade.EnsureJobActivityIndexes(this.JobActivityCollection);
         }
 
         public void Dispose()

@@ -28,6 +28,8 @@
 
         private void OnNext(JobActivity activity)
         {
+            // INFO: Just saving it on the database for now
+
             dbcontext.JobActivityCollection.InsertOne(activity);
         }
 
