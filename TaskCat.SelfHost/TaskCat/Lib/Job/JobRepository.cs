@@ -28,7 +28,10 @@
         private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
         private Subject<JobActivity> activitySubject;
 
-        public JobRepository(IJobManager manager, AccountManager accountManager, Subject<JobActivity> activitySubject)
+        public JobRepository(
+            IJobManager manager, 
+            AccountManager accountManager, 
+            Subject<JobActivity> activitySubject)
         {
             this.manager = manager;
             this.accountManager = accountManager;
