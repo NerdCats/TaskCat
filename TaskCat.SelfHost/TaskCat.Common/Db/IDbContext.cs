@@ -28,5 +28,7 @@
         IMongoCollection<Vendor> Vendors { get; }
         IMongoCollection<Product> Products { get; }
         IMongoCollection<Comment> Comments { get; }
+
+        IMongoCollection<JobActivity> JobActivityCollection { get; }
     }
 }

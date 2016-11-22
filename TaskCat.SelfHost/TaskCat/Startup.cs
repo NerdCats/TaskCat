@@ -17,6 +17,9 @@ using TaskCat.Account.Core;
 using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Settings;
+using TaskCat.Data.Entity;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace TaskCat
 {
@@ -24,7 +27,7 @@ namespace TaskCat
     {
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
-        public static void ConfigureApp(IAppBuilder app)
+        public static void ConfigureApp(IAppBuilder app, Subject<JobActivity> activitySubject)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             app.Properties["host.AppName"] = ConfigurationManager.AppSettings["AppName"];
@@ -44,7 +47,7 @@ namespace TaskCat
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
-            var container = builder.BuildContainer(app);
+            var container = builder.BuildContainer(app, activitySubject);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
 

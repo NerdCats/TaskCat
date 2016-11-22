@@ -5,11 +5,14 @@
     using Microsoft.Owin.Hosting;
     using Lib.Constants;
     using Its.Configuration;
-    using App.Settings;
     using Common.Settings;
+    using Data.Entity;
+    using System.Reactive.Linq;
+    using System.Reactive.Subjects;
 
     public class TaskCatApiService : IDichotomyService
     {
+        private Subject<JobActivity> jobActivitySubject;
         private string listeningAddress;
         private IDisposable webApp;
 
@@ -24,6 +27,9 @@
 
             this.listeningAddress = string.IsNullOrWhiteSpace(Settings.Get<ClientSettings>().HostingAddress)
                 ? AppConstants.DefaultHostingAddress : Settings.Get<ClientSettings>().HostingAddress;
+
+            // INFO: Damn!
+            this.jobActivitySubject = new Subject<JobActivity>();
         }
 
         public void Dispose()
@@ -38,7 +44,7 @@
         {
             Console.WriteLine("Starting TaskCat Api Service");
 
-            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder));
+            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder, jobActivitySubject));
 
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;

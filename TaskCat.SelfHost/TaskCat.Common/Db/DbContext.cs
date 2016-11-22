@@ -145,6 +145,15 @@ namespace TaskCat.Common.Db
         }
         #endregion
 
+        #region Activity
+
+        private IMongoCollection<JobActivity> _jobActivityCollection;
+        public IMongoCollection<JobActivity> JobActivityCollection
+        {
+            get { return _jobActivityCollection; }
+        }
+        #endregion
+
         public DbContext()
         {
             InitiateDatabase();
@@ -169,6 +178,8 @@ namespace TaskCat.Common.Db
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
+
+            _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings.Get("ShadowCat.LocationCacheCollectionName")))
                 _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);

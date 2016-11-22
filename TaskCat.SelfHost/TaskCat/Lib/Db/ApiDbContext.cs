@@ -2,22 +2,13 @@
 {
     using NLog;
     using Common.Db;
-    using MongoDB.Driver;
-    using Data.Entity;
 
     public class ApiDbContext : DbContext
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private IMongoCollection<JobActivity> _jobActivityCollection;
-        public IMongoCollection<JobActivity> JobActivityCollection
-        {
-            get { return _jobActivityCollection; }
-        }
-
         public ApiDbContext()
         {
-            _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
             EnsureIndexes();
         }
 
