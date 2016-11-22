@@ -221,56 +221,6 @@
         }
 
         /// <summary>
-        /// Gets Assigned Jobs to an Asset sorted by CreatedTime
-        /// </summary>
-        /// <param name="userId">
-        /// userId for the Asset to find assigned jobs, would only work for Administrator and BackendAdministrator roles
-        /// </param>
-        /// <param name="pageSize">
-        /// Page size of the request, default is 10
-        /// </param>
-        /// <param name="page">
-        /// Desired page number
-        /// </param>
-        /// <param name="fromDateTime">
-        /// Results should be fetched from this date, if sent null, all results are fetched back regardless of Creation Time of the Job
-        /// </param>
-        /// <param name="jobStateUpto">
-        /// Highest Job State to be fetched, default is IN_PROGRESS, that means by default ENQUEUED and IN_PROGRESS jobs would be fetched
-        /// </param>
-        /// <param name="sortDirection">
-        /// default sort by CreatedTime direction, usually set at descending
-        /// </param>
-        /// <returns>
-        /// A paginated set of results for Assigned job against an user id
-        /// </returns>
-
-        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
-        [HttpGet]
-        [Route("{userId?}/jobs", Name = AppConstants.JobsAssignedToUserRoute)]
-        public async Task<IHttpActionResult> GetAssignedJobs(string userId = null, int pageSize = AppConstants.DefaultPageSize, int page = 0, string fromDateTime = null, JobState jobStateUpto = JobState.IN_PROGRESS, SortDirection sortDirection = SortDirection.Descending)
-        {
-            DateTime? fromdt = null;
-            if (!string.IsNullOrEmpty(fromDateTime))
-            {
-                fromdt = DateTime.Parse(fromDateTime);
-            }
-            if (!string.IsNullOrWhiteSpace(userId))
-            {
-                if (this.User.IsInRole("Asset") && (this.User.Identity.GetUserId() != userId))
-                    return Content(HttpStatusCode.Forbidden, "Accessing Assigned jobs of other Assets is not supported unless you're an admin");
-            }
-            else
-            {
-                userId = this.User.Identity.GetUserId();
-            }
-
-            var result = await accountContext.FindAssignedJobs(userId, page, pageSize, fromdt, jobStateUpto, sortDirection, this.Request, AppConstants.JobsAssignedToUserRoute);
-            return Ok(result);
-        }
-
-
-        /// <summary>
         /// Get All Users
         /// </summary>
         /// <param name="pageSize">

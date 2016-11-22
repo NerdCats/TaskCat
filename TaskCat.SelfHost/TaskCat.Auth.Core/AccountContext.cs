@@ -319,31 +319,6 @@
             return user.ToModel(true);
         }
 
-        public async Task<PageEnvelope<Job>> FindAssignedJobs(string userId, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute)
-        {
-            // INFO: When the job microservice and its classes gets to be generic, we should really refactor this one too
-            // And we can use multithreading here to get the job done faster
-
-            var FindContext = dateTimeUpto == null ?
-                dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo) :
-                dbContext.Jobs.Find(x => x.Assets.ContainsKey(userId) && x.State == jobStateToFetchUpTo && x.CreateTime >= dateTimeUpto);
-            var orderContext = dateTimeSortDirection == SortDirection.Descending ? FindContext.SortByDescending(x => x.CreateTime) : FindContext.SortBy(x => x.CreateTime);
-
-            var data = new QueryResult<Job>()
-            {
-                Total = await orderContext.CountAsync(),
-                Result = await orderContext.Skip(page * pageSize).Limit(pageSize).ToListAsync()
-            };
-
-            return new PageEnvelope<Job>(data.Total, page, pageSize, apiRoute, data.Result, request);
-        }
-
-        public async Task<PageEnvelope<Job>> FindAssignedJobsByUserName(string userName, int page, int pageSize, DateTime? dateTimeUpto, JobState jobStateToFetchUpTo, SortDirection dateTimeSortDirection, HttpRequestMessage request, string apiRoute)
-        {
-            var user = await accountManager.FindByNameAsync(userName);
-            return await FindAssignedJobs(user.Id, page, pageSize, dateTimeUpto, jobStateToFetchUpTo, dateTimeSortDirection, request, apiRoute);
-        }
-
         public async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
         {
             return await RemoveRefreshToken(refreshToken.Id);
