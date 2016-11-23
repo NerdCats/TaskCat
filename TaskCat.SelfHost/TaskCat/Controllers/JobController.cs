@@ -26,6 +26,7 @@ using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
+using TaskCat.Common.Lib.Utility;
 
 namespace TaskCat.Controllers
 {
@@ -151,7 +152,7 @@ namespace TaskCat.Controllers
         {
             IQueryable<Job> jobs = repository.GetJobs();
 
-            if (IsUserOrEnterpriseUserOnly())
+            if (User.IsUserOrEnterpriseUserOnly())
             {
                 // INFO: You're in this block because the user is either just a regular user 
                 // or enterprise user , not an administrator or anything
@@ -187,14 +188,6 @@ namespace TaskCat.Controllers
 
             var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
             return Ok(odataResult);
-        }
-
-        private bool IsUserOrEnterpriseUserOnly()
-        {
-            return ((User.IsInRole(RoleNames.ROLE_USER) || User.IsInRole(RoleNames.ROLE_ENTERPRISE))
-                && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
-                && !User.IsInRole(RoleNames.ROLE_ASSET)
-                && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         /// <summary>
@@ -346,7 +339,7 @@ namespace TaskCat.Controllers
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
-        public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
+        public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
             if (taskPatch.Operations.Any(x => x.op != "replace"))
             {
@@ -354,6 +347,10 @@ namespace TaskCat.Controllers
             }
 
             var result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
+            result.SerializeUpdatedValue = updatedValue;
+
+            //var activity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, )
+
             return Ok(result);
         }
 
