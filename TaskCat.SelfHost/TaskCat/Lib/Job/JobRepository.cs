@@ -156,10 +156,9 @@
             job.JobServedBy = userModel;
 
             this.activitySubject.OnNext(
-                new JobActivity(job, JobActivityOperatioNames.Claim)
+                new JobActivity(job, JobActivityOperatioNames.Claim, new ReferenceUser(userModel))
                 {
-                    Path = nameof(job.JobServedBy),
-                    Value = job.JobServedBy
+                    Path = nameof(job.JobServedBy)
                 });
 
             return await UpdateJob(job);
