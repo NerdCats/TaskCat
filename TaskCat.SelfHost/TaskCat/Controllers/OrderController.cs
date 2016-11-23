@@ -60,16 +60,17 @@ namespace TaskCat.Controllers
             if (model.UserId == null) model.UserId = currentUserId;
 
             Job createdJob;
+            var referenceUserForActivityLog = new ReferenceUser(currentUserId, this.User.Identity.GetUserName());
 
             switch (opt)
             {
                 case OrderCreationOptions.CREATE:
                     createdJob = await repository.PostOrder(model);
-                    activitySubject.OnNext(new JobActivity(createdJob.Id, JobActivityOperatioNames.Add, createdJob.User, new ReferenceUser(currentUserId, this.User.Identity.GetUserName())));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await repository.PostOrder(model, currentUserId);
-                    activitySubject.OnNext(new JobActivity(createdJob.Id, JobActivityOperatioNames.Add, createdJob.User, new ReferenceUser(currentUserId, this.User.Identity.GetUserName())));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");

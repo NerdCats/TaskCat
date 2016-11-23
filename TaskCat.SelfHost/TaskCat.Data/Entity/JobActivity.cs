@@ -27,22 +27,22 @@
 
         }
 
-        public JobActivity(string jobId, string operation, UserModel forUser, ReferenceUser byUser)
+        public JobActivity(Job job, string operation, ReferenceUser byUser)
         {
-            this.JobId = jobId;
+            this.JobId = job.Id;
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
 
             this.ForUser = new ReferenceUser();
-            ForUser.Id = forUser.UserId;
-            ForUser.Username = forUser.UserName;
+            ForUser.Id = job.User.UserId;
+            ForUser.Username = job.User.UserName;
 
-            if (forUser.Profile is UserProfile)
-                ForUser.Name = (forUser.Profile as UserProfile).FullName;
-            else if (forUser.Profile is EnterpriseUserProfile)
-                ForUser.Name = (forUser.Profile as EnterpriseUserProfile).CompanyName;
-            else if (forUser.Profile is AssetProfile)
-                ForUser.Name = (forUser.Profile as AssetProfile).FullName;
+            if (job.User.Profile is AssetProfile)
+                ForUser.Name = (job.User.Profile as AssetProfile).FullName;
+            else if (job.User.Profile is UserProfile)
+                ForUser.Name = (job.User.Profile as UserProfile).FullName;
+            else if (job.User.Profile is EnterpriseUserProfile)
+                ForUser.Name = (job.User.Profile as EnterpriseUserProfile).CompanyName;
 
             this.ByUser = byUser;
         }
