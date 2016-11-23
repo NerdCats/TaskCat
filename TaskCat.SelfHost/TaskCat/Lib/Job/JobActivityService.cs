@@ -22,21 +22,21 @@
             this.jobActivitySource = jobActivitySource;
 
             this.jobActivitySource
-                .SubscribeOn(Scheduler.Default)
+                .ObserveOn(NewThreadScheduler.Default)
                 .Subscribe(OnNext, OnError);          
         }
 
         private void OnNext(JobActivity activity)
         {
-            // INFO: Just saving it on the database for now
-
+            // TODO: Just saving it on the database for now
+            // Log activity here
             dbcontext.JobActivityCollection.InsertOne(activity);
         }
 
         private void OnError(Exception exception)
         {
             Console.WriteLine(exception);
-            // Log the exception here
+            // TODO: Log the exception here
         }
     }
 }
