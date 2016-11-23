@@ -52,9 +52,9 @@ namespace TaskCat.Controllers
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (model.UserId != null && model.UserId != currentUserId)
-                    throw new InvalidOperationException(string.Format("Updating order/job id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
+                    throw new InvalidOperationException($"Updating order/job id {model.UserId} is not authorized against user id {this.User.Identity.GetUserId()}");
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
-                    throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
+                    throw new InvalidOperationException($"Claiming a job under user id {User.Identity.GetUserId()} is not authorized");
             }
                 
             if (model.UserId == null) model.UserId = currentUserId;
