@@ -18,7 +18,8 @@
         [BsonIgnoreIfNull]
         public ReferenceActivity Reference { get; set; }
 
-        public ReferenceUser User { get; set; }
+        public ReferenceUser ForUser { get; set; }
+        public ReferenceUser ByUser { get; set; }
         public DateTime TimeStamp { get; set; }
 
         public JobActivity()
@@ -26,23 +27,26 @@
 
         }
 
-        public JobActivity(string jobId, string operation, UserModel userModel)
+        public JobActivity(string jobId, string operation, UserModel forUser, ReferenceUser byUser)
         {
             this.JobId = jobId;
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
 
-            this.User = new ReferenceUser();
-            User.Id = userModel.UserId;
-            User.Username = userModel.UserName;
+            this.ForUser = new ReferenceUser();
+            ForUser.Id = forUser.UserId;
+            ForUser.Username = forUser.UserName;
 
-            if (userModel.Profile is UserProfile)
-                User.Name = (userModel.Profile as UserProfile).FullName;
-            else if (userModel.Profile is EnterpriseUserProfile)
-                User.Name = (userModel.Profile as EnterpriseUserProfile).CompanyName;
-            else if (userModel.Profile is AssetProfile)
-                User.Name = (userModel.Profile as AssetProfile).FullName;
+            if (forUser.Profile is UserProfile)
+                ForUser.Name = (forUser.Profile as UserProfile).FullName;
+            else if (forUser.Profile is EnterpriseUserProfile)
+                ForUser.Name = (forUser.Profile as EnterpriseUserProfile).CompanyName;
+            else if (forUser.Profile is AssetProfile)
+                ForUser.Name = (forUser.Profile as AssetProfile).FullName;
+
+            this.ByUser = byUser;
         }
+
     }
 
     public class ReferenceActivity
@@ -67,6 +71,17 @@
 
         [BsonIgnoreIfNull]
         public string Name { get; set; }
+
+        public ReferenceUser()
+        {
+
+        }
+
+        public ReferenceUser(string userId, string userName)
+        {
+            this.Id = userId;
+            this.Username = userName;
+        }
     }
 
     public class JobActivityOperatioNames

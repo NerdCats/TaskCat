@@ -64,14 +64,14 @@
 
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.JobId) ,jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.Operation), jobActivityIndexOptions);
-            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.User.Id), jobActivityIndexOptions);
-            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.User.Username), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Id), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Username), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.TimeStamp), jobActivityIndexOptions);
 
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.JobId), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.Operation), jobActivityIndexOptions);
-            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.User.Id), jobActivityIndexOptions);
-            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.User.Username), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.ForUser.Id), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.ForUser.Username), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.TimeStamp), jobActivityIndexOptions);
 
             var referenceIndexOptions = new CreateIndexOptions();
