@@ -66,11 +66,13 @@ namespace TaskCat.Controllers
             {
                 case OrderCreationOptions.CREATE:
                     createdJob = await repository.PostOrder(model);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await repository.PostOrder(model, currentUserId);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog) {
+
+                    });
                     return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");

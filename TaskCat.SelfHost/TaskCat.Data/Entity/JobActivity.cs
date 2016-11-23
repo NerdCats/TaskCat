@@ -30,8 +30,9 @@
         public JobActivity(Job job, string operation, ReferenceUser byUser)
         {
             InitiateActivity(job, operation);
-                      
+
             this.ByUser = byUser;
+            GenerateActionText(job, operation);
         }
 
         public JobActivity(Job job, string operation)
@@ -39,6 +40,7 @@
             InitiateActivity(job, operation);
 
             this.ByUser = new ReferenceUser(job.JobServedBy);
+            GenerateActionText(job, operation);
         }
 
         private void InitiateActivity(Job job, string operation)
@@ -47,6 +49,14 @@
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
             this.ForUser = new ReferenceUser(job.User);
+        }
+
+        private void GenerateActionText(Job job, string operation)
+        {
+            if (operation == JobActivityOperatioNames.Create)
+            {
+                this.ActionText = $"{this.ByUser} {operation.ToLower()}d {job.HRID}";
+            }
         }
     }
 
@@ -108,7 +118,7 @@
 
     public class JobActivityOperatioNames
     {
-        public const string Add = "Add";
+        public const string Create = "Create";
         public const string Update = "Update";
         public const string Delete = "Delete";
         public const string Claim = "Claim";
