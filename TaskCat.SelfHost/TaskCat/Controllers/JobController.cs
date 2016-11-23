@@ -18,7 +18,6 @@ using TaskCat.Data.Model.Identity.Profile;
 using TaskCat.Data.Model.Operation;
 using TaskCat.Data.Model.Order;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Email;
 using TaskCat.Lib.Invoice;
 using TaskCat.Lib.Invoice.Request;
 using TaskCat.Lib.Job;
@@ -27,7 +26,6 @@ using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
-using System.IdentityModel.Claims;
 
 namespace TaskCat.Controllers
 {

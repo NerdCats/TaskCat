@@ -27,12 +27,16 @@
     using AppSettings = Its.Configuration.Settings;
     using Common.Settings;
     using Lib.Db;
+    using System.Reactive.Subjects;
 
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer(IAppBuilder app)
+        public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
+
+            var jobActivitySubject = new Subject<JobActivity>();
+            builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
 
             #region Account
             builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();

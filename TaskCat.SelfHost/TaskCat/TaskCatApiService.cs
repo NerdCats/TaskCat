@@ -5,11 +5,19 @@
     using Microsoft.Owin.Hosting;
     using Lib.Constants;
     using Its.Configuration;
-    using App.Settings;
     using Common.Settings;
+    using Data.Entity;
+    using App;
+    using Autofac;
+    using Lib.Job;
+    using Common.Db;
+    using System.Reactive.Subjects;
+    using System.Diagnostics;
 
     public class TaskCatApiService : IDichotomyService
     {
+        private IContainer container;
+        private JobActivityService jobActivityService;
         private string listeningAddress;
         private IDisposable webApp;
 
@@ -24,6 +32,16 @@
 
             this.listeningAddress = string.IsNullOrWhiteSpace(Settings.Get<ClientSettings>().HostingAddress)
                 ? AppConstants.DefaultHostingAddress : Settings.Get<ClientSettings>().HostingAddress;
+
+        }
+
+        private void BuildAutofacContainerAndStartActivityService()
+        {
+            // INFO: Doing the IoC container building here
+            AutofacContainerBuilder builder = new AutofacContainerBuilder();
+            this.container = builder.BuildContainer();
+
+            this.jobActivityService = new JobActivityService(container.Resolve<IDbContext>(), container.Resolve<Subject<JobActivity>>());
         }
 
         public void Dispose()
@@ -31,18 +49,28 @@
             if (webApp != null)
             {
                 webApp.Dispose();
+                container.Dispose();
             }
         }
 
         public void Start()
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             Console.WriteLine("Starting TaskCat Api Service");
 
-            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder));
+            Console.WriteLine("Building Container...");
+            BuildAutofacContainerAndStartActivityService();
+
+            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder, container));
 
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Hosted TaskCat on {listeningAddress}");
+
+            watch.Stop();
+
+            Console.WriteLine($"Hosted TaskCat on {listeningAddress} in {watch.Elapsed.TotalSeconds} seconds");
             Console.ForegroundColor = oldColor;
         }
 

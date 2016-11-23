@@ -77,7 +77,6 @@
                         return countResult;
                     });
                     
-
                     var newQueryString = odataRequestModel.OdataQueryString + $"$skip={odataRequestModel.Page * odataRequestModel.PageSize}$top={odataRequestModel.PageSize}";
                     var queryResult = Task.Run(() => {
                         var result = queryable.LinqToQuerystring(typeof(T), queryString: newQueryString) as IQueryable<Dictionary<string, object>>;

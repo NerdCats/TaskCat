@@ -19,6 +19,7 @@
     using Data.Entity.Identity;
     using Vendor;
     using Account.Core;
+    using System.Reactive.Subjects;
 
     public class OrderRepository : IOrderRepository
     {
@@ -38,8 +39,7 @@
             AccountManager accountManager,
             IHRIDService hridService,
             IPaymentManager paymentManager,
-            IVendorService vendorService
-            )
+            IVendorService vendorService)
         {
             this.manager = manager;
             this.supportedOrderStore = supportedOrderStore;
@@ -157,7 +157,8 @@
         private async Task<Job> ConstructAndRegister(JobShop jobShop, JobBuilder builder)
         {
             var createdJob = jobShop.Construct(builder);
-            return await manager.RegisterJob(createdJob);
+            var result = await manager.RegisterJob(createdJob);           
+            return result;
         }
 
         public async Task<SupportedOrder> PostSupportedOrder(SupportedOrder supportedOrder)

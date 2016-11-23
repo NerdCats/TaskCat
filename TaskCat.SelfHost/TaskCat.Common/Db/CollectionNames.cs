@@ -17,5 +17,7 @@
         public const string ProductCollectionName = "Products";
 
         public const string CommentCollectionName = "Comments";
+
+        public const string JobActivityCollectionName = "JobActivities";
     }
 }
