@@ -43,8 +43,7 @@
             hridService = hridServiceMock.Object;
             paymentMethodMock = new Mock<IPaymentMethod>();
 
-            Mock<Subject<JobActivity>> activitySubjectMock = new Mock<Subject<JobActivity>>();
-            this.activitySubject = activitySubjectMock.Object;
+            this.activitySubject = new Subject<JobActivity>();
         }
 
         private JobRepository SetupMockJobRepositoryForUpdate()
