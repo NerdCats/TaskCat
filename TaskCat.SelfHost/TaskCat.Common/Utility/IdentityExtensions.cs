@@ -41,13 +41,13 @@
         /// <summary>
         ///     Get full name of a user if claimed
         /// </summary>
-        /// <param name="user">
+        /// <param name="userIdentity">
         ///     Identity user that is to be checked
         /// </param>
         /// <returns></returns>
-        public static string GetUserFullName(this IPrincipal user)
+        public static string GetUserFullName(this IIdentity userIdentity)
         {
-            var identity = user as ClaimsIdentity;
+            var identity = userIdentity as ClaimsIdentity;
             var fullNameClaim = identity.FindFirst(x => x.Type == ClaimTypes.GivenName)?.Value;
             return fullNameClaim;
         }

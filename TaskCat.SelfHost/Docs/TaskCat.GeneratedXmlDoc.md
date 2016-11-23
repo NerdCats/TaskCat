@@ -315,7 +315,7 @@
 
 
 ---
-#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask})
+#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask},System.Boolean)
 
  Partial update to a specific task under a job 
 

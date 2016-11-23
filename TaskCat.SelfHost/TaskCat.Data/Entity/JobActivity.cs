@@ -22,6 +22,8 @@
         public ReferenceUser ByUser { get; set; }
         public DateTime TimeStamp { get; set; }
 
+        public string ActionText { get; set; }
+
         public JobActivity()
         { }
 
@@ -70,6 +72,17 @@
 
         [BsonIgnoreIfNull]
         public string Name { get; set; }
+
+        [BsonIgnore]
+        public string DisplayName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Name) ?
+                    Username : Name;
+            }
+        }
+
         public ReferenceUser()
         { }
 

@@ -27,6 +27,7 @@ using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
 using TaskCat.Common.Lib.Utility;
+using System.Reactive.Subjects;
 
 namespace TaskCat.Controllers
 {
@@ -38,11 +39,13 @@ namespace TaskCat.Controllers
     {
         private IJobRepository repository;
         private IEmailService mailService;
+        private Subject<JobActivity> activitySubject;
 
-        public JobController(IJobRepository repository, IEmailService mailService)
+        public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
+            this.activitySubject = activitySubject;
         }
 
         /// <summary>
@@ -341,15 +344,40 @@ namespace TaskCat.Controllers
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
-            if (taskPatch.Operations.Any(x => x.op != "replace"))
+            if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
             {
                 throw new NotSupportedException("Operations except replace is not supported");
+            }
+
+            if (taskPatch.Operations.Any(x=> !x.path.EndsWith("assetRef") || !x.path.EndsWith("State")))
+            {
+                throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
             var result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
             result.SerializeUpdatedValue = updatedValue;
 
-            //var activity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, )
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
+            var updatedTask = result.UpdatedValue.Tasks.First(x => x.id == taskId);
+
+            Task.Factory.StartNew(()=> {
+                foreach (var op in taskPatch.Operations)
+                {
+                    var activity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, currentUser)
+                    {
+                        Reference = new ReferenceActivity(taskId, updatedTask.Type),
+                        Path = $"Tasks[{taskId}]{op.path}",
+                        Value = op.value,
+                        ActionText = $"{currentUser.DisplayName} updated {op.path.Substring(1)} of {updatedTask.Type} task of job {result.UpdatedValue.HRID} to {op.value}"
+                    };
+
+                    activitySubject.OnNext(activity);
+                }
+            });
 
             return Ok(result);
         }
