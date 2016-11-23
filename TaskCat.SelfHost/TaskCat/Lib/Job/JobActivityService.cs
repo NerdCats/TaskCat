@@ -22,7 +22,7 @@
             this.jobActivitySource = jobActivitySource;
 
             this.jobActivitySource
-                .ObserveOn(NewThreadScheduler.Default)
+                .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(OnNext, OnError);          
         }
 
