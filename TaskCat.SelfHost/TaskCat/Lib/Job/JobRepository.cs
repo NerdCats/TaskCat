@@ -155,6 +155,13 @@
             var userModel = new UserModel(adminUser);
             job.JobServedBy = userModel;
 
+            this.activitySubject.OnNext(
+                new JobActivity(job, JobActivityOperatioNames.Claim)
+                {
+                    Path = nameof(job.JobServedBy),
+                    Value = job.JobServedBy
+                });
+
             return await UpdateJob(job);
         }
 
