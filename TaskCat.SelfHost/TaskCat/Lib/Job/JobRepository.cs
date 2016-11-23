@@ -73,12 +73,13 @@
             throw new NotImplementedException();
         }
 
-        public async Task<ReplaceOneResult> UpdateJob(Job job)
+        public async Task<UpdateResult<Job>> UpdateJob(Job job)
         {
-            return await manager.UpdateJob(job);
+            var result = await manager.UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
+        public async Task<UpdateResult<Job>> UpdateOrder(Job job, OrderModel orderModel)
         {
             if (job.Order.Type != orderModel.Type)
             {
@@ -105,10 +106,10 @@
             }
 
             var result = await UpdateJob(job);
-            return result;
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
+        public async Task<UpdateResult<Job>> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
             var job = await GetJob(jobId);
 
@@ -129,7 +130,7 @@
             job.ModifiedTime = selectedTask.ModifiedTime;
 
             var result = await UpdateJob(job);
-            return result;
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
         public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobTask)
@@ -148,7 +149,7 @@
             return true;
         }
 
-        public async Task<ReplaceOneResult> Claim(string jobId, string userId)
+        public async Task<UpdateResult<Job>> Claim(string jobId, string userId)
         {
             var job = await GetJob(jobId);
             var adminUser = await accountManager.FindByIdAsync(userId);
@@ -161,7 +162,8 @@
                     Path = nameof(job.JobServedBy)
                 });
 
-            return await UpdateJob(job);
+            var result = await UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
         public async Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request)

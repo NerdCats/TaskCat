@@ -316,13 +316,13 @@ namespace TaskCat.Controllers
         /// Returns a replace result that replaces the JobServedBy field
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/claim/{jobId}")]
         [HttpPost]
         public async Task<IHttpActionResult> Claim(string jobId)
         {
-            ReplaceOneResult result = await repository.Claim(jobId, this.User.Identity.GetUserId());
+            var result = await repository.Claim(jobId, this.User.Identity.GetUserId());
             return Ok(result);
         }
 
@@ -342,13 +342,18 @@ namespace TaskCat.Controllers
         /// Returns a ReplaceOneResult based on the update
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
         {
-            ReplaceOneResult result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
+            if (taskPatch.Operations.Any(x => x.op != "replace"))
+            {
+                throw new NotSupportedException("Operations except replace is not supported");
+            }
+
+            var result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
             return Ok(result);
         }
 
@@ -398,7 +403,7 @@ namespace TaskCat.Controllers
         /// Returns a ReplaceOneResult based on the update
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
@@ -426,7 +431,7 @@ namespace TaskCat.Controllers
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
             }
 
-            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
+            var result = await repository.UpdateOrder(job, orderModel);
             return Ok(result);
         }
     }
