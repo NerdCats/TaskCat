@@ -30,7 +30,7 @@
         public ReferenceUser ByUser { get; set; }
         public DateTime TimeStamp { get; set; }
 
-        public string ActionText { get; set; }
+        public string ActionText { get { return GenerateActionText(); } }
 
         public JobActivity()
         { }
@@ -41,9 +41,6 @@
 
             this.Reference = referenceActivity;
             this.ByUser = byUser;
-
-            if (referenceActivity != null)
-                GenerateActionText(this.Job, this.Operation);
         }
 
         public JobActivity(Job job, string operation, string path, ReferenceUser byUser, ReferenceActivity referenceActivity = null) : this(job, operation, byUser, referenceActivity)
@@ -57,9 +54,6 @@
 
             this.Reference = referenceActivity;
             this.ByUser = new ReferenceUser(job.JobServedBy);
-
-            if (referenceActivity != null)
-                GenerateActionText(this.Job, this.Operation);
         }
 
         public JobActivity(Job job, string operation, string path, ReferenceActivity referenceActivity = null) : this(job, operation, referenceActivity)
@@ -79,27 +73,29 @@
             this.ForUser = new ReferenceUser(job.User);
         }
 
-        private void GenerateActionText(Job job, string operation)
+        private string GenerateActionText()
         {
-            if (operation == JobActivityOperatioNames.Create)
+            if (Operation == JobActivityOperatioNames.Create)
             {
-                this.ActionText = $"{this.ByUser} {operation.ToLower()}d {job.HRID}";
+                return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
             }
-            else if (operation == JobActivityOperatioNames.Claim)
+            else if (Operation == JobActivityOperatioNames.Claim)
             {
-                this.ActionText = $"{this.ByUser} {operation.ToLower()}d {job.HRID}";
+                return $"{this.ByUser.DisplayName} {Operation.ToLower()}ed {HRID}";
             }
-            else if (operation == JobActivityOperatioNames.Update)
+            else if (Operation == JobActivityOperatioNames.Update)
             {
                 if (Reference != null)
                 {
-                    this.ActionText = $"{this.ByUser} {operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {job.HRID} to {Value}";
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {HRID} to {Value}";
                 }
                 else
                 {
-                    this.ActionText = $"{this.ByUser} {operation.ToLower()}d {Path} of {job.HRID} to {Value}";
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID} to {Value}";
                 }
             }
+
+            return null;
         }
     }
 

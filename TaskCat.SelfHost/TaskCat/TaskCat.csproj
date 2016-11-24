@@ -353,6 +353,7 @@
     <Compile Include="Controllers\AssetProviderController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DropPointController.cs" />
+    <Compile Include="Controllers\JobActivityController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
@@ -488,6 +489,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\Job\Activity\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
