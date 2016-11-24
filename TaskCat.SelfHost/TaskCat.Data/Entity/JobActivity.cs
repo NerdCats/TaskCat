@@ -30,6 +30,7 @@
         public ReferenceUser ByUser { get; set; }
         public DateTime TimeStamp { get; set; }
 
+        [BsonIgnore]
         public string ActionText { get { return GenerateActionText(); } }
 
         public JobActivity()
