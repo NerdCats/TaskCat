@@ -11,6 +11,9 @@
     using Data.Entity;
     using Lib.Constants;
     using Common.Utility.Odata;
+    using Common.Lib.Utility;
+    using Data.Entity.Identity;
+    using Microsoft.AspNet.Identity;
 
     /// <summary>
     /// Controller for job activities.
@@ -32,13 +35,25 @@
         /// Default Odata route to get job activities
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Authorize]
         [ResponseType(typeof(PageEnvelope<JobActivity>))]
         [HttpGet]
         [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> GetJobActivityFeed()
         {
-            IQueryable<JobActivity> activities = dbContext.JobActivityCollection.AsQueryable();
+            IQueryable<JobActivity> activities = null;
+            if (!User.IsAdmin())
+            {
+                if (User.IsInRole(RoleNames.ROLE_ASSET))
+                    activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ByUser.Id == this.User.Identity.GetUserId());
+                else
+                    activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ForUser.Id == this.User.Identity.GetUserId());
+            }
+            else
+            {
+                activities = dbContext.JobActivityCollection.AsQueryable();
+            }
+            
             var odataResult = await activities.ToOdataResponse(Request, AppConstants.JobActivityOdataRoute);
             return Ok(odataResult);
         }
