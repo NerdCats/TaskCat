@@ -3,11 +3,19 @@
     using Model.Identity.Profile;
     using Model.Identity.Response;
     using MongoDB.Bson.Serialization.Attributes;
+    using Newtonsoft.Json;
     using System;
+    using System.Linq;
 
     public class JobActivity : DbEntity
     {
         public string JobId { get; set; }
+        public string HRID { get; set; }
+
+        [BsonIgnore]
+        [JsonIgnore]
+        private Job Job;
+
         public string Operation { get; set; }
 
         [BsonIgnoreIfNull]
@@ -27,25 +35,45 @@
         public JobActivity()
         { }
 
-        public JobActivity(Job job, string operation, ReferenceUser byUser)
+        public JobActivity(Job job, string operation, ReferenceUser byUser, ReferenceActivity referenceActivity = null)
         {
             InitiateActivity(job, operation);
 
+            this.Reference = referenceActivity;
             this.ByUser = byUser;
-            GenerateActionText(job, operation);
+
+            if (referenceActivity != null)
+                GenerateActionText(this.Job, this.Operation);
         }
 
-        public JobActivity(Job job, string operation)
+        public JobActivity(Job job, string operation, string path, ReferenceUser byUser, ReferenceActivity referenceActivity = null) : this(job, operation, byUser, referenceActivity)
+        {
+            this.Path = path;
+        }
+
+        public JobActivity(Job job, string operation, ReferenceActivity referenceActivity = null)
         {
             InitiateActivity(job, operation);
 
+            this.Reference = referenceActivity;
             this.ByUser = new ReferenceUser(job.JobServedBy);
-            GenerateActionText(job, operation);
+
+            if (referenceActivity != null)
+                GenerateActionText(this.Job, this.Operation);
+        }
+
+        public JobActivity(Job job, string operation, string path, ReferenceActivity referenceActivity = null) : this(job, operation, referenceActivity)
+        {
+            this.Path = path;
         }
 
         private void InitiateActivity(Job job, string operation)
         {
             this.JobId = job.Id;
+            this.HRID = job.HRID;
+
+            this.Job = job;
+
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
             this.ForUser = new ReferenceUser(job.User);
@@ -56,6 +84,21 @@
             if (operation == JobActivityOperatioNames.Create)
             {
                 this.ActionText = $"{this.ByUser} {operation.ToLower()}d {job.HRID}";
+            }
+            else if (operation == JobActivityOperatioNames.Claim)
+            {
+                this.ActionText = $"{this.ByUser} {operation.ToLower()}d {job.HRID}";
+            }
+            else if (operation == JobActivityOperatioNames.Update)
+            {
+                if (Reference != null)
+                {
+                    this.ActionText = $"{this.ByUser} {operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {job.HRID} to {Value}";
+                }
+                else
+                {
+                    this.ActionText = $"{this.ByUser} {operation.ToLower()}d {Path} of {job.HRID} to {Value}";
+                }
             }
         }
     }

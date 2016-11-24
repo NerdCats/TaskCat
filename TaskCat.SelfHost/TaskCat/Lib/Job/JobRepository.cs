@@ -157,11 +157,7 @@
             job.JobServedBy = userModel;
 
             this.activitySubject.OnNext(
-                new JobActivity(job, JobActivityOperatioNames.Claim, new ReferenceUser(userModel))
-                {
-                    Path = nameof(job.JobServedBy),
-                    ActionText = $"{userModel.ToString()} claimed job {job.HRID}"
-                });
+                new JobActivity(job, JobActivityOperatioNames.Claim, nameof(job.JobServedBy), new ReferenceUser(userModel)));
 
             var result = await UpdateJob(job);
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);

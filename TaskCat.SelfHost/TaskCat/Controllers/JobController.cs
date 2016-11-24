@@ -370,7 +370,7 @@ namespace TaskCat.Controllers
                     var activity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, currentUser)
                     {
                         Reference = new ReferenceActivity(taskId, updatedTask.Type),
-                        Path = $"Tasks[{taskId}]{op.path}",
+                        Path = $"Tasks[{taskId}].{op.path.Substring(1)}",
                         Value = op.value,
                         ActionText = $"{currentUser.DisplayName} updated {op.path.Substring(1)} of {updatedTask.Type} task of job {result.UpdatedValue.HRID} to {op.value}"
                     };
