@@ -100,7 +100,7 @@
                         "audience", (context.ClientId == null) ? string.Empty : context.ClientId
                     },
                     {
-                        "userName", context.UserName
+                        "userName", user.UserName
                     },
                     {
                         "userId", user.Id
