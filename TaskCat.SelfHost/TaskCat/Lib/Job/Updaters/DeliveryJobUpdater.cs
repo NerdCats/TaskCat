@@ -91,7 +91,9 @@
                 case JobTaskTypes.PACKAGE_PICKUP:
                     PackagePickUpTask pickUpTask = job.Tasks[1] as PackagePickUpTask;
                     pickUpTask.PickupLocation = order.From;
-                    pickUpTask.State = JobTaskState.PENDING;
+
+                    // TODO: need explanation
+                    // pickUpTask.State = JobTaskState.PENDING;
 
                     if (!orderCartComparisonResult.AreEqual)
                     {
@@ -103,10 +105,17 @@
                     DeliveryTask deliveryTask = job.Tasks[2] as DeliveryTask;
                     deliveryTask.From = order.From;
                     deliveryTask.To = order.To;
-                    deliveryTask.State = JobTaskState.PENDING;
+                    
+                    // TODO: need explanation
+                    //deliveryTask.State = JobTaskState.PENDING;
 
                     job.Order.From = order.From;
                     job.Order.To = order.To;
+
+                    if (!orderCartComparisonResult.AreEqual)
+                    {
+                        job.Order.OrderCart = order.OrderCart;
+                    }
                     break;
             }
 
