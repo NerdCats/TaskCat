@@ -78,7 +78,7 @@
             return await manager.UpdateJob(job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
+        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel, string mode)
         {
             if (job.Order.Type != orderModel.Type)
             {
@@ -98,7 +98,7 @@
                             serviceChargeCalculationService);
                         orderProcessor.ProcessOrder(orderModel);
                         var jobUpdater = new DeliveryJobUpdater(job);
-                        jobUpdater.UpdateJob(orderModel);
+                        jobUpdater.UpdateJob(orderModel, mode);
                         job = jobUpdater.Job;
                         break;
                     }

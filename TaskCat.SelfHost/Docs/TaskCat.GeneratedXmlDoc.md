@@ -355,7 +355,7 @@
 
 
 ---
-#### Method Controllers.JobController.UpdateOrder(System.String,TaskCat.Data.Model.OrderModel)
+#### Method Controllers.JobController.UpdateOrder(System.String,TaskCat.Data.Model.OrderModel,System.String)
 
  Update a order inside a job 
 

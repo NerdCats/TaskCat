@@ -26,6 +26,7 @@ using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
+using TaskCat.Lib.Job.Updaters;
 
 namespace TaskCat.Controllers
 {
@@ -402,8 +403,11 @@ namespace TaskCat.Controllers
         [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
-        public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel)
+        public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel, [FromUri]string mode = JobUpdateMode.force)
         {
+            if (!JobUpdateMode.IsValidUpdateMode(mode))
+                throw new ArgumentException(nameof(mode));
+
             if (orderModel == null) return BadRequest("Null order payload provided");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -426,7 +430,7 @@ namespace TaskCat.Controllers
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
             }
 
-            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
+            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel, mode);
             return Ok(result);
         }
     }

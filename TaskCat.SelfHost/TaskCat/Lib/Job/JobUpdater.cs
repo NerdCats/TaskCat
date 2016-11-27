@@ -2,6 +2,7 @@
 {
     using Data.Entity;
     using Data.Model;
+    using Updaters;
 
     public abstract class JobUpdater
     {
@@ -13,6 +14,6 @@
             this.job = job;
         }
 
-        public abstract void UpdateJob(OrderModel order);
+        public abstract void UpdateJob(OrderModel order, string mode);
     }
 }

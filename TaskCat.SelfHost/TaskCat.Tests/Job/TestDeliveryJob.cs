@@ -26,6 +26,7 @@
     using TaskCat.Data.Model.Identity;
     using TaskCat.Account.Core;
     using System.Reactive.Subjects;
+    using TaskCat.Lib.Job.Updaters;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -74,7 +75,7 @@
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
-            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
 
             var newOrder = job.Order as DeliveryOrder;
 
@@ -106,7 +107,7 @@
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
-            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
 
             var newOrder = job.Order as DeliveryOrder;
 
@@ -137,7 +138,7 @@
             updatedOrder.RequiredChangeFor = 1000;
 
             Assert.ThrowsAsync<NotSupportedException>(async () => {
-                var result = await jobRepository.UpdateOrder(job, updatedOrder);
+                var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
             });   
         }
 
