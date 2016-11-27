@@ -7,11 +7,11 @@ using System.Web.Http;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Domain;
-using TaskCat.Lib.Utility.Odata;
-using TaskCat.Model.Pagination;
 using System.Web.Http.Description;
-using TaskCat.Lib.Utility.ActionFilter;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
+using TaskCat.Common.Domain;
 
 namespace TaskCat.Controllers
 {
@@ -28,7 +28,7 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<ProductCategory>))]
         [HttpGet]
         [Route("api/ProductCategory/odata", Name = AppConstants.ProductCategoryRoute)]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get()
         {
             IQueryable<ProductCategory> productCategories = service.Collection.AsQueryable();

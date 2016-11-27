@@ -118,10 +118,14 @@
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Notes { get; set; }
 
+        [JsonIgnore]
         public bool IsReadytoMoveToNextTask { get; set; }
+        [JsonIgnore]
         public bool IsDependencySatisfied { get; set; }
 
+        [JsonIgnore]
         public bool IsStartingTask { get; set; } = true;
+        [JsonIgnore]
         public bool IsTerminatingTask { get; set; } = false;
 
         public bool ETAFailed

@@ -6,6 +6,8 @@
     using System;
     using Its.Configuration;
     using App.Settings;
+    using Common.Email.Model;
+    using Common.Email;
 
     public class RazorTemplateParser : IEmailTemplateParser
     {

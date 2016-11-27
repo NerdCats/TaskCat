@@ -109,6 +109,7 @@
     <Compile Include="Entity\Identity\Asset.cs" />
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
+    <Compile Include="Entity\JobActivity.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductCategory.cs" />
     <Compile Include="Entity\Store.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Lib\Payment\Response\RefundPaymentResponse.cs" />
     <Compile Include="Lib\Payment\Request\VoidPaymentRequest.cs" />
     <Compile Include="Lib\Payment\Response\VoidPaymentResponse.cs" />
+    <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\Geocoding\Address.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />

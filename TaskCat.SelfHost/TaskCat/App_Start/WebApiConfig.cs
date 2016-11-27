@@ -1,8 +1,7 @@
-﻿using TaskCat.Lib.Utility.Converter;
-
-namespace TaskCat
+﻿namespace TaskCat
 {
     using Autofac.Integration.WebApi;
+    using Common.Utility.Converter;
     using Newtonsoft.Json;
     using Swashbuckle.Application;
     using System;
@@ -11,6 +10,8 @@ namespace TaskCat
     using System.Net.Http.Headers;
     using System.Reflection;
     using System.Web.Http;
+    using Lib.Utility.Converter;
+    using TaskCat.Common.WebApi;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class WebApiConfig
@@ -29,7 +30,7 @@ namespace TaskCat
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("docs/{apiVersion}/", c =>
+            config.EnableSwagger("api/docs/{apiVersion}/", c =>
             {
 
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -61,6 +62,9 @@ namespace TaskCat
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new RegistrationModelConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new UserProfileConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new VendorConverter());
+
+            config.MessageHandlers.Insert(0, new CompressionHandler());
+
             config.Formatters.JsonFormatter.Indent = true;
         }
     }

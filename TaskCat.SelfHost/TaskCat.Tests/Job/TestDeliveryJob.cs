@@ -7,7 +7,6 @@
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
     using Data.Entity.Identity;
-    using TaskCat.Lib.Auth;
     using System.Threading.Tasks;
     using Data.Model.Order;
     using Data.Model.Geocoding;
@@ -25,6 +24,9 @@
     using System;
     using Data.Model.Order.Delivery;
     using TaskCat.Data.Model.Identity;
+    using TaskCat.Account.Core;
+    using System.Reactive.Subjects;
+    using TaskCat.Lib.Job.Updaters;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -32,6 +34,7 @@
         IHRIDService hridService;
         string MockedHrid = "Job#123456";
         Mock<IPaymentMethod> paymentMethodMock;
+        private Subject<JobActivity> activitySubject;
 
         [SetUp]
         public void Setup()
@@ -40,6 +43,8 @@
             hridServiceMock.Setup<string>(x => x.NextId(It.IsAny<string>())).Returns(MockedHrid);
             hridService = hridServiceMock.Object;
             paymentMethodMock = new Mock<IPaymentMethod>();
+
+            this.activitySubject = new Subject<JobActivity>();
         }
 
         private JobRepository SetupMockJobRepositoryForUpdate()
@@ -52,7 +57,7 @@
 
             var userStoreMock = new Mock<IUserStore<User>>();
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object));
+                new AccountManager(userStoreMock.Object), activitySubject);
             return jobRepository;
         }
 
@@ -70,7 +75,7 @@
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
-            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
 
             var newOrder = job.Order as DeliveryOrder;
 
@@ -102,7 +107,7 @@
             updatedOrder.OrderCart = GetDummyCart();
             updatedOrder.RequiredChangeFor = 1000;
 
-            var result = await jobRepository.UpdateOrder(job, updatedOrder);
+            var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
 
             var newOrder = job.Order as DeliveryOrder;
 
@@ -133,7 +138,7 @@
             updatedOrder.RequiredChangeFor = 1000;
 
             Assert.ThrowsAsync<NotSupportedException>(async () => {
-                var result = await jobRepository.UpdateOrder(job, updatedOrder);
+                var result = await jobRepository.UpdateOrder(job, updatedOrder, JobUpdateMode.smart);
             });   
         }
 
@@ -156,7 +161,7 @@
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object));
+                new AccountManager(userStoreMock.Object), activitySubject);
 
             var result = await jobRepository.CancelJob(new JobCancellationRequest()
             {
@@ -190,7 +195,7 @@
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object));
+                new AccountManager(userStoreMock.Object), activitySubject);
 
             var result = await jobRepository.RestoreJob(searchJobId);
 

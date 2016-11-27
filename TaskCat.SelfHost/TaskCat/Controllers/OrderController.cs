@@ -9,19 +9,22 @@ using TaskCat.Data.Model;
 using TaskCat.Data.Model.Order;
 using TaskCat.Lib.Job;
 using TaskCat.Lib.Order;
+using System.Reactive.Subjects;
 
 namespace TaskCat.Controllers
 {
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
     {
-        private IOrderRepository _repository;
-        private IJobRepository _jobRepository;
+        private IOrderRepository repository;
+        private IJobRepository jobRepository;
+        private Subject<JobActivity> activitySubject;
 
-        public OrderController(IOrderRepository repository, IJobRepository jobRepository)
+        public OrderController(IOrderRepository repository, IJobRepository jobRepository, Subject<JobActivity> activitySubject)
         {
-            _repository = repository;
-            _jobRepository = jobRepository;
+            this.repository = repository;
+            this.jobRepository = jobRepository;
+            this.activitySubject = activitySubject;
         }
 
         /// <summary>
@@ -49,22 +52,25 @@ namespace TaskCat.Controllers
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (model.UserId != null && model.UserId != currentUserId)
-                    throw new InvalidOperationException(string.Format("Updating order/job id {0} is not authorized against user id {1}", model.UserId, this.User.Identity.GetUserId()));
+                    throw new InvalidOperationException($"Updating order/job id {model.UserId} is not authorized against user id {this.User.Identity.GetUserId()}");
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
-                    throw new InvalidOperationException(string.Format("Claiming a job under user id {0} is not authorized", User.Identity.GetUserId()));
+                    throw new InvalidOperationException($"Claiming a job under user id {User.Identity.GetUserId()} is not authorized");
             }
                 
             if (model.UserId == null) model.UserId = currentUserId;
 
             Job createdJob;
+            var referenceUserForActivityLog = new ReferenceUser(currentUserId, this.User.Identity.GetUserName());
 
             switch (opt)
             {
                 case OrderCreationOptions.CREATE:
-                    createdJob = await _repository.PostOrder(model);
+                    createdJob = await repository.PostOrder(model);
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
-                    createdJob = await _repository.PostOrder(model, currentUserId);
+                    createdJob = await repository.PostOrder(model, currentUserId);
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Add, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
@@ -84,7 +90,7 @@ namespace TaskCat.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllSupportedOrder()
         {
-            var supportedOrderList = await _repository.GetAllSupportedOrder();
+            var supportedOrderList = await repository.GetAllSupportedOrder();
             return Ok(supportedOrderList);
         }
 
@@ -105,7 +111,7 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _repository.PostSupportedOrder(supportedOrder);
+            await repository.PostSupportedOrder(supportedOrder);
             return Ok(supportedOrder);
         }
 
@@ -125,7 +131,7 @@ namespace TaskCat.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetSupportedOrder(string id)
         {
-             var supportedOrder = await _repository.GetSupportedOrder(id);
+             var supportedOrder = await repository.GetSupportedOrder(id);
              return Ok(supportedOrder);         
         }
 
@@ -147,7 +153,7 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var updatedSupportedOrder = await _repository.UpdateSupportedOrder(order);
+            var updatedSupportedOrder = await repository.UpdateSupportedOrder(order);
             return Ok(updatedSupportedOrder);
         }
 
@@ -167,7 +173,7 @@ namespace TaskCat.Controllers
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteSupportedOrder(string id)
         {
-            var deletedSupportedOrder = await _repository.DeleteSupportedOrder(id);
+            var deletedSupportedOrder = await repository.DeleteSupportedOrder(id);
             return Ok(deletedSupportedOrder);
         }
 

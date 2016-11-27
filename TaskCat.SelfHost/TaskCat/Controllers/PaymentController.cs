@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using TaskCat.Common.Exceptions;
 using TaskCat.Data.Lib.Payment;
 using TaskCat.Data.Lib.Payment.Request;
-using TaskCat.Lib.Exceptions;
 using TaskCat.Lib.Job;
 using TaskCat.Lib.Payment;
 

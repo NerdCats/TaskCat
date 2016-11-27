@@ -1,6 +1,6 @@
 ﻿namespace TaskCat.Lib.Vendor
 {
-    using Auth;
+    using Account;
     using Data.Entity.Identity;
     using Data.Model.Identity;
     using System;
@@ -9,6 +9,9 @@
     using Data.Entity;
     using Db;
     using Exceptions;
+    using Common.Exceptions;
+    using Common.Db;
+    using Account.Core;
 
     public class VendorService : IVendorService
     {

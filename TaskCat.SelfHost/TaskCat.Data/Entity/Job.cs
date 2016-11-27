@@ -48,7 +48,7 @@
         private UserModel _jobServedBy;
         public UserModel JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
 
-        public Dictionary<string, AssetModel> Assets;
+        public Dictionary<string, AssetModel> Assets { get; set; }
 
         private List<JobTask> tasks;
         public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }

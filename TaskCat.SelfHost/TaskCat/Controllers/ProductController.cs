@@ -1,13 +1,13 @@
 ﻿namespace TaskCat.Controllers
 {
+    using Common.Domain;
+    using Common.Lib.Utility;
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
     using Data.Entity;
     using Lib.Constants;
-    using Lib.Domain;
-    using Lib.Utility;
-    using Lib.Utility.ActionFilter;
-    using Lib.Utility.Odata;
     using Microsoft.AspNet.Identity;
-    using Model.Pagination;
     using MongoDB.Driver;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -32,7 +32,7 @@
         [HttpGet]
         [Route("api/Product/odata", Name = AppConstants.ProductOdataRoute)]
         [ResponseType(typeof(PageEnvelope<Product>))]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get()
         {
             IQueryable<Product> products = productService.Collection.AsQueryable();

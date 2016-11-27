@@ -14,11 +14,14 @@
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
-    using TaskCat.Lib.Auth;
-    using TaskCat.Lib.Db;
-    using TaskCat.Lib.Email;
-    using TaskCat.Lib.Job;
-    using TaskCat.Lib.Storage;
+    using Common.Email;
+    using Common.Storage;
+    using Common.Db;
+    using TaskCat.Account.Core;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Utility;
+    using Common.Settings;
+    using TaskCat.Account;
 
     [TestFixture]
     public class AccountContextTest
@@ -28,7 +31,6 @@
         Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
         Mock<AccountManager> accountManagerMock;
         Mock<IBlobService> blobServiceMock = new Mock<IBlobService>();
-        Mock<IJobManager> jobManagerMock = new Mock<IJobManager>();
 
         [SetUp]
         public void SetUp()
@@ -54,8 +56,7 @@
                 dbContextMock.Object,
                 mailServiceMock.Object,
                 accountManagerMock.Object,
-                blobServiceMock.Object,
-                jobManagerMock.Object);
+                blobServiceMock.Object);
 
             var registerModel = new UserRegistrationModel()
             {
@@ -92,21 +93,31 @@
             accountManagerMock = new Mock<AccountManager>(userStoreMock.Object);
 
             mailServiceMock.Setup(x => x.SendWelcomeMail(
-                It.IsAny<SendWelcomeEmailRequest>())).ReturnsAsync(
+                It.IsAny<SendWelcomeEmailRequest>(), It.IsAny<string>())).ReturnsAsync(
                 new SendEmailResponse(HttpStatusCode.OK));
 
             var accountContext = new AccountContext(
                 dbContextMock.Object,
                 mailServiceMock.Object,
                 accountManagerMock.Object,
-                blobServiceMock.Object,
-                jobManagerMock.Object);
+                blobServiceMock.Object);
 
             Environment.SetEnvironmentVariable("Its.Configuration.Settings.Precedence", "local|production");
 
             var userMock = new Mock<User>(new RegistrationModelBase() { UserName = "test_username" });
 
-            var result = await accountContext.NotifyUserCreationByMail(userMock.Object);
+            AppSettings.Set<ClientSettings>(new ClientSettings()
+            {
+                AuthenticationIssuerName = "Test_Auth_Issuer",
+                ConfirmEmailPath = "Test_Confirm_Email_Path",
+                HostingAddress = "",
+                WebCatUrl = "http://test-webcat.com"
+            });
+
+            var clientSettings = AppSettings.Get<ClientSettings>();
+            clientSettings.Validate();
+
+            var result = await accountContext.NotifyUserCreationByMail(userMock.Object, clientSettings.WebCatUrl, clientSettings.ConfirmEmailPath, EmailTemplatesConfig.WelcomeEmailTemplate);
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
         }

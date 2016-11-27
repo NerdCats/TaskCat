@@ -2,15 +2,17 @@
 {
     using Moq;
     using NUnit.Framework;
-    using Controllers.Auth;
     using Data.Entity.Identity;
-    using TaskCat.Lib.Auth;
     using Data.Model.Identity.Registration;
     using Data.Model.Identity.Profile;
-    using TaskCat.Lib.Email;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Http.Results;
+    using Common.Email;
+    using TaskCat.Account.Core;
+    using TaskCat.Account.Controllers;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Settings;
 
     [TestFixture]
     public class AccountControllerTests
@@ -19,10 +21,18 @@
         [Test]
         public async Task Test_ResendConfirmationEmail_With_SucessfulResult()
         {
+            AppSettings.Set<ClientSettings>(new ClientSettings()
+            {
+                AuthenticationIssuerName = "TaskCat.Auth",
+                ConfirmEmailPath = "confirmEmail",
+                HostingAddress = "TestHostAddress",
+                WebCatUrl = "WebCatUrl"
+            });
+
             Mock<IAccountContext> accountContextMock = new Mock<IAccountContext>();
             accountContextMock.Setup(x => x.FindUser(It.IsAny<string>())).ReturnsAsync(
                 new User(new UserRegistrationModel(), new UserProfile()));
-            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>()))
+            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new SendEmailResponse(HttpStatusCode.OK, null));
 
             AccountController accountController = new AccountController(accountContextMock.Object);
@@ -41,10 +51,18 @@
         [Test]
         public async Task Test_ResendConfirmationEmail_With_FailedResult()
         {
+            AppSettings.Set<ClientSettings>(new ClientSettings()
+            {
+                AuthenticationIssuerName = "TaskCat.Auth",
+                ConfirmEmailPath = "confirmEmail",
+                HostingAddress = "TestHostAddress",
+                WebCatUrl = "WebCatUrl"
+            });
+
             Mock<IAccountContext> accountContextMock = new Mock<IAccountContext>();
             accountContextMock.Setup(x => x.FindUser(It.IsAny<string>())).ReturnsAsync(
                 new User(new UserRegistrationModel(), new UserProfile()));
-            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>()))
+            accountContextMock.Setup(x => x.NotifyUserCreationByMail(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new SendEmailResponse(HttpStatusCode.InternalServerError, "Random mail error"));
 
             AccountController accountController = new AccountController(accountContextMock.Object);

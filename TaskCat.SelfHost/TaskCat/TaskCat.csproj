@@ -206,6 +206,10 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin.Security.Jwt, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Jwt.3.0.1\lib\net45\Microsoft.Owin.Security.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
       <Private>True</Private>
@@ -260,6 +264,11 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.18.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.18\lib\net45\System.Net.Http.Extensions.dll</HintPath>
@@ -274,6 +283,26 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Reactive.Core, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.3.1.1\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.PlatformServices.3.1.1\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
@@ -305,14 +334,16 @@
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.2.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
-    <Compile Include="App\Settings\ClientSettings.cs" />
     <Compile Include="App\Settings\EmailTemplatePathSettings.cs" />
-    <Compile Include="App\Settings\ExternalLoginSettings.cs" />
-    <Compile Include="App\Settings\ProprietorSettings.cs" />
-    <Compile Include="App\Settings\SMTPMailSettings.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -320,8 +351,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controllers\AssetProviderController.cs" />
-    <Compile Include="Controllers\Auth\AccountController.cs" />
-    <Compile Include="Controllers\Auth\RefreshTokensController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DropPointController.cs" />
     <Compile Include="Controllers\JobController.cs" />
@@ -335,56 +364,23 @@
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
     <Compile Include="Lib\Asset\FakeNearestRideProvider.cs" />
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
-    <Compile Include="Lib\Auth\AccountContext.cs" />
-    <Compile Include="Lib\Auth\AccountManager.cs" />
-    <Compile Include="Lib\Auth\AccountStore.cs" />
-    <Compile Include="Lib\Auth\IAccountContext.cs" />
-    <Compile Include="Lib\Auth\RoleManager.cs" />
     <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
     <Compile Include="Lib\Catalog\ProductService.cs" />
     <Compile Include="Lib\Catalog\StoreService.cs" />
     <Compile Include="Lib\Comments\CommentService.cs" />
     <Compile Include="Lib\Comments\ICommentService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />
-    <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
-    <Compile Include="Lib\DataProtection\MachineKeyDataProtectionProvider.cs" />
-    <Compile Include="Lib\DataProtection\MachineKeyDataProtector.cs" />
-    <Compile Include="Lib\Db\CollectionNames.cs" />
-    <Compile Include="Lib\Db\DatabaseNames.cs" />
-    <Compile Include="Lib\Db\DbContext.cs" />
-    <Compile Include="Lib\Db\IDbContext.cs" />
+    <Compile Include="Lib\Db\ApiDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
     <Compile Include="Lib\Db\MongoExtensions.cs" />
-    <Compile Include="Lib\Domain\IRepository.cs" />
     <Compile Include="Lib\DropPoint\DropPointNameSuggestions.cs" />
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />
-    <Compile Include="Lib\Email\IEmailService.cs" />
-    <Compile Include="Lib\Email\IEmailTemplateParser.cs" />
-    <Compile Include="Lib\Email\Model\EmailInvoice.cs" />
-    <Compile Include="Lib\Email\Model\EmailInvoiceItem.cs" />
-    <Compile Include="Lib\Email\Model\IEmailPayload.cs" />
-    <Compile Include="Lib\Email\Model\OrderEmail.cs" />
-    <Compile Include="Lib\Email\Model\WelcomeEmail.cs" />
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
-    <Compile Include="Lib\Email\SendEMailRequest.cs" />
-    <Compile Include="Lib\Email\SendEmailResponse.cs" />
-    <Compile Include="Lib\Email\SendWithUs\SendWithUsMailService.cs" />
-    <Compile Include="Lib\Email\SendWithUs\SendWithUsSettings.cs" />
-    <Compile Include="Lib\Email\SMTP\SMTPMailService.cs" />
-    <Compile Include="Lib\Exceptions\EntityDeleteException.cs" />
-    <Compile Include="Lib\Exceptions\EntityNotFoundException.cs" />
-    <Compile Include="Lib\Exceptions\EntityUpdateException.cs" />
     <Compile Include="Lib\Exceptions\OrderCalculationException.cs" />
     <Compile Include="Lib\Exceptions\PaymentMethodException.cs" />
-    <Compile Include="Lib\Exceptions\ServerErrorException.cs" />
-    <Compile Include="Lib\Exceptions\SettingsException.cs" />
-    <Compile Include="Lib\Exceptions\UpdateFailedException.cs" />
     <Compile Include="Lib\HRID\HRIDService.cs" />
     <Compile Include="Lib\HRID\IHRIDService.cs" />
-    <Compile Include="Lib\Identity\FacebookAuthProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatAuthorizationServerProvider.cs" />
-    <Compile Include="Lib\Identity\TaskCatRefreshTokenProvider.cs" />
     <Compile Include="Lib\Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Lib\Invoice\IInvoiceService.cs" />
     <Compile Include="Lib\Invoice\InvoiceService.cs" />
@@ -393,6 +389,7 @@
     <Compile Include="Lib\Job\Builders\RideJobBuilder.cs" />
     <Compile Include="Lib\Job\IJobManager.cs" />
     <Compile Include="Lib\Job\IJobRepository.cs" />
+    <Compile Include="Lib\Job\JobActivityService.cs" />
     <Compile Include="Lib\Job\JobBuilder.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />
     <Compile Include="Lib\Job\JobRepository.cs" />
@@ -400,6 +397,7 @@
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Job\JobUpdater.cs" />
     <Compile Include="Lib\Job\Updaters\DeliveryJobUpdater.cs" />
+    <Compile Include="Lib\Job\Updaters\JobUpdateMode.cs" />
     <Compile Include="Lib\Order\DefaultDeliveryServiceChargeCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />
@@ -409,56 +407,23 @@
     <Compile Include="Lib\Order\Process\DeliveryOrderProcessor.cs" />
     <Compile Include="Lib\Order\Process\IOrderProcessor.cs" />
     <Compile Include="Lib\Order\SupportedOrderStore.cs" />
-    <Compile Include="Lib\Owin\PreflightRequestsHandler.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentMethod.cs" />
     <Compile Include="Lib\Payment\COD\CashOnDeliveryPaymentSettings.cs" />
     <Compile Include="Lib\Payment\COD\TransactMode.cs" />
     <Compile Include="Lib\Payment\IPaymentManager.cs" />
     <Compile Include="Lib\Payment\PaymentManager.cs" />
     <Compile Include="Lib\Payment\PaymentService.cs" />
-    <Compile Include="Lib\Storage\BlobHelper.cs" />
-    <Compile Include="Lib\Storage\BlobService.cs" />
-    <Compile Include="Lib\Storage\BlobStorageUploadProvider.cs" />
-    <Compile Include="Lib\Storage\IBlobService.cs" />
-    <Compile Include="Lib\Storage\IStorageRepository.cs" />
-    <Compile Include="Lib\Storage\StorageRepository.cs" />
-    <Compile Include="Lib\Utility\ActionFilter\ErrorDocumentFilter.cs" />
-    <Compile Include="Lib\Utility\ActionFilter\TaskCatOdataRouteAttribute.cs" />
     <Compile Include="Lib\Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Lib\Utility\Converter\ProfitSharingModelConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\RegistrationModelConverter.cs" />
-    <Compile Include="Lib\Utility\Converter\UserProfileConverter.cs" />
     <Compile Include="Lib\Utility\Converter\VendorConverter.cs" />
     <Compile Include="Lib\Utility\Discriminator\JobTaskDiscriminator.cs" />
     <Compile Include="Lib\Utility\Discriminator\OrderModelDiscriminator.cs" />
-    <Compile Include="Lib\Utility\FileUtility.cs" />
-    <Compile Include="Lib\Utility\HashMaker.cs" />
-    <Compile Include="Lib\Utility\IdentityExtensions.cs" />
-    <Compile Include="Lib\Utility\IPagingHelper.cs" />
-    <Compile Include="Lib\Utility\Odata\LinqToQuerystringExtensions.cs" />
-    <Compile Include="Lib\Utility\Odata\OdataOptionExceptions.cs" />
-    <Compile Include="Lib\Utility\Odata\OdataRequestModel.cs" />
     <Compile Include="Lib\Utility\OrderTypeResolver.cs" />
-    <Compile Include="Lib\Utility\PagingHelper.cs" />
-    <Compile Include="Lib\Utility\PagingQueryParameters.cs" />
-    <Compile Include="Lib\Utility\SettingsHelper.cs" />
-    <Compile Include="Lib\Utility\UrlExtensions.cs" />
-    <Compile Include="Lib\Utility\UserModelExtensions.cs" />
     <Compile Include="Lib\Vendor\IVendorService.cs" />
     <Compile Include="Lib\Vendor\SubscriptionResult.cs" />
     <Compile Include="Lib\Vendor\VendorService.cs" />
-    <Compile Include="Model\Account\AvailibilityResponse.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
-    <Compile Include="Model\Identity\AccountResult.cs" />
-    <Compile Include="Model\Identity\ExternalLoginData.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
-    <Compile Include="Model\Pagination\PageEnvelope.cs" />
-    <Compile Include="Model\Pagination\PaginationHeader.cs" />
-    <Compile Include="Model\Response\ChallengeResult.cs" />
-    <Compile Include="Model\Response\ErrorResponse.cs" />
-    <Compile Include="Model\Storage\FileDeleteModel.cs" />
-    <Compile Include="Model\Storage\FileDownloadModel.cs" />
-    <Compile Include="Model\Storage\FileUploadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Startup.cs" />
@@ -500,6 +465,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Auth.Core\TaskCat.Account.Core.csproj">
+      <Project>{96D1F5BC-2A40-411F-A8AB-C7AD07F981DF}</Project>
+      <Name>TaskCat.Account.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj">
+      <Project>{64b973ca-bd1a-451b-8336-1dc243e56c23}</Project>
+      <Name>TaskCat.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj">
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>

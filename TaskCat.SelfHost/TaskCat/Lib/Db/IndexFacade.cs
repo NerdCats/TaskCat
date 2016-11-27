@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using Data.Entity;
     using Data.Entity.Identity;
+    using System;
 
     public class IndexFacade
     {
@@ -56,6 +57,34 @@
             jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
         }
 
+        public static void EnsureJobActivityIndexes(IMongoCollection<JobActivity> jobActivityCollection)
+        {
+            var jobActivityIndexOptions = new CreateIndexOptions();
+            jobActivityIndexOptions.Background = true;
+
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.JobId) ,jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.Operation), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Id), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Username), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.TimeStamp), jobActivityIndexOptions);
+
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.JobId), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.Operation), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.ForUser.Id), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.ForUser.Username), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.TimeStamp), jobActivityIndexOptions);
+
+            var referenceIndexOptions = new CreateIndexOptions();
+            referenceIndexOptions.Background = true;
+            referenceIndexOptions.Sparse = true;
+
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.Reference.EntityType), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Descending(x => x.Reference.Id), jobActivityIndexOptions);
+
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.Reference.EntityType), jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.Reference.Id), jobActivityIndexOptions);
+        }
+
         public static void EnsureHRIDIndex(IMongoCollection<HRIDEntity> hridCollection)
         {
             var hridIndexOptions = new CreateIndexOptions();
@@ -99,7 +128,7 @@
             productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Descending(c => c.Name), UniqueIndexOptions);
         }
 
-        internal static void EnsureComments(IMongoCollection<Comment> commentCollection)
+        internal static void EnsureCommentIndexes(IMongoCollection<Comment> commentCollection)
         {
             var SparseIndexOptions = new CreateIndexOptions();
             SparseIndexOptions.Sparse = true;

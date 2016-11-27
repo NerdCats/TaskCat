@@ -18,14 +18,15 @@ using TaskCat.Data.Model.Identity.Profile;
 using TaskCat.Data.Model.Operation;
 using TaskCat.Data.Model.Order;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Email;
 using TaskCat.Lib.Invoice;
 using TaskCat.Lib.Invoice.Request;
 using TaskCat.Lib.Job;
-using TaskCat.Lib.Utility.Odata;
 using TaskCat.Model.Job;
-using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility.ActionFilter;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
+using TaskCat.Common.Email;
+using TaskCat.Lib.Job.Updaters;
 
 namespace TaskCat.Controllers
 {
@@ -146,7 +147,7 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<Job>))]
         [Route("api/Job/odata", Name = AppConstants.JobsOdataRoute)]
         [HttpGet]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> ListOdata()
         {
             IQueryable<Job> jobs = repository.GetJobs();
@@ -160,7 +161,32 @@ namespace TaskCat.Controllers
                 jobs = jobs.Where(x => x.User.UserId == User.Identity.GetUserId()).AsQueryable();
             }
 
-            var odataResult = await jobs.ToOdataResponse(this.Request, AppConstants.JobsOdataRoute);
+            var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
+            return Ok(odataResult);
+        }
+
+        /// <summary>
+        /// Get Jobs assigned to an asset with odata query features
+        /// </summary>
+        /// <param name="assetId">Related asset id</param>
+        /// <returns></returns>
+        [Authorize(Roles = "Administrator, BackOfficeAdmin, Asset")]
+        [Route("api/job/jobsbyasset/{assetId?}", Name = AppConstants.JobsByAssetOdataRoute)]
+        [HttpGet]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
+        public async Task<IHttpActionResult> GetAssignedJobsByAssetId(string assetId = null)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != currentUserId)
+            {
+                throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
+            }
+
+            assetId = string.IsNullOrEmpty(assetId) ? currentUserId : assetId;
+            
+            IQueryable<Job> jobs = repository.GetJobs().Where(x => x.Assets.ContainsKey(assetId)).AsQueryable();
+
+            var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
             return Ok(odataResult);
         }
 
@@ -377,8 +403,11 @@ namespace TaskCat.Controllers
         [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
-        public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel)
+        public async Task<IHttpActionResult> UpdateOrder([FromUri]string jobId, [FromBody]OrderModel orderModel, [FromUri]string mode = JobUpdateMode.force)
         {
+            if (!JobUpdateMode.IsValidUpdateMode(mode))
+                throw new ArgumentException(nameof(mode));
+
             if (orderModel == null) return BadRequest("Null order payload provided");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -401,7 +430,7 @@ namespace TaskCat.Controllers
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
             }
 
-            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel);
+            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel, mode);
             return Ok(result);
         }
     }

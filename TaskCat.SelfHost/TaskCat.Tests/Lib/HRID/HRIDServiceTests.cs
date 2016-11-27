@@ -6,6 +6,8 @@
     using TaskCat.Lib.Db;
     using TaskCat.Lib.HRID;
     using TaskCat.Lib.Exceptions;
+    using Common.Exceptions;
+    using Common.Db;
 
     [TestFixture(TestOf = typeof(IHRIDService))]
     public class HRIDServiceTests

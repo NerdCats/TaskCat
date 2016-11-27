@@ -1,51 +1,50 @@
-﻿using Microsoft.Owin.Security.DataProtection;
-using TaskCat.Lib.DataProtection;
-
-namespace TaskCat.App
+﻿namespace TaskCat.App
 {
     using Autofac;
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
     using Lib.Asset;
     using Lib.Job;
-    using Lib.Db;
     using Lib.Order;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
-    using Lib.Identity;
-    using Microsoft.Owin.Security.OAuth;
-    using Microsoft.Owin.Security.Infrastructure;
-    using Lib.Auth;
-    using Lib.Storage;
     using Lib.AssetProvider;
     using Lib.HRID;
     using Lib.Payment;
     using Data.Lib.Payment;
-    using Lib.Email;
-    using Lib.Email.SMTP;
     using Owin;
     using Lib.DropPoint;
     using Data.Entity;
-    using Lib.Domain;
     using Lib.Catalog;
     using Lib.Vendor;
     using Lib.Comments;
+    using Common.Email;
+    using Common.Storage;
+    using Common.Db;
+    using Account.Core;
+    using Common.Domain;
+    using Common.Email.SMTP;
+    using AppSettings = Its.Configuration.Settings;
+    using Common.Settings;
+    using Lib.Db;
+    using System.Reactive.Subjects;
 
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer(IAppBuilder app)
+        public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
 
-            #region Account
+            var jobActivitySubject = new Subject<JobActivity>();
+            builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
 
-            var machineKeyProtectionProvider = new MachineKeyDataProtectionProvider();
-            builder.Register(c => machineKeyProtectionProvider).As<IDataProtectionProvider>().SingleInstance();
-            builder.RegisterType<DbContext>().As<IDbContext>().SingleInstance();
+            #region Account
+            builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
             builder.RegisterType<AccountManager>().SingleInstance();
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();
             builder.RegisterType<RoleManager>().SingleInstance();
+            builder.RegisterType<ClientStore>().As<IClientStore>().SingleInstance();
             #endregion
 
             #region Payment
@@ -54,12 +53,14 @@ namespace TaskCat.App
             #endregion
 
             #region Mail
-            builder.RegisterType<SMTPMailService>().AsImplementedInterfaces<IEmailService, ConcreteReflectionActivatorData>().SingleInstance();
+            var mailService = new SMTPMailService(AppSettings.Get<SMTPMailSettings>(), AppSettings.Get<ProprietorSettings>());
+            builder.Register(m => mailService).As<IEmailService>().SingleInstance();
             #endregion
 
             #region Job
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Order
@@ -73,15 +74,8 @@ namespace TaskCat.App
             #endregion
 
             #region Asset
-            builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>();
-            #endregion
-
-            #region Auth
-            builder.RegisterType<TaskCatAuthorizationServerProvider>().AsImplementedInterfaces<IOAuthAuthorizationServerProvider, ConcreteReflectionActivatorData>().SingleInstance();
-
-            builder.RegisterType<TaskCatRefreshTokenProvider>()
-                .AsImplementedInterfaces<IAuthenticationTokenProvider, ConcreteReflectionActivatorData>().SingleInstance();
-            #endregion
+            builder.RegisterType<DefaultAssetProvider>().AsImplementedInterfaces<IAssetProvider, ConcreteReflectionActivatorData>().SingleInstance();
+            #endregion            
 
             #region Hrid
             builder.RegisterType<HRIDService>().AsImplementedInterfaces<IHRIDService, ConcreteReflectionActivatorData>().SingleInstance();
@@ -104,9 +98,7 @@ namespace TaskCat.App
             #region Comment
             builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
-
-            builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>();
-
+         
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }

@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using Data.Model.Api;
-    using Model.Pagination;
     using System.Net.Http;
     using Data.Model;
     using MongoDB.Driver;
@@ -12,6 +11,8 @@
     using System.Linq;
     using Data.Model.Operation;
     using Model.Job;
+    using Common.Model.Pagination;
+
     public interface IJobRepository
     {
         Task<Job> GetJob(string id);
@@ -24,7 +25,7 @@
         Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobtask);
         Task<ReplaceOneResult> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> Claim(string jobId, string userId);
-        Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel);
+        Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel, string mode);
         Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request);
         Task<UpdateResult<Job>> RestoreJob(string jobId);
     }

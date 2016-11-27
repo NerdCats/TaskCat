@@ -6,12 +6,10 @@
     using System.Threading.Tasks;
     using Data.Entity;
     using Data.Model.Api;
-    using Model.Pagination;
     using System.Net.Http;
     using Constants;
     using Data.Model;
     using MongoDB.Driver;
-    using Auth;
     using Data.Model.Identity.Response;
     using Marvin.JsonPatch;
     using Order;
@@ -20,44 +18,52 @@
     using Data.Model.Operation;
     using Model.Job;
     using Updaters;
+    using Common.Model.Pagination;
+    using Account.Core;
+    using System.Reactive.Subjects;
 
     public class JobRepository : IJobRepository
     {
-        private IJobManager _manager;
-        private AccountManager _accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
+        private IJobManager manager;
+        private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
+        private Subject<JobActivity> activitySubject;
 
-        public JobRepository(IJobManager manager, AccountManager accountManager)
+        public JobRepository(
+            IJobManager manager, 
+            AccountManager accountManager, 
+            Subject<JobActivity> activitySubject)
         {
-            this._manager = manager;
-            this._accountManager = accountManager;
+            this.manager = manager;
+            this.accountManager = accountManager;
+            this.activitySubject = activitySubject;
         }
 
         public async Task<Job> GetJob(string id)
         {
-            return await _manager.GetJob(id);
+            return await manager.GetJob(id);
         }
 
         public IQueryable<Job> GetJobs()
         {
-            return _manager.GetJobs();
+            return manager.GetJobs();
         }
 
         public async Task<Job> GetJobByHrid(string hrid)
         {
-            return await _manager.GetJobByHRID(hrid);
+            return await manager.GetJobByHRID(hrid);
         }
 
         public async Task<IEnumerable<Job>> GetJobs(string type, int page, int pageSize)
         {
             if (page < 0)
                 throw new ArgumentException("Invalid page index provided");
-            return await _manager.GetJobs(type, page * pageSize, pageSize);
+            return await manager.GetJobs(type, page * pageSize, pageSize);
         }
 
         public async Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int page, int pageSize, HttpRequestMessage request)
         {
             var data = await GetJobs(type, page, pageSize);
-            var total = await _manager.GetTotalJobCount();
+            var total = await manager.GetTotalJobCount();
 
             return new PageEnvelope<Job>(total, page, pageSize, AppConstants.DefaultApiRoute, data, request, new Dictionary<string, string>() { ["type"] = type });
         }
@@ -69,10 +75,10 @@
 
         public async Task<ReplaceOneResult> UpdateJob(Job job)
         {
-            return await _manager.UpdateJob(job);
+            return await manager.UpdateJob(job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
+        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel, string mode)
         {
             if (job.Order.Type != orderModel.Type)
             {
@@ -92,7 +98,7 @@
                             serviceChargeCalculationService);
                         orderProcessor.ProcessOrder(orderModel);
                         var jobUpdater = new DeliveryJobUpdater(job);
-                        jobUpdater.UpdateJob(orderModel);
+                        jobUpdater.UpdateJob(orderModel, mode);
                         job = jobUpdater.Job;
                         break;
                     }
@@ -134,7 +140,7 @@
             if (jobTask.State == JobTaskState.COMPLETED)
                 throw new InvalidOperationException($"Updating AssetRef of JobTask {jobTask.id} is not suppported as the task is in {jobTask.State} state");
 
-            var asset = await _accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(assetRefReplaceOp.value.ToString());
+            var asset = await accountManager.FindAsByIdAsync<Data.Entity.Identity.Asset>(assetRefReplaceOp.value.ToString());
             if (asset == null) return false;
             var assetModel = new AssetModel(asset);
             assetRefReplaceOp.path = "/Asset";
@@ -145,9 +151,15 @@
         public async Task<ReplaceOneResult> Claim(string jobId, string userId)
         {
             var job = await GetJob(jobId);
-            var adminUser = await _accountManager.FindByIdAsync(userId);
+            var adminUser = await accountManager.FindByIdAsync(userId);
             var userModel = new UserModel(adminUser);
             job.JobServedBy = userModel;
+
+            this.activitySubject.OnNext(
+                new JobActivity(job, JobActivityOperatioNames.Claim, new ReferenceUser(userModel))
+                {
+                    Path = nameof(job.JobServedBy)
+                });
 
             return await UpdateJob(job);
         }

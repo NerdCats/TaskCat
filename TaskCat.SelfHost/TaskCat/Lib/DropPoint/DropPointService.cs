@@ -5,10 +5,11 @@
     using Data.Entity;
     using System;
     using System.Threading.Tasks;
-    using Exceptions;
     using System.Linq;
     using System.Collections.Generic;
     using MongoDB.Bson;
+    using Common.Exceptions;
+    using Common.Db;
 
     public class DropPointService : IDropPointService
     {

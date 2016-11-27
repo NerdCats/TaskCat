@@ -9,12 +9,12 @@ using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
 using TaskCat.Data.Entity;
 using TaskCat.Lib.Constants;
-using TaskCat.Lib.Domain;
-using TaskCat.Lib.Utility;
-using TaskCat.Lib.Utility.Odata;
-using TaskCat.Model.Pagination;
-using TaskCat.Lib.Utility.ActionFilter;
 using System.Web.Http.Description;
+using TaskCat.Common.Model.Pagination;
+using TaskCat.Common.Utility.ActionFilter;
+using TaskCat.Common.Utility.Odata;
+using TaskCat.Common.Lib.Utility;
+using TaskCat.Common.Domain;
 
 namespace TaskCat.Controllers
 {
@@ -30,7 +30,7 @@ namespace TaskCat.Controllers
         [ResponseType(typeof(PageEnvelope<Store>))]
         [HttpGet]
         [Route("api/Store/odata", Name = AppConstants.StoreOdataRoute)]
-        [TaskCatOdataRoute]
+        [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get()
         {
             IQueryable<Store> stores = service.Collection.AsQueryable();

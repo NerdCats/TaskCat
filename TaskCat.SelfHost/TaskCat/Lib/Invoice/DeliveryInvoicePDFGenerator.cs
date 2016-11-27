@@ -11,6 +11,7 @@
     using App.Settings;
     using System.Globalization;
     using System.ComponentModel.DataAnnotations;
+    using Common.Settings;
 
     public class DeliveryInvoicePDFGenerator : IPDFService<DeliveryInvoice>
     {
