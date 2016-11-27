@@ -10,7 +10,6 @@
     using Data.Model.JobTasks;
     using Data.Model.Payment;
     using System.Collections.Generic;
-    using Data.Model.Order.Delivery;
 
     public class DeliveryJobUpdater : JobUpdater
     {
@@ -24,13 +23,8 @@
         {
         }
 
-        public override void UpdateJob(OrderModel order)
-        {
-            if (job.State >= JobState.COMPLETED)
-            {
-                throw new NotSupportedException("Updating order of a completed/cancelled job is not supported");
-            }
-
+        public override void UpdateJob(OrderModel order, string mode)
+        { 
             if (!supportedOrderTypes.Any(x => x == order.Type))
             {
                 throw new NotSupportedException("Invalid Order Type provided");
@@ -46,6 +40,35 @@
                 throw new NotSupportedException("Order variant type changed, order variant type is not updateable");
             }
 
+            switch (mode)
+            {
+                case JobUpdateMode.force:
+                    UpdateJobForce(order);
+                    break;
+                case JobUpdateMode.smart:
+                    UpdateJobSmart(order);
+                    break;
+            }
+
+            job.Name = order.Name;
+            job.ModifiedTime = DateTime.UtcNow;
+
+            if (order.PaymentMethod != job.Order.PaymentMethod)
+            {
+                if (job.PaymentStatus >= PaymentStatus.Authorized && job.PaymentStatus <= PaymentStatus.Refunded)
+                    throw new InvalidOperationException($"Current payment method {job.PaymentMethod} is on state {job.PaymentStatus}, Changing payment mehtod is not supported");
+                job.Order.PaymentMethod = order.PaymentMethod;
+                job.PaymentStatus = PaymentStatus.Pending;
+            }
+        }
+
+        private void UpdateJobSmart(OrderModel order)
+        {
+            if (job.State >= JobState.COMPLETED)
+            {
+                throw new NotSupportedException("Updating order of a completed/cancelled job is not supported");
+            }
+
             // Checking whether the new orders are okay or not
             job.Order.Description = order.Description;
             (job.Order as DeliveryOrder).NoteToDeliveryMan = (order as DeliveryOrder).NoteToDeliveryMan;
@@ -53,7 +76,7 @@
             job.Order.ETA = order.ETA;
             job.Order.ETAMinutes = order.ETAMinutes;
 
-            if(order.Type == OrderTypes.ClassifiedDelivery)
+            if (order.Type == OrderTypes.ClassifiedDelivery)
             {
                 (job.Order as ClassifiedDeliveryOrder).BuyerInfo = (order as ClassifiedDeliveryOrder).BuyerInfo;
                 (job.Order as ClassifiedDeliveryOrder).SellerInfo = (order as ClassifiedDeliveryOrder).SellerInfo;
@@ -91,9 +114,7 @@
                 case JobTaskTypes.PACKAGE_PICKUP:
                     PackagePickUpTask pickUpTask = job.Tasks[1] as PackagePickUpTask;
                     pickUpTask.PickupLocation = order.From;
-
-                    // TODO: need explanation
-                    // pickUpTask.State = JobTaskState.PENDING;
+                    pickUpTask.State = JobTaskState.PENDING;
 
                     if (!orderCartComparisonResult.AreEqual)
                     {
@@ -105,29 +126,62 @@
                     DeliveryTask deliveryTask = job.Tasks[2] as DeliveryTask;
                     deliveryTask.From = order.From;
                     deliveryTask.To = order.To;
-                    
-                    // TODO: need explanation
-                    //deliveryTask.State = JobTaskState.PENDING;
+                    deliveryTask.State = JobTaskState.PENDING;
 
                     job.Order.From = order.From;
                     job.Order.To = order.To;
-
-                    if (!orderCartComparisonResult.AreEqual)
-                    {
-                        job.Order.OrderCart = order.OrderCart;
-                    }
                     break;
             }
 
-            job.Name = order.Name;
-            job.ModifiedTime = DateTime.UtcNow;
+        }
 
-            if (order.PaymentMethod != job.Order.PaymentMethod)
+        private void UpdateJobForce(OrderModel order)
+        {
+            // Checking whether the new orders are okay or not
+            job.Order.Description = order.Description;
+            (job.Order as DeliveryOrder).NoteToDeliveryMan = (order as DeliveryOrder).NoteToDeliveryMan;
+            (job.Order as DeliveryOrder).RequiredChangeFor = (order as DeliveryOrder).RequiredChangeFor;
+            job.Order.ETA = order.ETA;
+            job.Order.ETAMinutes = order.ETAMinutes;
+
+            if (order.Type == OrderTypes.ClassifiedDelivery)
             {
-                if (job.PaymentStatus >= PaymentStatus.Authorized && job.PaymentStatus <= PaymentStatus.Refunded)
-                    throw new InvalidOperationException($"Current payment method {job.PaymentMethod} is on state {job.PaymentStatus}, Changing payment mehtod is not supported");
-                job.Order.PaymentMethod = order.PaymentMethod;
-                job.PaymentStatus = PaymentStatus.Pending;
+                (job.Order as ClassifiedDeliveryOrder).BuyerInfo = (order as ClassifiedDeliveryOrder).BuyerInfo;
+                (job.Order as ClassifiedDeliveryOrder).SellerInfo = (order as ClassifiedDeliveryOrder).SellerInfo;
+            }
+
+            CompareLogic compareLogic = new CompareLogic();
+            compareLogic.Config.ComparePrivateFields = true;
+
+            job.Order.From = order.From;
+            job.Order.To = order.To;
+
+            job.Order.OrderCart = order.OrderCart;
+
+            var orderCartComparisonResult = compareLogic.Compare(job.Order.OrderCart, order.OrderCart);
+            // TODO: The reason Im keeping all the order comparison result is to invoke a job activity notification from it
+
+            // INFO: Yes, this is stupid. Fetching all the Tasks and updating them
+            foreach (var task in job.Tasks)
+            {
+                switch (task.Type)
+                {
+                    case JobTaskTypes.FETCH_DELIVERYMAN:
+                        FetchDeliveryManTask fetchDeliveryManTask = task as FetchDeliveryManTask;
+                        fetchDeliveryManTask.From = order.From;
+                        fetchDeliveryManTask.To = order.To;
+                        break;
+                    case JobTaskTypes.PACKAGE_PICKUP:
+                        PackagePickUpTask pickUpTask = task as PackagePickUpTask;
+                        pickUpTask.PickupLocation = order.From;
+                        break;
+                    case JobTaskTypes.SECURE_DELIVERY:
+                    case JobTaskTypes.DELIVERY:
+                        DeliveryTask deliveryTask = task as DeliveryTask;
+                        deliveryTask.From = order.From;
+                        deliveryTask.To = order.To;
+                        break;
+                }
             }
         }
     }

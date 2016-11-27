@@ -397,6 +397,7 @@
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Job\JobUpdater.cs" />
     <Compile Include="Lib\Job\Updaters\DeliveryJobUpdater.cs" />
+    <Compile Include="Lib\Job\Updaters\JobUpdateMode.cs" />
     <Compile Include="Lib\Order\DefaultDeliveryServiceChargeCalculationService.cs" />
     <Compile Include="Lib\Order\DefaultOrderCalculationService.cs" />
     <Compile Include="Lib\Order\IOrderCalculationService.cs" />

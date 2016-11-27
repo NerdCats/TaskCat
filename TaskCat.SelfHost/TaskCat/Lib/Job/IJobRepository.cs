@@ -25,7 +25,7 @@
         Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobtask);
         Task<ReplaceOneResult> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<ReplaceOneResult> Claim(string jobId, string userId);
-        Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel);
+        Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel, string mode);
         Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request);
         Task<UpdateResult<Job>> RestoreJob(string jobId);
     }
