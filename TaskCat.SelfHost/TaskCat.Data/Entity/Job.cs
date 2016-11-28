@@ -116,6 +116,7 @@
         }
 
         public string PaymentMethod { get; set; }
+        [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentStatus PaymentStatus { get; set; }
 
