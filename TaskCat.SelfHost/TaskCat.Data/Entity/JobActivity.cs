@@ -171,13 +171,7 @@
 
             Id = userModel.UserId;
             Username = userModel.UserName;
-
-            if (userModel.Profile is AssetProfile)
-                Name = (userModel.Profile as AssetProfile).FullName;
-            else if (userModel.Profile is UserProfile)
-                Name = (userModel.Profile as UserProfile).FullName;
-            else if (userModel.Profile is EnterpriseUserProfile)
-                Name = (userModel.Profile as EnterpriseUserProfile).CompanyName;
+            Name = userModel.Profile.GetName();
         }
     }
 
