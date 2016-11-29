@@ -416,8 +416,19 @@ namespace TaskCat.Controllers
             if (request == null) return BadRequest("null request encountered");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
             var job = await repository.GetJob(request.JobId);
             var result = await repository.CancelJob(job, request.Reason);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Cancel, currentUser);
+                activitySubject.OnNext(activity);
+            });
             return Ok(result);
         }
 
@@ -439,8 +450,21 @@ namespace TaskCat.Controllers
             if (string.IsNullOrWhiteSpace(jobId))
                 throw new ArgumentException(nameof(jobId));
 
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
             var job = await repository.GetJob(jobId);
-            return Ok(await repository.RestoreJob(job));
+            var result = await repository.RestoreJob(job);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Restore, currentUser);
+                activitySubject.OnNext(activity);
+            });
+
+            return Ok(result);
         }
 
         /// <summary>
