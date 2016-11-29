@@ -410,7 +410,10 @@ namespace TaskCat.Controllers
         {
             if (request == null) return BadRequest("null request encountered");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            return Ok(await repository.CancelJob(request));
+
+            var result = await repository.CancelJob(request);
+
+            return Ok(result);
         }
 
         /// <summary>

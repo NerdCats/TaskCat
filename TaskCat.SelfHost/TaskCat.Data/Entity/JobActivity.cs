@@ -156,5 +156,7 @@
         public const string Update = "Update";
         public const string Delete = "Delete";
         public const string Claim = "Claim";
+        public const string Cancel = "Cancel";
+        public const string Restore = "Restore";
     }
 }
