@@ -182,6 +182,7 @@
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
             tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
+            IsJobTasksEventsHooked = true;
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -202,8 +203,6 @@
                         Assets[task.AssetRef] = task.Asset;
                     break;
             }
-
-            IsJobTasksEventsHooked = true;
         }
 
         private void SetProperJobState(JobTask jobTask)
