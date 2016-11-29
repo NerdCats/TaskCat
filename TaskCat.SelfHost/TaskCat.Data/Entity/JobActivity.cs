@@ -1,9 +1,7 @@
 ﻿namespace TaskCat.Data.Entity
 {
-    using Model.Identity.Profile;
     using Model.Identity.Response;
     using MongoDB.Bson.Serialization.Attributes;
-    using Newtonsoft.Json;
     using System;
     using System.Linq;
 
