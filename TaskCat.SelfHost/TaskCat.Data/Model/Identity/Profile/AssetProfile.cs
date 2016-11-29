@@ -24,6 +24,5 @@
         // Then we can actually override an abstract property named IsVetted and start working towards it, then again,
         // if all the assets do have much in common then its pretty pointless to be honest. We should only take teh polymorphic way
         // if and only if we have really diverse properties for all the assets
-
     }
 }

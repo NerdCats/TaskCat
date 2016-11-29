@@ -5,7 +5,6 @@
     using Registration;
     using Newtonsoft.Json.Converters;
     using System.Collections.Generic;
-    using System;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     [BsonDiscriminator(Required = true)]

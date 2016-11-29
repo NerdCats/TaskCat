@@ -8,7 +8,6 @@
     using Data.Entity;
     using Data.Model;
     using Data.Model.Order;
-    using System.ComponentModel.DataAnnotations;
     using Data.Model.Identity.Response;
     using HRID;
     using Process;
@@ -19,7 +18,6 @@
     using Data.Entity.Identity;
     using Vendor;
     using Account.Core;
-    using System.Reactive.Subjects;
 
     public class OrderRepository : IOrderRepository
     {
