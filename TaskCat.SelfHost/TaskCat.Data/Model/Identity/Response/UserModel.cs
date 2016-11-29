@@ -46,8 +46,8 @@
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty((this.Profile as AssetProfile).FullName)
-                ? this.UserName : (this.Profile as AssetProfile).FullName;
+            return string.IsNullOrEmpty(this.Profile.GetName())
+                ? this.UserName : this.Profile.GetName();
         }
     }
 }

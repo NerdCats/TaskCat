@@ -5,6 +5,7 @@
     using Registration;
     using Newtonsoft.Json.Converters;
     using System.Collections.Generic;
+    using System;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     [BsonDiscriminator(Required = true)]
@@ -18,7 +19,13 @@
         public string LastName { get; set; }
         [BsonIgnore]
         [JsonIgnore]
-        public string FullName { get { return string.Concat(FirstName, " ", LastName); } }
+        public string FullName
+        {
+            get
+            {
+                return string.Concat(FirstName, " ", LastName).Trim();
+            }
+        }
         public int Age { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
@@ -39,6 +46,11 @@
             this.Gender = userModel.Gender;
             this.Age = userModel.Age;
             this.InterestedLocalities = userModel.InterestedLocalities;
+        }
+
+        public override string GetName()
+        {
+            return FullName;
         }
     }
 }
