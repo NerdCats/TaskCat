@@ -28,6 +28,7 @@ using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
 using TaskCat.Common.Lib.Utility;
 using System.Reactive.Subjects;
+using System.Collections.Generic;
 
 namespace TaskCat.Controllers
 {
@@ -354,7 +355,23 @@ namespace TaskCat.Controllers
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
-            var result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
+            var job = await repository.GetJob(jobId);
+
+            var activities = new List<JobActivity>();
+            job.PropertyChanged += (sender, eventArgs) => {
+                JobActivity jobChangeActivity = null;
+                switch (eventArgs.PropertyName)
+                {
+                    case nameof(Job.State):
+                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State)) {
+                            Value = (sender as Job).State
+                        };
+                        activities.Add(jobChangeActivity);
+                        break;
+                }
+            };
+
+            var result = await repository.UpdateJobTaskWithPatch(job, taskId, taskPatch);
             result.SerializeUpdatedValue = updatedValue;
 
             var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
@@ -364,10 +381,15 @@ namespace TaskCat.Controllers
 
             var updatedTask = result.UpdatedValue.Tasks.First(x => x.id == taskId);
 
+            foreach (var op in taskPatch.Operations)
+            {
+                var taskActivity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, $"Tasks[{taskId}].{op.path.Substring(1)}", currentUser, new ReferenceActivity(taskId, updatedTask.Type));
+                activities.Add(taskActivity);
+            }
+
             Task.Factory.StartNew(()=> {
-                foreach (var op in taskPatch.Operations)
-                {
-                    var activity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, $"Tasks[{taskId}].{op.path.Substring(1)}", currentUser, new ReferenceActivity(taskId, updatedTask.Type));
+                foreach (var activity in activities)
+                {                    
                     activitySubject.OnNext(activity);
                 }
             });

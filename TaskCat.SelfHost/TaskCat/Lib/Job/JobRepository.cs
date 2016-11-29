@@ -109,13 +109,11 @@
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<UpdateResult<Job>> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
+        public async Task<UpdateResult<Job>> UpdateJobTaskWithPatch(Job job, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
-            var job = await GetJob(jobId);
-
             if (job.State == JobState.CANCELLED)
             {
-                throw new NotSupportedException($"Job {jobId} is in state {job.State}, restore job for further changes");
+                throw new NotSupportedException($"Job {job.Id} is in state {job.State}, restore job for further changes");
             }
 
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
@@ -130,6 +128,7 @@
             job.ModifiedTime = selectedTask.ModifiedTime;
 
             var result = await UpdateJob(job);
+
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 

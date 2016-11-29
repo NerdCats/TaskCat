@@ -23,7 +23,7 @@
         Task<PageEnvelope<Job>> GetJobsEnveloped(string type, int start, int limit, HttpRequestMessage message);
         Task<UpdateResult<Job>> UpdateJob(Job job);
         Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobtask);
-        Task<UpdateResult<Job>> UpdateJobTaskWithPatch(string JobId, string taskId, JsonPatchDocument<JobTask> taskPatch);
+        Task<UpdateResult<Job>> UpdateJobTaskWithPatch(Job job, string taskId, JsonPatchDocument<JobTask> taskPatch);
         Task<UpdateResult<Job>> Claim(string jobId, string userId);
         Task<UpdateResult<Job>> UpdateOrder(Job job, OrderModel orderModel);
         Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request);
