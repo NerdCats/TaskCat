@@ -355,6 +355,11 @@ namespace TaskCat.Controllers
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
             var job = await repository.GetJob(jobId);
 
             var activities = new List<JobActivity>();
@@ -363,7 +368,7 @@ namespace TaskCat.Controllers
                 switch (eventArgs.PropertyName)
                 {
                     case nameof(Job.State):
-                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State)) {
+                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser) {
                             Value = (sender as Job).State
                         };
                         activities.Add(jobChangeActivity);
@@ -372,12 +377,8 @@ namespace TaskCat.Controllers
             };
 
             var result = await repository.UpdateJobTaskWithPatch(job, taskId, taskPatch);
-            result.SerializeUpdatedValue = updatedValue;
 
-            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
-            {
-                Name = this.User.Identity.GetUserFullName()
-            };
+            result.SerializeUpdatedValue = updatedValue;
 
             var updatedTask = result.UpdatedValue.Tasks.First(x => x.id == taskId);
 
@@ -453,6 +454,11 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var currentUserId = this.User.Identity.GetUserId();
+            var currentUser = new ReferenceUser(currentUserId, this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+           
             var job = await repository.GetJob(jobId);
 
             if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
@@ -472,6 +478,13 @@ namespace TaskCat.Controllers
             }
 
             var result = await repository.UpdateOrder(job, orderModel);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.Order), currentUser);
+                activitySubject.OnNext(activity);
+            });
+
             return Ok(result);
         }
     }

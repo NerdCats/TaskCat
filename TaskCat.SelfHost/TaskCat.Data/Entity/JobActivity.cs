@@ -12,10 +12,6 @@
         public string JobId { get; set; }
         public string HRID { get; set; }
 
-        [BsonIgnore]
-        [JsonIgnore]
-        private Job Job;
-
         public string Operation { get; set; }
 
         [BsonIgnoreIfNull]
@@ -67,8 +63,6 @@
             this.JobId = job.Id;
             this.HRID = job.HRID;
 
-            this.Job = job;
-
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
             this.ForUser = new ReferenceUser(job.User);
@@ -88,11 +82,11 @@
             {
                 if (Reference != null)
                 {
-                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {HRID} to {Value}";
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {HRID}" + Value ?? $"to {Value}";
                 }
                 else
                 {
-                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID} to {Value}";
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID}" + Value ?? $" to {Value}";
                 }
             }
 
