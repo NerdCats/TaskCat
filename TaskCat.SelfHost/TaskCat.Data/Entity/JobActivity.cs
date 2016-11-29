@@ -36,12 +36,18 @@
         {
             InitiateActivity(job, operation);
 
+            if (byUser == null)
+                throw new ArgumentNullException(nameof(byUser));
+
             this.Reference = referenceActivity;
             this.ByUser = byUser;
         }
 
         public JobActivity(Job job, string operation, string path, ReferenceUser byUser, ReferenceActivity referenceActivity = null) : this(job, operation, byUser, referenceActivity)
         {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             this.Path = path;
         }
 
@@ -55,11 +61,19 @@
 
         public JobActivity(Job job, string operation, string path, ReferenceActivity referenceActivity = null) : this(job, operation, referenceActivity)
         {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             this.Path = path;
         }
 
         private void InitiateActivity(Job job, string operation)
         {
+            if (job == null)
+                throw new ArgumentNullException(nameof(job));
+            if (string.IsNullOrWhiteSpace(operation))
+                throw new ArgumentException(nameof(operation));
+
             this.JobId = job.Id;
             this.HRID = job.HRID;
 
@@ -108,6 +122,11 @@
 
         public ReferenceActivity(string id, string entityType)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException(nameof(id));
+            if (string.IsNullOrWhiteSpace(entityType))
+                throw new ArgumentException(nameof(entityType));
+
             this.Id = id;
             this.EntityType = entityType;
         }
@@ -136,12 +155,20 @@
 
         public ReferenceUser(string userId, string userName)
         {
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentException(nameof(userId));
+            if (string.IsNullOrWhiteSpace(userName))
+                throw new ArgumentException(nameof(userName));
+
             this.Id = userId;
             this.Username = userName;
         }
 
         public ReferenceUser(UserModel userModel)
         {
+            if (userModel == null)
+                throw new ArgumentNullException(nameof(userModel));
+
             Id = userModel.UserId;
             Username = userModel.UserName;
 
