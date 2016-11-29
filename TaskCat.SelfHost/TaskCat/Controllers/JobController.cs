@@ -319,7 +319,12 @@ namespace TaskCat.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Claim(string jobId)
         {
-            var result = await repository.Claim(jobId, this.User.Identity.GetUserId());
+            var job = await repository.GetJob(jobId);
+            var result = await repository.Claim(job, this.User.Identity.GetUserId());
+
+            Task.Run(() => this.activitySubject.OnNext(
+                new JobActivity(job, JobActivityOperatioNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
+
             return Ok(result);
         }
 
@@ -411,8 +416,8 @@ namespace TaskCat.Controllers
             if (request == null) return BadRequest("null request encountered");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await repository.CancelJob(request);
-
+            var job = await repository.GetJob(request.JobId);
+            var result = await repository.CancelJob(job, request.Reason);
             return Ok(result);
         }
 
@@ -431,7 +436,11 @@ namespace TaskCat.Controllers
         [Route("api/Job/restore/{jobId}")]
         public async Task<IHttpActionResult> RestoreJob(string jobId)
         {
-            return Ok(await repository.RestoreJob(jobId));
+            if (string.IsNullOrWhiteSpace(jobId))
+                throw new ArgumentException(nameof(jobId));
+
+            var job = await repository.GetJob(jobId);
+            return Ok(await repository.RestoreJob(job));
         }
 
         /// <summary>
