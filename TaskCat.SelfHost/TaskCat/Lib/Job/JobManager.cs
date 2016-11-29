@@ -57,7 +57,6 @@
             TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
             JobPayload.TerminalTask = TerminalTask;
 
-            JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
             JobPayload.EnsureJobTaskChangeEventsRegistered(isFetchingJobPayload: true);
 

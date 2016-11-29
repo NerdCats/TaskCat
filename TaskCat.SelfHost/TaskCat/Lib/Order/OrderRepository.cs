@@ -83,15 +83,6 @@
 
             switch (model.Type)
             {
-                case OrderTypes.Ride:
-                    {
-                        RideOrder rideOrderModel = model as RideOrder;
-                        Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                        builder = adminUserModel == null ?
-                            new RideJobBuilder(rideOrderModel, userModel, hridService)
-                            : new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
-                        break;
-                    }
                 case OrderTypes.ClassifiedDelivery:
                     {
                         ClassifiedDeliveryOrder classifiedDeliveryOrderModel = model as ClassifiedDeliveryOrder;

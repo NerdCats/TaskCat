@@ -10,7 +10,6 @@
     using Data.Model.Payment;
     using System;
     using System.Linq;
-    using Data.Model.Order.Delivery;
     using Data.Model.Vendor.ProfitSharing;
     using Data.Entity;
 
@@ -45,24 +44,20 @@
             // INFO: Fetching to 
             FetchDeliveryManTask fetchDeliveryManTask = new FetchDeliveryManTask(order.From, order.To);
             job.Tasks.Add(fetchDeliveryManTask);
-            fetchDeliveryManTask.AssetUpdated += JobTask_AssetUpdated;
 
             PackagePickUpTask pickUpTask = new PackagePickUpTask(order.From);
             pickUpTask.SetPredecessor(fetchDeliveryManTask);
             job.Tasks.Add(pickUpTask);
-            pickUpTask.AssetUpdated += JobTask_AssetUpdated;
 
             DeliveryTask deliveryTask = new DeliveryTask(order.From, order.To);
             deliveryTask.SetPredecessor(pickUpTask);
             job.Tasks.Add(deliveryTask);
-            deliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
             if (order.Type == OrderTypes.ClassifiedDelivery && order.Variant == DeliveryOrderVariants.Default)
             {
                 SecureDeliveryTask secureDeliveryTask = new SecureDeliveryTask(order.To, order.From);
                 secureDeliveryTask.SetPredecessor(deliveryTask);
                 job.Tasks.Add(secureDeliveryTask);
-                secureDeliveryTask.AssetUpdated += JobTask_AssetUpdated;
 
                 job.TerminalTask = secureDeliveryTask;
             }
@@ -77,8 +72,6 @@
             job.PaymentStatus = PaymentStatus.Pending;
 
             job.EnsureJobTaskChangeEventsRegistered();
-
-            job.EnsureTaskAssetEventsAssigned();
 
             if (order.JobTaskETAPreference?.Count > 0)
                 SetupJobTaskETAs(order);
@@ -102,13 +95,6 @@
                     }
                 }
             }
-        }
-
-        private void JobTask_AssetUpdated(string AssetRef, AssetModel asset)
-        {
-            //FIXME: Replicating code constantly, need to fix these
-            if (!job.Assets.ContainsKey(AssetRef))
-                job.Assets[AssetRef] = asset;
         }
     }
 }

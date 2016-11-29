@@ -18,7 +18,7 @@
     {
         [BsonIgnore]
         [JsonIgnore]
-        public bool IsAssetEventsHooked = false;
+        public bool IsJobTasksEventsHooked = false;
 
         private string _name;
         public string Name
@@ -51,7 +51,7 @@
         public Dictionary<string, AssetModel> Assets { get; set; }
 
         private List<JobTask> tasks;
-        public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
+        public List<JobTask> Tasks { get { return tasks; } set { tasks = value; } }
 
         private JobState state;
         [BsonRepresentation(BsonType.String)]
@@ -186,13 +186,24 @@
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (!(sender is JobTask))
+                throw new ArgumentException($"sender is not of type {typeof(JobTask).Name}");
+
+            var task = sender as JobTask;
+
             this.ModifiedTime = DateTime.UtcNow;
             switch (e.PropertyName)
             {
-                case "State":
-                    SetProperJobState(sender as JobTask);
+                case nameof(JobTask.State):
+                    SetProperJobState(task);
+                    break;
+                case nameof(JobTask.AssetRef):
+                    if (!Assets.ContainsKey(task.AssetRef))
+                        Assets[task.AssetRef] = task.Asset;
                     break;
             }
+
+            IsJobTasksEventsHooked = true;
         }
 
         private void SetProperJobState(JobTask jobTask)
@@ -211,18 +222,6 @@
             {
                 this.CompletionTime = DateTime.UtcNow;
                 this.state = JobState.COMPLETED;
-            }
-        }
-
-        public void EnsureTaskAssetEventsAssigned()
-        {
-            if (this.Tasks != null && this.Tasks.Count > 0)
-            {
-                foreach (var task in Tasks)
-                {
-                    task.AssetUpdated += Jtask_AssetUpdated;
-                }
-                IsAssetEventsHooked = true;
             }
         }
 
@@ -246,18 +245,12 @@
             if (this.Tasks == null)
                 Tasks = new List<JobTask>();
             this.Tasks.Add(jtask);
-            jtask.AssetUpdated += Jtask_AssetUpdated;
+
         }
 
         private string GenerateDefaultJobName()
         {
             return string.Format("{0} Job for {1}", this.Order.Type, string.IsNullOrWhiteSpace(User.UserName) ? User.UserId : User.UserName);
-        }
-
-        private void Jtask_AssetUpdated(string AssetRef, AssetModel asset)
-        {
-            if (!Assets.ContainsKey(AssetRef))
-                Assets[AssetRef] = asset;
         }
     }
 }
