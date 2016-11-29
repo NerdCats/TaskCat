@@ -8,7 +8,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using AppSettings = Its.Configuration.Settings;
 using Owin;
-using TaskCat.App;
 using TaskCat.App_Start;
 using Microsoft.Owin.Security.DataHandler.Encoder;
 using Microsoft.Owin.Security;
@@ -17,9 +16,7 @@ using TaskCat.Account.Core;
 using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Settings;
-using TaskCat.Data.Entity;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 namespace TaskCat
 {

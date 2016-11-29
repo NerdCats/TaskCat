@@ -5,7 +5,6 @@
     using Data.Model.Identity.Response;
     using HRID;
     using System;
-    using Data.Model.Vendor.ProfitSharing;
 
     public abstract class JobBuilder
     {

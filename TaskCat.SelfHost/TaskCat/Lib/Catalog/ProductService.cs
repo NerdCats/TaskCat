@@ -7,6 +7,7 @@
     using Common.Exceptions;
     using Common.Db;
     using Common.Domain;
+    using MongoDB.Bson;
 
     public class ProductService : IRepository<Product>
     {

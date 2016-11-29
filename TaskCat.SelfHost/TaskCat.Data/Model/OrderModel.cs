@@ -9,7 +9,7 @@
     using Order.Delivery;
     using Order;
 
-    [BsonKnownTypes(typeof(RideOrder), typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
+    [BsonKnownTypes(typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {

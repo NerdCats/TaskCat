@@ -5,6 +5,7 @@
         public const string DefaultApiRoute = "DefaultApi";
 
         public const string JobsOdataRoute = "JobsOdata";
+        public const string JobActivityOdataRoute = "JobActvityOdata";
         public const string CommentOdataRoute = "CommentOdata";
         public const string DropPointOdataRoute = "DropPointOdata";
         public const string ProductCategoryRoute = "ProductCategoryOdata";

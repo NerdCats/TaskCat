@@ -8,7 +8,6 @@
     using Data.Entity;
     using Data.Model;
     using Data.Model.Order;
-    using System.ComponentModel.DataAnnotations;
     using Data.Model.Identity.Response;
     using HRID;
     using Process;
@@ -19,7 +18,6 @@
     using Data.Entity.Identity;
     using Vendor;
     using Account.Core;
-    using System.Reactive.Subjects;
 
     public class OrderRepository : IOrderRepository
     {
@@ -83,15 +81,6 @@
 
             switch (model.Type)
             {
-                case OrderTypes.Ride:
-                    {
-                        RideOrder rideOrderModel = model as RideOrder;
-                        Validator.ValidateObject(rideOrderModel, new ValidationContext(rideOrderModel), true);
-                        builder = adminUserModel == null ?
-                            new RideJobBuilder(rideOrderModel, userModel, hridService)
-                            : new RideJobBuilder(rideOrderModel, userModel, adminUserModel, hridService);
-                        break;
-                    }
                 case OrderTypes.ClassifiedDelivery:
                     {
                         ClassifiedDeliveryOrder classifiedDeliveryOrderModel = model as ClassifiedDeliveryOrder;

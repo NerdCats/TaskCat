@@ -8,7 +8,6 @@
     using System.Web.OData.Query;
     using Data.Model.Operation;
     using System;
-    using Exceptions;
     using System.Linq;
     using Common.Exceptions;
 
@@ -57,7 +56,6 @@
             TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
             JobPayload.TerminalTask = TerminalTask;
 
-            JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
             JobPayload.EnsureJobTaskChangeEventsRegistered(isFetchingJobPayload: true);
 
