@@ -12,9 +12,11 @@
     using Model.Payment;
     using System.ComponentModel;
     using Model.Vendor.ProfitSharing;
+    using Core;
+    using System.Runtime.CompilerServices;
 
     [BsonIgnoreExtraElements(Inherited = true)]
-    public class Job : HRIDEntity
+    public class Job : HRIDEntity, INotifyPropertyChanged
     {
         [BsonIgnore]
         [JsonIgnore]
@@ -29,7 +31,10 @@
                     GenerateDefaultJobName()
                     : _name;
             }
-            set { _name = value; }
+            set
+            {
+                Set(ref _name, value);
+            }
         }
 
         [BsonIgnoreIfNull]
@@ -42,11 +47,24 @@
             {
                 return _user;
             }
-            set { _user = value; }
+            set
+            {
+                Set(ref _user, value);
+            }
         }
 
         private UserModel _jobServedBy;
-        public UserModel JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
+        public UserModel JobServedBy
+        {
+            get
+            {
+                return _jobServedBy;
+            }
+            set
+            {
+                Set(ref _jobServedBy, value);
+            }
+        }
 
         public Dictionary<string, AssetModel> Assets { get; set; }
 
@@ -61,7 +79,7 @@
             get { return state; }
             set
             {
-                state = value;
+                Set(ref state, value);
             }
         }
 
@@ -96,10 +114,7 @@
             }
         }
 
-        [BsonIgnoreIfNull]
-        public DateTime? PreferredDeliveryTime { get; set; }
-
-        public string InvoiceId { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private JobTask _terminalTask;
         [BsonIgnore]
@@ -115,9 +130,32 @@
             }
         }
 
-        public string PaymentMethod { get; set; }
+        private string _paymentMethod;
+        public string PaymentMethod
+        {
+            get
+            {
+                return _paymentMethod;
+            }
+            set
+            {
+                Set(ref _paymentMethod, value);
+            }
+        }
+
+        private PaymentStatus _paymentStatus;
         [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentStatus PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus
+        {
+            get
+            {
+                return _paymentStatus;
+            }
+            set
+            {
+                Set(ref _paymentStatus, value);
+            }
+        }
 
         public string CancellationReason { get; set; }
         public bool IsDeleted { get; set; }
@@ -250,6 +288,20 @@
         private string GenerateDefaultJobName()
         {
             return string.Format("{0} Job for {1}", this.Order.Type, string.IsNullOrWhiteSpace(User.UserName) ? User.UserId : User.UserName);
+        }
+
+        // INFO: This is definitely code replication. But I currently don't have a good idea
+        // to make it reusable 
+
+        protected bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(storage, value))
+            {
+                storage = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+            return false;
         }
     }
 }
