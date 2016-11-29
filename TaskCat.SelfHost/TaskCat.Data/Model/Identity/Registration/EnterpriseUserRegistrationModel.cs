@@ -4,6 +4,7 @@
     {
         public string ContactPersonName { get; set; }
         public string Website { get; set; }
+        public string PrefixId { get; set; }
 
     }
 }

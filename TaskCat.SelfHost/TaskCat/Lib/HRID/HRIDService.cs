@@ -18,7 +18,7 @@
         private IDbContext _context;
 
         private static char[] _base62chars =
-            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
+            "0123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".ToCharArray();
 
         private Random _random = new Random();
         private int length = 8;
@@ -42,7 +42,7 @@
             while (count < maxRetry)
             {
                 for (int i = 0; i < length; i++)
-                    sb.Append(_base62chars[_random.Next(36)]);
+                    sb.Append(_base62chars[_random.Next(35)]);
 
                 generatedId = sb.ToString();
                 var existingIdCount = GetExistingIdCount(generatedId);

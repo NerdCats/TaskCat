@@ -8,6 +8,7 @@ namespace TaskCat.Data.Model.Identity.Profile
     {
         public string CompanyName { get; set; }
         public string Website { get; set; }
+        public string PrefixId { get; set; }
 
         public EnterpriseUserProfile()
         {
@@ -18,6 +19,8 @@ namespace TaskCat.Data.Model.Identity.Profile
         {
             this.CompanyName = enterpriseUserModel.ContactPersonName;
             this.Website = enterpriseUserModel.Website;
+            this.PrefixId = enterpriseUserModel.PrefixId;
+            
         }
     }
 }
