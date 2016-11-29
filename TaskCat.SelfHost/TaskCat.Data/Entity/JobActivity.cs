@@ -89,7 +89,10 @@
                     return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID}" + Value ?? $" to {Value}";
                 }
             }
-
+            else if (Operation == JobActivityOperatioNames.Restore || Operation == JobActivityOperatioNames.Cancel)
+            {
+                return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
+            }
 
             return null;
         }
