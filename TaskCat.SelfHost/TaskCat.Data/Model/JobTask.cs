@@ -70,7 +70,6 @@
             }
             set
             {
-                assetRef = value;
                 Set(ref assetRef, value);
             }
         }
