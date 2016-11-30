@@ -357,7 +357,7 @@ namespace TaskCat.Controllers
                 throw new NotSupportedException("Operations except replace is not supported");
             }
 
-            if (taskPatch.Operations.Any(x=> !x.path.EndsWith("assetRef") || !x.path.EndsWith("State")))
+            if (taskPatch.Operations.Any(x=> !x.path.EndsWith(nameof(JobTask.AssetRef)) || !x.path.EndsWith(nameof(JobTask.State))))
             {
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
