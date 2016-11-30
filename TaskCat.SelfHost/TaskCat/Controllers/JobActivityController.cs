@@ -54,7 +54,7 @@
                 activities = dbContext.JobActivityCollection.AsQueryable();
             }
             
-            var odataResult = await activities.ToOdataResponse(Request, AppConstants.JobActivityOdataRoute);
+            var odataResult = await activities.ToOdataResponse(Request, AppConstants.DefaultApiRoute);
             return Ok(odataResult);
         }
     }
