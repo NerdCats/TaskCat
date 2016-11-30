@@ -352,12 +352,20 @@ namespace TaskCat.Controllers
         [HttpPatch]
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
+            if (taskPatch == null)
+                throw new ArgumentNullException(nameof(taskPatch));
+
             if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
             {
                 throw new NotSupportedException("Operations except replace is not supported");
             }
 
-            if (taskPatch.Operations.Any(x=> !x.path.EndsWith(nameof(JobTask.AssetRef)) || !x.path.EndsWith(nameof(JobTask.State))))
+            // INFO: This is ghetto, need to do it in a better way, may be write extension methods for JsonPatchDocument
+            List<string> allowedPaths = new List<string>();
+            allowedPaths.Add(nameof(JobTask.AssetRef));
+            allowedPaths.Add(nameof(JobTask.State));
+
+            if (!taskPatch.Operations.All(x => allowedPaths.Any(a => x.path.EndsWith(a))))
             {
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
