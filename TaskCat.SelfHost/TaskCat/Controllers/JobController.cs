@@ -399,7 +399,15 @@ namespace TaskCat.Controllers
 
             foreach (var op in taskPatch.Operations)
             {
-                var taskActivity = new JobActivity(result.UpdatedValue, JobActivityOperatioNames.Update, $"Tasks[{taskId}].{op.path.Substring(1)}", currentUser, new ReferenceActivity(taskId, updatedTask.Type));
+                var taskActivity = new JobActivity(
+                    result.UpdatedValue,
+                    JobActivityOperatioNames.Update,
+                    op.path.Substring(1),
+                    currentUser,
+                    new ReferenceActivity(taskId, updatedTask.Type))
+                {
+                    Value = op.value.ToString()
+                };
                 activities.Add(taskActivity);
             }
 

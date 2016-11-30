@@ -94,11 +94,13 @@
             {
                 if (Reference != null)
                 {
-                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path.Split('.').Last()} of {Reference.EntityType} of {HRID}" + Value ?? $"to {Value}";
+                    var prefix = $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {Reference.EntityType} of {HRID}";
+                    return Value!=null? $"{prefix} to {Value}": prefix;
                 }
                 else
                 {
-                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID}" + Value ?? $" to {Value}";
+                    var prefix = $"{this.ByUser.DisplayName} {Operation.ToLower()}d {Path} of {HRID}";
+                    return Value != null ? $"{prefix} to {Value}" : prefix;
                 }
             }
             else if (Operation == JobActivityOperatioNames.Restore || Operation == JobActivityOperatioNames.Cancel)
