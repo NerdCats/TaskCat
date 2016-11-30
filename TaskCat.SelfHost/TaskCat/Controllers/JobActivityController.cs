@@ -50,7 +50,7 @@
                     activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ForUser.Id == this.User.Identity.GetUserId());
             }
             else
-            {
+            {   
                 activities = dbContext.JobActivityCollection.AsQueryable();
             }
             

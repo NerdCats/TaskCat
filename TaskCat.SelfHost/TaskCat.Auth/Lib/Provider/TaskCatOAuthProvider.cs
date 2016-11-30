@@ -83,14 +83,7 @@
                 return;
             }
 
-            string givenNameClaim = string.Empty;
-
-            if (user.Profile is AssetProfile)
-                givenNameClaim = (user.Profile as AssetProfile)?.FullName;
-            else if (user.Profile is EnterpriseUserProfile)
-                givenNameClaim = (user.Profile as EnterpriseUserProfile)?.CompanyName;
-            else if (user.Profile is UserProfile)
-                givenNameClaim = (user.Profile as UserProfile)?.FullName;
+            string givenNameClaim = user.Profile.GetName();
 
             var identity = new ClaimsIdentity("JWT");
             identity.AddClaim(new Claim(ClaimTypes.Authentication, "true"));
