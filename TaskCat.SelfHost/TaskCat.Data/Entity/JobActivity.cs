@@ -169,7 +169,7 @@
 
             Id = userModel.UserId;
             Username = userModel.UserName;
-            Name = userModel.Profile.GetName();
+            Name = userModel.Profile?.GetName();
         }
     }
 
