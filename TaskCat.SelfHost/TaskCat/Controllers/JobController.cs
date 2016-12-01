@@ -27,6 +27,10 @@ using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
 using TaskCat.Common.Email;
 using TaskCat.Lib.Job.Updaters;
+using TaskCat.Common.Lib.Utility;
+using System.Reactive.Subjects;
+using System.Collections.Generic;
+
 
 namespace TaskCat.Controllers
 {
@@ -38,11 +42,13 @@ namespace TaskCat.Controllers
     {
         private IJobRepository repository;
         private IEmailService mailService;
+        private Subject<JobActivity> activitySubject;
 
-        public JobController(IJobRepository repository, IEmailService mailService)
+        public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
+            this.activitySubject = activitySubject;
         }
 
         /// <summary>
@@ -152,7 +158,7 @@ namespace TaskCat.Controllers
         {
             IQueryable<Job> jobs = repository.GetJobs();
 
-            if (IsUserOrEnterpriseUserOnly())
+            if (User.IsUserOrEnterpriseUserOnly())
             {
                 // INFO: You're in this block because the user is either just a regular user 
                 // or enterprise user , not an administrator or anything
@@ -188,14 +194,6 @@ namespace TaskCat.Controllers
 
             var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
             return Ok(odataResult);
-        }
-
-        private bool IsUserOrEnterpriseUserOnly()
-        {
-            return ((User.IsInRole(RoleNames.ROLE_USER) || User.IsInRole(RoleNames.ROLE_ENTERPRISE))
-                && !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
-                && !User.IsInRole(RoleNames.ROLE_ASSET)
-                && !User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN));
         }
 
         /// <summary>
@@ -317,13 +315,18 @@ namespace TaskCat.Controllers
         /// Returns a replace result that replaces the JobServedBy field
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [Route("api/Job/claim/{jobId}")]
         [HttpPost]
         public async Task<IHttpActionResult> Claim(string jobId)
         {
-            ReplaceOneResult result = await repository.Claim(jobId, this.User.Identity.GetUserId());
+            var job = await repository.GetJob(jobId);
+            var result = await repository.Claim(job, this.User.Identity.GetUserId());
+
+            Task.Run(() => this.activitySubject.OnNext(
+                new JobActivity(job, JobActivityOperatioNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
+
             return Ok(result);
         }
 
@@ -343,13 +346,81 @@ namespace TaskCat.Controllers
         /// Returns a ReplaceOneResult based on the update
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize(Roles = "Asset, Administrator, Enterprise, BackOfficeAdmin")]
         [Route("api/Job/{jobId}/{taskId}")]
         [HttpPatch]
-        public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
+        public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
-            ReplaceOneResult result = await repository.UpdateJobTaskWithPatch(jobId, taskId, taskPatch);
+            if (taskPatch == null)
+                throw new ArgumentNullException(nameof(taskPatch));
+
+            if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
+            {
+                throw new NotSupportedException("Operations except replace is not supported");
+            }
+
+            // INFO: This is ghetto, need to do it in a better way, may be write extension methods for JsonPatchDocument
+            List<string> allowedPaths = new List<string>();
+            allowedPaths.Add(nameof(JobTask.AssetRef));
+            allowedPaths.Add(nameof(JobTask.State));
+
+            if (!taskPatch.Operations.All(x => allowedPaths.Any(a => x.path.EndsWith(a))))
+            {
+                throw new NotSupportedException("Patch operation not supported on one or more paths");
+            }
+
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
+            var job = await repository.GetJob(jobId);
+
+            var activities = new List<JobActivity>();
+            job.PropertyChanged += (sender, eventArgs) => {
+                JobActivity jobChangeActivity = null;
+                switch (eventArgs.PropertyName)
+                {
+                    case nameof(Job.State):
+                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser) {
+                            Value = (sender as Job).State.ToString()
+                        };
+                        activities.Add(jobChangeActivity);
+                        break;
+                }
+            };
+
+            var result = await repository.UpdateJobTaskWithPatch(job, taskId, taskPatch);
+
+            result.SerializeUpdatedValue = updatedValue;
+
+            var updatedTask = result.UpdatedValue.Tasks.First(x => x.id == taskId);
+
+            var taskUpdates = new List<JobActivity>();
+            foreach (var op in taskPatch.Operations)
+            {
+                var taskActivity = new JobActivity(
+                    result.UpdatedValue,
+                    JobActivityOperatioNames.Update,
+                    op.path.Substring(1),
+                    currentUser,
+                    new ReferenceActivity(taskId, updatedTask.Type))
+                {
+                    Value = op.value.ToString()
+                };
+                taskUpdates.Add(taskActivity);
+            }
+
+            activities.InsertRange(0, taskUpdates);
+
+            Task.Factory.StartNew(()=> {
+                foreach (var activity in activities)
+                {                    
+                    activitySubject.OnNext(activity);
+                }
+            });
+
             return Ok(result);
         }
 
@@ -365,7 +436,21 @@ namespace TaskCat.Controllers
         {
             if (request == null) return BadRequest("null request encountered");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            return Ok(await repository.CancelJob(request));
+
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
+            var job = await repository.GetJob(request.JobId);
+            var result = await repository.CancelJob(job, request.Reason);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Cancel, currentUser);
+                activitySubject.OnNext(activity);
+            });
+            return Ok(result);
         }
 
         /// <summary>
@@ -383,7 +468,24 @@ namespace TaskCat.Controllers
         [Route("api/Job/restore/{jobId}")]
         public async Task<IHttpActionResult> RestoreJob(string jobId)
         {
-            return Ok(await repository.RestoreJob(jobId));
+            if (string.IsNullOrWhiteSpace(jobId))
+                throw new ArgumentException(nameof(jobId));
+
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
+            var job = await repository.GetJob(jobId);
+            var result = await repository.RestoreJob(job);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Restore, currentUser);
+                activitySubject.OnNext(activity);
+            });
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -399,7 +501,7 @@ namespace TaskCat.Controllers
         /// Returns a ReplaceOneResult based on the update
         /// </returns>
         /// 
-        [ResponseType(typeof(ReplaceOneResult))]
+        [ResponseType(typeof(UpdateResult<Job>))]
         [Authorize]
         [Route("api/Job/{jobId}/order")]
         [HttpPut]
@@ -412,6 +514,11 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var currentUserId = this.User.Identity.GetUserId();
+            var currentUser = new ReferenceUser(currentUserId, this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+           
             var job = await repository.GetJob(jobId);
 
             if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
@@ -430,7 +537,14 @@ namespace TaskCat.Controllers
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
             }
 
-            ReplaceOneResult result = await repository.UpdateOrder(job, orderModel, mode);
+            var result = await repository.UpdateOrder(job, orderModel, mode);
+
+            Task.Factory.StartNew(() =>
+            {
+                var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.Order), currentUser);
+                activitySubject.OnNext(activity);
+            });
+
             return Ok(result);
         }
     }

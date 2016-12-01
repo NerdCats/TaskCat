@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNet.Identity;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using TaskCat.Common.Exceptions;
+using TaskCat.Common.Lib.Utility;
+using TaskCat.Data.Entity;
 using TaskCat.Data.Lib.Payment;
 using TaskCat.Data.Lib.Payment.Request;
 using TaskCat.Lib.Job;
@@ -14,6 +18,7 @@ namespace TaskCat.Controllers
     /// </summary>
     public class PaymentController : ApiController
     {
+        private Subject<JobActivity> activitySubject;
         private IJobRepository jobRepository;
         private IPaymentManager manager;
         private IPaymentService service;
@@ -24,11 +29,12 @@ namespace TaskCat.Controllers
         /// <param name="manager">
         /// <c>IPaymentManager instance to be injected in the controller</c>
         /// </param>
-        public PaymentController(IPaymentManager manager, IPaymentService service, IJobRepository jobRepository)
+        public PaymentController(IPaymentManager manager, IPaymentService service, IJobRepository jobRepository, Subject<JobActivity> activitySubject)
         {
             this.service = service;
             this.manager = manager;
             this.jobRepository = jobRepository;
+            this.activitySubject = activitySubject;
         }
 
         /// <summary>
@@ -69,6 +75,11 @@ namespace TaskCat.Controllers
                 JobId = jobid
             });
 
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
             if (result.Errors != null && result.Errors.Count > 0)
                 return Content(System.Net.HttpStatusCode.BadRequest, result.Errors);
 
@@ -76,6 +87,16 @@ namespace TaskCat.Controllers
             {
                 job.PaymentStatus = result.NewPaymentStatus;
                 var jobUpdateResult = await jobRepository.UpdateJob(job);
+
+                Task.Factory.StartNew(() =>
+                {
+                    var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.PaymentStatus), currentUser)
+                    {
+                        Value = result.NewPaymentStatus.ToString()
+                    };
+                    activitySubject.OnNext(activity);
+                });
+
                 if (jobUpdateResult.ModifiedCount > 0)
                     return Ok();
                 else

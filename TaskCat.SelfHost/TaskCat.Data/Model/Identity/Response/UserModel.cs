@@ -44,5 +44,11 @@
             return IsUserAuthenticated;
         }
 
+        public override string ToString()
+        {
+            string name = this.Profile?.GetName();
+            return string.IsNullOrEmpty(name)
+                ? this.UserName : name;
+        }
     }
 }

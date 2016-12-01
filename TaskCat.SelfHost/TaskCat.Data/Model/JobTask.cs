@@ -22,13 +22,6 @@
         public delegate void JobTaskCompletedEventHandler(JobTask sender, JobTaskResult result);
         public event JobTaskCompletedEventHandler JobTaskCompleted;
 
-        public delegate void AssetUpdatedEventHandler(string AssetRef, AssetModel asset);
-        public event AssetUpdatedEventHandler AssetUpdated;
-
-        //FIXME: I still dont know how Im going to implement this!
-        //protected delegate void JobTaskUpdatedEventHandler(JobTask sender, string result);
-        //protected event JobTaskUpdatedEventHandler JobTaskUpdated;
-
         [BsonIgnore]
         [JsonIgnore]
         public JobTaskResult Result { get; protected set; }
@@ -77,14 +70,7 @@
             }
             set
             {
-                assetRef = value;
-                if (AssetUpdated != null)
-                {
-                    if (Asset == null)
-                        throw new InvalidOperationException("Invoking Asset Updated event without having actual Asset defined, error");
-                    AssetUpdated(assetRef, Asset);
-                }
-
+                Set(ref assetRef, value);
             }
         }
 

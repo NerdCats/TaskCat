@@ -202,6 +202,32 @@
 
 
 ---
+## Type Controllers.JobActivityController
+
+ Controller for job activities. 
+
+
+
+---
+#### Method Controllers.JobActivityController.#ctor(TaskCat.Common.Db.IDbContext)
+
+ Instantiates job activity controller. 
+
+|Name | Description |
+|-----|------|
+|dbContext: |Database context to go with.|
+
+
+---
+#### Method Controllers.JobActivityController.GetJobActivityFeed
+
+ Default Odata route to get job activities 
+
+**Returns**: 
+
+
+
+---
 ## Type Controllers.JobController
 
  Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -315,7 +341,7 @@
 
 
 ---
-#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask})
+#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask},System.Boolean)
 
  Partial update to a specific task under a job 
 

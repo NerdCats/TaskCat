@@ -8,6 +8,7 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Account.Core;
+    using Data.Model.Identity.Profile;
 
     public class TaskCatOAuthProvider : OAuthAuthorizationServerProvider
     {
@@ -82,12 +83,17 @@
                 return;
             }
 
+            string givenNameClaim = user.Profile?.GetName();
+
             var identity = new ClaimsIdentity("JWT");
             identity.AddClaim(new Claim(ClaimTypes.Authentication, "true"));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
             identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
             identity.AddClaim(new Claim("sub", user.UserName));           
             identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+
+            if(!string.IsNullOrWhiteSpace(givenNameClaim))
+                identity.AddClaim(new Claim(ClaimTypes.GivenName, givenNameClaim));
 
             foreach (var role in user.Roles)
             {

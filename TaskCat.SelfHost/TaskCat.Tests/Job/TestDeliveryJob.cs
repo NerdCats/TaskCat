@@ -156,18 +156,12 @@
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
                 .ReturnsAsync(replaceOneResult);
 
-            jobManagerMock.Setup(x => x.GetJob(searchJobId)).ReturnsAsync(createdJob);
-
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object), activitySubject);
 
-            var result = await jobRepository.CancelJob(new JobCancellationRequest()
-            {
-                JobId = searchJobId,
-                Reason = cancellationReason
-            });
+            var result = await jobRepository.CancelJob(createdJob, cancellationReason);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(JobState.CANCELLED, result.UpdatedValue.State);
@@ -190,14 +184,12 @@
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
                 .ReturnsAsync(replaceOneResult);
 
-            jobManagerMock.Setup(x => x.GetJob(searchJobId)).ReturnsAsync(createdJob);
-
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
                 new AccountManager(userStoreMock.Object), activitySubject);
 
-            var result = await jobRepository.RestoreJob(searchJobId);
+            var result = await jobRepository.RestoreJob(createdJob);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(JobState.ENQUEUED, result.UpdatedValue.State);
