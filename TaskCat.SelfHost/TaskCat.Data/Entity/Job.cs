@@ -248,18 +248,18 @@
         {
             if (jobTask.State >= JobTaskState.IN_PROGRESS
                 && jobTask.State < JobTaskState.COMPLETED
-                && state != JobState.IN_PROGRESS)
+                && State != JobState.IN_PROGRESS)
             {
-                state = JobState.IN_PROGRESS;
+                State = JobState.IN_PROGRESS;
                 this.InitiationTime = this.InitiationTime ?? DateTime.UtcNow;
             }
             else if (jobTask.State == JobTaskState.CANCELLED)
-                state = JobState.CANCELLED;
+                State = JobState.CANCELLED;
 
             if (this.tasks.All(x => x.State == JobTaskState.COMPLETED))
             {
                 this.CompletionTime = DateTime.UtcNow;
-                this.state = JobState.COMPLETED;
+                this.State = JobState.COMPLETED;
             }
         }
 
