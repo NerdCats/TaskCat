@@ -23,6 +23,8 @@
 
         public TaskCatApiService()
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler((s, e) => { });
 
 #if DEBUG
             Settings.Precedence = new[] { "local", "production" };
