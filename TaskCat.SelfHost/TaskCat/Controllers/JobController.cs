@@ -384,7 +384,7 @@ namespace TaskCat.Controllers
                 {
                     case nameof(Job.State):
                         jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser) {
-                            Value = (sender as Job).State
+                            Value = (sender as Job).State.ToString()
                         };
                         activities.Add(jobChangeActivity);
                         break;
@@ -397,6 +397,7 @@ namespace TaskCat.Controllers
 
             var updatedTask = result.UpdatedValue.Tasks.First(x => x.id == taskId);
 
+            var taskUpdates = new List<JobActivity>();
             foreach (var op in taskPatch.Operations)
             {
                 var taskActivity = new JobActivity(
@@ -408,8 +409,10 @@ namespace TaskCat.Controllers
                 {
                     Value = op.value.ToString()
                 };
-                activities.Add(taskActivity);
+                taskUpdates.Add(taskActivity);
             }
+
+            activities.InsertRange(0, taskUpdates);
 
             Task.Factory.StartNew(()=> {
                 foreach (var activity in activities)
