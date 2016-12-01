@@ -92,7 +92,7 @@ namespace TaskCat.Controllers
                 {
                     var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.PaymentStatus), currentUser)
                     {
-                        Value = result.NewPaymentStatus
+                        Value = result.NewPaymentStatus.ToString()
                     };
                     activitySubject.OnNext(activity);
                 });
