@@ -28,6 +28,7 @@
     using Common.Settings;
     using Lib.Db;
     using System.Reactive.Subjects;
+    using Common.Search;
 
     public class AutofacContainerBuilder
     {
@@ -38,8 +39,10 @@
             var jobActivitySubject = new Subject<JobActivity>();
             builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
 
-            #region Account
             builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<SearchContext>().As<ISearchContext>().SingleInstance();
+
+            #region Account
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
             builder.RegisterType<AccountManager>().SingleInstance();
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();

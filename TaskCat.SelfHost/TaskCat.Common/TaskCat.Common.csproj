@@ -165,6 +165,7 @@
     <Compile Include="Exceptions\SettingsException.cs" />
     <Compile Include="Exceptions\UpdateFailedException.cs" />
     <Compile Include="Email\SMTP\SMTPMailService.cs" />
+    <Compile Include="Search\ISearchContext.cs" />
     <Compile Include="Search\SearchContext.cs" />
     <Compile Include="Settings\ElasticSearchSettings.cs" />
     <Compile Include="WebApi\CompressedContent.cs" />
