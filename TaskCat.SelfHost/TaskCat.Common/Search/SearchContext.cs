@@ -16,9 +16,16 @@
 
         private void InitiateConnection()
         {
-            var connectionUrl = new Uri(AppSettings.Get<ElasticSearchSettings>().ConnectionString);
-            var settings = new ConnectionSettings(connectionUrl);
-            this.Client = new ElasticClient(settings);
+            try
+            {
+                var connectionUrl = new Uri(AppSettings.Get<ElasticSearchSettings>().ConnectionString);
+                var settings = new ConnectionSettings(connectionUrl);
+                this.Client = new ElasticClient(settings);
+            }
+            catch (Exception)
+            {
+                //TODO: Log problems here
+            }
         }
     }
 }

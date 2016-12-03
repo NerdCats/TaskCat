@@ -35,7 +35,6 @@
 
             this.listeningAddress = string.IsNullOrWhiteSpace(Settings.Get<ClientSettings>().HostingAddress)
                 ? AppConstants.DefaultHostingAddress : Settings.Get<ClientSettings>().HostingAddress;
-
         }
 
         private void BuildAutofacContainerAndStartActivityService()
