@@ -106,6 +106,10 @@
       <HintPath>..\packages\Dichotomy.1.0.0.3\lib\net40\Dichotomy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Elasticsearch.Net, Version=2.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.2.5.0\lib\net45\Elasticsearch.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentEmail, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\fluent-email.1.5\lib\net40\FluentEmail.dll</HintPath>
       <Private>True</Private>
@@ -232,6 +236,10 @@
     </Reference>
     <Reference Include="MongoDB.Driver.Core, Version=2.3.0.157, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Driver.Core.2.3.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.2.5.0\lib\net45\Nest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -392,6 +400,7 @@
     <Compile Include="Lib\Job\JobBuilder.cs" />
     <Compile Include="Lib\Job\JobManager.cs" />
     <Compile Include="Lib\Job\JobRepository.cs" />
+    <Compile Include="Lib\Job\JobSearchIndexService.cs" />
     <Compile Include="Lib\Job\JobShop.cs" />
     <Compile Include="Lib\Job\JobStore.cs" />
     <Compile Include="Lib\Job\JobUpdater.cs" />
@@ -489,9 +498,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Lib\Job\Activity\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
