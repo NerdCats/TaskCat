@@ -19,15 +19,18 @@ namespace TaskCat.Controllers
         private IOrderRepository repository;
         private IJobRepository jobRepository;
         private Subject<JobActivity> activitySubject;
+        private IObserver<Job> jobIndexSubject;
 
         public OrderController(
             IOrderRepository repository, 
             IJobRepository jobRepository, 
-            Subject<JobActivity> activitySubject)
+            Subject<JobActivity> activitySubject,
+            IObserver<Job> jobIndexSubject)
         {
             this.repository = repository;
             this.jobRepository = jobRepository;
             this.activitySubject = activitySubject;
+            this.jobIndexSubject = jobIndexSubject;
         }
 
         /// <summary>

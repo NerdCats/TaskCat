@@ -471,7 +471,7 @@
 
 
 ---
-#### Method Controllers.PaymentController.#ctor(TaskCat.Lib.Payment.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Lib.Job.IJobRepository)
+#### Method Controllers.PaymentController.#ctor(TaskCat.Lib.Payment.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Lib.Job.IJobRepository,System.Reactive.Subjects.Subject{TaskCat.Data.Entity.JobActivity})
 
  `PaymentController`  constructor 
 

@@ -13,13 +13,16 @@
     using Common.Db;
     using System.Reactive.Subjects;
     using System.Diagnostics;
+    using Common.Search;
 
     public class TaskCatApiService : IDichotomyService
     {
         private IContainer container;
-        private JobActivityService jobActivityService;
         private string listeningAddress;
         private IDisposable webApp;
+
+        private JobActivityService jobActivityService;
+        private JobSearchIndexService JobIndexService;
 
         public TaskCatApiService()
         {
@@ -39,9 +42,13 @@
         {
             // INFO: Doing the IoC container building here
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
-            this.container = builder.BuildContainer();
+            this.container = builder.BuildContainer();           
+        }
 
+        private void InitializeReactiveServices()
+        {
             this.jobActivityService = new JobActivityService(container.Resolve<IDbContext>(), container.Resolve<Subject<JobActivity>>());
+            this.JobIndexService = new JobSearchIndexService(container.Resolve<ISearchContext>(), container.Resolve<IObservable<Job>>());
         }
 
         public void Dispose()
@@ -62,6 +69,7 @@
 
             Console.WriteLine("Building Container...");
             BuildAutofacContainerAndStartActivityService();
+            InitializeReactiveServices();          
 
             this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder, container));
 

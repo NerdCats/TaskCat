@@ -29,6 +29,7 @@
     using Lib.Db;
     using System.Reactive.Subjects;
     using Common.Search;
+    using System;
 
     public class AutofacContainerBuilder
     {
@@ -38,6 +39,9 @@
 
             var jobActivitySubject = new Subject<JobActivity>();
             builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
+
+            var jobSearchSubject = new Subject<Job>();
+            builder.Register(x => jobSearchSubject).As<IObserver<Job>>().SingleInstance();
 
             builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();
             builder.RegisterType<SearchContext>().As<ISearchContext>().SingleInstance();
