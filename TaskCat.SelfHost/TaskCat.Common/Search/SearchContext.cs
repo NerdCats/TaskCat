@@ -8,6 +8,7 @@
     public class SearchContext : ISearchContext
     {
         public ElasticClient Client { get; set; }
+        public bool SearchEnabled { get; private set; }
 
         public SearchContext()
         {
@@ -18,7 +19,13 @@
         {
             try
             {
-                var connectionUrl = new Uri(AppSettings.Get<ElasticSearchSettings>().ConnectionString);
+                var searchSettings = AppSettings.Get<ElasticSearchSettings>();
+                if (searchSettings == null)
+                {
+                    SearchEnabled = false;
+                    return;
+                }
+                var connectionUrl = new Uri(searchSettings.ConnectionString);
                 var settings = new ConnectionSettings(connectionUrl);
                 this.Client = new ElasticClient(settings);
             }
