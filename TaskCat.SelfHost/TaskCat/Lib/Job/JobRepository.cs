@@ -159,7 +159,7 @@
 
             var result = await UpdateJob(job);
 
-            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, result.UpdatedValue);
         }
 
         public async Task<UpdateResult<Job>> CancelJob(Job job, string reason)
