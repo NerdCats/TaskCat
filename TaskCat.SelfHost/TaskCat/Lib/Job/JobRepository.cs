@@ -76,7 +76,7 @@
         public async Task<UpdateResult<Job>> UpdateJob(Job job)
         {
             var result = await manager.UpdateJob(job);
-            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
+            return new UpdateResult<Job>(1, 1, job);
         }
 
         public async Task<UpdateResult<Job>> UpdateOrder(Job job, OrderModel orderModel, string mode)
