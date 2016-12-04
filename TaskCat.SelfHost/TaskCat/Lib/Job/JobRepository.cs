@@ -76,6 +76,8 @@
         public async Task<UpdateResult<Job>> UpdateJob(Job job)
         {
             var result = await manager.UpdateJob(job);
+            jobSearchSubject.OnNext(result);
+
             return new UpdateResult<Job>(1, 1, job);
         }
 
@@ -106,6 +108,7 @@
             }
 
             var result = await UpdateJob(job);
+
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
@@ -155,7 +158,6 @@
             job.JobServedBy = userModel;
 
             var result = await UpdateJob(job);
-            jobSearchSubject.OnNext(result.UpdatedValue);
 
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
