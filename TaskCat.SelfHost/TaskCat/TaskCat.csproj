@@ -459,6 +459,9 @@
     <Content Include=".config\production\ClientSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include=".config\production\ElasticSearchSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include=".config\local\ElasticSearchSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
