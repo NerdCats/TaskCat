@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Data.Entity
 {
+    using Model.Identity.Response;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -20,5 +21,7 @@
 
         public DateTime? CreateTime { get; set; }
         public DateTime? LastModified { get; set; }
+
+        public ReferenceUser User { get; set; }
     }   
 }

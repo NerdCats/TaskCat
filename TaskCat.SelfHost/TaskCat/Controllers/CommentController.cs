@@ -1,12 +1,16 @@
 ﻿namespace TaskCat.Controllers
 {
+    using Common.Lib.Utility;
     using Common.Model.Pagination;
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Data.Entity;
     using Lib.Comments;
     using Lib.Constants;
+    using Lib.Job;
+    using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
@@ -19,6 +23,7 @@
     public class CommentController : ApiController
     {
         private ICommentService service;
+        private IJobRepository jobRepository;
 
         /// <summary>
         /// Initializes a default instance of CommentController
@@ -26,9 +31,10 @@
         /// <param name="service">
         /// ICommentService to facilitate comment features
         /// </param>
-        public CommentController(ICommentService service)
+        public CommentController(ICommentService service, IJobRepository jobRepository)
         {
             this.service = service;
+            this.jobRepository = jobRepository;
         }
 
         /// <summary>
@@ -91,14 +97,32 @@
         /// </summary>
         /// <param name="comment">Comment to be created. </param>
         /// <returns></returns>
+        /// 
+        [Authorize]
         [HttpPost]
         public async Task<IHttpActionResult> Post(Comment comment)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var currentUserId = this.User.Identity.GetUserId();
+
             if (service.IsValidEntityTypeForComment(comment.EntityType))
             {
+                // TODO: This needs to move to a proper class and place. Since I dont have any other entities that have 
+                // comments enabled, this will do the trick for now
+                if(this.User.IsUserOrEnterpriseUserOnly() && comment.EntityType == typeof(Job).ToString())
+                {
+                    var job = await jobRepository.GetJobByHrid(comment.RefId);
+                    if (job.User.UserId != currentUserId)
+                        throw new InvalidOperationException($"{currentUserId} is not allowed to comment on {comment.RefId}");
+                }
+
+                comment.User = new ReferenceUser(currentUserId, this.User.Identity.GetUserName())
+                {
+                    Name = this.User.Identity.GetUserFullName()
+                };
+
                 var result = await service.Insert(comment);
                 return Created<Comment>($"{this.Request.RequestUri}{result.Id}", result);
             }
