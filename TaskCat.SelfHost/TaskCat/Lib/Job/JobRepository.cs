@@ -25,14 +25,17 @@
     {
         private IJobManager manager;
         private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
+        private IObserver<Job> jobSearchSubject;
 
         public JobRepository(
             IJobManager manager, 
             AccountManager accountManager, 
-            Subject<JobActivity> activitySubject)
+            Subject<JobActivity> activitySubject,
+            IObserver<Job> jobIndexingSubject)
         {
             this.manager = manager;
             this.accountManager = accountManager;
+            this.jobSearchSubject = jobIndexingSubject;
         }
 
         public async Task<Job> GetJob(string id)
@@ -152,6 +155,8 @@
             job.JobServedBy = userModel;
 
             var result = await UpdateJob(job);
+            jobSearchSubject.OnNext(result.UpdatedValue);
+
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 

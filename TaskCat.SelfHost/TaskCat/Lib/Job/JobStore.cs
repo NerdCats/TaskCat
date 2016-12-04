@@ -111,6 +111,7 @@
 
         internal async Task<ReplaceOneResult> ReplaceOne(Job job)
         {
+            job.ModifiedTime = DateTime.UtcNow;
             var Filter = Builders<Job>.Filter.Where(x => x.Id == job.Id);
             var result = await _context.Jobs.ReplaceOneAsync(Filter, job);
             return result;
