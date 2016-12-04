@@ -29,7 +29,9 @@
         {
             // TODO: Just saving it on the database for now
             // Log activity here
-            context.Client.Index(job, idx => idx.Index(nameof(Job).ToLowerInvariant()));     
+            context.Client.Index(job, idx => idx
+            .Index(nameof(Job).ToLowerInvariant())
+            .Type(job.Order.Type));
         }
 
         private void OnError(Exception exception)
