@@ -49,7 +49,6 @@
             this.hridService = hridService;
             this.vendorService = vendorService;
             this.jobSearchIndexService = jobSearchIndexSubject;
-            this.searchContext = searchContext;
 
             orderCalculationService = new DefaultOrderCalculationService();
             serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
