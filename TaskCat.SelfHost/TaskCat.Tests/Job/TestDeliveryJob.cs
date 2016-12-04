@@ -35,6 +35,7 @@
         string MockedHrid = "Job#123456";
         Mock<IPaymentMethod> paymentMethodMock;
         private Subject<JobActivity> activitySubject;
+        private Subject<Job> jobIndexingSubject;
 
         [SetUp]
         public void Setup()
@@ -45,6 +46,7 @@
             paymentMethodMock = new Mock<IPaymentMethod>();
 
             this.activitySubject = new Subject<JobActivity>();
+            this.jobIndexingSubject = new Subject<Job>();
         }
 
         private JobRepository SetupMockJobRepositoryForUpdate()
@@ -53,11 +55,11 @@
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
             return jobRepository;
         }
 
@@ -154,12 +156,12 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
 
             var result = await jobRepository.CancelJob(createdJob, cancellationReason);
 
@@ -174,7 +176,6 @@
         {
             var searchJobId = "i1i2i3i4";
             string cancellationReason = "test cancellation reason";
-            var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
             var createdJob = GetDummyJob(OrderTypes.Delivery);
             createdJob.State = JobState.CANCELLED;
@@ -182,12 +183,12 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
 
             var result = await jobRepository.RestoreJob(createdJob);
 
