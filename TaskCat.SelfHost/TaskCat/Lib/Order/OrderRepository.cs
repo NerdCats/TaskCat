@@ -18,6 +18,7 @@
     using Data.Entity.Identity;
     using Vendor;
     using Account.Core;
+    using Common.Search;
 
     public class OrderRepository : IOrderRepository
     {
@@ -30,6 +31,8 @@
         IOrderProcessor orderProcessor;
         IPaymentService paymentService;
         private IVendorService vendorService;
+        private IObserver<Job> jobSearchIndexService;
+        private ISearchContext searchContext;
 
         public OrderRepository(
             IJobManager manager,
@@ -37,13 +40,16 @@
             AccountManager accountManager,
             IHRIDService hridService,
             IPaymentManager paymentManager,
-            IVendorService vendorService)
+            IVendorService vendorService,
+            IObserver<Job> jobSearchIndexSubject)
         {
             this.manager = manager;
             this.supportedOrderStore = supportedOrderStore;
             this.accountManager = accountManager;
             this.hridService = hridService;
             this.vendorService = vendorService;
+            this.jobSearchIndexService = jobSearchIndexSubject;
+            this.searchContext = searchContext;
 
             orderCalculationService = new DefaultOrderCalculationService();
             serviceChargeCalculationService = new DefaultDeliveryServiceChargeCalculationService();
@@ -110,7 +116,9 @@
                 default:
                     throw new InvalidOperationException("Invalid/Not supported Order Type Provided");
             }
-            return await ConstructAndRegister(jobShop, builder);
+            var result = await ConstructAndRegister(jobShop, builder);
+            this.jobSearchIndexService.OnNext(result);
+            return result;
         }
 
         private string GetNameFromProfile(User user)
@@ -146,7 +154,7 @@
         private async Task<Job> ConstructAndRegister(JobShop jobShop, JobBuilder builder)
         {
             var createdJob = jobShop.Construct(builder);
-            var result = await manager.RegisterJob(createdJob);           
+            var result = await manager.RegisterJob(createdJob);
             return result;
         }
 

@@ -4,6 +4,7 @@
     using Data.Entity;
     using Common.Search;
     using System.Reactive.Linq;
+    using System.Reactive.Concurrency;
 
     public class JobSearchIndexService
     {
@@ -28,7 +29,7 @@
         {
             // TODO: Just saving it on the database for now
             // Log activity here
-            context.Client.Index(job, idx => idx.Index(nameof(Job)));     
+            context.Client.Index(job, idx => idx.Index(nameof(Job).ToLowerInvariant()));     
         }
 
         private void OnError(Exception exception)
