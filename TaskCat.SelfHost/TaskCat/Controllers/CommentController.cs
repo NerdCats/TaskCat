@@ -79,11 +79,13 @@
         /// <param name="pageSize">Desired page size.</param>
         /// <param name="page">Desired page number.</param>
         /// <returns></returns>
+        /// 
+        [Authorize]
         [HttpGet]
         [Route("api/Comment/{entityType}/{refId}", Name = AppConstants.DefaultCommentsRoute)]
         public async Task<IHttpActionResult> GetComments(string entityType, string refId, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
-            if(service.IsValidEntityTypeForComment(entityType))
+            if (service.IsValidEntityTypeForComment(entityType))
             {
                 var comments = await service.GetByRefId(refId, entityType, pageSize, page);
                 return Ok(new PageEnvelope<Comment>(comments.Total, page, pageSize, AppConstants.DefaultCommentsRoute, comments.Result, this.Request));
@@ -111,7 +113,7 @@
             {
                 // TODO: This needs to move to a proper class and place. Since I dont have any other entities that have 
                 // comments enabled, this will do the trick for now
-                if(this.User.IsUserOrEnterpriseUserOnly() && comment.EntityType == typeof(Job).ToString())
+                if (!this.User.IsAdmin() && comment.EntityType == typeof(Job).ToString())
                 {
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
@@ -134,9 +136,19 @@
         /// </summary>
         /// <param name="id">Delete to be created.</param>
         /// <returns></returns>
+        /// 
+        [Authorize]
         [HttpDelete]
-        public async Task<IHttpActionResult> Delete (string id)
+        public async Task<IHttpActionResult> Delete(string id)
         {
+            var currentUserId = this.User.Identity.GetUserId();
+            if (!this.User.IsAdmin())
+            {
+                var comment = await service.Get(id);
+                if (comment.User.Id != currentUserId)
+                    throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to delete comment {id}");
+            }
+
             var result = await service.Delete(id);
             return Ok<Comment>(result);
         }
