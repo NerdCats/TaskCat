@@ -121,6 +121,12 @@
         /// </summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// Added a reference invoice id for every order
+        /// </summary>
+        [Required(ErrorMessage ="Please give an invoice id")]
+        public string ReferenceInvoiceId { get; set; }
+
         public OrderDetails OrderCart { get; set; }
 
         public OrderModel()

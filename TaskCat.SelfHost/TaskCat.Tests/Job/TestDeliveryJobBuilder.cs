@@ -45,6 +45,7 @@
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             order.UserId = "SampleUserId";
             order.PaymentMethod = "SamplePaymentMethod";
+            order.ReferenceInvoiceId = "SampleReferenceInvoiceId";
 
             UserModel userModel = new UserModel()
             {
