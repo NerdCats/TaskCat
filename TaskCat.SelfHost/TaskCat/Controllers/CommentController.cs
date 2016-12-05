@@ -116,7 +116,7 @@
             {
                 // TODO: This needs to move to a proper class and place. Since I dont have any other entities that have 
                 // comments enabled, this will do the trick for now
-                if (!this.User.IsAdmin() && comment.EntityType == typeof(Job).ToString())
+                if (this.User.IsUserOrEnterpriseUserOnly() && comment.EntityType == typeof(Job).ToString())
                 {
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
