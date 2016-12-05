@@ -5,6 +5,7 @@
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Data.Entity;
+    using Data.Model;
     using Lib.Comments;
     using Lib.Constants;
     using Lib.Job;
@@ -132,11 +133,38 @@
         }
 
         /// <summary>
+        /// Update a comment 
+        /// </summary>
+        /// <param name="model">CommentUpdateModel to update a single comment</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut]
+        public async Task<IHttpActionResult> Update([FromBody] CommentUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentUserId = this.User.Identity.GetUserId();
+            var comment = await service.Get(model.Id);
+
+            if (!this.User.IsAdmin())
+            {
+                if (comment.User.Id != currentUserId)
+                    throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
+            }
+
+            comment.LastModified = DateTime.UtcNow;
+            comment.CommentText = model.CommentText;
+
+            var result = await service.Update(comment);
+            return Ok<Comment>(result);
+        }
+
+        /// <summary>
         /// Delete request to delete a comment.
         /// </summary>
         /// <param name="id">Delete to be created.</param>
         /// <returns></returns>
-        /// 
         [Authorize]
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(string id)
