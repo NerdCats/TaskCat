@@ -31,7 +31,7 @@
 
 
 ---
-#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService)
+#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService,TaskCat.Lib.Job.IJobRepository)
 
  Initializes a default instance of CommentController 
 
@@ -89,6 +89,18 @@
 |Name | Description |
 |-----|------|
 |comment: |Comment to be created. |
+**Returns**: 
+
+
+
+---
+#### Method Controllers.CommentController.Update(TaskCat.Data.Model.CommentUpdateModel)
+
+ Update a comment 
+
+|Name | Description |
+|-----|------|
+|model: |CommentUpdateModel to update a single comment|
 **Returns**: 
 
 
