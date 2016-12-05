@@ -136,6 +136,7 @@
     <Compile Include="Lib\Payment\Request\VoidPaymentRequest.cs" />
     <Compile Include="Lib\Payment\Response\VoidPaymentResponse.cs" />
     <Compile Include="Model\ClientModel.cs" />
+    <Compile Include="Model\CommentUpdateModel.cs" />
     <Compile Include="Model\Geocoding\Address.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
