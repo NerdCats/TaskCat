@@ -17,5 +17,11 @@
             this.Profile = asset.Profile as AssetProfile;
             this.AverageRating = asset.AverageRating;
         }
+
+        public override string ToString()
+        {
+            return string.IsNullOrEmpty((this.Profile as AssetProfile).FullName)
+                ? this.UserName : (this.Profile as AssetProfile).FullName;
+        }
     }
 }

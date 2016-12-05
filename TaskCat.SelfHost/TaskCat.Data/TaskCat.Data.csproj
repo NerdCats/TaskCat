@@ -136,6 +136,7 @@
     <Compile Include="Lib\Payment\Request\VoidPaymentRequest.cs" />
     <Compile Include="Lib\Payment\Response\VoidPaymentResponse.cs" />
     <Compile Include="Model\ClientModel.cs" />
+    <Compile Include="Model\CommentUpdateModel.cs" />
     <Compile Include="Model\Geocoding\Address.cs" />
     <Compile Include="Model\Identity\PasswordUpdateModel.cs" />
     <Compile Include="Model\Identity\Profile\ContactUpdateModel.cs" />
@@ -175,13 +176,11 @@
     <Compile Include="Model\JobTasks\AssignAssetTask.cs" />
     <Compile Include="Model\JobTasks\DeliveryTask.cs" />
     <Compile Include="Model\JobTasks\FetchDeliveryManTask.cs" />
-    <Compile Include="Model\JobTasks\FetchRideTask.cs" />
     <Compile Include="Model\JobTasks\PackagePickUpTask.cs" />
     <Compile Include="Model\JobTasks\PickUpTask.cs" />
     <Compile Include="Model\JobTasks\Preference\JobTaskETAPreference.cs" />
     <Compile Include="Model\JobTasks\Result\DefaultAssignAssetTaskResult.cs" />
     <Compile Include="Model\JobTasks\Result\AssetTaskResult.cs" />
-    <Compile Include="Model\JobTasks\RidePickUpTask.cs" />
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\Operation\UpdateResult.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="Model\Order\OrderCreationBehaviour.cs" />
     <Compile Include="Model\Order\OrderDetails.cs" />
     <Compile Include="Model\Order\OrderTypes.cs" />
-    <Compile Include="Model\Order\RideOrder.cs" />
     <Compile Include="Model\Payment\PaymentSettings.cs" />
     <Compile Include="Model\Payment\PaymentStatus.cs" />
     <Compile Include="Model\Operation\QueryResult.cs" />

@@ -90,29 +90,31 @@
             return await _context.Jobs.CountAsync(x => true);
         }
 
-        internal async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
+        internal async Task<Job> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
             task.ModifiedTime = DateTime.Now;
             var Filter = Builders<Job>.Filter.Where(x => x.Id == jobId);
             var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks[taskIndex], task);
 
-            var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
+            var result = await _context.Jobs.FindOneAndUpdateAsync(Filter, UpdateDefinition);
             return result;
         }
 
-        internal async Task<UpdateResult> UpdateJobTasks(string jobId, List<JobTask> tasks)
+        internal async Task<Job> UpdateJobTasks(string jobId, List<JobTask> tasks)
         {
             var Filter = Builders<Job>.Filter.Where(x => x.Id == jobId);
             var UpdateDefinition = Builders<Job>.Update.Set(x => x.Tasks, tasks);
 
-            var result = await _context.Jobs.UpdateOneAsync(Filter, UpdateDefinition);
+            var result = await _context.Jobs.FindOneAndUpdateAsync(Filter, UpdateDefinition);
             return result;
         }
 
-        internal async Task<ReplaceOneResult> ReplaceOne(Job job)
+        internal async Task<Job> ReplaceOne(Job job)
         {
+            job.ModifiedTime = DateTime.UtcNow;
             var Filter = Builders<Job>.Filter.Where(x => x.Id == job.Id);
-            var result = await _context.Jobs.ReplaceOneAsync(Filter, job);
+
+            var result = await _context.Jobs.FindOneAndReplaceAsync(Filter, job);
             return result;
         }
     }

@@ -12,13 +12,15 @@
     using Model.Payment;
     using System.ComponentModel;
     using Model.Vendor.ProfitSharing;
+    using Core;
+    using System.Runtime.CompilerServices;
 
     [BsonIgnoreExtraElements(Inherited = true)]
-    public class Job : HRIDEntity
+    public class Job : HRIDEntity, INotifyPropertyChanged
     {
         [BsonIgnore]
         [JsonIgnore]
-        public bool IsAssetEventsHooked = false;
+        public bool IsJobTasksEventsHooked = false;
 
         private string _name;
         public string Name
@@ -29,7 +31,10 @@
                     GenerateDefaultJobName()
                     : _name;
             }
-            set { _name = value; }
+            set
+            {
+                Set(ref _name, value);
+            }
         }
 
         [BsonIgnoreIfNull]
@@ -42,16 +47,29 @@
             {
                 return _user;
             }
-            set { _user = value; }
+            set
+            {
+                Set(ref _user, value);
+            }
         }
 
         private UserModel _jobServedBy;
-        public UserModel JobServedBy { get { return _jobServedBy; } set { _jobServedBy = value; } }
+        public UserModel JobServedBy
+        {
+            get
+            {
+                return _jobServedBy;
+            }
+            set
+            {
+                Set(ref _jobServedBy, value);
+            }
+        }
 
         public Dictionary<string, AssetModel> Assets { get; set; }
 
         private List<JobTask> tasks;
-        public List<JobTask> Tasks { get { return tasks; } set { tasks = value; EnsureTaskAssetEventsAssigned(); } }
+        public List<JobTask> Tasks { get { return tasks; } set { tasks = value; } }
 
         private JobState state;
         [BsonRepresentation(BsonType.String)]
@@ -61,7 +79,7 @@
             get { return state; }
             set
             {
-                state = value;
+                Set(ref state, value);
             }
         }
 
@@ -96,10 +114,7 @@
             }
         }
 
-        [BsonIgnoreIfNull]
-        public DateTime? PreferredDeliveryTime { get; set; }
-
-        public string InvoiceId { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private JobTask _terminalTask;
         [BsonIgnore]
@@ -115,9 +130,33 @@
             }
         }
 
-        public string PaymentMethod { get; set; }
+        private string _paymentMethod;
+        public string PaymentMethod
+        {
+            get
+            {
+                return _paymentMethod;
+            }
+            set
+            {
+                Set(ref _paymentMethod, value);
+            }
+        }
+
+        private PaymentStatus _paymentStatus;
+        [BsonRepresentation(BsonType.String)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentStatus PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus
+        {
+            get
+            {
+                return _paymentStatus;
+            }
+            set
+            {
+                Set(ref _paymentStatus, value);
+            }
+        }
 
         public string CancellationReason { get; set; }
         public bool IsDeleted { get; set; }
@@ -182,15 +221,25 @@
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
             tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
+            IsJobTasksEventsHooked = true;
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (!(sender is JobTask))
+                throw new ArgumentException($"sender is not of type {typeof(JobTask).Name}");
+
+            var task = sender as JobTask;
+
             this.ModifiedTime = DateTime.UtcNow;
             switch (e.PropertyName)
             {
-                case "State":
-                    SetProperJobState(sender as JobTask);
+                case nameof(JobTask.State):
+                    SetProperJobState(task);
+                    break;
+                case nameof(JobTask.AssetRef):
+                    if (!Assets.ContainsKey(task.AssetRef))
+                        Assets[task.AssetRef] = task.Asset;
                     break;
             }
         }
@@ -199,30 +248,18 @@
         {
             if (jobTask.State >= JobTaskState.IN_PROGRESS
                 && jobTask.State < JobTaskState.COMPLETED
-                && state != JobState.IN_PROGRESS)
+                && State != JobState.IN_PROGRESS)
             {
-                state = JobState.IN_PROGRESS;
+                State = JobState.IN_PROGRESS;
                 this.InitiationTime = this.InitiationTime ?? DateTime.UtcNow;
             }
             else if (jobTask.State == JobTaskState.CANCELLED)
-                state = JobState.CANCELLED;
+                State = JobState.CANCELLED;
 
             if (this.tasks.All(x => x.State == JobTaskState.COMPLETED))
             {
                 this.CompletionTime = DateTime.UtcNow;
-                this.state = JobState.COMPLETED;
-            }
-        }
-
-        public void EnsureTaskAssetEventsAssigned()
-        {
-            if (this.Tasks != null && this.Tasks.Count > 0)
-            {
-                foreach (var task in Tasks)
-                {
-                    task.AssetUpdated += Jtask_AssetUpdated;
-                }
-                IsAssetEventsHooked = true;
+                this.State = JobState.COMPLETED;
             }
         }
 
@@ -246,7 +283,7 @@
             if (this.Tasks == null)
                 Tasks = new List<JobTask>();
             this.Tasks.Add(jtask);
-            jtask.AssetUpdated += Jtask_AssetUpdated;
+
         }
 
         private string GenerateDefaultJobName()
@@ -254,10 +291,18 @@
             return string.Format("{0} Job for {1}", this.Order.Type, string.IsNullOrWhiteSpace(User.UserName) ? User.UserId : User.UserName);
         }
 
-        private void Jtask_AssetUpdated(string AssetRef, AssetModel asset)
+        // INFO: This is definitely code replication. But I currently don't have a good idea
+        // to make it reusable 
+
+        protected bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            if (!Assets.ContainsKey(AssetRef))
-                Assets[AssetRef] = asset;
+            if (!Equals(storage, value))
+            {
+                storage = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+            return false;
         }
     }
 }

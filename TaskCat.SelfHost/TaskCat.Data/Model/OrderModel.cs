@@ -9,7 +9,7 @@
     using Order.Delivery;
     using Order;
 
-    [BsonKnownTypes(typeof(RideOrder), typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
+    [BsonKnownTypes(typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
@@ -120,6 +120,11 @@
         /// Package Description to describe what the package is all about
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Added a reference invoice id for every order
+        /// </summary>
+        public string ReferenceInvoiceId { get; set; }
 
         public OrderDetails OrderCart { get; set; }
 

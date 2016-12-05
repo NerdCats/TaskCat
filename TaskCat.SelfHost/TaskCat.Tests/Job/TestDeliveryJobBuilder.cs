@@ -45,6 +45,7 @@
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             order.UserId = "SampleUserId";
             order.PaymentMethod = "SamplePaymentMethod";
+            order.ReferenceInvoiceId = "SampleReferenceInvoiceId";
 
             UserModel userModel = new UserModel()
             {
@@ -102,7 +103,7 @@
             Assert.NotNull(builder.Job.CreateTime);
             Assert.NotNull(builder.Job.ModifiedTime);
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
-            Assert.False(builder.Job.IsAssetEventsHooked);
+            Assert.False(builder.Job.IsJobTasksEventsHooked);
             Assert.Null(builder.Job.TerminalTask);
         }
 
@@ -194,7 +195,7 @@
             Assert.That(builder.Job.Tasks.First().GetType() == typeof(FetchDeliveryManTask));
             Assert.That(builder.Job.Tasks[1].GetType() == typeof(PackagePickUpTask));
             Assert.That(builder.Job.Tasks.Last().GetType() == typeof(DeliveryTask));
-            Assert.True(builder.Job.IsAssetEventsHooked);
+            Assert.True(builder.Job.IsJobTasksEventsHooked);
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);
@@ -500,7 +501,7 @@
             Assert.That(builder.Job.Tasks.First().GetType() == typeof(FetchDeliveryManTask));
             Assert.That(builder.Job.Tasks[1].GetType() == typeof(PackagePickUpTask));
             Assert.That(builder.Job.Tasks.Last().GetType() == typeof(SecureDeliveryTask));
-            Assert.True(builder.Job.IsAssetEventsHooked);
+            Assert.True(builder.Job.IsJobTasksEventsHooked);
             Assert.NotNull(builder.Job.TerminalTask);
             Assert.That(builder.Job.TerminalTask == builder.Job.Tasks.Last());
             Assert.AreEqual(JobState.ENQUEUED, builder.Job.State);

@@ -30,9 +30,8 @@
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("api/docs/{apiVersion}/", c =>
+            config.EnableSwagger("docs/{apiVersion}/", c =>
             {
-
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
                 var commentsFile = Path.Combine(baseDirectory, commentsFileName);

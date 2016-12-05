@@ -16,7 +16,6 @@
     using Order.Process;
     using Data.Model.Order;
     using Data.Model.Operation;
-    using Model.Job;
     using Updaters;
     using Common.Model.Pagination;
     using Account.Core;
@@ -26,16 +25,17 @@
     {
         private IJobManager manager;
         private AccountManager accountManager; // FIXME: When a full fledged assetManager comes up this should be replaced by that
-        private Subject<JobActivity> activitySubject;
+        private IObserver<Job> jobSearchSubject;
 
         public JobRepository(
             IJobManager manager, 
             AccountManager accountManager, 
-            Subject<JobActivity> activitySubject)
+            Subject<JobActivity> activitySubject,
+            IObserver<Job> jobIndexingSubject)
         {
             this.manager = manager;
             this.accountManager = accountManager;
-            this.activitySubject = activitySubject;
+            this.jobSearchSubject = jobIndexingSubject;
         }
 
         public async Task<Job> GetJob(string id)
@@ -73,12 +73,15 @@
             throw new NotImplementedException();
         }
 
-        public async Task<ReplaceOneResult> UpdateJob(Job job)
+        public async Task<UpdateResult<Job>> UpdateJob(Job job)
         {
-            return await manager.UpdateJob(job);
+            var result = await manager.UpdateJob(job);
+            jobSearchSubject.OnNext(result);
+
+            return new UpdateResult<Job>(1, 1, job);
         }
 
-        public async Task<ReplaceOneResult> UpdateOrder(Job job, OrderModel orderModel)
+        public async Task<UpdateResult<Job>> UpdateOrder(Job job, OrderModel orderModel, string mode)
         {
             if (job.Order.Type != orderModel.Type)
             {
@@ -98,23 +101,22 @@
                             serviceChargeCalculationService);
                         orderProcessor.ProcessOrder(orderModel);
                         var jobUpdater = new DeliveryJobUpdater(job);
-                        jobUpdater.UpdateJob(orderModel);
+                        jobUpdater.UpdateJob(orderModel, mode);
                         job = jobUpdater.Job;
                         break;
                     }
             }
 
             var result = await UpdateJob(job);
-            return result;
+
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<ReplaceOneResult> UpdateJobTaskWithPatch(string jobId, string taskId, JsonPatchDocument<JobTask> taskPatch)
+        public async Task<UpdateResult<Job>> UpdateJobTaskWithPatch(Job job, string taskId, JsonPatchDocument<JobTask> taskPatch)
         {
-            var job = await GetJob(jobId);
-
             if (job.State == JobState.CANCELLED)
             {
-                throw new NotSupportedException($"Job {jobId} is in state {job.State}, restore job for further changes");
+                throw new NotSupportedException($"Job {job.Id} is in state {job.State}, restore job for further changes");
             }
 
             var selectedTask = job.Tasks.FirstOrDefault(x => x.id == taskId);
@@ -129,7 +131,8 @@
             job.ModifiedTime = selectedTask.ModifiedTime;
 
             var result = await UpdateJob(job);
-            return result;
+
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
         public async Task<bool> ResolveAssetRef(JsonPatchDocument<JobTask> taskPatch, JobTask jobTask)
@@ -148,27 +151,21 @@
             return true;
         }
 
-        public async Task<ReplaceOneResult> Claim(string jobId, string userId)
+        public async Task<UpdateResult<Job>> Claim(Job job, string userId)
         {
-            var job = await GetJob(jobId);
             var adminUser = await accountManager.FindByIdAsync(userId);
             var userModel = new UserModel(adminUser);
             job.JobServedBy = userModel;
 
-            this.activitySubject.OnNext(
-                new JobActivity(job, JobActivityOperatioNames.Claim, new ReferenceUser(userModel))
-                {
-                    Path = nameof(job.JobServedBy)
-                });
+            var result = await UpdateJob(job);
 
-            return await UpdateJob(job);
+            return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, result.UpdatedValue);
         }
 
-        public async Task<UpdateResult<Job>> CancelJob(JobCancellationRequest request)
+        public async Task<UpdateResult<Job>> CancelJob(Job job, string reason)
         {
-            var job = await GetJob(request.JobId);
             job.State = JobState.CANCELLED;
-            job.CancellationReason = request.Reason ?? request.Reason;
+            job.CancellationReason = reason;
 
             var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
 
@@ -179,10 +176,8 @@
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<UpdateResult<Job>> RestoreJob(string jobId)
+        public async Task<UpdateResult<Job>> RestoreJob(Job job)
         {
-            var job = await GetJob(jobId);
-
             if (!job.IsJobFreezed)
                 throw new NotSupportedException($" job {job.Id} is not freezed to be restored");
 

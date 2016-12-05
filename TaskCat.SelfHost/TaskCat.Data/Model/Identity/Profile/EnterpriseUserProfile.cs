@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
 using TaskCat.Data.Model.Identity.Registration;
 
 namespace TaskCat.Data.Model.Identity.Profile
@@ -18,6 +19,11 @@ namespace TaskCat.Data.Model.Identity.Profile
         {
             this.CompanyName = enterpriseUserModel.ContactPersonName;
             this.Website = enterpriseUserModel.Website;
+        }
+
+        public override string GetName()
+        {
+            return CompanyName;
         }
     }
 }

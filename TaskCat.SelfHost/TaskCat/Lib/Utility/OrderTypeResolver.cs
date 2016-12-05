@@ -11,9 +11,6 @@
             OrderModel orderModel = default(OrderModel);
             switch (orderType)
             {
-                case OrderTypes.Ride:
-                    orderModel = new RideOrder();
-                    break;
                 case OrderTypes.Delivery:
                     orderModel = new DeliveryOrder();
                     break;

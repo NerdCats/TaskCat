@@ -20,5 +20,7 @@
 
         public DateTime? CreateTime { get; set; }
         public DateTime? LastModified { get; set; }
+
+        public ReferenceUser User { get; set; }
     }   
 }

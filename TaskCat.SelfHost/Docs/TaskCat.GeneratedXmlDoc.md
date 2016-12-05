@@ -31,7 +31,7 @@
 
 
 ---
-#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService)
+#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService,TaskCat.Lib.Job.IJobRepository)
 
  Initializes a default instance of CommentController 
 
@@ -89,6 +89,18 @@
 |Name | Description |
 |-----|------|
 |comment: |Comment to be created. |
+**Returns**: 
+
+
+
+---
+#### Method Controllers.CommentController.Update(TaskCat.Data.Model.CommentUpdateModel)
+
+ Update a comment 
+
+|Name | Description |
+|-----|------|
+|model: |CommentUpdateModel to update a single comment|
 **Returns**: 
 
 
@@ -198,6 +210,32 @@
 |id: | Sepcific drop point id to be deleted |
 |userId: | Optional, if an Administrator wants to delete a specific id of an user, he can use this field |
 **Returns**:  Deleted drop point 
+
+
+
+---
+## Type Controllers.JobActivityController
+
+ Controller for job activities. 
+
+
+
+---
+#### Method Controllers.JobActivityController.#ctor(TaskCat.Common.Db.IDbContext)
+
+ Instantiates job activity controller. 
+
+|Name | Description |
+|-----|------|
+|dbContext: |Database context to go with.|
+
+
+---
+#### Method Controllers.JobActivityController.GetJobActivityFeed
+
+ Default Odata route to get job activities 
+
+**Returns**: 
 
 
 
@@ -315,7 +353,7 @@
 
 
 ---
-#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask})
+#### Method Controllers.JobController.Update(System.String,System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask},System.Boolean)
 
  Partial update to a specific task under a job 
 
@@ -355,7 +393,7 @@
 
 
 ---
-#### Method Controllers.JobController.UpdateOrder(System.String,TaskCat.Data.Model.OrderModel)
+#### Method Controllers.JobController.UpdateOrder(System.String,TaskCat.Data.Model.OrderModel,System.String)
 
  Update a order inside a job 
 
@@ -445,7 +483,7 @@
 
 
 ---
-#### Method Controllers.PaymentController.#ctor(TaskCat.Lib.Payment.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Lib.Job.IJobRepository)
+#### Method Controllers.PaymentController.#ctor(TaskCat.Lib.Payment.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Lib.Job.IJobRepository,System.Reactive.Subjects.Subject{TaskCat.Data.Entity.JobActivity})
 
  `PaymentController`  constructor 
 

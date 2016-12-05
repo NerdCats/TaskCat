@@ -8,7 +8,6 @@
     using System.Web.OData.Query;
     using Data.Model.Operation;
     using System;
-    using Exceptions;
     using System.Linq;
     using Common.Exceptions;
 
@@ -57,7 +56,6 @@
             TerminalTask = TerminalTask ?? JobPayload.Tasks[0];
             JobPayload.TerminalTask = TerminalTask;
 
-            JobPayload.EnsureTaskAssetEventsAssigned();
             JobPayload.EnsureAssetModelsPropagated();
             JobPayload.EnsureJobTaskChangeEventsRegistered(isFetchingJobPayload: true);
 
@@ -93,17 +91,17 @@
             return job;
         }
 
-        public async Task<UpdateResult> UpdateJobTask(string jobId, int taskIndex, JobTask task)
+        public async Task<Job> UpdateJobTask(string jobId, int taskIndex, JobTask task)
         {
             return await store.UpdateJobTask(jobId, taskIndex, task);
         }
 
-        public async Task<UpdateResult> UpdateJobTask(string _id, List<JobTask> tasks)
+        public async Task<Job> UpdateJobTask(string _id, List<JobTask> tasks)
         {
             return await store.UpdateJobTasks(_id, tasks);
         }
 
-        public async Task<ReplaceOneResult> UpdateJob(Job job)
+        public async Task<Job> UpdateJob(Job job)
         {
             return await store.ReplaceOne(job);
         }
