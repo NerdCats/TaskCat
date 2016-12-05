@@ -249,7 +249,7 @@
                 },
                 Type = Data.Model.Identity.IdentityTypes.USER,
                 UserId = "123456789",
-                UserName = "GabulTheAwesome"
+                UserName = "GabulTheAwesome",  
             };
 
             UserModel backendAdminModel = new UserModel()
@@ -287,6 +287,7 @@
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             order.PaymentMethod = "SamplePaymentMethod";
             order.Type = orderType;
+            order.ReferenceInvoiceId = "S1ML-1NV01C31";
             return order;
         }
 
