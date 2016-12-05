@@ -88,8 +88,15 @@
         [Route("api/Comment/{entityType}/{refId}", Name = AppConstants.DefaultCommentsRoute)]
         public async Task<IHttpActionResult> GetComments(string entityType, string refId, int pageSize = AppConstants.DefaultPageSize, int page = 0)
         {
+            var currentUserId = this.User.Identity.GetUserId();
             if (service.IsValidEntityTypeForComment(entityType))
             {
+                if (this.User.IsUserOrEnterpriseUserOnly() && entityType == typeof(Job).ToString())
+                {
+                    var job = await jobRepository.GetJobByHrid(refId);
+                    if (job.User.UserId != currentUserId)
+                        throw new InvalidOperationException($"{currentUserId} is not allowed to get comment feed of {refId}");
+                }
                 var comments = await service.GetByRefId(refId, entityType, pageSize, page);
                 return Ok(new PageEnvelope<Comment>(comments.Total, page, pageSize, AppConstants.DefaultCommentsRoute, comments.Result, this.Request));
             }
