@@ -40,7 +40,8 @@
                         }              
                     }                    
                 },
-                PaymentMethod = "CashOnDelivery"
+                PaymentMethod = "CashOnDelivery",
+                ReferenceInvoiceId = "SMPL-1NV01C31D"
             };
 
             // Act
