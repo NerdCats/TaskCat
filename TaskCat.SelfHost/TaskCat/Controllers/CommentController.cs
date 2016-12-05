@@ -46,7 +46,7 @@
         /// <param name="envelope">Boolean trigger to envelope or package the data in or not. </param>
         /// <returns></returns>
         /// 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Authorize(Roles = "Administrator,BackOfficeAdmin")]
         [ResponseType(typeof(PageEnvelope<Comment>))]
         [HttpGet]
         [Route("api/Comment/odata", Name = AppConstants.CommentOdataRoute)]
@@ -65,7 +65,7 @@
         /// <param name="id">Comment id to be fetched.</param>
         /// <returns>Comment with specified id.</returns>
         /// 
-        [Authorize]
+        [Authorize(Roles = "Administrator,BackOfficeAdmin")]
         [HttpGet]
         public async Task<IHttpActionResult> Get([Required(AllowEmptyStrings = false, ErrorMessage = "Comment Id not provided")]string id)
         {
