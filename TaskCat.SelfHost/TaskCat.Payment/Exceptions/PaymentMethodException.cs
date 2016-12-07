@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Payment.Exceptions
+﻿namespace TaskCat.Payment.Core.Exceptions
 {
     using System;
     public class PaymentMethodException : Exception

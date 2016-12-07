@@ -10,7 +10,7 @@
     using Data.Entity;
     using Data.Lib.Payment;
     using Data.Lib.Payment.Request;
-    using Payment;
+    using Payment.Core;
     using Job;
 
     /// <summary>

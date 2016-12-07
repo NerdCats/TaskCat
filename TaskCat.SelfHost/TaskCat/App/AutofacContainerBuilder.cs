@@ -25,7 +25,7 @@
     using Common.Search;
     using System;
     using Common.HRID;
-    using Payment;
+    using Payment.Core;
     using Job;
     using Job.Order;
     using Job.Vendor;

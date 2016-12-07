@@ -7,7 +7,7 @@
     <ProjectGuid>{816B4F10-12BB-475A-84A3-B8D317862F44}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskCat.Payment</RootNamespace>
+    <RootNamespace>TaskCat.Payment.Core</RootNamespace>
     <AssemblyName>TaskCat.Payment</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

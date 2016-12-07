@@ -156,9 +156,9 @@
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.csproj">
+    <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.Core.csproj">
       <Project>{816B4F10-12BB-475A-84A3-B8D317862F44}</Project>
-      <Name>TaskCat.Payment</Name>
+      <Name>TaskCat.Payment.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

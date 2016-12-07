@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Payment.Manual
+﻿namespace TaskCat.Payment.Core.Manual
 {
     /// <summary>
     /// Represents manual payment processor transaction mode

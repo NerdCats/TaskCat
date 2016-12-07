@@ -451,9 +451,9 @@
       <Project>{CE6F8FC6-5725-4038-A29A-5E094342B848}</Project>
       <Name>TaskCat.Job</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.csproj">
+    <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.Core.csproj">
       <Project>{816B4F10-12BB-475A-84A3-B8D317862F44}</Project>
-      <Name>TaskCat.Payment</Name>
+      <Name>TaskCat.Payment.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Payment
+﻿namespace TaskCat.Payment.Core
 {
     using System;
     using System.Collections.Generic;

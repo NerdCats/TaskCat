@@ -12,13 +12,13 @@
     using Common.HRID;
     using Process;
     using Data.Lib.Payment;
-    using Payment;
     using Data.Model.Identity;
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
     using Account.Core;
     using Common.Search;
     using Vendor;
+    using Payment.Core;
 
     public class OrderRepository : IOrderRepository
     {

@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Payment.Manual
+﻿namespace TaskCat.Payment.Core.Manual
 {
     public class CashOnDeliveryPaymentSettings
     {
