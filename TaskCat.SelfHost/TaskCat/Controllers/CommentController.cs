@@ -6,9 +6,9 @@
     using Common.Utility.Odata;
     using Data.Entity;
     using Data.Model;
+    using Job;
     using Lib.Comments;
     using Lib.Constants;
-    using Lib.Job;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
     using System;

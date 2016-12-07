@@ -1,39 +1,38 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Marvin.JsonPatch;
-using Microsoft.AspNet.Identity;
-using MongoDB.Driver;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Lib.Invoice.Response;
-using TaskCat.Data.Model;
-using TaskCat.Data.Model.Api;
-using TaskCat.Data.Model.Identity.Profile;
-using TaskCat.Data.Model.Operation;
-using TaskCat.Data.Model.Order;
-using TaskCat.Lib.Constants;
-using TaskCat.Lib.Invoice;
-using TaskCat.Lib.Invoice.Request;
-using TaskCat.Lib.Job;
-using TaskCat.Model.Job;
-using TaskCat.Common.Model.Pagination;
-using TaskCat.Common.Utility.ActionFilter;
-using TaskCat.Common.Utility.Odata;
-using TaskCat.Common.Email;
-using TaskCat.Lib.Job.Updaters;
-using TaskCat.Common.Lib.Utility;
-using System.Reactive.Subjects;
-using System.Collections.Generic;
-
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using Marvin.JsonPatch;
+    using Microsoft.AspNet.Identity;
+    using MongoDB.Driver;
+    using Data.Entity;
+    using Data.Entity.Identity;
+    using Data.Lib.Invoice.Response;
+    using Data.Model;
+    using Data.Model.Api;
+    using Data.Model.Identity.Profile;
+    using Data.Model.Operation;
+    using Data.Model.Order;
+    using Lib.Constants;
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
+    using Common.Email;
+    using Common.Lib.Utility;
+    using System.Reactive.Subjects;
+    using System.Collections.Generic;
+    using Job;
+    using Job.Updaters;
+    using Job.Invoice;
+    using Data.Lib.Invoice.Request;
+    using Data.Model.Job;
+
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
     /// </summary>
@@ -125,7 +124,7 @@ namespace TaskCat.Controllers
             pageSize = pageSize > AppConstants.MaxPageSize ? AppConstants.MaxPageSize : pageSize;
 
             if (envelope)
-                return Ok(await repository.GetJobsEnveloped(type, page, pageSize, this.Request));
+                return Ok(await repository.GetJobsEnveloped(type, page, pageSize, this.Request, AppConstants.DefaultApiRoute));
             return Ok(await repository.GetJobs(type, page, pageSize));
         }
 
@@ -189,7 +188,7 @@ namespace TaskCat.Controllers
             }
 
             assetId = string.IsNullOrEmpty(assetId) ? currentUserId : assetId;
-            
+
             IQueryable<Job> jobs = repository.GetJobs().Where(x => x.Assets.ContainsKey(assetId)).AsQueryable();
 
             var odataResult = await jobs.ToOdataResponse(Request, AppConstants.JobsOdataRoute);
@@ -378,12 +377,14 @@ namespace TaskCat.Controllers
             var job = await repository.GetJob(jobId);
 
             var activities = new List<JobActivity>();
-            job.PropertyChanged += (sender, eventArgs) => {
+            job.PropertyChanged += (sender, eventArgs) =>
+            {
                 JobActivity jobChangeActivity = null;
                 switch (eventArgs.PropertyName)
                 {
                     case nameof(Job.State):
-                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser) {
+                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser)
+                        {
                             Value = (sender as Job).State.ToString()
                         };
                         activities.Add(jobChangeActivity);
@@ -414,9 +415,10 @@ namespace TaskCat.Controllers
 
             activities.InsertRange(0, taskUpdates);
 
-            Task.Factory.StartNew(()=> {
+            Task.Factory.StartNew(() =>
+            {
                 foreach (var activity in activities)
-                {                    
+                {
                     activitySubject.OnNext(activity);
                 }
             });
@@ -518,7 +520,7 @@ namespace TaskCat.Controllers
             {
                 Name = this.User.Identity.GetUserFullName()
             };
-           
+
             var job = await repository.GetJob(jobId);
 
             if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)

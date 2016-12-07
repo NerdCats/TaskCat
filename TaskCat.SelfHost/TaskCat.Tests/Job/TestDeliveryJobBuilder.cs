@@ -10,15 +10,14 @@
     using Data.Model.Identity.Profile;
     using Data.Model.Geocoding;
     using Moq;
-    using TaskCat.Lib.Job.Builders;
-    using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
     using System.Collections.Generic;
     using Data.Model.JobTasks.Preference;
     using System;
     using Data.Lib.Constants;
     using System.ComponentModel.DataAnnotations;
-    using Data.Model.Order.Delivery;
+    using TaskCat.Job.Builders;
+    using Common.HRID;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]
     public class TestDeliveryJobBuilder

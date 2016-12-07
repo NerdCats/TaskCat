@@ -3,7 +3,7 @@ namespace TaskCat.Tests.Order
     using Data.Model.Inventory;
     using NUnit.Framework;
     using System.Collections.Generic;
-    using TaskCat.Lib.Order;
+    using TaskCat.Job.Order;
 
     [TestFixture(TestOf =typeof(DefaultDeliveryServiceChargeCalculationService))]
     public class DefaultDeliveryServiceChargeCalculationServiceTest

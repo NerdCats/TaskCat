@@ -1,9 +1,9 @@
-﻿using Dichotomy;
-using Dichotomy.Configuration;
-using Dichotomy.Helpers;
-
-namespace TaskCat
+﻿namespace TaskCat
 {
+    using Dichotomy;
+    using Dichotomy.Configuration;
+    using Dichotomy.Helpers;
+
     public static class Program
     {
         /// <summary>

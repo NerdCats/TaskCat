@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNet.Identity;
-using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using TaskCat.Common.Exceptions;
-using TaskCat.Common.Lib.Utility;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Lib.Payment;
-using TaskCat.Data.Lib.Payment.Request;
-using TaskCat.Lib.Job;
-using TaskCat.Lib.Payment;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
+    using Microsoft.AspNet.Identity;
+    using System.Reactive.Subjects;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using Common.Exceptions;
+    using Common.Lib.Utility;
+    using Data.Entity;
+    using Data.Lib.Payment;
+    using Data.Lib.Payment.Request;
+    using Payment;
+    using Job;
+
     /// <summary>
     /// <c>PaymentController</c> exposes all services provided by a <c>IPaymentManager</c>
     /// </summary>
@@ -71,7 +71,8 @@ namespace TaskCat.Controllers
         {
             var job = await jobRepository.GetJob(jobid);
             var paymentMethod = service.GetPaymentMethodByKey(job.PaymentMethod);
-            var result = paymentMethod.ProcessPayment(new ProcessPaymentRequest() {
+            var result = paymentMethod.ProcessPayment(new ProcessPaymentRequest()
+            {
                 JobId = jobid
             });
 
