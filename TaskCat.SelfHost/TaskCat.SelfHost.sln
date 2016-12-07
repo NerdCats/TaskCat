@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Account.Core", "Tas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Account", "TaskCat.Account\TaskCat.Account.csproj", "{34C727D8-FD09-4A6A-A633-38BE69C114F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Job", "TaskCat.Job\TaskCat.Job.csproj", "{CE6F8FC6-5725-4038-A29A-5E094342B848}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Job.Core", "TaskCat.Job\TaskCat.Job.Core.csproj", "{CE6F8FC6-5725-4038-A29A-5E094342B848}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Payment.Core", "TaskCat.Payment\TaskCat.Payment.Core.csproj", "{816B4F10-12BB-475A-84A3-B8D317862F44}"
 EndProject

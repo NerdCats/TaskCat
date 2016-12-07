@@ -158,9 +158,9 @@
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TaskCat.Job\TaskCat.Job.csproj">
+    <ProjectReference Include="..\TaskCat.Job\TaskCat.Job.Core.csproj">
       <Project>{CE6F8FC6-5725-4038-A29A-5E094342B848}</Project>
-      <Name>TaskCat.Job</Name>
+      <Name>TaskCat.Job.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskCat\TaskCat.csproj">
       <Project>{3239d40e-e8ff-462a-8e91-1203055c6e55}</Project>
