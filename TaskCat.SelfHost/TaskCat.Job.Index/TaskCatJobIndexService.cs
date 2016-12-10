@@ -46,11 +46,7 @@
             int secondsToGo = 6;
             Console.WriteLine($"Issuing the startup in {secondsToGo} seconds");
 
-            Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(secondsToGo)))
-            .ContinueWith((t) =>
-            {
-                StartUpIndexers();
-            });
+            SetTaskInterval(secondsToGo, () => StartUpIndexers());
 
             watch.Stop();
             Console.WriteLine($"Started TaskCat Job Indexing Servicein {watch.Elapsed.TotalSeconds} seconds");
@@ -73,8 +69,15 @@
             }
             catch (Exception ex)
             {
-                
+                int secondsToGo = 5 * 60;
+                SetTaskInterval(secondsToGo, ()=>StartUpIndexers());
             }
+        }
+
+        private void SetTaskInterval(int secondsToGo, Action action)
+        {
+            Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(secondsToGo)))
+            .ContinueWith((t) => action(), TaskScheduler.Current);
         }
 
         public void Stop()
