@@ -679,7 +679,7 @@
 
 
 ---
-#### Method Program.Main
+#### Method Program.Main(System.String[])
 
  This is the entry point of the service host process. 
 

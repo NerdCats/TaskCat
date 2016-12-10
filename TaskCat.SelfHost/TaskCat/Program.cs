@@ -9,7 +9,7 @@
         /// <summary>
         /// This is the entry point of the service host process.
         /// </summary>
-        private static void Main()
+        private static void Main(string[] args)
         {
             ServiceManager.Initialize("TaskCatApiService", "TaskCat Api Service", "This is the api service of TaskCat");
 
