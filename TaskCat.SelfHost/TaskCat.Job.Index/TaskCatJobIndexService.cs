@@ -6,6 +6,11 @@
     using System.Diagnostics;
     using Common.Db;
     using Common.Search;
+    using System.Threading.Tasks;
+    using System.Threading;
+    using MongoDB.Bson.Serialization;
+    using Utility.Discriminator;
+    using Data.Model;
 
     public class TaskCatJobIndexService : IDichotomyService
     {
@@ -33,12 +38,43 @@
             var dbContext = new DbContext();
             var searchContext = new SearchContext();
 
+            RegisterDiscriminators();
+
             this.jobInitiatiator = new JobIndexInitiator(dbContext, searchContext);
             this.jobIndexer = new JobIndexer(dbContext, searchContext);
+
+            int secondsToGo = 6;
+            Console.WriteLine($"Issuing the startup in {secondsToGo} seconds");
+
+            Task.Factory.StartNew(() => Thread.Sleep(TimeSpan.FromSeconds(secondsToGo)))
+            .ContinueWith((t) =>
+            {
+                StartUpIndexers();
+            });
 
             watch.Stop();
             Console.WriteLine($"Started TaskCat Job Indexing Servicein {watch.Elapsed.TotalSeconds} seconds");
             Console.ForegroundColor = oldColor;
+        }
+
+        private void RegisterDiscriminators()
+        {
+            BsonSerializer.RegisterDiscriminatorConvention(typeof(OrderModel), new OrderModelDiscriminator());
+            BsonSerializer.RegisterDiscriminatorConvention(typeof(JobTask), new JobTaskDiscriminator());
+        }
+
+        private void StartUpIndexers()
+        {
+            try
+            {
+                if (jobInitiatiator.IsInitiationNeeded())
+                    jobInitiatiator.Start();
+                jobIndexer.Start();
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         public void Stop()

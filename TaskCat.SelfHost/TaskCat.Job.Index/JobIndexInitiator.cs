@@ -31,6 +31,9 @@
             var coldStorageCount = dbContext.Jobs.Count(x => true);
             var searchContextCount = searchContext.Client.Count<Job>();
 
+            if (!searchContextCount.IsValid)
+                throw new InvalidOperationException("Failed to connect to search context", searchContextCount.OriginalException);
+
             if (coldStorageCount > searchContextCount.Count)
             {
                 var indexPercentage = ((double)searchContextCount.Count / (double)coldStorageCount) * 100;
