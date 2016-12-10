@@ -6,12 +6,14 @@
     using MongoDB.Driver;
     using Data.Entity;
     using System.Threading;
+    using NLog;
 
     public class JobIndexer : IDisposable
     {
         private IDbContext dbContext;
         private IMongoCollection<Job> jobs;
         private ISearchContext searchContext;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public JobIndexer(IDbContext dbContext, ISearchContext searchContext)
         {
@@ -49,12 +51,16 @@
                         if (searchContextJob != null)
                         {
                             if (job.ModifiedTime > searchContextJob.Source.ModifiedTime)
-                                searchContext.Client.Index(job);
+                            {
+                                logger.Info($"Indexing {job.Id}");
+                                this.searchContext.Client.Index(job, idx => idx
+                                    .Index(nameof(Job).ToLowerInvariant())
+                                    .Type(job.Order.Type));
+                            }
                         }
                     }
                 }
-
-                Thread.Sleep(TimeSpan.FromHours(1.5)); 
+                Thread.Sleep(TimeSpan.FromHours(1.5));
             }
         }
     }

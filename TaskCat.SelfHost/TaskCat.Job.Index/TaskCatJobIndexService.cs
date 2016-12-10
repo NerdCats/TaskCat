@@ -11,6 +11,7 @@
     using MongoDB.Bson.Serialization;
     using Utility.Discriminator;
     using Data.Model;
+    using NLog;
 
     public class TaskCatJobIndexService : IDichotomyService
     {
@@ -49,7 +50,7 @@
             SetTaskInterval(secondsToGo, () => StartUpIndexers());
 
             watch.Stop();
-            Console.WriteLine($"Started TaskCat Job Indexing Servicein {watch.Elapsed.TotalSeconds} seconds");
+            Console.WriteLine($"Started TaskCat Job Indexing Service in {watch.Elapsed.TotalSeconds} seconds");
             Console.ForegroundColor = oldColor;
         }
 
@@ -82,7 +83,7 @@
 
         public void Stop()
         {
-            Console.WriteLine("Stopping TaskCat Job Indexing Service Service");
+            Console.WriteLine("Stopping TaskCat Job Indexing Service");
         }
         public void Dispose()
         {

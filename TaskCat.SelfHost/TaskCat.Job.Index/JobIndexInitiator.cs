@@ -5,12 +5,15 @@
     using System;
     using MongoDB.Driver;
     using Data.Entity;
+    using NLog;
 
     public class JobIndexInitiator : IDisposable
     {
         private IDbContext dbContext;
         private ISearchContext searchContext;
         private IMongoCollection<Job> jobs;
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public JobIndexInitiator(IDbContext dbContext, ISearchContext searchContext)
         {
@@ -37,6 +40,7 @@
             if (coldStorageCount > searchContextCount.Count)
             {
                 var indexPercentage = ((double)searchContextCount.Count / (double)coldStorageCount) * 100;
+                logger.Info($"{indexPercentage} of jobs are indexed in the system");
                 return indexPercentage <= 5;
             }
 
@@ -46,11 +50,18 @@
         public void Start()
         {
             var jobCursor = this.jobs.Find(x => true).SortByDescending(x => x.Id).ToCursor();
+            logger.Info($"Starting job index initialization");
             while (jobCursor.MoveNext())
             {
-                var job = jobCursor.Current;
-                this.searchContext.Client.Index(job);
+                var jobs = jobCursor.Current;
+                foreach (var job in jobs)
+                {
+                    this.searchContext.Client.Index(job, idx=>idx
+                    .Index(nameof(Job).ToLowerInvariant())
+                    .Type(job.Order.Type));
+                }           
             }
+            logger.Info($"Job index initialization is done");
         }
 
         public void Dispose()
