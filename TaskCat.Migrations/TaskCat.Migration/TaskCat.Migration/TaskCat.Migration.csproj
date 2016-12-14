@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddingReferenceInvoiceIdInOrderMigration.cs" />
     <Compile Include="OrderTypeRenameToVariantMigration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

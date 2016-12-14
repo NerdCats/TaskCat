@@ -31,7 +31,7 @@
 
 
 ---
-#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService,TaskCat.Lib.Job.IJobRepository)
+#### Method Controllers.CommentController.#ctor(TaskCat.Lib.Comments.ICommentService,TaskCat.Job.IJobRepository)
 
  Initializes a default instance of CommentController 
 
@@ -371,7 +371,7 @@
 
 
 ---
-#### Method Controllers.JobController.CancelJob(TaskCat.Model.Job.JobCancellationRequest)
+#### Method Controllers.JobController.CancelJob(TaskCat.Data.Model.Job.JobCancellationRequest)
 
  Cancel a job with specific job id 
 
@@ -483,7 +483,7 @@
 
 
 ---
-#### Method Controllers.PaymentController.#ctor(TaskCat.Lib.Payment.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Lib.Job.IJobRepository,System.Reactive.Subjects.Subject{TaskCat.Data.Entity.JobActivity})
+#### Method Controllers.PaymentController.#ctor(TaskCat.Payment.Core.IPaymentManager,TaskCat.Data.Lib.Payment.IPaymentService,TaskCat.Job.IJobRepository,System.Reactive.Subjects.Subject{TaskCat.Data.Entity.JobActivity})
 
  `PaymentController`  constructor 
 
@@ -623,97 +623,6 @@
 
 
 ---
-## Type Lib.Exceptions.OrderCalculationException
-
- Generic Exception to define a calculation exception for IOrderCalculationService 
-
-
-
----
-## Type Lib.Payment.Manual.CashOnDeliveryPaymentMethod
-
- Manual payment processor for cash when delivery processes 
-
-
-
----
-#### Property Lib.Payment.Manual.CashOnDeliveryPaymentSettings.IsAdditionalFeeSetOnPercentage
-
- Gets or sets a value indicating whether to "additional fee" is specified as percentage. true - percentage, false - fixed value. 
-
-
-
----
-#### Property Lib.Payment.Manual.CashOnDeliveryPaymentSettings.AdditionalFee
-
- Additional fee 
-
-
-
----
-## Type Lib.Payment.Manual.TransactMode
-
- Represents manual payment processor transaction mode 
-
-
-
----
-#### Field Lib.Payment.Manual.TransactMode.Pending
-
- Pending 
-
-
-
----
-#### Field Lib.Payment.Manual.TransactMode.Authorize
-
- Authorize 
-
-
-
----
-#### Field Lib.Payment.Manual.TransactMode.AuthorizeAndCapture
-
- Authorize and capture 
-
-
-
----
-#### Property Lib.Payment.PaymentManager.AllowRePostingPayments
-
- Gets or sets a value indicating whether customers are allowed to repost (complete) payments for redirection payment methods 
-
-
-
----
-#### Property Lib.Payment.PaymentManager.BypassPaymentMethodSelectionIfOnlyOne
-
- Gets or sets a value indicating whether we should bypass 'select payment method' page if we have only one payment method 
-
-
-
----
-#### Property Lib.Payment.PaymentManager.AllPaymentMethods
-
- Return All Available Payment Methods 
-
-
-
----
-#### Property Lib.Payment.PaymentManager.ActivePaymentMethodKeys
-
- Gets or sets a system names of active payment methods 
-
-
-
----
-## Type Lib.Payment.PaymentService
-
- Default Payment Service for all installer services through a IPaymentManager 
-
-
-
----
 ## Type Model.Asset.AssetSearchRequest
 
  Standard Asset Search Request based on location for a IAssetProvider 
@@ -770,7 +679,7 @@
 
 
 ---
-#### Method Program.Main
+#### Method Program.Main(System.String[])
 
  This is the entry point of the service host process. 
 

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using MongoDB.Bson.Serialization.Attributes;
-    using Lib.Invoice.Response;
+    using Response;
     using Model.Inventory;
     using Model.Payment;
 

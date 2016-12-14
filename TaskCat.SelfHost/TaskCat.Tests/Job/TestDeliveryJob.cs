@@ -2,7 +2,6 @@
 {
     using Moq;
     using NUnit.Framework;
-    using TaskCat.Lib.Job;
     using Data.Entity;
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
@@ -14,11 +13,8 @@
     using System.Linq;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
-    using TaskCat.Lib.Job.Builders;
-    using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
     using Data.Model;
-    using TaskCat.Model.Job;
     using Data.Model.Inventory;
     using System.Collections.Generic;
     using System;
@@ -26,7 +22,10 @@
     using TaskCat.Data.Model.Identity;
     using TaskCat.Account.Core;
     using System.Reactive.Subjects;
-    using TaskCat.Lib.Job.Updaters;
+    using Common.HRID;
+    using TaskCat.Job;
+    using TaskCat.Job.Updaters;
+    using TaskCat.Job.Builders;
 
     [TestFixture]
     public class TestDeliveryJob

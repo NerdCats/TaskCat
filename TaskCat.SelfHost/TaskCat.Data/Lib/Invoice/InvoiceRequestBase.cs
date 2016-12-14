@@ -1,9 +1,8 @@
-﻿using System;
-using TaskCat.Data.Model.Geocoding;
-using TaskCat.Data.Model.Payment;
-
-namespace TaskCat.Lib.Invoice
+﻿namespace TaskCat.Data.Lib.Invoice
 {
+    using System;
+    using Model.Geocoding;
+    using Model.Payment;
     public class InvoiceRequestBase
     {
         public string CustomerName { get; set; }

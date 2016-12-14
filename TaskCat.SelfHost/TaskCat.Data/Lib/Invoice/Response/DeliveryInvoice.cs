@@ -1,9 +1,9 @@
 ﻿namespace TaskCat.Data.Lib.Invoice.Response
 {
     using Model.Geocoding;
-    using TaskCat.Lib.Invoice.Request;
     using System;
     using Model.Payment;
+    using Request;
 
     public class DeliveryInvoice : InvoiceBase, IInvoiceFor<ItemDetailsInvoiceRequest>
     {
