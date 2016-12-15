@@ -10,12 +10,13 @@ namespace TaskCat.Migration
     {
         public AddingReferenceInvoiceIdInOrderMigration() : base("1.0.0")
         {
-            Description = "Added a separate field called ReferenceInvocieId";
+            Description = "Added a field named ReferenceInvocieId in the OrderModel";
         }
 
         public UpdateDefinition<BsonDocument> GetReferenceInvoiceId()
         {
-            return Builders<BsonDocument>.Update.Set("Order.ReferenceInvoiceId", "");
+            return Builders<BsonDocument>.Update
+                .Set("Order.ReferenceInvoiceId", "");
         }
 
         protected void UpdateReferenceInvoiceIdValue(IMongoCollection<BsonDocument> collection, BsonDocument document)
@@ -46,8 +47,8 @@ namespace TaskCat.Migration
             if(match.Success)
             {
                 return match.Value;
-            }
-            return "No Reference Invoice Id found for the product";
+            } 
+            return null;
         }
     }
 }
