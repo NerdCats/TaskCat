@@ -27,10 +27,13 @@
             Assert.AreEqual(updateFilter, result);
         }
 
-        //[Test]
-        //public void MigrationToAddingReferenceInvoiceIdInOrder()
-        //{
-          
-        //}
+        [Test]
+        public void MigrationToPopulateReferenceInvoiceId_IsEnterpriseJob_PopulatesOldJobWithReferenceInvoiceId()
+        {
+            var migration = new OrderReferenceInvoiceIdPopulationMigration();
+            var updateDef = migration.GenerateUpdateDefinition("Something");
+            var result = updateDef.Render(new BsonDocumentSerializer(), BsonSerializer.SerializerRegistry);
+
+        }
     }
 }
