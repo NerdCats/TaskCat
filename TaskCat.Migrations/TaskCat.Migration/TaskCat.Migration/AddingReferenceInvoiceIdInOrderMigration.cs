@@ -13,53 +13,19 @@ namespace TaskCat.Migration
             Description = "Added a field named ReferenceInvocieId in the OrderModel";
         }
 
-        //public UpdateDefinition<BsonDocument> GetReferenceInvoiceId()
-        //{
-        //    return Builders<BsonDocument>.Update
-        //        .Set("Order.ReferenceInvoiceId", "");
-        //}
-
-        protected void UpdateReferenceInvoiceIdValue(IMongoCollection<BsonDocument> collection, BsonDocument document)
+        public UpdateDefinition<BsonDocument> GetReferenceInvoiceId()
         {
-
-            BsonValue itemName;
-            document.TryGetValue("Order.OrderCart.PackageList[0].Item", out itemName);
-            string extractedInvoiceNumber =  FindInvoiceNumber(itemName.AsString);
-            document.Set("Order.ReferenceInvoiceId", extractedInvoiceNumber);
-            collection.UpdateOne(x=>true, document);
+            return Builders<BsonDocument>.Update
+                .Set("Order.ReferenceInvoiceId", "");
         }
 
-        // TestJob is a temporary collection of the taskcatdev
-        public override async void Update()
-        {
-            var collection = Database.GetCollection<BsonDocument>("TestJob");
-            var filter = new BsonDocument();
-            using (var cursor = await collection.FindAsync(filter))
-            {
-                while (await cursor.MoveNextAsync())
-                {
-                    var batch = cursor.Current;
-                    foreach (var document in batch)
-                    {
-                        string itemName = "";
-                        document.GetValue("Order.OrderCart.PackageList[0].Item", itemName);
-                        string extractedInvoiceNumber = FindInvoiceNumber(itemName);
-                        System.Console.WriteLine(extractedInvoiceNumber);
-                        if(extractedInvoiceNumber == null)
-                        {
-                            document.Set("Order.ReferenceInvoiceId", "");
-                        }
-                        else
-                        {
-                            document.Set("Order.ReferenceInvoiceId", extractedInvoiceNumber);
-                        }
+        // Invoice id from old job is still unable to fetch. Need to fix.
+        public override void Update()
+        {               
+            UpdateDefinition<BsonDocument> update = GetReferenceInvoiceId();
+            Database.GetCollection<BsonDocument>("Jobs")
+                .UpdateMany(x => true, update);
 
-                        System.Console.WriteLine(document.AsString);
-                        
-                        await collection.ReplaceOneAsync(x => true, document);
-                    }
-                }
-            }                
         }
 
         private string FindInvoiceNumber(string ItemName)
