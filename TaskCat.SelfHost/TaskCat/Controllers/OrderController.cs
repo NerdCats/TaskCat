@@ -1,18 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Microsoft.AspNet.Identity;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Model;
-using TaskCat.Data.Model.Order;
-using TaskCat.Lib.Job;
-using TaskCat.Lib.Order;
-using System.Reactive.Subjects;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using Microsoft.AspNet.Identity;
+    using Data.Entity;
+    using Data.Entity.Identity;
+    using Data.Model;
+    using Data.Model.Order;
+    using System.Reactive.Subjects;
+    using Job.Order;
+    using Job;
+
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
     {
@@ -20,7 +20,10 @@ namespace TaskCat.Controllers
         private IJobRepository jobRepository;
         private Subject<JobActivity> activitySubject;
 
-        public OrderController(IOrderRepository repository, IJobRepository jobRepository, Subject<JobActivity> activitySubject)
+        public OrderController(
+            IOrderRepository repository,
+            IJobRepository jobRepository,
+            Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.jobRepository = jobRepository;
@@ -56,7 +59,7 @@ namespace TaskCat.Controllers
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
                     throw new InvalidOperationException($"Claiming a job under user id {User.Identity.GetUserId()} is not authorized");
             }
-                
+
             if (model.UserId == null) model.UserId = currentUserId;
 
             Job createdJob;
@@ -70,9 +73,8 @@ namespace TaskCat.Controllers
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await repository.PostOrder(model, currentUserId);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog) {
-
-                    });
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Claim, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
@@ -133,8 +135,8 @@ namespace TaskCat.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetSupportedOrder(string id)
         {
-             var supportedOrder = await repository.GetSupportedOrder(id);
-             return Ok(supportedOrder);         
+            var supportedOrder = await repository.GetSupportedOrder(id);
+            return Ok(supportedOrder);
         }
 
         /// <summary>

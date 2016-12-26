@@ -4,19 +4,13 @@
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
     using Lib.Asset;
-    using Lib.Job;
-    using Lib.Order;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
     using Lib.AssetProvider;
-    using Lib.HRID;
-    using Lib.Payment;
     using Data.Lib.Payment;
-    using Owin;
     using Lib.DropPoint;
     using Data.Entity;
     using Lib.Catalog;
-    using Lib.Vendor;
     using Lib.Comments;
     using Common.Email;
     using Common.Storage;
@@ -28,6 +22,13 @@
     using Common.Settings;
     using Lib.Db;
     using System.Reactive.Subjects;
+    using Common.Search;
+    using System;
+    using Common.HRID;
+    using Payment.Core;
+    using Job;
+    using Job.Order;
+    using Job.Vendor;
 
     public class AutofacContainerBuilder
     {
@@ -38,8 +39,14 @@
             var jobActivitySubject = new Subject<JobActivity>();
             builder.Register(x => jobActivitySubject).As<Subject<JobActivity>>().SingleInstance();
 
-            #region Account
+            var jobSearchSubject = new Subject<Job>();
+            builder.Register(x => jobSearchSubject).As<IObserver<Job>>().SingleInstance();
+            builder.Register(x => jobSearchSubject).As<IObservable<Job>>().SingleInstance();
+
             builder.RegisterType<ApiDbContext>().As<IDbContext>().SingleInstance();
+            builder.RegisterType<SearchContext>().As<ISearchContext>().SingleInstance();
+
+            #region Account
             builder.RegisterType<AccountStore>().As<IUserStore<User>>().SingleInstance();
             builder.RegisterType<AccountManager>().SingleInstance();
             builder.RegisterType<AccountContext>().As<IAccountContext>().SingleInstance();

@@ -3,11 +3,9 @@
     using NUnit.Framework;
     using Moq;
     using System.Threading.Tasks;
-    using TaskCat.Lib.Db;
-    using TaskCat.Lib.HRID;
-    using TaskCat.Lib.Exceptions;
     using Common.Exceptions;
     using Common.Db;
+    using Common.HRID;
 
     [TestFixture(TestOf = typeof(IHRIDService))]
     public class HRIDServiceTests

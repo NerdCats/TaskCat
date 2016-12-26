@@ -2,7 +2,6 @@
 {
     using Moq;
     using NUnit.Framework;
-    using TaskCat.Lib.Job;
     using Data.Entity;
     using MongoDB.Driver;
     using Microsoft.AspNet.Identity;
@@ -14,11 +13,8 @@
     using System.Linq;
     using Data.Model.Identity.Response;
     using Data.Model.Identity.Profile;
-    using TaskCat.Lib.Job.Builders;
-    using TaskCat.Lib.HRID;
     using Data.Lib.Payment;
     using Data.Model;
-    using TaskCat.Model.Job;
     using Data.Model.Inventory;
     using System.Collections.Generic;
     using System;
@@ -26,7 +22,10 @@
     using TaskCat.Data.Model.Identity;
     using TaskCat.Account.Core;
     using System.Reactive.Subjects;
-    using TaskCat.Lib.Job.Updaters;
+    using Common.HRID;
+    using TaskCat.Job;
+    using TaskCat.Job.Updaters;
+    using TaskCat.Job.Builders;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -35,6 +34,7 @@
         string MockedHrid = "Job#123456";
         Mock<IPaymentMethod> paymentMethodMock;
         private Subject<JobActivity> activitySubject;
+        private Subject<Job> jobIndexingSubject;
 
         [SetUp]
         public void Setup()
@@ -45,6 +45,7 @@
             paymentMethodMock = new Mock<IPaymentMethod>();
 
             this.activitySubject = new Subject<JobActivity>();
+            this.jobIndexingSubject = new Subject<Job>();
         }
 
         private JobRepository SetupMockJobRepositoryForUpdate()
@@ -53,11 +54,11 @@
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
             return jobRepository;
         }
 
@@ -154,12 +155,12 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
 
             var result = await jobRepository.CancelJob(createdJob, cancellationReason);
 
@@ -174,7 +175,6 @@
         {
             var searchJobId = "i1i2i3i4";
             string cancellationReason = "test cancellation reason";
-            var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
             var createdJob = GetDummyJob(OrderTypes.Delivery);
             createdJob.State = JobState.CANCELLED;
@@ -182,12 +182,12 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(replaceOneResult);
+                .ReturnsAsync(null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
             var jobRepository = new JobRepository(jobManagerMock.Object,
-                new AccountManager(userStoreMock.Object), activitySubject);
+                new AccountManager(userStoreMock.Object), activitySubject, jobIndexingSubject);
 
             var result = await jobRepository.RestoreJob(createdJob);
 
@@ -248,7 +248,7 @@
                 },
                 Type = Data.Model.Identity.IdentityTypes.USER,
                 UserId = "123456789",
-                UserName = "GabulTheAwesome"
+                UserName = "GabulTheAwesome",  
             };
 
             UserModel backendAdminModel = new UserModel()
@@ -286,6 +286,7 @@
             order.To = new DefaultAddress("Test To Address", new Point((new double[] { 2, 1 }).ToList()));
             order.PaymentMethod = "SamplePaymentMethod";
             order.Type = orderType;
+            order.ReferenceInvoiceId = "S1ML-1NV01C31";
             return order;
         }
 
