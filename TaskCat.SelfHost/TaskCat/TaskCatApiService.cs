@@ -47,7 +47,7 @@
         private void InitializeReactiveServices()
         {
             this.jobActivityService = new JobActivityService(container.Resolve<IDbContext>(), container.Resolve<Subject<JobActivity>>());
-            this.JobIndexService = new JobSearchIndexService(container.Resolve<ISearchContext>(), container.Resolve<IObservable<Job>>());
+            this.JobIndexService = new JobSearchIndexService(container.Resolve<ISearchContext>(), container.Resolve<IObservable<Data.Entity.Job>>());
         }
 
         public void Dispose()

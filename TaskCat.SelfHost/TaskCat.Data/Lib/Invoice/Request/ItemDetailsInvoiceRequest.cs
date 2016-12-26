@@ -1,8 +1,9 @@
-﻿namespace TaskCat.Lib.Invoice.Request
+﻿namespace TaskCat.Data.Lib.Invoice.Request
 {
-    using Data.Model.Geocoding;
+    using Model.Geocoding;
     using System.Collections.Generic;
-    using Data.Model.Inventory;
+    using Model.Inventory;
+    using Invoice;
 
     public class ItemDetailsInvoiceRequest : InvoiceRequestBase
     {

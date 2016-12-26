@@ -1,9 +1,8 @@
 ﻿namespace TaskCat.App_Start
 {
     using Data.Model;
-    using Lib.Utility.Discriminator;
+    using Job.Utility.Discriminator;
     using MongoDB.Bson.Serialization;
-    using Data.Model.JobTasks;
 
     public class BsonSerializerConfig
     {

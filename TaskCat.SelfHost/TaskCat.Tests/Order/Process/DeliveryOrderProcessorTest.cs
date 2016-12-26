@@ -6,8 +6,8 @@
     using Data.Model.Order.Delivery;
     using NUnit.Framework;
     using System.Collections.Generic;
-    using TaskCat.Lib.Order;
-    using TaskCat.Lib.Order.Process;
+    using TaskCat.Job.Order;
+    using TaskCat.Job.Order.Process;
 
     [TestFixture(TestOf = typeof(DeliveryOrderProcessor))]
     public class DeliveryOrderProcessorTest

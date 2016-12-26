@@ -4,19 +4,13 @@
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
     using Lib.Asset;
-    using Lib.Job;
-    using Lib.Order;
     using Data.Entity.Identity;
     using Microsoft.AspNet.Identity;
     using Lib.AssetProvider;
-    using Lib.HRID;
-    using Lib.Payment;
     using Data.Lib.Payment;
-    using Owin;
     using Lib.DropPoint;
     using Data.Entity;
     using Lib.Catalog;
-    using Lib.Vendor;
     using Lib.Comments;
     using Common.Email;
     using Common.Storage;
@@ -30,6 +24,11 @@
     using System.Reactive.Subjects;
     using Common.Search;
     using System;
+    using Common.HRID;
+    using Payment.Core;
+    using Job;
+    using Job.Order;
+    using Job.Vendor;
 
     public class AutofacContainerBuilder
     {

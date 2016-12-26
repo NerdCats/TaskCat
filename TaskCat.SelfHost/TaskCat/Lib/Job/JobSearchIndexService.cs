@@ -4,7 +4,6 @@
     using Data.Entity;
     using Common.Search;
     using System.Reactive.Linq;
-    using System.Reactive.Concurrency;
 
     public class JobSearchIndexService
     {

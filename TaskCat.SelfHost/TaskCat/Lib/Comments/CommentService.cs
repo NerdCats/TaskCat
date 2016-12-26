@@ -4,9 +4,7 @@
     using System.Threading.Tasks;
     using MongoDB.Driver;
     using Data.Entity;
-    using Db;
     using System.Linq;
-    using Exceptions;
     using Data.Model.Operation;
     using System.Collections.Generic;
     using Common.Exceptions;
