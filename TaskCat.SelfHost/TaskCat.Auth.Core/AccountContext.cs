@@ -31,7 +31,6 @@
         private readonly AccountManager accountManager;
         private readonly IBlobService blobService;
         private readonly IEmailService mailService;
-        private readonly IServiceBusClient serviceBusClient;
         private IObserver<User> userUpdateSubject;
 
         public AccountContext(
@@ -39,16 +38,13 @@
             IEmailService mailService,
             AccountManager accountManager,
             IBlobService blobService,
-            IObserver<User> userUpdateSubject,
-            IServiceBusClient serviceBusClient = null)
+            IObserver<User> userUpdateSubject = null)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
             this.mailService = mailService;
             this.userUpdateSubject = userUpdateSubject;
-
-            this.serviceBusClient = serviceBusClient;
         }
 
         // Register is always used for someone not in the database, only first time User or first time Asset use this method
@@ -172,7 +168,7 @@
             user.Profile = profile;
 
             var result = await accountManager.UpdateAsync(user);
-            userUpdateSubject.OnNext(user);
+            userUpdateSubject?.OnNext(user);
             return result;
         }
 
@@ -185,7 +181,7 @@
             user.Profile = model;
 
             var result = await accountManager.UpdateAsync(user);
-            userUpdateSubject.OnNext(user);
+            userUpdateSubject?.OnNext(user);
             return result;
         }
 
@@ -239,7 +235,7 @@
             {
                 user.UserName = newUserName;
                 var result = await accountManager.UpdateAsync(user).ConfigureAwait(continueOnCapturedContext: false);
-                if (result.Succeeded && serviceBusClient?.AccountUpdateTopicClient != null)
+                if (result.Succeeded)
                 {
                     // INFO: This is definitely temporary, when GFETCH-250 finishes this would be done by another microservice.
                     var updateFilter = Builders<Job>.Update
@@ -251,7 +247,7 @@
                     {
                         // TODO: Log it or do something about it as this means the propagation failed
                     }
-                    userUpdateSubject.OnNext(user);
+                    userUpdateSubject?.OnNext(user);
                     return result;
                 }
                 else
@@ -280,7 +276,7 @@
             user.PhoneNumber = model.PhoneNumber;
 
             var result = await accountManager.UpdateAsync(user);
-            userUpdateSubject.OnNext(user);
+            userUpdateSubject?.OnNext(user);
             return result;
         }
 
@@ -330,7 +326,7 @@
             var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
             if (result.ModifiedCount > 0)
             {
-                userUpdateSubject.OnNext(result.UpdatedValue);
+                userUpdateSubject?.OnNext(result.UpdatedValue);
                 return fileUploadModel;
             }
             else
