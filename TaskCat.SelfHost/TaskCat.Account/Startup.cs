@@ -22,7 +22,7 @@
 
     public static class Startup
     {
-        public static void ConfigureApp(IAppBuilder app)
+        public static void ConfigureApp(IAppBuilder app, IContainer container)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
 
@@ -30,7 +30,6 @@
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
-            var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
 
