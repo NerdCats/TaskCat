@@ -16,12 +16,19 @@
     using Lib.Db;
     using Lib.ServiceBus;
     using Core.Lib.ServiceBus;
+    using System.Reactive.Subjects;
+    using Data.Model.Identity.Response;
+    using System;
 
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer(IAppBuilder app)
+        public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
+
+            var userSubject = new Subject<User>();
+            builder.Register(x => userSubject).As<IObserver<User>>().SingleInstance();
+            builder.Register(x => userSubject).As<IObservable<User>>().SingleInstance();
 
             #region Account
 

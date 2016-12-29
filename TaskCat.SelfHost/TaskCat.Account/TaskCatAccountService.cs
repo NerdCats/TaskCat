@@ -6,11 +6,19 @@
     using Common.Settings;
     using Lib.Constants;
     using Microsoft.Owin.Hosting;
+    using Propagation;
+    using Autofac;
+    using Common.Db;
+    using Data.Entity.Identity;
+    using Data.Model.Identity.Response;
 
     public class TaskCatAccountService : IDichotomyService
     {
+        private IContainer container;
         private string listeningAddress;
         private IDisposable webApp;
+
+        private AccountUpdatePropagationService accountUpdatePropagationService;
 
         public TaskCatAccountService()
         {
@@ -30,18 +38,39 @@
             {
                 webApp.Dispose();
             }
+            if (container != null)
+            {
+                container.Dispose();
+            }
         }
 
         public void Start()
         {
             Console.WriteLine("Starting TaskCat Account Service");
 
-            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder));
+            Console.WriteLine("Building Container...");
+            BuildAutofacContainerAndStartActivityService();
+            InitializeReactiveServices();
+
+            this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder, container));
 
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Hosted TaskCat Account Service on {listeningAddress}");
             Console.ForegroundColor = oldColor;
+        }
+
+        private void InitializeReactiveServices()
+        {
+            this.accountUpdatePropagationService = new AccountUpdatePropagationService(
+                container.Resolve<IDbContext>(),
+                container.Resolve<IObservable<User>>());
+        }
+
+        private void BuildAutofacContainerAndStartActivityService()
+        {
+            AutofacContainerBuilder builder = new AutofacContainerBuilder();
+            this.container = builder.BuildContainer();
         }
 
         public void Stop()

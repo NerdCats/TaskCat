@@ -13,8 +13,6 @@
     using Data.Model.Identity.Profile;
     using System.Net.Http;
     using Data.Model.Identity.Response;
-    using Data.Model.Operation;
-    using Data.Model;
     using Common.Exceptions;
     using Common.Model.Pagination;
     using Utility;
@@ -25,8 +23,6 @@
     using Common.Db;
     using Model;
     using Lib.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using MongoDB.Bson;
 
     public class AccountContext : IAccountContext
     {
@@ -36,18 +32,22 @@
         private readonly IBlobService blobService;
         private readonly IEmailService mailService;
         private readonly IServiceBusClient serviceBusClient;
+        private IObserver<User> userUpdateSubject;
 
         public AccountContext(
             IDbContext dbContext,
             IEmailService mailService,
             AccountManager accountManager,
             IBlobService blobService,
+            IObserver<User> userUpdateSubject,
             IServiceBusClient serviceBusClient = null)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
             this.mailService = mailService;
+            this.userUpdateSubject = userUpdateSubject;
+
             this.serviceBusClient = serviceBusClient;
         }
 
@@ -172,33 +172,8 @@
             user.Profile = profile;
 
             var result = await accountManager.UpdateAsync(user);
-            if (user.Type != IdentityTypes.USER && user.Type != IdentityTypes.ENTERPRISE)
-            {
-                var updateDef = Builders<Job>.Update.Set(x => x.Assets[user.Id], new AssetModel(user as Asset));
-                var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-            else if (user.Roles.Any(x => x == "Administrator" || x == "BackOfficeAdmin"))
-            {
-                var userModel = new UserModel(user);
-                var updateDef = Builders<Job>.Update.Set(x => x.JobServedBy, userModel);
-                var searchFilter = Builders<Job>.Filter.Where(x => x.JobServedBy.UserId == user.Id);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-            else if (user.Type == IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
-            {
-                var userModel = user.Type == IdentityTypes.USER ? new UserModel(user) : new EnterpriseUserModel(user as EnterpriseUser);
-                var updateDef = Builders<Job>.Update.Set(x => x.User, userModel);
-                var searchFilter = Builders<Job>.Filter.Where(x => x.User.UserId == user.Id);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-
-            //TODO: Need to do something with this propagation results man
-
-
-            //FIXME: might have to do the same propagation for enterprise users
+            userUpdateSubject.OnNext(user);
             return result;
-
         }
 
         public async Task<IdentityResult> UpdateById(IdentityProfile model, string userId)
@@ -209,7 +184,9 @@
             model.PicUri = user.Profile.PicUri;
             user.Profile = model;
 
-            return await accountManager.UpdateAsync(user);
+            var result = await accountManager.UpdateAsync(user);
+            userUpdateSubject.OnNext(user);
+            return result;
         }
 
         public async Task<bool> IsUsernameAvailable(string suggestedUsername)
@@ -246,7 +223,8 @@
         public async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName)
         {
             var user = await accountManager.FindByNameAsync(oldUserName);
-            return await UpdateUsername(user, newUserName);
+            var result = await UpdateUsername(user, newUserName);
+            return result;
         }
 
         public async Task<IdentityResult> UpdateUsernameById(string userId, string newUserName)
@@ -273,6 +251,7 @@
                     {
                         // TODO: Log it or do something about it as this means the propagation failed
                     }
+                    userUpdateSubject.OnNext(user);
                     return result;
                 }
                 else
@@ -300,7 +279,9 @@
             user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
 
-            return await accountManager.UpdateAsync(user);
+            var result = await accountManager.UpdateAsync(user);
+            userUpdateSubject.OnNext(user);
+            return result;
         }
 
         public async Task<User> FindUser(string userId)
@@ -348,7 +329,10 @@
             var fileUploadModel = await blobService.UploadBlob(content, "avatar", StorageConstants.SupportedImageFormats);
             var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
             if (result.ModifiedCount > 0)
+            {
+                userUpdateSubject.OnNext(result.UpdatedValue);
                 return fileUploadModel;
+            }
             else
             {
                 // INFO: Upload was alright but our update failed, we should delete the file we

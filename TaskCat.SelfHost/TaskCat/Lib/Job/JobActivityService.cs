@@ -36,7 +36,7 @@
         private void OnError(Exception exception)
         {
             Console.WriteLine(exception);
-            // TODO: Log the exception here
+            // TODO: Log the exception here and we might need to redo things here
         }
     }
 }

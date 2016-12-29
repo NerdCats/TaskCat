@@ -13,6 +13,7 @@
     using Utility;
     using Common.Db;
     using Common.Exceptions;
+    using Data.Model.Operation;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class AccountStore : UserStore<User>
     {
@@ -101,20 +102,16 @@
             throw new InvalidOperationException("Identity Type not supported yet");
         }
 
-
-
         internal async Task<long> GetUserCountAsync()
         {
             return await collection.CountAsync(Builders<User>.Filter.Empty);
         }
 
-        internal async Task<UpdateResult> SetAvatarAsync(string userId, string picUrl)
+        internal async Task<UpdateResult<User>> SetAvatarAsync(string userId, string picUrl)
         {
             UpdateDefinition<User> updateDefinition = Builders<User>.Update.Set(x => x.Profile.PicUri, picUrl);
-            var result = await collection.UpdateOneAsync(Builders<User>.Filter.Where(x => x.Id == userId), updateDefinition);
-            return result;
+            var result = await collection.FindOneAndUpdateAsync(Builders<User>.Filter.Where(x => x.Id == userId), updateDefinition);
+            return new UpdateResult<User>(1, 1, result);
         }
-
-
     }
 }
