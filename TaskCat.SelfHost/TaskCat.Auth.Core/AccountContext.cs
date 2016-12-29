@@ -13,8 +13,6 @@
     using Data.Model.Identity.Profile;
     using System.Net.Http;
     using Data.Model.Identity.Response;
-    using Data.Model.Operation;
-    using Data.Model;
     using Common.Exceptions;
     using Common.Model.Pagination;
     using Utility;
@@ -25,8 +23,6 @@
     using Common.Db;
     using Model;
     using Lib.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using MongoDB.Bson;
 
     public class AccountContext : IAccountContext
     {

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Model.Identity.Profile;
     using Model.Identity.Registration;
+    using Model.Identity.Response;
 
     public class EnterpriseUser : User
     {
@@ -16,5 +17,10 @@
 
         public string VendorId { get; set; }
         public DateTime? VendorSubscriptionDate { get; set; }
+
+        public override UserModel ToModel()
+        {
+            return new EnterpriseUserModel(this);
+        }
     }
 }
