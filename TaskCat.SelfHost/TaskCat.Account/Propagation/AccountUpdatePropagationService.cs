@@ -17,7 +17,6 @@
     public class AccountUpdatePropagationService
     {
         private IDbContext dbContext;
-        private IObservable<UserModel> profileUpdateSource;
         private IObservable<User> userUpdateSource;
 
         /// <summary>
@@ -25,30 +24,21 @@
         /// </summary>
         /// <param name="dbcontext">IDbContext for database context.</param>
         /// <param name="userUpdateSource">Observable source for User updates.</param>
-        /// <param name="userModelUpdateSource">Observable source for UserModel updates.</param>
         public AccountUpdatePropagationService(
             IDbContext dbcontext,
-            IObservable<User> userUpdateSource,
-            IObservable<UserModel> userModelUpdateSource)
+            IObservable<User> userUpdateSource)
         {
             if (dbcontext == null)
                 throw new ArgumentNullException(nameof(dbcontext));
             if (userUpdateSource == null)
                 throw new ArgumentNullException(nameof(userUpdateSource));
-            if (userModelUpdateSource == null)
-                throw new ArgumentNullException(nameof(userModelUpdateSource));
 
             this.dbContext = dbcontext;
-            this.profileUpdateSource = userModelUpdateSource;
             this.userUpdateSource = userUpdateSource;
 
             this.userUpdateSource
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(OnUserUpdate, OnUserUpdateError);
-
-            this.profileUpdateSource
-                .ObserveOn(ThreadPoolScheduler.Instance)
-                .Subscribe(OnProfileUpdate, OnProfileUpdateError);
         }
 
         private void OnProfileUpdate(UserModel model)

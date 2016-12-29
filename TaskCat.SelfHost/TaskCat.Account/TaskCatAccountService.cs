@@ -64,8 +64,7 @@
         {
             this.accountUpdatePropagationService = new AccountUpdatePropagationService(
                 container.Resolve<IDbContext>(),
-                container.Resolve<IObservable<User>>(),
-                container.Resolve<IObservable<UserModel>>());
+                container.Resolve<IObservable<User>>());
         }
 
         private void BuildAutofacContainerAndStartActivityService()

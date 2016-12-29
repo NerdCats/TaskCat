@@ -33,7 +33,6 @@
         private readonly IEmailService mailService;
         private readonly IServiceBusClient serviceBusClient;
         private IObserver<User> userUpdateSubject;
-        private IObserver<UserModel> userModelUpdateSubject;
 
         public AccountContext(
             IDbContext dbContext,
@@ -41,14 +40,12 @@
             AccountManager accountManager,
             IBlobService blobService,
             IObserver<User> userUpdateSubject,
-            IObserver<UserModel> userModelUpdateSubject,
             IServiceBusClient serviceBusClient = null)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
             this.mailService = mailService;
-            this.userModelUpdateSubject = userModelUpdateSubject;
             this.userUpdateSubject = userUpdateSubject;
 
             this.serviceBusClient = serviceBusClient;

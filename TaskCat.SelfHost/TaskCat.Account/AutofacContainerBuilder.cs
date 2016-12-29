@@ -30,10 +30,6 @@
             builder.Register(x => userSubject).As<IObserver<User>>().SingleInstance();
             builder.Register(x => userSubject).As<IObservable<User>>().SingleInstance();
 
-            var userModelSubject = new Subject<UserModel>();
-            builder.Register(x => userModelSubject).As<IObserver<UserModel>>().SingleInstance();
-            builder.Register(x => userModelSubject).As<IObservable<UserModel>>().SingleInstance();
-
             #region Account
 
             builder.RegisterType<AccountDbContext>().As<IDbContext>().SingleInstance();
