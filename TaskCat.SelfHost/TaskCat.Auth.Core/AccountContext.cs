@@ -187,7 +187,9 @@
             model.PicUri = user.Profile.PicUri;
             user.Profile = model;
 
-            return await accountManager.UpdateAsync(user);
+            var result = await accountManager.UpdateAsync(user);
+            userUpdateSubject.OnNext(user);
+            return result;
         }
 
         public async Task<bool> IsUsernameAvailable(string suggestedUsername)
@@ -224,7 +226,8 @@
         public async Task<IdentityResult> UpdateUsername(string newUserName, string oldUserName)
         {
             var user = await accountManager.FindByNameAsync(oldUserName);
-            return await UpdateUsername(user, newUserName);
+            var result = await UpdateUsername(user, newUserName);
+            return result;
         }
 
         public async Task<IdentityResult> UpdateUsernameById(string userId, string newUserName)
@@ -251,6 +254,7 @@
                     {
                         // TODO: Log it or do something about it as this means the propagation failed
                     }
+                    userUpdateSubject.OnNext(user);
                     return result;
                 }
                 else
@@ -278,7 +282,9 @@
             user.Email = model.Email;
             user.PhoneNumber = model.PhoneNumber;
 
-            return await accountManager.UpdateAsync(user);
+            var result = await accountManager.UpdateAsync(user);
+            userUpdateSubject.OnNext(user);
+            return result;
         }
 
         public async Task<User> FindUser(string userId)
