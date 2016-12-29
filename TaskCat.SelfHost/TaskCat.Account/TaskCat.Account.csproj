@@ -219,7 +219,6 @@
     <Compile Include="Lib\Constants\CheckPropertyNames.cs" />
     <Compile Include="Lib\Db\AccountDbContext.cs" />
     <Compile Include="Lib\Db\IndexFacade.cs" />
-    <Compile Include="Lib\ServiceBus\ServiceBusClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Propagation\AccountUpdatePropagationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
