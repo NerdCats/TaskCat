@@ -332,7 +332,10 @@
             var fileUploadModel = await blobService.UploadBlob(content, "avatar", StorageConstants.SupportedImageFormats);
             var result = await accountManager.ChangeAvatar(userId, fileUploadModel.FileUrl);
             if (result.ModifiedCount > 0)
+            {
+                userUpdateSubject.OnNext(result.UpdatedValue);
                 return fileUploadModel;
+            }
             else
             {
                 // INFO: Upload was alright but our update failed, we should delete the file we

@@ -3,7 +3,7 @@
     using Entity;
     using Newtonsoft.Json;
 
-    public class UpdateResult<T> where T: DbEntity
+    public class UpdateResult<T>
     {
         [JsonIgnore]
         public bool SerializeUpdatedValue { get; set; }
