@@ -32,18 +32,25 @@
         private readonly IBlobService blobService;
         private readonly IEmailService mailService;
         private readonly IServiceBusClient serviceBusClient;
+        private IObserver<User> userUpdateSubject;
+        private IObserver<UserModel> userModelUpdateSubject;
 
         public AccountContext(
             IDbContext dbContext,
             IEmailService mailService,
             AccountManager accountManager,
             IBlobService blobService,
+            IObserver<User> userUpdateSubject,
+            IObserver<UserModel> userModelUpdateSubject,
             IServiceBusClient serviceBusClient = null)
         {
             this.dbContext = dbContext;
             this.accountManager = accountManager;
             this.blobService = blobService;
             this.mailService = mailService;
+            this.userModelUpdateSubject = userModelUpdateSubject;
+            this.userUpdateSubject = userUpdateSubject;
+
             this.serviceBusClient = serviceBusClient;
         }
 
@@ -168,33 +175,8 @@
             user.Profile = profile;
 
             var result = await accountManager.UpdateAsync(user);
-            if (user.Type != IdentityTypes.USER && user.Type != IdentityTypes.ENTERPRISE)
-            {
-                var updateDef = Builders<Job>.Update.Set(x => x.Assets[user.Id], new AssetModel(user as Asset));
-                var searchFilter = Builders<Job>.Filter.Exists(x => x.Assets[user.Id], true);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-            else if (user.Roles.Any(x => x == "Administrator" || x == "BackOfficeAdmin"))
-            {
-                var userModel = new UserModel(user);
-                var updateDef = Builders<Job>.Update.Set(x => x.JobServedBy, userModel);
-                var searchFilter = Builders<Job>.Filter.Where(x => x.JobServedBy.UserId == user.Id);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-            else if (user.Type == IdentityTypes.USER && user.Type == IdentityTypes.ENTERPRISE)
-            {
-                var userModel = user.Type == IdentityTypes.USER ? new UserModel(user) : new EnterpriseUserModel(user as EnterpriseUser);
-                var updateDef = Builders<Job>.Update.Set(x => x.User, userModel);
-                var searchFilter = Builders<Job>.Filter.Where(x => x.User.UserId == user.Id);
-                var propagationResult = await dbContext.Jobs.UpdateManyAsync(searchFilter, updateDef);
-            }
-
-            //TODO: Need to do something with this propagation results man
-
-
-            //FIXME: might have to do the same propagation for enterprise users
+            userUpdateSubject.OnNext(user);
             return result;
-
         }
 
         public async Task<IdentityResult> UpdateById(IdentityProfile model, string userId)
