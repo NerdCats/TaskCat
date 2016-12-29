@@ -22,6 +22,7 @@
     using Common.Utility;
     using Common.Settings;
     using TaskCat.Account;
+    using System.Reactive.Subjects;
 
     [TestFixture]
     public class AccountContextTest
@@ -55,8 +56,9 @@
             var accountContext = new AccountContext(
                 dbContextMock.Object,
                 mailServiceMock.Object,
-                accountManagerMock.Object,
-                blobServiceMock.Object);
+                accountManagerMock.Object,             
+                blobServiceMock.Object,
+                new Subject<User>());
 
             var registerModel = new UserRegistrationModel()
             {
@@ -100,7 +102,8 @@
                 dbContextMock.Object,
                 mailServiceMock.Object,
                 accountManagerMock.Object,
-                blobServiceMock.Object);
+                blobServiceMock.Object,
+                new Subject<User>());
 
             Environment.SetEnvironmentVariable("Its.Configuration.Settings.Precedence", "local|production");
 
