@@ -27,7 +27,7 @@
             this.Result = new AssetTaskResult();
         }
 
-        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type) : 
+        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type) :
             this(from, to)
         {
             if (type != JobTaskTypes.SECURE_DELIVERY)
@@ -71,18 +71,22 @@
                 UpdateTask();
             }
 
-            try
+            // Making sure result only propagates if this doesn't have an asset assigned yet
+            if (this.Asset == null)
             {
-                var type = jobTaskResult.ResultType;
+                try
+                {
+                    var type = jobTaskResult.ResultType;
 
-                VerifyPropertyTypesFromResult(type);
+                    VerifyPropertyTypesFromResult(type);
 
-                var asset = type.GetProperty("Asset");
-                Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
-            }
-            catch (Exception)
-            {
-                throw;
+                    var asset = type.GetProperty("Asset");
+                    Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 

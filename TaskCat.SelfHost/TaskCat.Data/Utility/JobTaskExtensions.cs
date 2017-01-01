@@ -1,8 +1,6 @@
 ﻿namespace TaskCat.Data.Utility
 {
-    using Lib.Constants;
     using Model;
-    using System.Globalization;
 
     public static class JobTaskExtensions
     {
