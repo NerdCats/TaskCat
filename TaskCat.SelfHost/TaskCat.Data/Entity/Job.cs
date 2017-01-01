@@ -83,6 +83,8 @@
             }
         }
 
+        public string HRState { get;set; }
+
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public bool ETAFailed
@@ -193,6 +195,7 @@
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
             this.Assets = new Dictionary<string, AssetModel>();
+            this.HRState = this.HRState ?? JobState.ENQUEUED.ToString();
         }
 
         public Job(string name) : this()
@@ -236,6 +239,7 @@
             {
                 case nameof(JobTask.State):
                     SetProperJobState(task);
+                    SetHrState(task);
                     break;
                 case nameof(JobTask.AssetRef):
                     if (!Assets.ContainsKey(task.AssetRef))
@@ -244,8 +248,16 @@
             }
         }
 
+        private void SetHrState(JobTask task)
+        {
+            var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
+            if (lastSignificantTask != null)
+                this.HRState = $"{lastSignificantTask.Type} {lastSignificantTask.State.ToString()}";
+        }
+
         private void SetProperJobState(JobTask jobTask)
         {
+            // Set Job state based on job tasks state
             if (jobTask.State >= JobTaskState.IN_PROGRESS
                 && jobTask.State < JobTaskState.COMPLETED
                 && State != JobState.IN_PROGRESS)

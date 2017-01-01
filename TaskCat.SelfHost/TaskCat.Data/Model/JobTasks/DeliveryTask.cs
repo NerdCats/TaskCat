@@ -14,15 +14,15 @@
         public DefaultAddress To { get; set; }
 
         public DeliveryTask(DefaultAddress from, DefaultAddress to) :
-            base(JobTaskTypes.DELIVERY, "Deliverying Package")
+            base(JobTaskTypes.DELIVERY)
         {
             this.From = from;
             this.To = to;
             this.Result = new AssetTaskResult();
         }
 
-        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type, string name) : 
-            base(type, name)
+        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type) : 
+            base(type)
         {
             if (type != JobTaskTypes.SECURE_DELIVERY)
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");

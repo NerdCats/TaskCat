@@ -12,7 +12,7 @@
         }
 
         public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) : 
-            base(from, to, JobTaskTypes.SECURE_DELIVERY, "Deliverying Secure Package")
+            base(from, to, JobTaskTypes.SECURE_DELIVERY)
         {
         }
 

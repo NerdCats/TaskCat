@@ -8,7 +8,7 @@
 
     public class PackagePickUpTask : PickUpTask
     {
-        public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package", pickupLocation)
+        public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, pickupLocation)
         {
             this.Result = new AssetTaskResult();
         }

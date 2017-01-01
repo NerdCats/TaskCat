@@ -209,7 +209,7 @@
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonInitialization.cs" />
     <Compile Include="Utility\GeoJson\LocationUtility.cs" />
-    <Compile Include="Utility\StateStringGenerator.cs" />
+    <Compile Include="Utility\JobTaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

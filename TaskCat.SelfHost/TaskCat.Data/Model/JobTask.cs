@@ -11,7 +11,6 @@
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask : ObservableObject
     {
-        protected string Name;
         public string id { get; protected set; }
 
         [JsonIgnore]
@@ -27,12 +26,6 @@
         public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
-
-        [BsonIgnore]
-        public string JobTaskStateString
-        {
-            get { return StateStringGenerator.GenerateStateString(State, Name); }
-        }
 
         private JobTaskState state;
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
@@ -131,11 +124,10 @@
 
         }
 
-        public JobTask(string type, string name) : this()
+        public JobTask(string type) : this()
         {
             id = Guid.NewGuid().ToString();
             Type = type;
-            Name = name;
 
             CreateTime = DateTime.Now;
             ModifiedTime = DateTime.Now;
