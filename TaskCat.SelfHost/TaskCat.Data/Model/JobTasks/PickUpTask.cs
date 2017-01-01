@@ -60,19 +60,22 @@
                 UpdateTask();
             }
 
-            try
+            if (this.Asset == null)
             {
-                var type = jobTaskResult.ResultType;
+                try
+                {
+                    var type = jobTaskResult.ResultType;
 
-                var ride = type.GetProperty("Asset");
-                if (ride.PropertyType != typeof(AssetModel))
-                    throw new InvalidCastException("Type Verification Asset field failed");
+                    var ride = type.GetProperty("Asset");
+                    if (ride.PropertyType != typeof(AssetModel))
+                        throw new InvalidCastException("Type Verification Asset field failed");
 
-                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
-            }
-            catch (Exception)
-            {
-                throw;
+                    Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
