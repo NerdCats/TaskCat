@@ -4,12 +4,14 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using System;
+    using Utility;
     using Identity.Response;
     using Core;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask : ObservableObject
     {
+        protected string name;
         public string id { get; protected set; }
 
         [JsonIgnore]
@@ -122,13 +124,14 @@
         {
         }
 
-        public JobTask(string type) : this()
+        public JobTask(string type, string name) : this()
         {
             id = Guid.NewGuid().ToString();
             Type = type;
 
             CreateTime = DateTime.Now;
             ModifiedTime = DateTime.Now;
+            this.name = name;
         }
 
         public abstract void UpdateTask();
