@@ -1,6 +1,9 @@
 ﻿namespace TaskCat.Data.Utility
 {
-    using TaskCat.Data.Model;
+    using Lib.Constants;
+    using Model;
+    using System.Globalization;
+
     public static class JobTaskExtensions
     {
         public static string GetHrState(this JobTask task)
