@@ -13,6 +13,11 @@
         public DefaultAddress From { get; set; }
         public DefaultAddress To { get; set; }
 
+        public DeliveryTask() : base("Delivery")
+        {
+
+        }
+
         public DeliveryTask(DefaultAddress from, DefaultAddress to) :
             base(JobTaskTypes.DELIVERY, "Delivery")
         {
@@ -26,13 +31,6 @@
         {
             if (type != JobTaskTypes.SECURE_DELIVERY)
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
-
-            switch(type)
-            {
-                case JobTaskTypes.SECURE_DELIVERY:
-                    this.name = "Secure delivery";
-                    break;
-            }
         }
 
         public override void SetPredecessor(JobTask task, bool validateDependency = true)

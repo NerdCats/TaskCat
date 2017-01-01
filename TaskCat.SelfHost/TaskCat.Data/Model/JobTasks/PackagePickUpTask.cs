@@ -8,8 +8,14 @@
 
     public class PackagePickUpTask : PickUpTask
     {
+        public PackagePickUpTask()
+        {
+            this.Name = "Package pick up";
+        }
+
         public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, pickupLocation)
         {
+            this.Name = "Package pick up";
             this.Result = new AssetTaskResult();
         }
 

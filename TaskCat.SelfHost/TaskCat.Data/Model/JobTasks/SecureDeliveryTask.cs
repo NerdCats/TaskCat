@@ -11,9 +11,15 @@
             base.SetPredecessor(task, validateDependency);
         }
 
-        public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) : 
+        public SecureDeliveryTask()
+        {
+            this.Name = "Secure delivery";
+        }
+
+        public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) :
             base(from, to, JobTaskTypes.SECURE_DELIVERY)
         {
+            this.Name = "Secure delivery";
         }
 
         public override void UpdateTask()
