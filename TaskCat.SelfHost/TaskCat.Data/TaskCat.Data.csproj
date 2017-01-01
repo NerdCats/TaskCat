@@ -209,6 +209,7 @@
     <Compile Include="Utility\GeoJson\IGeoJsonEntityConverter.cs" />
     <Compile Include="Utility\GeoJson\IGeoJsonInitialization.cs" />
     <Compile Include="Utility\GeoJson\LocationUtility.cs" />
+    <Compile Include="Utility\JobExtensions.cs" />
     <Compile Include="Utility\JobTaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

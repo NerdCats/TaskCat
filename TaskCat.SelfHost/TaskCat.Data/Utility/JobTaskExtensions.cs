@@ -3,7 +3,7 @@
     using TaskCat.Data.Model;
     public static class JobTaskExtensions
     {
-        public static string ToHrState(JobTask task)
+        public static string GetHrState(this JobTask task)
         {
             var stateString = task.State.ToString().Replace("_", " ").ToLowerInvariant();
             return $"{task.Type} {stateString}";

@@ -12,8 +12,9 @@
     using Model.Payment;
     using System.ComponentModel;
     using Model.Vendor.ProfitSharing;
-    using Core;
     using System.Runtime.CompilerServices;
+    using Utility;
+    using System.Globalization;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity, INotifyPropertyChanged
@@ -83,7 +84,15 @@
             }
         }
 
-        public string HRState { get;set; }
+        public string HRState {
+            get
+            {
+                var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
+                if (lastSignificantTask != null)
+                    return lastSignificantTask.GetHrState();
+                else return this.state.GetSimplifiedStateString();
+            }
+        }
 
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
@@ -194,8 +203,7 @@
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
-            this.Assets = new Dictionary<string, AssetModel>();
-            this.HRState = this.HRState ?? JobState.ENQUEUED.ToString();
+            this.Assets = new Dictionary<string, AssetModel>(); 
         }
 
         public Job(string name) : this()
@@ -239,20 +247,12 @@
             {
                 case nameof(JobTask.State):
                     SetProperJobState(task);
-                    SetHrState(task);
                     break;
                 case nameof(JobTask.AssetRef):
                     if (!Assets.ContainsKey(task.AssetRef))
                         Assets[task.AssetRef] = task.Asset;
                     break;
             }
-        }
-
-        private void SetHrState(JobTask task)
-        {
-            var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
-            if (lastSignificantTask != null)
-                this.HRState = $"{lastSignificantTask.Type} {lastSignificantTask.State.ToString()}";
         }
 
         private void SetProperJobState(JobTask jobTask)
