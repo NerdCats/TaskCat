@@ -5,6 +5,7 @@
     using Lib.Constants;
     using Geocoding;
     using Result;
+    using Utility;
 
     public class PackagePickUpTask : PickUpTask
     {
@@ -17,6 +18,11 @@
         {
             this.Name = "Package pick up";
             this.Result = new AssetTaskResult();
+        }
+
+        public override string GetHRState()
+        {
+            return this.GetHrStateString();
         }
 
         public override JobTaskResult SetResultToNextState()

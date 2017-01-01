@@ -14,7 +14,6 @@
     using Model.Vendor.ProfitSharing;
     using System.Runtime.CompilerServices;
     using Utility;
-    using System.Globalization;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity, INotifyPropertyChanged
@@ -89,7 +88,7 @@
             {
                 var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
                 if (lastSignificantTask != null)
-                    return lastSignificantTask.GetHrState();
+                    return lastSignificantTask.GetHRState();
                 else return this.state.GetSimplifiedStateString();
             }
         }

@@ -2,6 +2,7 @@
 {
     using Lib.Constants;
     using Geocoding;
+    using System;
 
     public class SecureDeliveryTask : DeliveryTask
     {
@@ -30,6 +31,24 @@
         public override JobTaskResult SetResultToNextState()
         {
             return base.SetResultToNextState();
+        }
+
+        public override string GetHRState()
+        {
+            var prefix = "Cash delivery to buyer";
+            switch (State)
+            {
+                case JobTaskState.PENDING:
+                    return $"{prefix} is pending";
+                case JobTaskState.IN_PROGRESS:
+                    return $"{prefix} is in progress";
+                case JobTaskState.COMPLETED:
+                    return $"{prefix} is completed";
+                case JobTaskState.CANCELLED:
+                    return $"{prefix} is cancelled";
+                default:
+                    throw new NotImplementedException(State.ToString());
+            }
         }
     }
 

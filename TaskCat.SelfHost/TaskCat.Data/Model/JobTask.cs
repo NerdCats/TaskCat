@@ -139,6 +139,8 @@
         }
 
         public abstract void UpdateTask();
+        public abstract string GetHRState();
+
         public virtual JobTaskResult SetResultToNextState()
         {
             return this.Result;
@@ -188,7 +190,6 @@
                 JobTaskCompleted(this, Result);
             }
         }
-
     }
 
     //Should be moved to a new class file? No? Okay!
@@ -197,14 +198,5 @@
     {
         public DateTime? TaskCompletionTime { get; set; }       
         public Type ResultType { get; set; }
-    }
-
-    //FIXME: Might need to move this to an Util function
-    public static class JobTaskResultExtensions
-    {
-        public static T Cast<T>(this object input)
-        {
-            return (T)input;
-        }
     }
 }

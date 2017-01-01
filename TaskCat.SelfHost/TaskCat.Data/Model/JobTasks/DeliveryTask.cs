@@ -7,6 +7,7 @@
     using Lib.Exceptions;
     using Geocoding;
     using Result;
+    using Utility;
 
     public class DeliveryTask : JobTask
     {
@@ -100,6 +101,11 @@
             result.Asset = this.Asset;
             result.TaskCompletionTime = DateTime.UtcNow;
             return result;
+        }
+
+        public override string GetHRState()
+        {
+            return this.GetHrStateString();
         }
     }
 }
