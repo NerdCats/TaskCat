@@ -10,7 +10,7 @@
         public DefaultAddress From { get; set; }
         public DefaultAddress To { get; set; }
 
-        public AssignAssetTask(string type, DefaultAddress from, DefaultAddress to) : base(type, "Assign asset")
+        public AssignAssetTask(string type, DefaultAddress from, DefaultAddress to) : base(type)
         {
             From = from;
             To = to;

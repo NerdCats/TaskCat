@@ -10,7 +10,7 @@
         public DefaultAddress AssetLocation { get; set; }
         public DefaultAddress PickupLocation { get; set; }
 
-        public PickUpTask(string type, DefaultAddress pickupLocation) : base(type, "Pick up")
+        public PickUpTask(string type, DefaultAddress pickupLocation) : base(type)
         {
             this.PickupLocation = pickupLocation;
         }
