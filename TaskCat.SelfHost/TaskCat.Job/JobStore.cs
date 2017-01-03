@@ -55,7 +55,7 @@
             return new QueryResult<Job>()
             {
                 Total = await orderContext.CountAsync(),
-                Result = await orderContext.Skip(start).Limit(limit).ToListAsync()                
+                Result = await orderContext.Skip(start).Limit(limit).ToListAsync()
             };
         }
 
@@ -86,6 +86,36 @@
 
             var result = await _context.Jobs.FindOneAndUpdateAsync(Filter, UpdateDefinition);
             return result;
+        }
+
+        internal async Task<IEnumerable<string>> GetJobLocalities()
+        {
+            /*
+             **** GFETCH - 324 *****
+             * INFO: This one is particularly ugly. What we want to achieve here:
+             * 1. Get locality field from Order payload field From and To
+             * 2. Have a distinct set of from and to and return it back as all possible localities
+             * 
+             * How it should be done.
+             * The "refresh" method: The purpose of this method is to refresh all possible locality 
+             * in all the jobs. The technique we could use here is an aggregation pipiline. 
+             * 
+             * In the first aggregation stage we will have all the documents projecting the locality fields
+             * in From and To fields in order. We should use $addToSet operator so it ends up in a set
+             * 
+             * The second stage would $unwind this new Localities array that we created before so we will have a 
+             * basic list of string that have nothing but localities. But we have to make sure the list is unique.
+             * 
+             * The third stage would make the list unique. We would group them by themselves and since they are
+             * just strings now, we will have only the distinct ones.
+             * 
+             * The fourth and final stage of aggregation will copy the result to another collection so we have the result 
+             * cached in another collection and we will only serve that collection when someone asks for all the localities.
+             * 
+             * That collection will be manually update only when someone updates a job/creates a job and sees the locality 
+             * is new here. It should always be done though a Rx subject of course. We don't want the request thread to be slow.
+             */
+            throw new NotImplementedException();
         }
 
         internal async Task<Job> ReplaceOne(Job job)

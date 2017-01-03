@@ -549,5 +549,18 @@
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get all the localities listed in the job order
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/Job/localities")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetLocalities()
+        {
+            var result = await repository.GetAllLocalities();
+            return Ok(result);
+        }
     }
 }

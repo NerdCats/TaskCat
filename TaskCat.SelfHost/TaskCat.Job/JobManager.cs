@@ -98,5 +98,10 @@
         {
             return await store.ReplaceOne(job);
         }
+
+        public async Task<IEnumerable<string>> GetAllLocalities()
+        {
+            return await store.GetJobLocalities();
+        }
     }
 }
