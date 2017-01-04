@@ -367,6 +367,7 @@
     <Compile Include="Controllers\DropPointController.cs" />
     <Compile Include="Controllers\JobActivityController.cs" />
     <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\LocalityController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ProductCategoryController.cs" />
