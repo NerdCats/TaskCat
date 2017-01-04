@@ -554,10 +554,10 @@
         /// Get all the localities listed in the job order
         /// </summary>
         /// <returns></returns>
-        [Route("api/Job/localities")]
-        //[Authorize(Roles = "Administrator, BackOfficeAdmin")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLocalities()
+        [Route("api/Job/localities/refresh")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPost]
+        public async Task<IHttpActionResult> RefreshLocalities()
         {
             await repository.RefreshJobLocalities();
             return Ok();
