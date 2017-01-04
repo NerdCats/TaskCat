@@ -332,7 +332,7 @@
             var result = await repository.Claim(job, this.User.Identity.GetUserId());
 
             Task.Run(() => this.activitySubject.OnNext(
-                new JobActivity(job, JobActivityOperatioNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
+                new JobActivity(job, JobActivityOperationNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
 
             return Ok(result);
         }
@@ -397,7 +397,7 @@
                 switch (eventArgs.PropertyName)
                 {
                     case nameof(Job.State):
-                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser)
+                        jobChangeActivity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.State), currentUser)
                         {
                             Value = (sender as Job).State.ToString()
                         };
@@ -417,7 +417,7 @@
             {
                 var taskActivity = new JobActivity(
                     result.UpdatedValue,
-                    JobActivityOperatioNames.Update,
+                    JobActivityOperationNames.Update,
                     op.path.Substring(1),
                     currentUser,
                     new ReferenceActivity(taskId, updatedTask.Type))
@@ -463,7 +463,7 @@
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Cancel, currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Cancel, currentUser);
                 activitySubject.OnNext(activity);
             });
             return Ok(result);
@@ -500,7 +500,7 @@
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Restore, currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Restore, currentUser);
                 activitySubject.OnNext(activity);
             });
 
@@ -568,7 +568,7 @@
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.Order), currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.Order), currentUser);
                 activitySubject.OnNext(activity);
             });
 

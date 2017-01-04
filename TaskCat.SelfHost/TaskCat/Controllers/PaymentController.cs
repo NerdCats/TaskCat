@@ -91,7 +91,7 @@
 
                 Task.Factory.StartNew(() =>
                 {
-                    var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.PaymentStatus), currentUser)
+                    var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.PaymentStatus), currentUser)
                     {
                         Value = result.NewPaymentStatus.ToString()
                     };

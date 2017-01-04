@@ -69,12 +69,12 @@
             {
                 case OrderCreationOptions.CREATE:
                     createdJob = await repository.PostOrder(model);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Create, referenceUserForActivityLog));
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await repository.PostOrder(model, currentUserId);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Claim, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Create, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Claim, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
