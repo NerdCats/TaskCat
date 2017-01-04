@@ -124,9 +124,11 @@
              * is new here. It should always be done though a Rx subject of course. We don't want the request thread to be slow.
              */
 
+            var localitiesProperty = "Localities";
+
             ProjectionDefinition<Job, BsonDocument> projection = new BsonDocument() {
                 { "_id", 0},
-                { "Localities", new BsonArray() {
+                { localitiesProperty, new BsonArray() {
                     "$Order.From.Locality",
                     "$Order.To.Locality" }
                 }
@@ -135,13 +137,27 @@
             var groupDefinition = BsonDocument.Parse("{ _id : \"$Localities\" }");
             var matchDefinition = BsonDocument.Parse("{ $and:[ { _id : { $ne: null } }, { _id : { $ne: \"\" } }, { _id : { $ne: \"Undefined\" } } ] }");
 
-            var aggregation = await _context.Jobs
-                                        .Aggregate()
-                                        .Project(projection)
-                                        .Unwind("Localities")
-                                        .Group(groupDefinition)
-                                        .Match(matchDefinition)
-                                        .OutAsync("Localities");
+            /* INFO: Since the outAsync will expose a cursor to the newly created collection
+             * and since we are not doing anything with that here, it's only for the better we dispose
+             * this now.
+             * */
+
+            IAsyncCursor<BsonDocument> outCursor = default(IAsyncCursor<BsonDocument>);
+            try
+            {
+                outCursor = await _context.Jobs
+                    .Aggregate()
+                    .Project(projection)
+                    .Unwind(localitiesProperty)
+                    .Group(groupDefinition)
+                    .Match(matchDefinition)
+                    .OutAsync(CollectionNames.LocalityCollectionName);
+            }
+            finally
+            {
+                if (outCursor != null)
+                    outCursor.Dispose();
+            }    
         }
 
         internal async Task<Job> ReplaceOne(Job job)
