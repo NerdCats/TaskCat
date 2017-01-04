@@ -175,6 +175,8 @@
         }
     }
 
+    // Needs to be renamed 
+    // WARNING: COMMIT BEFORE RENAMING, OR THIS MAY END THE WORLD
     public class JobActivityOperatioNames
     {
         public const string Create = "Create";

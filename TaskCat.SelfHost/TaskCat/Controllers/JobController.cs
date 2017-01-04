@@ -32,6 +32,7 @@
     using Job.Invoice;
     using Data.Lib.Invoice.Request;
     using Data.Model.Job;
+    using NLog;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -42,6 +43,7 @@
         private IJobRepository repository;
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
         {
@@ -117,7 +119,7 @@
         public async Task<IHttpActionResult> List(string type = "", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
             if (pageSize == 0)
-                return BadRequest("Page size cant be 0");
+                return BadRequest("Page size can't be 0");
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
@@ -184,6 +186,7 @@
             var currentUserId = User.Identity.GetUserId();
             if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != currentUserId)
             {
+                logger.Warn("Asset {0} is not authorized to access job list assigned to {1}", User.Identity.Name, assetId);
                 throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
             }
 
@@ -227,7 +230,11 @@
                 DeliveryOrder order = job.Order as DeliveryOrder;
 
                 if (order.OrderCart == null)
+                {
+                    logger.Debug("\'order.OrderCart\' is null");
+                    logger.Warn("Generating invoice with blank order cart is not supported");
                     throw new InvalidOperationException("Generating invoice with blank order cart is not supported");
+                }
 
                 IInvoiceService invoiceService = new InvoiceService();
                 DeliveryInvoice invoice = invoiceService.GenerateInvoice<ItemDetailsInvoiceRequest, DeliveryInvoice>(new ItemDetailsInvoiceRequest()
@@ -264,6 +271,7 @@
             }
             else
             {
+                logger.Warn("Invoice for job type {0} is still not implemented", job.Order.Type);
                 throw new NotImplementedException($"Invoice for job type {job.Order.Type} is still not implemented");
             }
         }
@@ -352,10 +360,15 @@
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
             if (taskPatch == null)
+            {
+                logger.Warn("\'taskPatch\' is null");
                 throw new ArgumentNullException(nameof(taskPatch));
+            }
 
             if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
             {
+                logger.Debug(taskPatch.Operations.ToString());
+                logger.Warn("Operations except replace is not supported");
                 throw new NotSupportedException("Operations except replace is not supported");
             }
 
@@ -366,6 +379,7 @@
 
             if (!taskPatch.Operations.All(x => allowedPaths.Any(a => x.path.EndsWith(a))))
             {
+                logger.Warn("Patch operation not supported on one or more paths");
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
@@ -471,7 +485,10 @@
         public async Task<IHttpActionResult> RestoreJob(string jobId)
         {
             if (string.IsNullOrWhiteSpace(jobId))
+            {
+                logger.Warn("Null or WhiteSpace in JobID: {0}", jobId);
                 throw new ArgumentException(nameof(jobId));
+            }
 
             var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
             {
@@ -527,16 +544,24 @@
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) && !this.User.IsInRole(RoleNames.ROLE_ASSET))
             {
                 if (orderModel.UserId != null && orderModel.UserId != currentUserId)
+                {
+                    logger.Warn("Invalid Operation: Updating user id {0} is not authorized against user id {1}",
+                        orderModel.UserId, this.User.Identity.GetUserId());
+
                     throw new InvalidOperationException(string.Format(
                         "Updating user id {0} is not authorized against user id {1}",
                         orderModel.UserId, this.User.Identity.GetUserId()));
+                }
             }
             else if (this.User.IsInRole(RoleNames.ROLE_ASSET)
                 && !this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (!job.Assets.Any(x => x.Key == currentUserId))
+                {
+                    logger.Warn("{0} is not an associated asset with this job", currentUserId);
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
+                }
             }
 
             var result = await repository.UpdateOrder(job, orderModel, mode);
