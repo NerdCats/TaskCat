@@ -10,6 +10,7 @@
     using Data.Model.Operation;
     using MongoDB.Driver.Linq;
     using Common.Db;
+    using MongoDB.Bson;
 
     public class JobStore
     {
@@ -88,10 +89,14 @@
             return result;
         }
 
-        internal async Task<IEnumerable<string>> GetJobLocalities()
+        private class ProjectedLocalities
+        {
+            public string[] Localities { get; set; }
+        };
+        internal async Task RefreshJobLocalities()
         {
             /*
-             **** GFETCH - 324 *****
+             **** GFETCH - 325 *****
              * INFO: This one is particularly ugly. What we want to achieve here:
              * 1. Get locality field from Order payload field From and To
              * 2. Have a distinct set of from and to and return it back as all possible localities
@@ -101,21 +106,42 @@
              * in all the jobs. The technique we could use here is an aggregation pipiline. 
              * 
              * In the first aggregation stage we will have all the documents projecting the locality fields
-             * in From and To fields in order. We should use $addToSet operator so it ends up in a set
+             * in From and To fields in order. 
              * 
              * The second stage would $unwind this new Localities array that we created before so we will have a 
-             * basic list of string that have nothing but localities. But we have to make sure the list is unique.
+             * basic list of string that have nothing but localities. 
              * 
              * The third stage would make the list unique. We would group them by themselves and since they are
              * just strings now, we will have only the distinct ones.
              * 
-             * The fourth and final stage of aggregation will copy the result to another collection so we have the result 
+             * The fourth stage is a match operation which will essentially map out the empty and the null values 
+             * from the pipeline.
+             * 
+             * The fifth and final stage of aggregation will copy the result to another collection so we have the result 
              * cached in another collection and we will only serve that collection when someone asks for all the localities.
              * 
              * That collection will be manually update only when someone updates a job/creates a job and sees the locality 
              * is new here. It should always be done though a Rx subject of course. We don't want the request thread to be slow.
              */
-            throw new NotImplementedException();
+
+            ProjectionDefinition<Job, BsonDocument> projection = new BsonDocument() {
+                { "_id", 0},
+                { "Localities", new BsonArray() {
+                    "$Order.From.Locality",
+                    "$Order.To.Locality" }
+                }
+            };
+
+            var groupDefinition = BsonDocument.Parse("{ _id : \"$Localities\" }");
+            var matchDefinition = BsonDocument.Parse("{ $and:[ { _id : { $ne: null } }, { _id : { $ne: \"\" } }, { _id : { $ne: \"Undefined\" } } ] }");
+
+            var aggregation = await _context.Jobs
+                                        .Aggregate()
+                                        .Project(projection)
+                                        .Unwind("Localities")
+                                        .Group(groupDefinition)
+                                        .Match(matchDefinition)
+                                        .OutAsync("Localities");
         }
 
         internal async Task<Job> ReplaceOne(Job job)

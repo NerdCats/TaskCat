@@ -99,9 +99,9 @@
             return await store.ReplaceOne(job);
         }
 
-        public async Task<IEnumerable<string>> GetAllLocalities()
+        public async Task RefreshJobLocalities()
         {
-            return await store.GetJobLocalities();
+            await store.RefreshJobLocalities();
         }
     }
 }

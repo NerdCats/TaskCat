@@ -555,12 +555,12 @@
         /// </summary>
         /// <returns></returns>
         [Route("api/Job/localities")]
-        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        //[Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLocalities()
         {
-            var result = await repository.GetAllLocalities();
-            return Ok(result);
+            await repository.RefreshJobLocalities();
+            return Ok();
         }
     }
 }

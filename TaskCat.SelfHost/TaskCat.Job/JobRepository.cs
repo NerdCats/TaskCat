@@ -189,9 +189,9 @@
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
 
-        public async Task<IEnumerable<string>> GetAllLocalities()
+        public async Task RefreshJobLocalities()
         {
-            return await manager.GetAllLocalities();
+            await manager.RefreshJobLocalities();
         }
     }
 }

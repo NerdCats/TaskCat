@@ -406,6 +406,15 @@
 
 
 ---
+#### Method Controllers.JobController.GetLocalities
+
+ Get all the localities listed in the job order 
+
+**Returns**: 
+
+
+
+---
 #### Method Controllers.OrderController.PostOrder(TaskCat.Data.Model.OrderModel,TaskCat.Data.Model.Order.OrderCreationOptions)
 
  Default endpoint to create an Order 
