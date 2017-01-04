@@ -11,6 +11,7 @@
     using Lib.Constants;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
+    using NLog;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -25,6 +26,7 @@
     {
         private ICommentService service;
         private IJobRepository jobRepository;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a default instance of CommentController
@@ -95,7 +97,10 @@
                 {
                     var job = await jobRepository.GetJobByHrid(refId);
                     if (job.User.UserId != currentUserId)
+                    {
+                        logger.Warn("{0} is not allowed to get comment feed of {1}", currentUserId, refId);
                         throw new InvalidOperationException($"{currentUserId} is not allowed to get comment feed of {refId}");
+                    }
                 }
                 var comments = await service.GetByRefId(refId, entityType, pageSize, page);
                 return Ok(new PageEnvelope<Comment>(comments.Total, page, pageSize, AppConstants.DefaultCommentsRoute, comments.Result, this.Request));
@@ -127,7 +132,10 @@
                 {
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
+                    {
+                        logger.Warn("{0} is not allowed to comment on {1}", currentUserId, comment.RefId);
                         throw new InvalidOperationException($"{currentUserId} is not allowed to comment on {comment.RefId}");
+                    }
                 }
 
                 comment.User = new ReferenceUser(currentUserId, this.User.Identity.GetUserName())
@@ -159,7 +167,10 @@
             if (!this.User.IsAdmin())
             {
                 if (comment.User.Id != currentUserId)
+                {
+                    logger.Warn("{0} is not allowed to update comment {1}", this.User.Identity.Name, model.Id);
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
+                }
             }
 
             comment.LastModified = DateTime.UtcNow;
@@ -183,7 +194,10 @@
             {
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)
+                {
+                    logger.Warn("{0} is not allowed to delete comment {1}", this.User.Identity.Name, id);
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to delete comment {id}");
+                }
             }
 
             var result = await service.Delete(id);
