@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="refresh">Set to true for refreshing the list of localities. Default is false.</param>
         /// <returns>A list of </returns>
-        //[Authorize]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [ResponseType(typeof(PageEnvelope<Locality>))]
         [HttpGet]
         [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
