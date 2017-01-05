@@ -86,6 +86,7 @@
                 .Unwind(localitiesProperty)
                 .Group(groupDefinition)
                 .Match(matchDefinition)
+                .Sort(Builders<BsonDocument>.Sort.Ascending("_id"))
                 .OutAsync(CollectionNames.LocalityCollectionName);
 
             return outCursor;
