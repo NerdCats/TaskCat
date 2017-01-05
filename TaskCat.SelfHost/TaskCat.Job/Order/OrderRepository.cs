@@ -16,7 +16,6 @@
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
     using Account.Core;
-    using Common.Search;
     using Vendor;
     using Payment.Core;
 

@@ -415,6 +415,13 @@
 
 
 ---
+## Type Controllers.LocalityController
+
+ Localities fetched from jobs 
+
+
+
+---
 #### Method Controllers.LocalityController.#ctor(TaskCat.Job.ILocalityService)
 
  Creates a single instance of LocalityController. It's a controller for handling localities used in jobs. 

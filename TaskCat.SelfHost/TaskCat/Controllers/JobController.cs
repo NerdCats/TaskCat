@@ -10,7 +10,6 @@
     using System.Web.Http.Description;
     using Marvin.JsonPatch;
     using Microsoft.AspNet.Identity;
-    using MongoDB.Driver;
     using Data.Entity;
     using Data.Entity.Identity;
     using Data.Lib.Invoice.Response;
