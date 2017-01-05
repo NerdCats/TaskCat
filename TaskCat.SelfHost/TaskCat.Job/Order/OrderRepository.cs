@@ -32,7 +32,6 @@
         IPaymentService paymentService;
         private IVendorService vendorService;
         private IObserver<Job> jobSearchIndexService;
-        private ISearchContext searchContext;
 
         public OrderRepository(
             IJobManager manager,
