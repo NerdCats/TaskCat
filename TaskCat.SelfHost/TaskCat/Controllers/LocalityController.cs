@@ -1,17 +1,27 @@
 ﻿namespace TaskCat.Controllers
 {
-    using System;
+    using Job;
     using System.Threading.Tasks;
     using System.Web.Http;
 
     public class LocalityController : ApiController
     {
-        public LocalityController() { }
+        private ILocalityService service;
+
+        public LocalityController(ILocalityService service)
+        {
+            this.service = service;
+        }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetLocalities(bool refresh=false)
+        public async Task<IHttpActionResult> GetLocalities(bool refresh = false)
         {
-            throw new NotImplementedException();
+            if (refresh)
+            {
+                
+            }
+
+            return Ok();
         }
     }
 }

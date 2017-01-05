@@ -17,6 +17,7 @@
         IMongoCollection<RefreshToken> RefreshTokens { get; }
         IMongoCollection<Asset> Assets { get; }
 
+        IMongoCollection<Locality> Localities { get; }
         IMongoCollection<Job> Jobs { get; }
         IMongoCollection<SupportedOrder> SupportedOrders { get; }
 

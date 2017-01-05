@@ -1,5 +1,6 @@
 ﻿namespace TaskCat.Job
 {
+    using Data.Entity;
     using Common.Db;
     using MongoDB.Bson;
     using MongoDB.Driver;
@@ -7,16 +8,34 @@
 
     public class LocalityService : ILocalityService
     {
-        private IDbContext _context;
+        private readonly IDbContext _context;
 
         public LocalityService(IDbContext context)
         {
             this._context = context;
+            this.Collection = context.Localities;
         }
+
+        public IMongoCollection<Locality> Collection { get; }
+
         public async Task RefreshLocalities()
         {
+            IAsyncCursor<BsonDocument> outCursor = null;
+
+            try
+            {
+                outCursor = await this.FetchRefreshedLocalityCursor();
+            }
+            finally
+            {
+                outCursor?.Dispose();
+            }
+        }
+
+        private async Task<IAsyncCursor<BsonDocument>> FetchRefreshedLocalityCursor()
+        {
             /*
-             **** GFETCH - 325 *****
+             * **** GFETCH - 325 *****
              * INFO: This one is particularly ugly. What we want to achieve here:
              * 1. Get locality field from Order payload field From and To
              * 2. Have a distinct set of from and to and return it back as all possible localities
@@ -45,7 +64,6 @@
              */
 
             var localitiesProperty = "Localities";
-
             ProjectionDefinition<Data.Entity.Job, BsonDocument> projection = new BsonDocument() {
                 { "_id", 0},
                 { localitiesProperty, new BsonArray() {
@@ -62,22 +80,15 @@
              * this now.
              * */
 
-            IAsyncCursor<BsonDocument> outCursor = default(IAsyncCursor<BsonDocument>);
-            try
-            {
-                outCursor = await _context.Jobs
-                    .Aggregate()
-                    .Project(projection)
-                    .Unwind(localitiesProperty)
-                    .Group(groupDefinition)
-                    .Match(matchDefinition)
-                    .OutAsync(CollectionNames.LocalityCollectionName);
-            }
-            finally
-            {
-                if (outCursor != null)
-                    outCursor.Dispose();
-            }
+            var outCursor = await _context.Jobs
+                .Aggregate()
+                .Project(projection)
+                .Unwind(localitiesProperty)
+                .Group(groupDefinition)
+                .Match(matchDefinition)
+                .OutAsync(CollectionNames.LocalityCollectionName);
+
+            return outCursor;
         }
     }
 }
