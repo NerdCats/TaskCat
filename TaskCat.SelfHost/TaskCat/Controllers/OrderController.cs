@@ -58,14 +58,14 @@
             {
                 if (model.UserId != null && model.UserId != currentUserId)
                 {
-                    logger.Warn("INVALID OPERATION: Updating order/job id {0} is not authorized against user id {1}",
+                    logger.Error("INVALID OPERATION: Updating order/job id {0} is not authorized against user id {1}",
                         model.UserId, this.User.Identity.GetUserId());
 
                     throw new InvalidOperationException($"Updating order/job id {model.UserId} is not authorized against user id {this.User.Identity.GetUserId()}");
                 }
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
                 {
-                    logger.Warn("INVALID OPERATION: Claiming a job under user id {0} is not authorized",
+                    logger.Error("INVALID OPERATION: Claiming a job under user id {0} is not authorized",
                         User.Identity.GetUserId());
 
                     throw new InvalidOperationException($"Claiming a job under user id {User.Identity.GetUserId()} is not authorized");
@@ -89,7 +89,7 @@
                     activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Claim, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
-                    logger.Warn("Invalid OrderCreationOptions selected for order: {0}", model.Name);
+                    logger.Error("Invalid OrderCreationOptions selected for order: {0}", model.Name);
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
         }

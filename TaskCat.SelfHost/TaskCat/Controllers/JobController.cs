@@ -186,7 +186,7 @@
             var currentUserId = User.Identity.GetUserId();
             if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != currentUserId)
             {
-                logger.Warn("Asset {0} is not authorized to access job list assigned to {1}", User.Identity.Name, assetId);
+                logger.Error("Asset {0} is not authorized to access job list assigned to {1}", User.Identity.Name, assetId);
                 throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
             }
 
@@ -232,7 +232,7 @@
                 if (order.OrderCart == null)
                 {
                     logger.Debug("\'order.OrderCart\' is null");
-                    logger.Warn("Generating invoice with blank order cart is not supported");
+                    logger.Error("Generating invoice with blank order cart is not supported");
                     throw new InvalidOperationException("Generating invoice with blank order cart is not supported");
                 }
 
@@ -271,7 +271,7 @@
             }
             else
             {
-                logger.Warn("Invoice for job type {0} is still not implemented", job.Order.Type);
+                logger.Error("Invoice for job type {0} is still not implemented", job.Order.Type);
                 throw new NotImplementedException($"Invoice for job type {job.Order.Type} is still not implemented");
             }
         }
@@ -361,14 +361,14 @@
         {
             if (taskPatch == null)
             {
-                logger.Warn("\'taskPatch\' is null");
+                logger.Error("\'taskPatch\' is null");
                 throw new ArgumentNullException(nameof(taskPatch));
             }
 
             if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
             {
                 logger.Debug(taskPatch.Operations.ToString());
-                logger.Warn("Operations except replace is not supported");
+                logger.Error("Operations except replace is not supported");
                 throw new NotSupportedException("Operations except replace is not supported");
             }
 
@@ -379,7 +379,7 @@
 
             if (!taskPatch.Operations.All(x => allowedPaths.Any(a => x.path.EndsWith(a))))
             {
-                logger.Warn("Patch operation not supported on one or more paths");
+                logger.Error("Patch operation not supported on one or more paths");
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
@@ -486,7 +486,7 @@
         {
             if (string.IsNullOrWhiteSpace(jobId))
             {
-                logger.Warn("Null or WhiteSpace in JobID: {0}", jobId);
+                logger.Error("Null or WhiteSpace in JobID: {0}", jobId);
                 throw new ArgumentException(nameof(jobId));
             }
 
@@ -545,7 +545,7 @@
             {
                 if (orderModel.UserId != null && orderModel.UserId != currentUserId)
                 {
-                    logger.Warn("Invalid Operation: Updating user id {0} is not authorized against user id {1}",
+                    logger.Error("Invalid Operation: Updating user id {0} is not authorized against user id {1}",
                         orderModel.UserId, this.User.Identity.GetUserId());
 
                     throw new InvalidOperationException(string.Format(
@@ -559,7 +559,7 @@
             {
                 if (!job.Assets.Any(x => x.Key == currentUserId))
                 {
-                    logger.Warn("{0} is not an associated asset with this job", currentUserId);
+                    logger.Error("{0} is not an associated asset with this job", currentUserId);
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
                 }
             }

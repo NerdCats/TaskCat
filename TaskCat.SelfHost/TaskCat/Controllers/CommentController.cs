@@ -98,7 +98,7 @@
                     var job = await jobRepository.GetJobByHrid(refId);
                     if (job.User.UserId != currentUserId)
                     {
-                        logger.Warn("{0} is not allowed to get comment feed of {1}", currentUserId, refId);
+                        logger.Error("{0} is not allowed to get comment feed of {1}", currentUserId, refId);
                         throw new InvalidOperationException($"{currentUserId} is not allowed to get comment feed of {refId}");
                     }
                 }
@@ -133,7 +133,7 @@
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
                     {
-                        logger.Warn("{0} is not allowed to comment on {1}", currentUserId, comment.RefId);
+                        logger.Error("{0} is not allowed to comment on {1}", currentUserId, comment.RefId);
                         throw new InvalidOperationException($"{currentUserId} is not allowed to comment on {comment.RefId}");
                     }
                 }
@@ -168,7 +168,7 @@
             {
                 if (comment.User.Id != currentUserId)
                 {
-                    logger.Warn("{0} is not allowed to update comment {1}", this.User.Identity.Name, model.Id);
+                    logger.Error("{0} is not allowed to update comment {1}", this.User.Identity.Name, model.Id);
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
                 }
             }
@@ -195,7 +195,7 @@
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)
                 {
-                    logger.Warn("{0} is not allowed to delete comment {1}", this.User.Identity.Name, id);
+                    logger.Error("{0} is not allowed to delete comment {1}", this.User.Identity.Name, id);
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to delete comment {id}");
                 }
             }
