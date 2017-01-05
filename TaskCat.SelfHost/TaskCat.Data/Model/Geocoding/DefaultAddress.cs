@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Data.Model.Geocoding
+﻿using System.Globalization;
+
+namespace TaskCat.Data.Model.Geocoding
 {
     using GeoJson;
     using Newtonsoft.Json;
@@ -37,7 +39,9 @@
             this.Country = country;
             this.City = city;
             this.PostalCode = postcode;
-            this.Locality = locality;
+            this.Locality = string.IsNullOrEmpty(locality)
+                ? null
+                : CultureInfo.InvariantCulture.TextInfo.ToTitleCase(locality);
         }
 
         public string PostalCode { get; set; }
