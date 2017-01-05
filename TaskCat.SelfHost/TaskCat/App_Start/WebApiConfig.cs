@@ -1,4 +1,6 @@
-﻿namespace TaskCat
+﻿using TaskCat.Lib.Constants;
+
+namespace TaskCat
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;
@@ -21,7 +23,7 @@
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: AppConstants.DefaultApiRoute,
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );

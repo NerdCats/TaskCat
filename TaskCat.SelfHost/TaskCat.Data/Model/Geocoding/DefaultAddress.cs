@@ -5,6 +5,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
+    using System.Globalization;
 
     public class DefaultAddress : AddressBase
     {
@@ -30,14 +31,16 @@
         public DefaultAddress(string addressLine1, string addressLine2, string locality, string city, string postcode, string country, Point point) : this(addressLine1, point)
         {
             if (string.IsNullOrWhiteSpace(addressLine1))
-                throw new ArgumentNullException("address line 1 is blank or empty");
+                throw new ArgumentNullException(nameof(addressLine1));
 
             this.AddressLine1 = addressLine1;
             this.AddressLine2 = addressLine2;
             this.Country = country;
             this.City = city;
             this.PostalCode = postcode;
-            this.Locality = locality;
+            this.Locality = string.IsNullOrEmpty(locality)
+                ? null
+                : CultureInfo.InvariantCulture.TextInfo.ToTitleCase(locality);
         }
 
         public string PostalCode { get; set; }

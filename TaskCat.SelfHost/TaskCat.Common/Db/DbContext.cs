@@ -50,6 +50,12 @@ namespace TaskCat.Common.Db
 
         #region JobsAndOrders
 
+        private IMongoCollection<Locality> _localities;
+        public IMongoCollection<Locality> Localities
+        {
+            get { return _localities; }
+        }
+
         private IMongoCollection<Job> _jobs;
         public IMongoCollection<Job> Jobs
         {
@@ -180,6 +186,7 @@ namespace TaskCat.Common.Db
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
 
             _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
+            _localities = Database.GetCollection<Locality>(CollectionNames.LocalityCollectionName);
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings.Get("ShadowCat.LocationCacheCollectionName")))
                 _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);

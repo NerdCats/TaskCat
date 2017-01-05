@@ -3,7 +3,6 @@
     using Model.Identity.Response;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
-    using System.Linq;
 
     public class JobActivity : DbEntity
     {
