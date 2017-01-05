@@ -6,6 +6,8 @@
 
     public class LocalityService : ILocalityService
     {
+        private IDbContext context;
+
         public LocalityService(IDbContext context)
         {
             this.context = context;
