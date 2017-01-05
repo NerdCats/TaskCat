@@ -1,38 +1,38 @@
 ﻿namespace TaskCat.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Description;
-    using Marvin.JsonPatch;
-    using Microsoft.AspNet.Identity;
-    using MongoDB.Driver;
+    using Common.Email;
+    using Common.Lib.Utility;
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
     using Data.Entity;
     using Data.Entity.Identity;
+    using Data.Lib.Invoice.Request;
     using Data.Lib.Invoice.Response;
     using Data.Model;
     using Data.Model.Api;
     using Data.Model.Identity.Profile;
+    using Data.Model.Job;
     using Data.Model.Operation;
     using Data.Model.Order;
-    using Lib.Constants;
-    using Common.Model.Pagination;
-    using Common.Utility.ActionFilter;
-    using Common.Utility.Odata;
-    using Common.Email;
-    using Common.Lib.Utility;
-    using System.Reactive.Subjects;
-    using System.Collections.Generic;
     using Job;
-    using Job.Updaters;
     using Job.Invoice;
-    using Data.Lib.Invoice.Request;
-    using Data.Model.Job;
+    using Job.Updaters;
+    using Lib.Constants;
+    using Marvin.JsonPatch;
+    using Microsoft.AspNet.Identity;
+    using MongoDB.Driver;
     using NLog;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Reactive.Subjects;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
