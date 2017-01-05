@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace TaskCat.Controllers
     public class StorageController : ApiController
     {
         private IStorageRepository _repository;
+        private Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// StorageController Constructor
@@ -57,10 +59,14 @@ namespace TaskCat.Controllers
             }
             catch (NotSupportedException ex)
             {
+                logger.Error("NotSupportedException!!!\nFull stack trace: ");
+                logger.Error(ex.StackTrace);
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
+                logger.Error("An Exception thrown!!!\nFull stack trace:");
+                logger.Error(ex.StackTrace);
                 return InternalServerError(ex);
             }
         }
