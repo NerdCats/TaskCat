@@ -11,6 +11,9 @@
     using System.Threading.Tasks;
     using System.Web.Http;
 
+    /// <summary>
+    /// Localities fetched from jobs
+    /// </summary>
     public class LocalityController : ApiController
     {
         private readonly ILocalityService _service;
