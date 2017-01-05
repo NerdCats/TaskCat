@@ -1,19 +1,20 @@
 ﻿namespace TaskCat.Lib.AssetProvider
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Data.Model.Identity.Response;
-    using Asset;
-    using Model.Asset;
-    using Db;
-    using System;
-    using Data.Entity.ShadowCat;
-    using System.Linq;
-    using MongoDB.Bson;
-    using Data.Model.ShadowCat;
-    using MongoDB.Bson.Serialization;
     using Account.Core;
+    using Asset;
     using Common.Db;
+    using Data.Entity.ShadowCat;
+    using Data.Model.Identity.Response;
+    using Data.Model.ShadowCat;
+    using Db;
+    using Model.Asset;
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization;
+    using NLog;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Default implementation of asset provider, essentially provides assets
@@ -23,6 +24,7 @@
     {
         private readonly AccountManager _accountManager;
         private readonly IDbContext _dbContext;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public DefaultAssetProvider(AccountManager accountManager, IDbContext dbContext)
         {
@@ -33,9 +35,15 @@
         public async Task<IEnumerable<AssetWithLocationModel>> FindEligibleAssets(AssetSearchRequest assetRequest)
         {
             if (assetRequest.Location.Point == null)
+            {
+                logger.Error("assetRequest.Location.Point is null");
                 throw new NotImplementedException("Blank point with address is not supported yet");
+            }
             if (assetRequest.Strategy == SearchStrategy.DEEP)
+            {
+                logger.Error("Deep search is not implemented yet");
                 throw new NotImplementedException("Deep search is not implemented yet");
+            }
 
             var nearestAssets = await GetNearestAssetLocations(assetRequest);
             var result = await nearestAssets.Populate(x => x.Asset_Id, _dbContext.Assets);
