@@ -406,7 +406,7 @@
 
 
 ---
-#### Method Controllers.JobController.GetLocalities
+#### Method Controllers.JobController.RefreshLocalities
 
  Get all the localities listed in the job order 
 

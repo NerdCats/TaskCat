@@ -27,6 +27,5 @@
         Task<UpdateResult<Job>> UpdateOrder(Job job, OrderModel orderModel, string mode);
         Task<UpdateResult<Job>> CancelJob(Job job, string reason);
         Task<UpdateResult<Job>> RestoreJob(Job job);
-        Task RefreshJobLocalities();
     }
 }

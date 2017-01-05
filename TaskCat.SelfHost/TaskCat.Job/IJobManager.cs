@@ -21,6 +21,5 @@
         Task<Job> UpdateJob(Data.Entity.Job job);
         Task<Job> UpdateJobTask(string _id, List<JobTask> tasks);
         Task<Job> UpdateJobTask(string jobId, int taskIndex, JobTask task);
-        Task RefreshJobLocalities();
     }
 }

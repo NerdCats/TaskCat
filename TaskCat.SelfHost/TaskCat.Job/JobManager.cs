@@ -98,10 +98,5 @@
         {
             return await store.ReplaceOne(job);
         }
-
-        public async Task RefreshJobLocalities()
-        {
-            await store.RefreshJobLocalities();
-        }
     }
 }

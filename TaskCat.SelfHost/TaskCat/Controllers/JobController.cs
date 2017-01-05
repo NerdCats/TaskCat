@@ -42,12 +42,18 @@
         private IJobRepository repository;
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
+        private ILocalityService localLityService;
 
-        public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
+        public JobController(
+            IJobRepository repository, 
+            IEmailService mailService, 
+            ILocalityService localityService,
+            Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
             this.activitySubject = activitySubject;
+            this.localLityService = localityService;
         }
 
         /// <summary>
@@ -559,7 +565,7 @@
         [HttpPost]
         public async Task<IHttpActionResult> RefreshLocalities()
         {
-            await repository.RefreshJobLocalities();
+            await localLityService.RefreshLocalities();
             return Ok();
         }
     }
