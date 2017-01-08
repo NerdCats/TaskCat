@@ -19,5 +19,6 @@
         public const string CommentCollectionName = "Comments";
 
         public const string JobActivityCollectionName = "JobActivities";
+        public const string LocalityCollectionName = "Localities";
     }
 }

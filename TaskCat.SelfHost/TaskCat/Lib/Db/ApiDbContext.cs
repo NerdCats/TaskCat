@@ -29,6 +29,7 @@
 
         public void Dispose()
         {
+            base.Dispose();
             //TODO: Need to write this;
         }
     }

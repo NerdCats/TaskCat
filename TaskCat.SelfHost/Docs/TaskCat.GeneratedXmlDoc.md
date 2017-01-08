@@ -406,6 +406,44 @@
 
 
 ---
+#### Method Controllers.JobController.RefreshLocalities
+
+ Get all the localities listed in the job order 
+
+**Returns**: 
+
+
+
+---
+## Type Controllers.LocalityController
+
+ Localities fetched from jobs 
+
+
+
+---
+#### Method Controllers.LocalityController.#ctor(TaskCat.Job.ILocalityService)
+
+ Creates a single instance of LocalityController. It's a controller for handling localities used in jobs. 
+
+|Name | Description |
+|-----|------|
+|service: ||
+
+
+---
+#### Method Controllers.LocalityController.GetLocalities(System.Boolean)
+
+ Get the current set of localities used in jobs. 
+
+|Name | Description |
+|-----|------|
+|refresh: |Set to true for refreshing the list of localities. Default is false.|
+**Returns**: A list of 
+
+
+
+---
 #### Method Controllers.OrderController.PostOrder(TaskCat.Data.Model.OrderModel,TaskCat.Data.Model.Order.OrderCreationOptions)
 
  Default endpoint to create an Order 

@@ -108,10 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\DeliveryJobBuilder.cs" />
+    <Compile Include="ILocalityService.cs" />
     <Compile Include="Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Invoice\IInvoiceService.cs" />
     <Compile Include="Invoice\InvoiceService.cs" />
     <Compile Include="Invoice\IPDFService.cs" />
+    <Compile Include="LocalityService.cs" />
     <Compile Include="Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Utility\Converter\ProfitSharingModelConverter.cs" />
     <Compile Include="Utility\Converter\VendorConverter.cs" />

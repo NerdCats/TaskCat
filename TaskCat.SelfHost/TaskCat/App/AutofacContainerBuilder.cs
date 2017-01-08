@@ -65,6 +65,10 @@
             #endregion
 
             #region Job
+
+            builder.RegisterType<LocalityService>()
+                .AsImplementedInterfaces<ILocalityService, ConcreteReflectionActivatorData>()
+                .SingleInstance();
             builder.RegisterType<JobStore>().SingleInstance();
             builder.RegisterType<JobManager>().AsImplementedInterfaces<IJobManager, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<JobRepository>().AsImplementedInterfaces<IJobRepository, ConcreteReflectionActivatorData>().SingleInstance();

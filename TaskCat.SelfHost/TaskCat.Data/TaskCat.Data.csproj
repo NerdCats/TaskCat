@@ -110,6 +110,7 @@
     <Compile Include="Entity\Identity\EnterpriseUser.cs" />
     <Compile Include="Entity\Identity\RoleNames.cs" />
     <Compile Include="Entity\JobActivity.cs" />
+    <Compile Include="Entity\Locality.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\ProductCategory.cs" />
     <Compile Include="Entity\Store.cs" />

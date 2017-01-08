@@ -10,6 +10,7 @@
     using Data.Model.Operation;
     using MongoDB.Driver.Linq;
     using Common.Db;
+    using MongoDB.Bson;
 
     public class JobStore
     {
@@ -55,7 +56,7 @@
             return new QueryResult<Job>()
             {
                 Total = await orderContext.CountAsync(),
-                Result = await orderContext.Skip(start).Limit(limit).ToListAsync()                
+                Result = await orderContext.Skip(start).Limit(limit).ToListAsync()
             };
         }
 
@@ -87,6 +88,11 @@
             var result = await _context.Jobs.FindOneAndUpdateAsync(Filter, UpdateDefinition);
             return result;
         }
+
+        private class ProjectedLocalities
+        {
+            public string[] Localities { get; set; }
+        };
 
         internal async Task<Job> ReplaceOne(Job job)
         {
