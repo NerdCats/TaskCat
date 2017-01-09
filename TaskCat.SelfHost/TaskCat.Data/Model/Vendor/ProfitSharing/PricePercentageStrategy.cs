@@ -16,13 +16,7 @@
             }
         }
 
-        public ProfitSharingMethod Method
-        {
-            get
-            {
-                return ProfitSharingMethod.PRICE_PERCENTAGE;
-            }
-        }
+        public new ProfitSharingMethod Method => ProfitSharingMethod.PRICE_PERCENTAGE;
 
         public override ProfitShareResult Calculate(decimal totalPrice)
         {

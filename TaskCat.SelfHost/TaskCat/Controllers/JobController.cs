@@ -5,6 +5,16 @@
     using Common.Model.Pagination;
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using Marvin.JsonPatch;
+    using Microsoft.AspNet.Identity;
     using Data.Entity;
     using Data.Entity.Identity;
     using Data.Lib.Invoice.Request;
@@ -44,12 +54,18 @@
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private ILocalityService localLityService;
 
-        public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
+        public JobController(
+            IJobRepository repository, 
+            IEmailService mailService, 
+            ILocalityService localityService,
+            Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
             this.activitySubject = activitySubject;
+            this.localLityService = localityService;
         }
 
         /// <summary>
@@ -573,6 +589,19 @@
             });
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Get all the localities listed in the job order
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/Job/localities/refresh")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPost]
+        public async Task<IHttpActionResult> RefreshLocalities()
+        {
+            await localLityService.RefreshLocalities();
+            return Ok();
         }
     }
 }

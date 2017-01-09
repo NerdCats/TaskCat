@@ -4,8 +4,7 @@
     using System.Text;
     using Db;
     using MongoDB.Driver;
-    using Common.Exceptions;
-    using Common.Db;
+    using Exceptions;
 
     public class HRIDService : IHRIDService
     {
