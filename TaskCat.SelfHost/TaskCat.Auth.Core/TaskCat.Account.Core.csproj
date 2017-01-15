@@ -86,6 +86,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,6 +101,8 @@
     <Compile Include="ClientStore.cs" />
     <Compile Include="IAccountContext.cs" />
     <Compile Include="IClientStore.cs" />
+    <Compile Include="Lib\DataProtection\MachineKeyDataProtectionProvider.cs" />
+    <Compile Include="Lib\DataProtection\MachineKeyDataProtector.cs" />
     <Compile Include="Lib\ServiceBus\IServiceBusClient.cs" />
     <Compile Include="Model\AccountResult.cs" />
     <Compile Include="Model\Account\AvailibilityResponse.cs" />
