@@ -717,7 +717,7 @@
 
 
 ---
-#### Method Program.Main(System.String[])
+#### Field Program.logger
 
  This is the entry point of the service host process. 
 
