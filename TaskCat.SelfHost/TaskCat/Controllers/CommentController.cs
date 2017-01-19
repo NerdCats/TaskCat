@@ -133,7 +133,7 @@
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
                     {
-                        logger.Error("{0} is not allowed to comment on {1}", currentUserId, comment.RefId);
+                        logger.Error($"{currentUserId} is not allowed to comment on {comment.RefId}");
                         throw new InvalidOperationException($"{currentUserId} is not allowed to comment on {comment.RefId}");
                     }
                 }
@@ -168,7 +168,7 @@
             {
                 if (comment.User.Id != currentUserId)
                 {
-                    logger.Error("{0} is not allowed to update comment {1}", this.User.Identity.Name, model.Id);
+                    logger.Error($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
                 }
             }
@@ -195,7 +195,7 @@
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)
                 {
-                    logger.Error("{0} is not allowed to delete comment {1}", this.User.Identity.Name, id);
+                    logger.Error($"{this.User.Identity.Name} is not allowed to delete comment {id}");
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to delete comment {id}");
                 }
             }
