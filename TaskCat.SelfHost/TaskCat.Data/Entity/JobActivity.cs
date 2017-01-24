@@ -81,15 +81,15 @@
 
         private string GenerateActionText()
         {
-            if (Operation == JobActivityOperatioNames.Create)
+            if (Operation == JobActivityOperationNames.Create)
             {
                 return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
             }
-            else if (Operation == JobActivityOperatioNames.Claim)
+            else if (Operation == JobActivityOperationNames.Claim)
             {
                 return $"{this.ByUser.DisplayName} {Operation.ToLower()}ed {HRID}";
             }
-            else if (Operation == JobActivityOperatioNames.Update)
+            else if (Operation == JobActivityOperationNames.Update)
             {
                 if (Reference != null)
                 {
@@ -102,7 +102,7 @@
                     return Value != null ? $"{prefix} to {Value}" : prefix;
                 }
             }
-            else if (Operation == JobActivityOperatioNames.Restore || Operation == JobActivityOperatioNames.Cancel)
+            else if (Operation == JobActivityOperationNames.Restore || Operation == JobActivityOperationNames.Cancel)
             {
                 return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
             }
@@ -173,8 +173,8 @@
             Name = userModel.Profile?.GetName();
         }
     }
-
-    public class JobActivityOperatioNames
+    
+    public class JobActivityOperationNames
     {
         public const string Create = "Create";
         public const string Update = "Update";

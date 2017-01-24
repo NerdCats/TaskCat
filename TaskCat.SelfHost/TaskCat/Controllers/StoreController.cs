@@ -1,26 +1,28 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using MongoDB.Driver;
+using NLog;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.Identity;
-using MongoDB.Driver;
-using TaskCat.Data.Entity;
-using TaskCat.Lib.Constants;
 using System.Web.Http.Description;
+using TaskCat.Common.Domain;
+using TaskCat.Common.Lib.Utility;
 using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
-using TaskCat.Common.Lib.Utility;
-using TaskCat.Common.Domain;
+using TaskCat.Data.Entity;
+using TaskCat.Lib.Constants;
 
 namespace TaskCat.Controllers
 {
     public class StoreController : ApiController
     {
         private IRepository<Store> service;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public StoreController(IRepository<Store> service)
         {
@@ -57,7 +59,12 @@ namespace TaskCat.Controllers
             if (!User.IsAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
+                {
+                    logger.Error("INVALID OPEARTION: User {0} is not authorized to create a store for user {1}",
+                        authorizedId, store.EnterpriseUserId);
+
                     throw new InvalidOperationException($"User {authorizedId} is not authorized to create a store for user {store.EnterpriseUserId}");
+                }
 
                 store.DisplayOrder = AppConstants.DefaultStoreOrder;
             }
@@ -75,7 +82,12 @@ namespace TaskCat.Controllers
             if (!User.IsAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
+                {
+                    logger.Error("INVALID OPEARTION: User {0} is not authorized to update a store for user {1}",
+                        authorizedId, store.EnterpriseUserId);
+
                     throw new InvalidOperationException($"User {authorizedId} is not authorized to update a store for user {store.EnterpriseUserId}");
+                }
 
                 store.DisplayOrder = AppConstants.DefaultStoreOrder;
             }
@@ -95,7 +107,12 @@ namespace TaskCat.Controllers
             {
                 var jobUserId = (await service.Get(id)).EnterpriseUserId;
                 if (authorizedId != jobUserId)
-                    throw new InvalidOperationException($"User {authorizedId} is not authorized to delete a store for user {jobUserId}");                
+                {
+                    logger.Error("INVALID OPEARTION: User {0} is not authorized to delete a store for user {1}",
+                        authorizedId, jobUserId);
+
+                    throw new InvalidOperationException($"User {authorizedId} is not authorized to delete a store for user {jobUserId}");
+                }
             }
 
             var result = await service.Delete(id);

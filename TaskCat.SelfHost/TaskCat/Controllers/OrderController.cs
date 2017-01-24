@@ -1,17 +1,18 @@
 ﻿namespace TaskCat.Controllers
 {
-    using System;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using System.Web.Http.Description;
-    using Microsoft.AspNet.Identity;
     using Data.Entity;
     using Data.Entity.Identity;
     using Data.Model;
     using Data.Model.Order;
-    using System.Reactive.Subjects;
-    using Job.Order;
     using Job;
+    using Job.Order;
+    using Microsoft.AspNet.Identity;
+    using NLog;
+    using System;
+    using System.Reactive.Subjects;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
 
     [RoutePrefix("api/Order")]
     public class OrderController : ApiController
@@ -19,6 +20,7 @@
         private IOrderRepository repository;
         private IJobRepository jobRepository;
         private Subject<JobActivity> activitySubject;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public OrderController(
             IOrderRepository repository,
@@ -55,9 +57,19 @@
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (model.UserId != null && model.UserId != currentUserId)
+                {
+                    logger.Error("INVALID OPERATION: Updating order/job id {0} is not authorized against user id {1}",
+                        model.UserId, this.User.Identity.GetUserId());
+
                     throw new InvalidOperationException($"Updating order/job id {model.UserId} is not authorized against user id {this.User.Identity.GetUserId()}");
+                }
                 if (opt == OrderCreationOptions.CREATE_AND_CLAIM)
+                {
+                    logger.Error("INVALID OPERATION: Claiming a job under user id {0} is not authorized",
+                        User.Identity.GetUserId());
+
                     throw new InvalidOperationException($"Claiming a job under user id {User.Identity.GetUserId()} is not authorized");
+                }
             }
 
             if (model.UserId == null) model.UserId = currentUserId;
@@ -69,14 +81,15 @@
             {
                 case OrderCreationOptions.CREATE:
                     createdJob = await repository.PostOrder(model);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Create, referenceUserForActivityLog));
                     return Ok(createdJob);
                 case OrderCreationOptions.CREATE_AND_CLAIM:
                     createdJob = await repository.PostOrder(model, currentUserId);
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Create, referenceUserForActivityLog));
-                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperatioNames.Claim, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Create, referenceUserForActivityLog));
+                    activitySubject.OnNext(new JobActivity(createdJob, JobActivityOperationNames.Claim, referenceUserForActivityLog));
                     return Ok(createdJob);
                 default:
+                    logger.Error("Invalid OrderCreationOptions selected for order: {0}", model.Name);
                     throw new InvalidOperationException("Invalid OrderCreationOptions selected");
             }
         }
