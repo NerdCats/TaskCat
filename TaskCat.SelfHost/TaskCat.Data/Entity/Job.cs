@@ -86,7 +86,7 @@
         public string HRState {
             get
             {
-                var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
+                var lastSignificantTask = this.Tasks.LastOrDefault(x => x.State > JobTaskState.PENDING);
                 if (lastSignificantTask != null)
                     return lastSignificantTask.GetHRState();
                 else return this.state.GetSimplifiedStateString();
