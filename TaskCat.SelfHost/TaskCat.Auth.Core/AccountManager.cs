@@ -12,6 +12,7 @@
     using Microsoft.Owin.Security.DataProtection;
     using Microsoft.AspNet.Identity.Owin;
     using Data.Model.Operation;
+    using Lib.DataProtection;
 
     public class AccountManager : UserManager<User>
     {
@@ -30,12 +31,8 @@
             {
                 RequiredLength = 6
             };
-        }
 
-        public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : this(store)
-        {
-            //TODO: Define proper user token protection provider token here
-
+            MachineKeyDataProtectionProvider dataProtectionProvider = new MachineKeyDataProtectionProvider();
             this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"))
             {
                 TokenLifespan = TimeSpan.FromHours(6)
