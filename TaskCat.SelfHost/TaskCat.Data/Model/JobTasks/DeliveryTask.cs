@@ -34,6 +34,20 @@
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
         }
 
+        public DeliveryTask GenerateReturnTask()
+        {
+            var task = new DeliveryTask
+            {
+                From = this.To,
+                To = this.From,
+                State = JobTaskState.PENDING,
+                CreateTime = DateTime.UtcNow,
+                Name = "Return Delivery",
+                Variant = DeliveryTaskVariants.Return
+            };
+            return task;
+        }
+
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
             base.SetPredecessor(task, validateDependency);

@@ -13,6 +13,9 @@
         protected string Name;
         public string id { get; protected set; }
 
+        [BsonIgnoreIfNull]
+        public string Variant { get; set; } = "default";   
+
         [JsonIgnore]
         [BsonIgnore]
         protected JobTask Predecessor;

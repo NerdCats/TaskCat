@@ -20,14 +20,16 @@
 
         private void PopulateExtensions()
         {
-            EnlistDeliveryTaskExtension();
+            EnlistClassifiedDeliveryExtensions();
         }
 
-        private void EnlistDeliveryTaskExtension()
+        private void EnlistClassifiedDeliveryExtensions()
         {
+            // Delivery task extension
+
             var actionableState = JobTaskState.FAILED | JobTaskState.RETURNED;
             Expression<Func<JobTask, bool>> conditionExpression =
-                task => task.IsTerminatingTask && ((actionableState & task.State) > 0);
+                task => task.IsTerminatingTask && ((actionableState & task.State) == task.State);
 
             var deliveryJobTaskExtension = new JobTaskExtension(
                 OrderTypes.ClassifiedDelivery, 
@@ -38,13 +40,39 @@
                 {
                     if (job == null)
                         throw new ArgumentNullException(nameof(job));
-                    
+                    if (task ==null)
+                        throw new ArgumentNullException(nameof(task));
 
+                    if (task.State == JobTaskState.FAILED)
+                    {
+                        /* INFO: If the delivery task has reached state FAILED
+                         * that only means by default the next task should send 
+                         * back the delivery to the actual provider. In this case
+                         * the provider is the seller since this is for classified delivery.
+                         * That also means that we have to push this new job before 
+                         * SecureCashDelivery and increase the job attempt
+                         * */
+
+                        // Increase Job Attempt
+                        job.AttemptCount ++;
+
+                        // Create a delivery task that will send the product back since delivery has failed
+
+
+                        // Push the job after the delivery task itself.
+                        var index = job.Tasks.IndexOf(task);
+                        if (index == -1)
+                            throw new ArgumentException(nameof(task));
+                        job.Tasks.Insert(index, null);
+
+                    }
                     return null;
                 }
             };
 
             this.extensions.Add(deliveryJobTaskExtension);
+
+
         }
     }
 }

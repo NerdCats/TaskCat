@@ -181,6 +181,8 @@
             }
         }
 
+        public int AttemptCount { get; set; }
+
         public Vendor Vendor { get; set; }
         public ProfitShareResult ProfitShareResult { get; set; }
 
