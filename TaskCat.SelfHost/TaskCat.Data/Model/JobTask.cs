@@ -27,10 +27,9 @@
 
         public string Type { get; set; }
 
-        private JobTaskState state;
+        private string state;
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public JobTaskState State
+        public string State
         {
             get
             {
@@ -121,9 +120,10 @@
 
         public JobTask()
         {
+            this.State = JobTaskState.PENDING;
         }
 
-        public JobTask(string name)
+        public JobTask(string name) : this()
         {
             this.Name = name;
         }
@@ -162,10 +162,10 @@
 
         public virtual void UpdateStateParams()
         {
-            if (State == JobTaskState.PENDING) return;
+            if (State == JobTaskState.PENDING)
+                return;
 
-            if (State >= JobTaskState.IN_PROGRESS)
-                InitiationTime = InitiationTime ?? DateTime.UtcNow;
+            InitiationTime = InitiationTime ?? DateTime.UtcNow;
 
             if (IsReadytoMoveToNextTask)
                 NotifyJobTaskCompleted();

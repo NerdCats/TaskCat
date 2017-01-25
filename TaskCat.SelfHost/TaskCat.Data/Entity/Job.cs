@@ -86,7 +86,7 @@
         public string HRState {
             get
             {
-                var lastSignificantTask = this.Tasks.LastOrDefault(x => x.State > JobTaskState.PENDING);
+                var lastSignificantTask = this.Tasks.LastOrDefault(x => JobTaskState.GreaterThan(x.State, JobTaskState.PENDING));
                 if (lastSignificantTask != null)
                     return lastSignificantTask.GetHRState();
                 else return this.state.GetSimplifiedStateString();
@@ -257,8 +257,7 @@
         private void SetProperJobState(JobTask jobTask)
         {
             // Set Job state based on job tasks state
-            if (jobTask.State >= JobTaskState.IN_PROGRESS
-                && jobTask.State < JobTaskState.COMPLETED
+            if (jobTask.State == JobTaskState.IN_PROGRESS
                 && State != JobState.IN_PROGRESS)
             {
                 State = JobState.IN_PROGRESS;
