@@ -59,9 +59,8 @@
                     if (deliveryTask.State == JobTaskState.FAILED)
                     {
                         /* INFO: If the delivery task has reached state FAILED
-                         * that only means by default the next task should send 
-                         * back the delivery to the actual provider. In this case
-                         * the provider is the seller since this is for classified delivery.
+                         * that only means by default the next task should try  
+                         * to resend the pacakage again. 
                          * That also means that we have to push this new job before 
                          * SecureCashDelivery and increase the job attempt
                          * */
@@ -93,8 +92,13 @@
                          * if this is already a return task. If it is, the product should
                          * be returned to the nearest office.
                          * 
-                         * If this is already not a return job then we should do the same we
-                         * did for the FAILED state
+                         * If this is already not a return job then we should try to return it 
+                         * to the proper owner. For Enterprise variant of classified delivery 
+                         * the product should go back to the actual owner/provider of the product, 
+                         * in this case the enterprise user. 
+                         * 
+                         * For the default version of the classified delivery this should go 
+                         * back to the actual seller of the product
                          * */
 
                         if (deliveryTask.Variant == DeliveryTaskVariants.Return)
