@@ -86,7 +86,11 @@
         public string HRState {
             get
             {
+<<<<<<< HEAD
                 var lastSignificantTask = this.Tasks.LastOrDefault(x => JobTaskState.GreaterThan(x.State, JobTaskState.PENDING));
+=======
+                var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
+>>>>>>> parent of 79926da... GFETCH-338: Started with simple refactor
                 if (lastSignificantTask != null)
                     return lastSignificantTask.GetHRState();
                 else return this.state.GetSimplifiedStateString();
