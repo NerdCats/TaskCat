@@ -1,5 +1,8 @@
-﻿namespace TaskCat.Data.Model
+﻿using System;
+
+namespace TaskCat.Data.Model
 {
+    [Flags]
     public enum JobTaskState
     {
         /// <summary>

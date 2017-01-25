@@ -28,5 +28,22 @@ namespace TaskCat.Job
         /// Execute the extension works. Expects a Func with the respected job input and respected job output
         /// </summary>       
         public Func<Data.Entity.Job, Data.Entity.Job> ExecuteExtension;
+
+        public JobTaskExtension(
+            string orderType,
+            string jobTaskType,
+            Expression<Func<Data.Model.JobTask, bool>> conditionExpression)
+        {
+            if (string.IsNullOrWhiteSpace(orderType))
+                throw new ArgumentException(nameof(orderType));
+            if (string.IsNullOrWhiteSpace(jobTaskType))
+                throw new ArgumentException(nameof(jobTaskType));
+            if (conditionExpression == null)
+                throw new ArgumentNullException(nameof(conditionExpression));
+
+            this.OrderType = orderType;
+            this.JobTaskType = jobTaskType;
+            this.ConditionExpression = conditionExpression;
+        }
     }
 }
