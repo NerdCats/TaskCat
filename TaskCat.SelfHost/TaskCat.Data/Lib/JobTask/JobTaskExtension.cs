@@ -11,9 +11,14 @@
     public abstract class JobTaskExtension
     {
         /// <summary>
-        /// Type of the JobTask this extension is attached to
+        /// Type of the Order/Job this extension is attached to
         /// </summary>
-        public string Type { get; set; }
+        public string OrderType { get; set; }
+
+        /// <summary>
+        /// Type of the job task this extension is registered against
+        /// </summary>
+        public string JobTaskType { get; set; }
 
         /// <summary>
         /// Condition expression for the exntension to be activated

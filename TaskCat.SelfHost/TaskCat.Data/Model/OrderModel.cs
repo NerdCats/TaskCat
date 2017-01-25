@@ -15,10 +15,6 @@
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
-        [JsonIgnore]
-        [BsonIgnore]
-        public List<JobTaskExtension> Extensions;
-
         private string _name;
         /// <summary>
         /// Name for the order
