@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Job.Extensions
+﻿using TaskCat.Data.Model.JobTasks;
+
+namespace TaskCat.Job.Extensions
 {
     using System.Collections.Generic;
     using System;
@@ -40,7 +42,7 @@
                 {
                     if (job == null)
                         throw new ArgumentNullException(nameof(job));
-                    if (task ==null)
+                    if (task?.Type!= JobTaskTypes.DELIVERY)
                         throw new ArgumentNullException(nameof(task));
 
                     if (task.State == JobTaskState.FAILED)
@@ -53,20 +55,32 @@
                          * SecureCashDelivery and increase the job attempt
                          * */
 
+                        // Get index of current task
+                        var index = job.Tasks.IndexOf(task);
+                        if (index == -1)
+                            throw new ArgumentException(nameof(task));
+
                         // Increase Job Attempt
                         job.AttemptCount ++;
 
                         // Create a delivery task that will send the product back since delivery has failed
+                        var newDeliveryTask = task as DeliveryTask;
+                        newDeliveryTask.SetPredecessor(task);
 
-
-                        // Push the job after the delivery task itself.
-                        var index = job.Tasks.IndexOf(task);
-                        if (index == -1)
-                            throw new ArgumentException(nameof(task));
-                        job.Tasks.Insert(index, null);
-
+                        if (index < job.Tasks.Count - 1)
+                        {
+                            // this means this task is not a terminating task
+                            job.Tasks[index+1].SetPredecessor(newDeliveryTask);
+                            // Push the job after the delivery task itself.
+                            job.Tasks.Insert(index, newDeliveryTask);
+                        }
+                        else
+                        {
+                            job.Tasks.Add(newDeliveryTask);
+                        }
                     }
-                    return null;
+
+                    return job;
                 }
             };
 
