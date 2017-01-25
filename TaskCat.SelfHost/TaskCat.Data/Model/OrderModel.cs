@@ -1,7 +1,5 @@
 ﻿namespace TaskCat.Data.Model
 {
-    using Newtonsoft.Json;
-    using Lib.JobTask;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -9,7 +7,6 @@
     using JobTasks.Preference;
     using System.Collections.Generic;
     using Order.Delivery;
-    using Order;
 
     [BsonKnownTypes(typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
     [BsonIgnoreExtraElements(Inherited = true)]

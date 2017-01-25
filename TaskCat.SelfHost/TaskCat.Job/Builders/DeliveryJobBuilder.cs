@@ -1,6 +1,4 @@
-﻿using TaskCat.Data.Model.Order.Delivery;
-
-namespace TaskCat.Job.Builders
+﻿namespace TaskCat.Job.Builders
 {
     using Data.Model;
     using Data.Model.JobTasks;
@@ -11,6 +9,7 @@ namespace TaskCat.Job.Builders
     using Data.Model.Payment;
     using System;
     using System.Linq;
+    using Data.Model.Order.Delivery;
     using Data.Model.Vendor.ProfitSharing;
     using Data.Entity;
     using Common.HRID;
