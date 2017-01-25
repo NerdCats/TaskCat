@@ -34,6 +34,19 @@
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
         }
 
+        public DeliveryTask GenerateRetryTask()
+        {
+            var task = new DeliveryTask
+            {
+                From = this.From,
+                To = this.To,
+                State = JobTaskState.PENDING,
+                CreateTime = DateTime.UtcNow,
+                Variant = DeliveryTaskVariants.Default
+            };
+            return task;
+        }
+
         public DeliveryTask GenerateReturnTask()
         {
             var task = new DeliveryTask

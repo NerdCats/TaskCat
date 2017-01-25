@@ -10,27 +10,26 @@
     using Its.Configuration;
     using Common.Settings;
 
-
     public class DeliveryJobExtensions
     {
-        private List<JobTaskExtension> extensions;
-        public List<JobTaskExtension> Extensions() => extensions;
+        public Dictionary<string, List<JobTaskExtension>> ExtensionsDictionary { get; private set; }
 
         public DeliveryJobExtensions()
         {
-            extensions = new List<JobTaskExtension>();
+            ExtensionsDictionary = new Dictionary<string, List<JobTaskExtension>>();
             PopulateExtensions();
         }
 
         private void PopulateExtensions()
         {
             EnlistClassifiedDeliveryExtensions();
+            
         }
 
         private void EnlistClassifiedDeliveryExtensions()
         {
+            var extensions = new List<JobTaskExtension>();
             // Delivery task extension
-
             var actionableState = JobTaskState.FAILED | JobTaskState.RETURNED;
             Expression<Func<JobTask, bool>> conditionExpression =
                 task => task.IsTerminatingTask && ((actionableState & task.State) == task.State);
@@ -71,7 +70,7 @@
                         job.AttemptCount++;
 
                         // Create a delivery task that will send the product back since delivery has failed
-                        var newDeliveryTask = deliveryTask.GenerateReturnTask();
+                        var newDeliveryTask = deliveryTask.GenerateRetryTask();
                         newDeliveryTask.SetPredecessor(deliveryTask);
 
                         if (index < job.Tasks.Count - 1)
@@ -97,9 +96,6 @@
                          * If this is already not a return job then we should do the same we
                          * did for the FAILED state
                          * */
-
-                        // Increase Job Attempt
-                        job.AttemptCount++;
 
                         if (deliveryTask.Variant == DeliveryTaskVariants.Return)
                         {
@@ -153,7 +149,8 @@
                 }
             };
 
-            this.extensions.Add(deliveryJobTaskExtension);
+            extensions.Add(deliveryJobTaskExtension);
+            this.ExtensionsDictionary.Add(OrderTypes.ClassifiedDelivery, extensions);
         }
     }
 }
