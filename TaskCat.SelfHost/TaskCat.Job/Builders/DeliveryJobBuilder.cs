@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Job.Builders
+﻿using TaskCat.Data.Model.Order.Delivery;
+
+namespace TaskCat.Job.Builders
 {
     using Data.Model;
     using Data.Model.JobTasks;

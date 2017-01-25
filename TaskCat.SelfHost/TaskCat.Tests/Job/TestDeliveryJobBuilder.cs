@@ -17,6 +17,7 @@
     using Data.Lib.Constants;
     using System.ComponentModel.DataAnnotations;
     using TaskCat.Job.Builders;
+    using Data.Model.Order.Delivery;
     using Common.HRID;
 
     [TestFixture(TestOf = typeof(DeliveryJobBuilder))]

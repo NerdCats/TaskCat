@@ -1,10 +1,13 @@
-﻿namespace TaskCat.Lib.JobTask
+﻿namespace TaskCat.Data.Lib.JobTask
 {
     using System;
     using System.Linq.Expressions;
-    using Data.Entity;
-    using Data.Model;
+    using Entity;
 
+    /// <summary>
+    /// JobTaskExtension provides extended decision making capabilities to jobs
+    /// based on certain job task conditions.
+    /// </summary>
     public abstract class JobTaskExtension
     {
         /// <summary>
@@ -15,7 +18,7 @@
         /// <summary>
         /// Condition expression for the exntension to be activated
         /// </summary>
-        public Expression<Func<JobTask, bool>> ConditionExpression { get; set; }
+        public Expression<Func<Model.JobTask, bool>> ConditionExpression { get; set; }
 
         /// <summary>
         /// Execute the extension works

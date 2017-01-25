@@ -10,6 +10,7 @@
     using Data.Model.JobTasks;
     using Data.Model.Payment;
     using System.Collections.Generic;
+    using Data.Model.Order.Delivery;
 
     public class DeliveryJobUpdater : JobUpdater
     {

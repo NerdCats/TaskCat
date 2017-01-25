@@ -3,6 +3,7 @@
     using Data.Model;
     using Data.Model.Order;
     using System;
+    using Data.Model.Order.Delivery;
 
     public class OrderTypeResolver
     {  

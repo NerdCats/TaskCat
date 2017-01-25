@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Tests.Order
+﻿using TaskCat.Data.Model.Order.Delivery;
+
+namespace TaskCat.Tests.Order
 {
     using NUnit.Framework;
     using Data.Model.GeoJson;

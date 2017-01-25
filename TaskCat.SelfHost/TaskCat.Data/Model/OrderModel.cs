@@ -1,5 +1,7 @@
 ﻿namespace TaskCat.Data.Model
 {
+    using Newtonsoft.Json;
+    using Lib.JobTask;
     using MongoDB.Bson.Serialization.Attributes;
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -13,6 +15,10 @@
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class OrderModel
     {
+        [JsonIgnore]
+        [BsonIgnore]
+        public List<JobTaskExtension> Extensions;
+
         private string _name;
         /// <summary>
         /// Name for the order
@@ -130,7 +136,7 @@
 
         public OrderModel()
         {
-
+            
         }
 
         public OrderModel(string name, string type)

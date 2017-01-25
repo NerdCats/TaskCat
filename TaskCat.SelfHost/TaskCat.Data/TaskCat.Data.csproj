@@ -189,6 +189,7 @@
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
+    <Compile Include="Lib\JobTask\JobTaskExtension.cs" />
     <Compile Include="Model\Operation\UpdateResult.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\Delivery\ClassifiedDelivery.cs" />

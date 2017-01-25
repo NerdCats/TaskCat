@@ -1,7 +1,8 @@
 ﻿namespace TaskCat.Job.Order
 {
     using Job;
-    using Job.Builders;
+    using Builders;
+    using Data.Model.Order.Delivery;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

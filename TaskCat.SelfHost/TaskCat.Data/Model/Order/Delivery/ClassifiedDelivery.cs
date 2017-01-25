@@ -1,8 +1,7 @@
-﻿namespace TaskCat.Data.Model.Order
+﻿namespace TaskCat.Data.Model.Order.Delivery
 {
-    using Delivery;
-    using Person;
     using System.ComponentModel.DataAnnotations;
+    using Person;
 
     public class ClassifiedDeliveryOrder : DeliveryOrder
     {

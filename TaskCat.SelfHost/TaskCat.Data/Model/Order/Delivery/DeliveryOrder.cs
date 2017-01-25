@@ -1,8 +1,8 @@
-﻿namespace TaskCat.Data.Model.Order
-{
-    using MongoDB.Bson.Serialization.Attributes;
-    using System;
+﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
 
+namespace TaskCat.Data.Model.Order.Delivery
+{
     [BsonIgnoreExtraElements(Inherited = true)]
     public class DeliveryOrder : OrderModel
     {

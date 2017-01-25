@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Controllers
+﻿using TaskCat.Data.Model.Order.Delivery;
+
+namespace TaskCat.Controllers
 {
     using Common.Email;
     using Common.Lib.Utility;

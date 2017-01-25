@@ -390,7 +390,6 @@
     <Compile Include="Lib\DropPoint\DropPointService.cs" />
     <Compile Include="Lib\DropPoint\IDropPointService.cs" />
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
-    <Compile Include="Lib\JobTask\JobTaskExtension.cs" />
     <Compile Include="Lib\Job\JobActivityService.cs" />
     <Compile Include="Lib\Job\JobSearchIndexService.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
