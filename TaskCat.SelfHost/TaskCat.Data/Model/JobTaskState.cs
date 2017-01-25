@@ -2,9 +2,11 @@
 {
     public enum JobTaskState
     {
-        PENDING,
-        IN_PROGRESS,
-        COMPLETED,
-        CANCELLED
+        PENDING = 1,
+        IN_PROGRESS = 2,
+        COMPLETED = 4,
+        CANCELLED = 8,
+        RETURNED = 16,
+        FAILED = 32
     }
 }
