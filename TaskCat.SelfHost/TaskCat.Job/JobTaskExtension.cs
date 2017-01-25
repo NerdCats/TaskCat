@@ -1,8 +1,10 @@
-﻿using System;
-using System.Linq.Expressions;
-
-namespace TaskCat.Job
+﻿namespace TaskCat.Job
 {
+    using System;
+    using System.Linq.Expressions;
+    using Data.Model;
+    using Data.Entity;
+
     /// <summary>
     /// JobTaskExtension provides extended decision making capabilities to jobs
     /// based on certain job task conditions.
@@ -22,17 +24,17 @@ namespace TaskCat.Job
         /// <summary>
         /// Condition expression for the exntension to be activated
         /// </summary>
-        public Expression<Func<Data.Model.JobTask, bool>> ConditionExpression { get; set; }
+        public Expression<Func<JobTask, bool>> ConditionExpression { get; set; }
 
         /// <summary>
         /// Execute the extension works. Expects a Func with the respected job input and respected job output
         /// </summary>       
-        public Func<Data.Entity.Job, Data.Entity.Job> ExecuteExtension;
+        public Func<Job, JobTask, Job> ExecuteExtension;
 
         public JobTaskExtension(
             string orderType,
             string jobTaskType,
-            Expression<Func<Data.Model.JobTask, bool>> conditionExpression)
+            Expression<Func<JobTask, bool>> conditionExpression)
         {
             if (string.IsNullOrWhiteSpace(orderType))
                 throw new ArgumentException(nameof(orderType));
@@ -44,6 +46,14 @@ namespace TaskCat.Job
             this.OrderType = orderType;
             this.JobTaskType = jobTaskType;
             this.ConditionExpression = conditionExpression;
+        }
+
+        public void CheckAndExecute(JobTask task, Job job)
+        {
+            if (this.ConditionExpression.Compile().Invoke(task))
+            {
+                this.ExecuteExtension?.Invoke(job, task);
+            }
         }
     }
 }

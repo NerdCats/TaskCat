@@ -34,12 +34,11 @@
                 JobTaskTypes.DELIVERY,
                 conditionExpression)
             {
-                ExecuteExtension = job =>
+                ExecuteExtension = (job, task) =>
                 {
                     if (job == null)
                         throw new ArgumentNullException(nameof(job));
-
-
+                    
 
                     return null;
                 }
