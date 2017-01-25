@@ -28,8 +28,8 @@
         private IObserver<Job> jobSearchSubject;
 
         public JobRepository(
-            IJobManager manager,
-            AccountManager accountManager,
+            IJobManager manager, 
+            AccountManager accountManager, 
             Subject<JobActivity> activitySubject,
             IObserver<Job> jobIndexingSubject)
         {
@@ -167,7 +167,7 @@
             job.State = JobState.CANCELLED;
             job.CancellationReason = reason;
 
-            var jobTaskToCancel = job.Tasks.LastOrDefault(x => JobTaskState.GreaterThanOrEqualTo(x.State, JobTaskState.IN_PROGRESS));
+            var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
 
             jobTaskToCancel = jobTaskToCancel ?? job.Tasks.First();
 

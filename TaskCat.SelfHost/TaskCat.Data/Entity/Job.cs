@@ -86,11 +86,8 @@
         public string HRState {
             get
             {
-<<<<<<< HEAD
-                var lastSignificantTask = this.Tasks.LastOrDefault(x => JobTaskState.GreaterThan(x.State, JobTaskState.PENDING));
-=======
-                var lastSignificantTask = this.Tasks?.Where(x => x.State > JobTaskState.PENDING).LastOrDefault();
->>>>>>> parent of 79926da... GFETCH-338: Started with simple refactor
+                var lastSignificantTask = this.Tasks.LastOrDefault(x => x.State > JobTaskState.PENDING);
+
                 if (lastSignificantTask != null)
                     return lastSignificantTask.GetHRState();
                 else return this.state.GetSimplifiedStateString();
@@ -261,7 +258,8 @@
         private void SetProperJobState(JobTask jobTask)
         {
             // Set Job state based on job tasks state
-            if (jobTask.State == JobTaskState.IN_PROGRESS
+            if (jobTask.State >= JobTaskState.IN_PROGRESS
+                && jobTask.State < JobTaskState.COMPLETED
                 && State != JobState.IN_PROGRESS)
             {
                 State = JobState.IN_PROGRESS;
