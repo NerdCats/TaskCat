@@ -180,6 +180,7 @@
     <Compile Include="Model\JobTaskState.cs" />
     <Compile Include="Model\JobTasks\AssignAssetTask.cs" />
     <Compile Include="Model\JobTasks\DeliveryTask.cs" />
+    <Compile Include="Model\JobTasks\DeliveryTaskVariants.cs" />
     <Compile Include="Model\JobTasks\FetchDeliveryManTask.cs" />
     <Compile Include="Model\JobTasks\PackagePickUpTask.cs" />
     <Compile Include="Model\JobTasks\PickUpTask.cs" />
@@ -189,7 +190,6 @@
     <Compile Include="Model\Geocoding\DefaultAddress.cs" />
     <Compile Include="Model\JobTasks\SecureDeliveryTask.cs" />
     <Compile Include="Model\Job\JobCancellationRequest.cs" />
-    <Compile Include="Lib\JobTask\JobTaskExtension.cs" />
     <Compile Include="Model\Operation\UpdateResult.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\Order\Delivery\ClassifiedDelivery.cs" />
