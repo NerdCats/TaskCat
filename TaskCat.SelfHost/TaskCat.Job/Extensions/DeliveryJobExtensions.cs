@@ -41,7 +41,7 @@
             Expression<Func<JobTask, bool>> conditionExpression =
                 task => (actionableState & task.State) == task.State;
 
-            var deliveryJobExtension = new JobTaskExtension(
+            var deliveryJobTaskExtension = new JobTaskExtension(
                 OrderTypes.Delivery,
                 JobTaskTypes.DELIVERY,
                 conditionExpression)
@@ -114,6 +114,8 @@
                 }
             };
 
+            extensions.Add(deliveryJobTaskExtension);
+            this.ExtensionsDictionary.Add(OrderTypes.Delivery, extensions);
         }
 
         // Enterprise Delivery

@@ -225,7 +225,6 @@
             this.HRID = hrid;
         }
 
-
         public void EnsureJobTaskChangeEventsRegistered(bool isFetchingJobPayload = false)
         {
             if (!isFetchingJobPayload)
@@ -255,6 +254,8 @@
                         Assets[task.AssetRef] = task.Asset;
                     break;
             }
+
+            
         }
 
         private void SetProperJobState(JobTask jobTask)
