@@ -42,7 +42,9 @@
                 To = this.To,
                 State = JobTaskState.PENDING,
                 CreateTime = DateTime.UtcNow,
-                Variant = DeliveryTaskVariants.Default
+                Name= "Retry Delivery",
+                Variant = DeliveryTaskVariants.Retry,
+                Result = new AssetTaskResult()
             };
             return task;
         }
@@ -56,7 +58,8 @@
                 State = JobTaskState.PENDING,
                 CreateTime = DateTime.UtcNow,
                 Name = "Return Delivery",
-                Variant = DeliveryTaskVariants.Return
+                Variant = DeliveryTaskVariants.Return,
+                Result = new AssetTaskResult()
             };
             return task;
         }

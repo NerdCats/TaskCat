@@ -255,7 +255,7 @@
                 // this means this task is not a terminating task
                 job.Tasks[index + 1].SetPredecessor(newDeliveryTask);
                 // Push the job after the delivery task itself.
-                job.Tasks.Insert(index, newDeliveryTask);
+                job.Tasks.Insert(index + 1, newDeliveryTask);
             }
             else
             {

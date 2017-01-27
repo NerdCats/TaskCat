@@ -4,5 +4,6 @@
     {
         public const string Default = "default";
         public const string Return = "return";
+        public const string Retry = "retry";
     }
 }
