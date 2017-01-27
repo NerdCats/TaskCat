@@ -19,7 +19,7 @@
     using System.Collections.Generic;
     using System;
     using Data.Model.Order.Delivery;
-    using TaskCat.Data.Model.Identity;
+    using Data.Model.Identity;
     using TaskCat.Account.Core;
     using System.Reactive.Subjects;
     using Common.HRID;
