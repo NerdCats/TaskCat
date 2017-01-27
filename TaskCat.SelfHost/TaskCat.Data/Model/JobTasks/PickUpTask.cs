@@ -4,16 +4,12 @@
     using System;
     using Identity.Response;
     using Geocoding;
+    using Lib.Constants;
 
     public abstract class PickUpTask : JobTask
     {
         public DefaultAddress AssetLocation { get; set; }
         public DefaultAddress PickupLocation { get; set; }
-
-        public PickUpTask() : base("Pick up")
-        {
-
-        }
 
         public PickUpTask(string type, DefaultAddress pickupLocation) : base(type, "Pick up")
         {

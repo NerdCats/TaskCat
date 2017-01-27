@@ -26,6 +26,9 @@
     using TaskCat.Job;
     using TaskCat.Job.Updaters;
     using TaskCat.Job.Builders;
+    using Data.Lib.Extension;
+    using TaskCat.Job.Extensions;
+    using Data.Lib.Constants;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -146,7 +149,6 @@
         [Test]
         public async Task Test_Cancel_Delivery_Job_With_No_Task_In_Progress()
         {
-            var searchJobId = "i1i2i3i4";
             string cancellationReason = "test cancellation reason";
 
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
@@ -173,9 +175,6 @@
         [Test]
         public async Task Test_Restore_Delivery_Job_With_No_Task_In_Progress()
         {
-            var searchJobId = "i1i2i3i4";
-            string cancellationReason = "test cancellation reason";
-
             var createdJob = GetDummyJob(OrderTypes.Delivery);
             createdJob.State = JobState.CANCELLED;
             createdJob.Tasks.Last().State = JobTaskState.CANCELLED;
@@ -195,6 +194,39 @@
             Assert.AreEqual(JobState.ENQUEUED, result.UpdatedValue.State);
             result.UpdatedValue.Tasks.ForEach(x => Assert.AreEqual(JobTaskState.PENDING, x.State));
             Assert.AreEqual(null, result.UpdatedValue.CancellationReason);
+        }
+
+        [Test]
+        public async Task Test_Update_ClassifiedDeliveryJobTask_To_Returned_ReturnDeliveryTask_Added()
+        {
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+            var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
+
+            // Registering extensions
+            DeliveryJobExtensions.RegisterExtensions();
+
+            // Assigning asset and making sure the first task is done
+            job.State = JobState.IN_PROGRESS;
+            job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks.First().Asset = GetDummyAssetModel();
+            job.Tasks.First().UpdateTask();
+
+            // Making sure Pickup is done too
+            job.Tasks[1].State = JobTaskState.COMPLETED;
+            job.Tasks[1].UpdateTask();
+
+            // Now we should have delivery in progress
+            // Update delivery to get returned.
+            job.Tasks[2].State = JobTaskState.RETURNED;
+            // Making sure multiple updates don't hurt the system
+            job.Tasks[2].State = JobTaskState.RETURNED;
+            job.Tasks[2].UpdateTask();
+
+            Assert.AreEqual(4, job.Tasks.Count);
+            Assert.That(job.Tasks.Last().Type == JobTaskTypes.DELIVERY);
+            Assert.That(job.Tasks.Last().Variant == "return");
+            Assert.That(job.TerminalTask == job.Tasks.Last());
+            Assert.That(job.AttemptCount == 1);
         }
 
         private AssetModel GetDummyAssetModel()

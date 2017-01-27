@@ -136,6 +136,14 @@
             get { return _terminalTask; }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                if (!this.Tasks.Contains(value))
+                    throw new ArgumentException("Task doesn't belong to this job");
+
+                this.Tasks.ForEach(x => x.IsTerminatingTask = false);
+
                 _terminalTask = value;
                 _terminalTask.IsTerminatingTask = true;
                 _terminalTask.JobTaskCompleted += _terminalTask_JobTaskCompleted;
@@ -233,8 +241,11 @@
                 if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
-            tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
-            IsJobTasksEventsHooked = true;
+            if (!IsJobTasksEventsHooked)
+            {
+                tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
+                IsJobTasksEventsHooked = true;
+            }
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -249,14 +260,16 @@
             {
                 case nameof(JobTask.State):
                     SetProperJobState(task);
+
+                    // INFO: We only execute extensions if and only if state changes are encountered
+                    // May be someday we can make it more flesible if need be
+                    ExecuteExtensions(task);
                     break;
                 case nameof(JobTask.AssetRef):
                     if (!Assets.ContainsKey(task.AssetRef))
                         Assets[task.AssetRef] = task.Asset;
                     break;
-            }
-
-            ExecuteExtensions(task);
+            }    
         }
 
         private void ExecuteExtensions(JobTask task)

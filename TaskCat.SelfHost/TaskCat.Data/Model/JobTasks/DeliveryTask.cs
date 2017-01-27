@@ -14,7 +14,7 @@
         public DefaultAddress From { get; set; }
         public DefaultAddress To { get; set; }
 
-        public DeliveryTask() : base("Delivery")
+        public DeliveryTask() : base(JobTaskTypes.DELIVERY, "Delivery")
         {
 
         }

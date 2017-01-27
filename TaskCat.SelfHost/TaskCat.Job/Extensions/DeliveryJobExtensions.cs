@@ -95,12 +95,11 @@
                          * B2C job. Sending it back to office its only thing we can potentially do 
                          * at least for now
                          */
-
+                                                
                         deliveryTask.IsTerminatingTask = false;
 
                         var newDeliveryTask = deliveryTask.GenerateReturnTask();
                         newDeliveryTask.SetPredecessor(deliveryTask);
-                        newDeliveryTask.IsTerminatingTask = true;
 
                         var propSettings = Settings.Get<ProprietorSettings>();
                         if (propSettings?.Address == null)
@@ -108,7 +107,8 @@
                         newDeliveryTask.To = propSettings.Address;
 
                         RemoveTasksAfterIndex(job, index);
-                        job.AddTask(deliveryTask);
+                        job.AddTask(newDeliveryTask);
+                        job.TerminalTask = newDeliveryTask;
                     }
 
                     return job;
@@ -209,7 +209,6 @@
 
                         var newDeliveryTask = deliveryTask.GenerateReturnTask();
                         newDeliveryTask.SetPredecessor(deliveryTask);
-                        newDeliveryTask.IsTerminatingTask = true;
 
 
                         if (deliveryTask.Variant == DeliveryTaskVariants.Return)
@@ -231,7 +230,8 @@
                          * */
 
                         RemoveTasksAfterIndex(job, index);
-                        job.AddTask(deliveryTask);
+                        job.AddTask(newDeliveryTask);
+                        job.TerminalTask = newDeliveryTask;
                     }
 
                     return job;
@@ -261,6 +261,7 @@
             {
                 // This was the last job task, so just adding the new task will suffice
                 job.Tasks.Add(newDeliveryTask);
+                job.TerminalTask = newDeliveryTask;
             }
         }
 

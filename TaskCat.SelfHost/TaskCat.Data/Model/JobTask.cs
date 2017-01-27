@@ -126,11 +126,6 @@
         {
         }
 
-        public JobTask(string name)
-        {
-            this.Name = name;
-        }
-
         public JobTask(string type, string name) : this()
         {
             id = Guid.NewGuid().ToString();
@@ -159,8 +154,7 @@
             }
             
             this.Predecessor = task;
-            IsStartingTask = false;
-           
+            IsStartingTask = false;         
         }
 
         public virtual void UpdateStateParams()
