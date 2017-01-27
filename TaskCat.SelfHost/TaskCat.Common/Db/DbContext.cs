@@ -184,6 +184,7 @@ namespace TaskCat.Common.Db
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
+            
 
             _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
             _localities = Database.GetCollection<Locality>(CollectionNames.LocalityCollectionName);
