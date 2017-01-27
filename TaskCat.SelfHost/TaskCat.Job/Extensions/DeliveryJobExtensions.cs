@@ -107,7 +107,7 @@
                         newDeliveryTask.To = propSettings.Address;
 
                         RemoveTasksAfterIndex(job, index);
-                        job.AddTask(newDeliveryTask);
+                        job.AddTask(newDeliveryTask, hookPropertyChangedEvent: true);
                         job.TerminalTask = newDeliveryTask;
                     }
 
@@ -230,7 +230,7 @@
                          * */
 
                         RemoveTasksAfterIndex(job, index);
-                        job.AddTask(newDeliveryTask);
+                        job.AddTask(newDeliveryTask, hookPropertyChangedEvent: true);
                         job.TerminalTask = newDeliveryTask;
                     }
 
@@ -255,12 +255,12 @@
                 // this means this task is not a terminating task
                 job.Tasks[index + 1].SetPredecessor(newDeliveryTask);
                 // Push the job after the delivery task itself.
-                job.Tasks.Insert(index + 1, newDeliveryTask);
+                job.AddTask(newDeliveryTask, index + 1, hookPropertyChangedEvent: true);                
             }
             else
             {
                 // This was the last job task, so just adding the new task will suffice
-                job.Tasks.Add(newDeliveryTask);
+                job.AddTask(newDeliveryTask, hookPropertyChangedEvent: true);
                 job.TerminalTask = newDeliveryTask;
             }
         }

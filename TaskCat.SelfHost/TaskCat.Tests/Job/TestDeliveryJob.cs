@@ -26,7 +26,6 @@
     using TaskCat.Job;
     using TaskCat.Job.Updaters;
     using TaskCat.Job.Builders;
-    using Data.Lib.Extension;
     using TaskCat.Job.Extensions;
     using Data.Lib.Constants;
 
@@ -197,7 +196,7 @@
         }
 
         [Test]
-        public void Test_Update_ClassifiedDeliveryJobTask_To_Returned_ReturnDeliveryTask_Added()
+        public void Test_Update_ClassifiedDeliveryJob_DeliveryTask_To_Returned_ReturnDeliveryTask_Added()
         {
             JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
@@ -230,7 +229,7 @@
         }
 
         [Test]
-        public void Test_Update_ClassifiedDeliveryJobTask_To_Failed_RetryTask_Added()
+        public void Test_Update_ClassifiedDeliveryJob_DeliveryTask_To_Failed_RetryTask_Added()
         {
             JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
@@ -259,6 +258,35 @@
             Assert.That(job.TerminalTask == job.Tasks.Last());
             Assert.That(job.AttemptCount == 2);
             Assert.That(job.Tasks.Count(x => x.IsTerminatingTask) == 1);
+        }
+
+        [Test]
+        public void Test_Update_ClassifiedDeliveryJob_RetryDeliveryTask_To_Failed_RetryTaskAdded()
+        {
+            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
+            var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
+
+            // Registering extensions
+            DeliveryJobExtensions.RegisterExtensions();
+
+            // Assigning asset and making sure the first task is done
+            job.State = JobState.IN_PROGRESS;
+            job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks.First().Asset = GetDummyAssetModel();
+            job.Tasks.First().UpdateTask();
+
+            // Making sure Pickup is done too
+            job.Tasks[1].State = JobTaskState.COMPLETED;
+            job.Tasks[1].UpdateTask();
+
+            // Now we should have delivery in progress
+            // Update delivery to get returned.
+            job.Tasks[2].State = JobTaskState.FAILED;
+            job.Tasks[2].UpdateTask();
+
+            // Lets even return the return job
+            job.Tasks[3].State = JobTaskState.FAILED;
+            job.Tasks[3].UpdateTask();
         }
 
         private AssetModel GetDummyAssetModel()

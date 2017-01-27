@@ -144,6 +144,14 @@
 
                 this.Tasks.ForEach(x => x.IsTerminatingTask = false);
 
+                // Removing current terminal task association
+                // We can remove this since now we have a propertychanged 
+                // handler for jobtasks and we can essentially find
+                // out that way when a job task ends
+
+                if (_terminalTask != null)
+                    _terminalTask.JobTaskCompleted -= _terminalTask_JobTaskCompleted;
+
                 _terminalTask = value;
                 _terminalTask.IsTerminatingTask = true;
                 _terminalTask.JobTaskCompleted += _terminalTask_JobTaskCompleted;
@@ -241,11 +249,10 @@
                 if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
-            if (!IsJobTasksEventsHooked)
-            {
-                tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
-                IsJobTasksEventsHooked = true;
-            }
+
+           tasks.ForEach(x => x.PropertyChanged -= JobTask_PropertyChanged);
+           tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
+           IsJobTasksEventsHooked = true;          
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -319,12 +326,25 @@
             }
         }
 
-        public void AddTask(JobTask jtask)
+        public void AddTask(JobTask jtask, bool hookPropertyChangedEvent = false)
         {
             if (this.Tasks == null)
                 Tasks = new List<JobTask>();
             this.Tasks.Add(jtask);
 
+            if (hookPropertyChangedEvent)
+                jtask.PropertyChanged += this.JobTask_PropertyChanged;
+        }
+
+        public void AddTask(JobTask jtask, int index, bool hookPropertyChangedEvent = false)
+        {
+            if (this.Tasks == null)
+                throw new ArgumentNullException(nameof(Tasks));
+
+            this.Tasks.Insert(index, jtask);
+
+            if (hookPropertyChangedEvent)
+                jtask.PropertyChanged += this.JobTask_PropertyChanged;
         }
 
         private string GenerateDefaultJobName()
