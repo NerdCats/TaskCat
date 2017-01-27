@@ -1,11 +1,11 @@
-﻿using MongoDB.Driver;
-using System.Configuration;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Entity.ShadowCat;
-
-namespace TaskCat.Common.Db
+﻿namespace TaskCat.Common.Db
 {
+    using MongoDB.Driver;
+    using System.Configuration;
+    using TaskCat.Data.Entity;
+    using TaskCat.Data.Entity.Identity;
+    using TaskCat.Data.Entity.ShadowCat;
+
     public class DbContext : IDbContext
     {
         private MongoClient mongoClient;

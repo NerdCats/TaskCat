@@ -120,6 +120,8 @@
     <Compile Include="Entity\Store.cs" />
     <Compile Include="Entity\Vendor.cs" />
     <Compile Include="Lib\Core\ObservableObject.cs" />
+    <Compile Include="Lib\Extension\JobTaskExtension.cs" />
+    <Compile Include="Lib\Extension\JobTaskExtensionResolver.cs" />
     <Compile Include="Lib\Invoice\Response\DeliveryInvoice.cs" />
     <Compile Include="Lib\Invoice\IInvoiceFor.cs" />
     <Compile Include="Lib\Invoice\InvoiceRequestBase.cs" />

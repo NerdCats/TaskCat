@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Job
+﻿namespace TaskCat.Data.Lib.Extension
 {
     using System;
     using System.Linq.Expressions;

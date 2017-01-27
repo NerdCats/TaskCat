@@ -1,6 +1,7 @@
-﻿namespace TaskCat.Job
+﻿namespace TaskCat.Data.Lib.Extension
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public static class JobTaskExtensionResolver
     {
@@ -19,12 +20,15 @@
             }
         }
 
-        public static List<JobTaskExtension> Resolve(string orderType)
+        public static List<JobTaskExtension> Resolve(string orderType, string taskType)
         {
             if (!extensionsDictionary.ContainsKey(orderType))
                 return null;
             else
-                return extensionsDictionary[orderType];
+            {
+                var extensions = extensionsDictionary[orderType];
+                return extensions.Where(x => x.JobTaskType == taskType).ToList();
+            }
         }
     }
 }

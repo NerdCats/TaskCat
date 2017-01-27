@@ -9,6 +9,7 @@
     using Data.Model.JobTasks;
     using Its.Configuration;
     using Common.Settings;
+    using Data.Lib.Extension;
 
     public class DeliveryJobExtensions
     {
@@ -273,6 +274,15 @@
             if (index < job.Tasks.Count - 1)
             {
                 job.Tasks.RemoveRange(index + 1, job.Tasks.Count - (index + 1));
+            }
+        }
+
+        public static void RegisterExtensions()
+        {
+            var extensions = new DeliveryJobExtensions();
+            foreach (var item in extensions.ExtensionsDictionary)
+            {
+                JobTaskExtensionResolver.Register(item.Key, item.Value);
             }
         }
     }

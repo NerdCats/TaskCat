@@ -14,6 +14,7 @@
     using Model.Vendor.ProfitSharing;
     using System.Runtime.CompilerServices;
     using Utility;
+    using Lib.Extension;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity, INotifyPropertyChanged
@@ -255,7 +256,19 @@
                     break;
             }
 
-            
+            ExecuteExtensions(task);
+        }
+
+        private void ExecuteExtensions(JobTask task)
+        {
+            var extensions = JobTaskExtensionResolver.Resolve(this.Order.Type, task.Type);
+            if (extensions != null)
+            {
+                foreach (var extension in extensions)
+                {
+                    extension.CheckAndExecute(task, this);
+                }
+            }
         }
 
         private void SetProperJobState(JobTask jobTask)
