@@ -18,6 +18,11 @@
 
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
+            if (this.Predecessor != null)
+            {
+                this.Predecessor.JobTaskCompleted -= Predecessor_JobTaskCompleted;
+            }
+
             base.SetPredecessor(task, validateDependency);
             if (validateDependency)
             {

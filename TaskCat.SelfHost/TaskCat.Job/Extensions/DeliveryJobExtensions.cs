@@ -252,6 +252,7 @@
         {
             if (index < job.Tasks.Count - 1)
             {
+
                 // this means this task is not a terminating task
                 job.Tasks[index + 1].SetPredecessor(newDeliveryTask);
                 // Push the job after the delivery task itself.

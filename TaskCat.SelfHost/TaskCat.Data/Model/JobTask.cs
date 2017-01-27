@@ -6,6 +6,7 @@
     using System;
     using Identity.Response;
     using Core;
+    using Utility;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask : ObservableObject
@@ -175,7 +176,11 @@
        
             this.CompletionTime = DateTime.UtcNow;
             this.InitiationTime = this.InitiationTime ?? this.CompletionTime;
-            State = JobTaskState.COMPLETED;
+
+            // TODO: This has to be moved out when we do seperate states for the jobTasks.
+
+
+            State = State.IsConclusiveStateToMoveToNextTask() ? State : JobTaskState.COMPLETED;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
             {

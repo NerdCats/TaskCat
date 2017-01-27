@@ -280,13 +280,23 @@
             job.Tasks[1].UpdateTask();
 
             // Now we should have delivery in progress
-            // Update delivery to get returned.
+            // Update delivery to FAILED.
             job.Tasks[2].State = JobTaskState.FAILED;
             job.Tasks[2].UpdateTask();
 
             // Lets even return the return job
             job.Tasks[3].State = JobTaskState.FAILED;
             job.Tasks[3].UpdateTask();
+
+            Assert.AreEqual(6, job.Tasks.Count);
+            Assert.AreEqual(JobTaskTypes.DELIVERY, job.Tasks[3].Type);
+            Assert.AreEqual("retry", job.Tasks[3].Variant);
+            Assert.AreEqual(JobTaskState.FAILED, job.Tasks[3].State);
+            Assert.AreEqual(JobTaskTypes.DELIVERY, job.Tasks[4].Type);
+            Assert.AreEqual("retry", job.Tasks[4].Variant);
+            Assert.That(job.TerminalTask == job.Tasks.Last());
+            Assert.AreEqual(3, job.AttemptCount);
+            Assert.AreEqual(1, job.Tasks.Count(x => x.IsTerminatingTask));
         }
 
         private AssetModel GetDummyAssetModel()
