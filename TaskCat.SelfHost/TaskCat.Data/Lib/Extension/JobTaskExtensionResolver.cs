@@ -8,15 +8,22 @@
         private static Dictionary<string, List<JobTaskExtension>> extensionsDictionary
             = new Dictionary<string, List<JobTaskExtension>>();
 
+        private static bool isInitialized = false;
+
         public static void Register(string orderType, List<JobTaskExtension> extensions)
         {
-            if (extensionsDictionary.ContainsKey(orderType))
+            if (!isInitialized)
             {
-                extensionsDictionary[orderType].AddRange(extensions);
-            }
-            else
-            {
-                extensionsDictionary.Add(orderType, extensions);
+                if (extensionsDictionary.ContainsKey(orderType))
+                {
+                    extensionsDictionary[orderType].AddRange(extensions);
+                }
+                else
+                {
+                    extensionsDictionary.Add(orderType, extensions);
+                }
+
+                isInitialized = true;
             }
         }
 

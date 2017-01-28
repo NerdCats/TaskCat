@@ -28,6 +28,7 @@
     using TaskCat.Job.Builders;
     using TaskCat.Job.Extensions;
     using Data.Lib.Constants;
+    using System.Diagnostics;
 
     [TestFixture]
     public class TestDeliveryJob
@@ -37,6 +38,12 @@
         Mock<IPaymentMethod> paymentMethodMock;
         private Subject<JobActivity> activitySubject;
         private Subject<Job> jobIndexingSubject;
+
+        public TestDeliveryJob()
+        {
+            // Registering extensions and making sure it's done once
+            DeliveryJobExtensions.RegisterExtensions();
+        }
 
         [SetUp]
         public void Setup()
@@ -201,8 +208,6 @@
             JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
-            // Registering extensions
-            DeliveryJobExtensions.RegisterExtensions();
 
             // Assigning asset and making sure the first task is done
             job.State = JobState.IN_PROGRESS;
@@ -234,9 +239,6 @@
             JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
-            // Registering extensions
-            DeliveryJobExtensions.RegisterExtensions();
-
             // Assigning asset and making sure the first task is done
             job.State = JobState.IN_PROGRESS;
             job.Tasks.First().State = JobTaskState.COMPLETED;
@@ -266,9 +268,6 @@
             JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
-            // Registering extensions
-            DeliveryJobExtensions.RegisterExtensions();
-
             // Assigning asset and making sure the first task is done
             job.State = JobState.IN_PROGRESS;
             job.Tasks.First().State = JobTaskState.COMPLETED;
@@ -287,6 +286,8 @@
             // Lets even return the return job
             job.Tasks[3].State = JobTaskState.FAILED;
             job.Tasks[3].UpdateTask();
+
+            Console.WriteLine("TEST ASDASD");
 
             Assert.AreEqual(6, job.Tasks.Count);
             Assert.AreEqual(JobTaskTypes.DELIVERY, job.Tasks[3].Type);
