@@ -84,7 +84,7 @@
 
                         // Create a delivery task that will send the product back since delivery has failed
                         var newDeliveryTask = deliveryTask.GenerateRetryTask();
-                        newDeliveryTask.SetPredecessor(deliveryTask);
+                        newDeliveryTask.SetPredecessor(deliveryTask, validateDependency: false);
 
                         InsertTaskIntoTaskChain(job, index, newDeliveryTask);
                     }
@@ -99,7 +99,7 @@
                         deliveryTask.IsTerminatingTask = false;
 
                         var newDeliveryTask = deliveryTask.GenerateReturnTask();
-                        newDeliveryTask.SetPredecessor(deliveryTask);
+                        newDeliveryTask.SetPredecessor(deliveryTask, validateDependency: false);
 
                         var propSettings = Settings.Get<ProprietorSettings>();
                         if (propSettings?.Address == null)
@@ -182,7 +182,7 @@
 
                         // Create a delivery task that will send the product back since delivery has failed
                         var newDeliveryTask = deliveryTask.GenerateRetryTask();
-                        newDeliveryTask.SetPredecessor(deliveryTask);
+                        newDeliveryTask.SetPredecessor(deliveryTask, validateDependency: false);
 
                         InsertTaskIntoTaskChain(job, index, newDeliveryTask);
                     }
@@ -208,7 +208,7 @@
                         deliveryTask.IsTerminatingTask = false;
 
                         var newDeliveryTask = deliveryTask.GenerateReturnTask();
-                        newDeliveryTask.SetPredecessor(deliveryTask);
+                        newDeliveryTask.SetPredecessor(deliveryTask, validateDependency: false);
 
 
                         if (deliveryTask.Variant == DeliveryTaskVariants.Return)
@@ -254,7 +254,7 @@
             {
 
                 // this means this task is not a terminating task
-                job.Tasks[index + 1].SetPredecessor(newDeliveryTask);
+                job.Tasks[index + 1].SetPredecessor(newDeliveryTask, validateDependency: false);
                 // Push the job after the delivery task itself.
                 job.AddTask(newDeliveryTask, index + 1, hookPropertyChangedEvent: true);                
             }
