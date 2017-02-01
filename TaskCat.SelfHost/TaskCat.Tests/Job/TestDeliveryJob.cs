@@ -203,11 +203,38 @@
         }
 
         [Test]
-        public void Test_Update_ClassifiedDeliveryJob_DeliveryTask_To_Returned_ReturnDeliveryTask_Added()
+        public void Test_Complete_ClassifiedDeliveryJob_DeliveryTask_with_returned_and_delivery_state_Job_Completes()
         {
-            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
+            // Assigning asset and making sure the first task is done
+            job.State = JobState.IN_PROGRESS;
+            job.Tasks.First().State = JobTaskState.COMPLETED;
+            job.Tasks.First().Asset = GetDummyAssetModel();
+            job.Tasks.First().UpdateTask();
+
+            // Making sure Pickup is done too
+            job.Tasks[1].State = JobTaskState.COMPLETED;
+            job.Tasks[1].UpdateTask();
+
+            // Now we should have delivery in progress
+            // Update delivery to get returned.
+            job.Tasks[2].State = JobTaskState.RETURNED;
+            // Making sure multiple updates don't hurt the system
+            job.Tasks[2].State = JobTaskState.RETURNED;
+            job.Tasks[2].UpdateTask();
+
+            job.Tasks[3].State = JobTaskState.COMPLETED;
+            job.Tasks[3].UpdateTask();
+
+            Assert.AreEqual(4, job.Tasks.Count);
+            Assert.That(job.State == JobState.COMPLETED);
+        }
+
+        [Test]
+        public void Test_Update_ClassifiedDeliveryJob_DeliveryTask_To_Returned_ReturnDeliveryTask_Added()
+        {
+            var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
             // Assigning asset and making sure the first task is done
             job.State = JobState.IN_PROGRESS;
@@ -236,7 +263,6 @@
         [Test]
         public void Test_Update_ClassifiedDeliveryJob_DeliveryTask_To_Failed_RetryTask_Added()
         {
-            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
             // Assigning asset and making sure the first task is done
@@ -265,7 +291,6 @@
         [Test]
         public void Test_Update_ClassifiedDeliveryJob_RetryDeliveryTask_To_Failed_RetryTaskAdded()
         {
-            JobRepository jobRepository = SetupMockJobRepositoryForUpdate();
             var job = GetDummyJob(OrderTypes.ClassifiedDelivery);
 
             // Assigning asset and making sure the first task is done
