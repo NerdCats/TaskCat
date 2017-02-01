@@ -47,7 +47,7 @@
                 JobTaskTypes.DELIVERY,
                 conditionExpression)
             {
-                ExecuteExtension = (job, task) => 
+                ExecuteExtension = (job, task) =>
                 {
                     // Corner case checks
                     if (job == null)
@@ -95,7 +95,7 @@
                          * B2C job. Sending it back to office its only thing we can potentially do 
                          * at least for now
                          */
-                                                
+
                         deliveryTask.IsTerminatingTask = false;
 
                         var newDeliveryTask = deliveryTask.GenerateReturnTask();
@@ -250,13 +250,31 @@
         /// <param name="newDeliveryTask">New task to insert</param>
         private static void InsertTaskIntoTaskChain(Data.Entity.Job job, int index, DeliveryTask newDeliveryTask)
         {
+            // First, making sure there are no retry tasks after this.
+            // The reason we are doing this is since someone might make the initial delivery task
+            // set to in progress after he set it to returned or failed which will end in a 
+            // sticky situation
+
+            var tasksToDelete = new List<JobTask>();
+            for (int i = index + 1; i < job.Tasks.Count; i++)
+            {
+                if (job.Tasks[i].Type == JobTaskTypes.DELIVERY && job.Tasks[i].Variant == DeliveryTaskVariants.Retry)
+                {
+                    tasksToDelete.Add(job.Tasks[i]);
+                }
+            }
+
+            foreach (var task in tasksToDelete)
+            {
+                job.Tasks.Remove(task);
+            }
+
             if (index < job.Tasks.Count - 1)
             {
-
                 // this means this task is not a terminating task
                 job.Tasks[index + 1].SetPredecessor(newDeliveryTask, validateDependency: false);
                 // Push the job after the delivery task itself.
-                job.AddTask(newDeliveryTask, index + 1, hookPropertyChangedEvent: true);                
+                job.AddTask(newDeliveryTask, index + 1, hookPropertyChangedEvent: true);
             }
             else
             {
