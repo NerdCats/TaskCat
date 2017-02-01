@@ -210,7 +210,7 @@
 
         public void CompleteJob()
         {
-            if (!Tasks.All(x => x.State == JobTaskState.COMPLETED))
+            if (Tasks.Any(x => !x.State.IsConclusiveStateToMoveToNextTask()))
             {
                 throw new NotSupportedException("Setting Job State to COMPLETED when all the job Tasks are not completed");
             }
