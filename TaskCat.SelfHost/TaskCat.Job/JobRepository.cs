@@ -190,11 +190,20 @@ namespace TaskCat.Job
 
         public async Task<UpdateResult<Job>> RestoreJob(Job job)
         {
+            /* INFO: The definition of restoring jobs has to a bit different now since it is restoring
+             * the cancelled job tasks now, we do have to deal with jobs that have been tried and has a result.
+             * So setting all them back to PENDING is not a viable option anymore. This job should only restore the 
+             * tasks those are CANCELLED. Any other state of tasks will and should not be affected. 
+             */
             if (!job.IsJobFreezed)
                 throw new NotSupportedException($" job {job.Id} is not freezed to be restored");
 
             job.State = JobState.ENQUEUED;
-            job.Tasks.ForEach(x => x.State = JobTaskState.PENDING);
+            foreach (var jobTask in job.Tasks)
+            {
+                jobTask.State = jobTask.State == JobTaskState.CANCELLED 
+                    ? JobTaskState.PENDING : jobTask.State;
+            }
             job.CancellationReason = null;
 
             var result = await UpdateJob(job);
