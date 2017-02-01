@@ -1,4 +1,6 @@
-﻿namespace TaskCat.Job
+﻿using TaskCat.Data.Utility;
+
+namespace TaskCat.Job
 {
     using System;
     using System.Collections.Generic;
@@ -167,11 +169,21 @@
             job.State = JobState.CANCELLED;
             job.CancellationReason = reason;
 
-            var jobTaskToCancel = job.Tasks.LastOrDefault(x => x.State >= JobTaskState.IN_PROGRESS);
+            /* INFO: Since multiple tasks might run parallel and we are slowly moving away
+             * from the task chain we used to have, the definition of cancelling jobs has to change.
+             * 
+             * The simplest definition of cancelling a job just has to be now stop whatever we were doing. 
+             * That means setting Cancelled state on jobs that doesn't have a terminal state yet. It has to be
+             * that simple just because now we can handle a lot of complex states, there has to be one way
+             * where we can just halt whatever we were doing. 
+             */
 
-            jobTaskToCancel = jobTaskToCancel ?? job.Tasks.First();
+            var jobTasksToCancel = job.Tasks.Where(x => x.State <= JobTaskState.IN_PROGRESS);
+            foreach (var jobTask in jobTasksToCancel)
+            {
+                jobTask.State = JobTaskState.CANCELLED;
+            }
 
-            jobTaskToCancel.State = JobTaskState.CANCELLED;
             var result = await UpdateJob(job);
             return new UpdateResult<Job>(result.MatchedCount, result.ModifiedCount, job);
         }
