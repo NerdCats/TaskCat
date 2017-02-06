@@ -102,9 +102,17 @@
                     return Value != null ? $"{prefix} to {Value}" : prefix;
                 }
             }
-            else if (Operation == JobActivityOperationNames.Restore || Operation == JobActivityOperationNames.Cancel)
+            else
             {
-                return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
+                if(Operation == JobActivityOperationNames.Restore)
+                {
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}d {HRID}";
+                }
+
+                else if(Operation == JobActivityOperationNames.Cancel)
+                {
+                    return $"{this.ByUser.DisplayName} {Operation.ToLower()}led {HRID}";
+                }
             }
 
             return null;
