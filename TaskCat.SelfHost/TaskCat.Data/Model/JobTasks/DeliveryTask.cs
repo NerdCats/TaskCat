@@ -30,6 +30,7 @@
         protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type) :
             this(from, to)
         {
+            this.Type = type;
             if (type != JobTaskTypes.SECURE_DELIVERY)
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
         }

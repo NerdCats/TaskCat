@@ -11,7 +11,7 @@
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask : ObservableObject
     {
-        protected string Name;
+        public string Name { get; set; } 
         public string id { get; protected set; }
 
         [BsonIgnoreIfNull]
