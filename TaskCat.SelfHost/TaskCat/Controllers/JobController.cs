@@ -1,6 +1,4 @@
-﻿using TaskCat.Data.Model.Order.Delivery;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
     using Common.Email;
     using Common.Lib.Utility;
@@ -34,6 +32,7 @@ namespace TaskCat.Controllers
     using NLog;
     using System.Collections.Generic;
     using System.Reactive.Subjects;
+    using TaskCat.Data.Model.Order.Delivery;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
