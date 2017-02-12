@@ -200,8 +200,6 @@
 
         public int AttemptCount { get; set; } = 1;
 
-
-        // INFO: This properties following this shouldn't be in a job I suppose. 
         public Vendor Vendor { get; set; }
         public ProfitShareResult ProfitShareResult { get; set; }
 

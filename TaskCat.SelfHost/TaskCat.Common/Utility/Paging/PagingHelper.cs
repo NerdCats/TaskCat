@@ -24,7 +24,7 @@
             {
                 foreach (var item in otherParams)
                 {
-                    if (!routeParams.ContainsKey(item.Key.ToLower()))
+                    if (!routeParams.ContainsKey(item.Key))
                         routeParams.Add(item.Key, item.Value);
                 }
             }
