@@ -2,6 +2,7 @@
 {
     using Model;
     using System.Text.RegularExpressions;
+    using System.Globalization;
 
     public static class JobTaskExtensions
     {
@@ -11,8 +12,8 @@
 
             if (!task.Variant.Equals("default"))
             {
-                var taskVariantToString = task.Variant.ToString();
-                variantString = char.ToUpper(taskVariantToString[0]) + taskVariantToString.Substring(1);
+                TextInfo variantText = new CultureInfo("en-US", false).TextInfo;
+                variantString = variantText.ToTitleCase(task.Variant);
             }
             
             var stateString = task.State.ToString().Replace("_", " ").ToLowerInvariant();
