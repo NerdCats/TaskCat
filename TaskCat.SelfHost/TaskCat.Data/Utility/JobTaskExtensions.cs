@@ -10,7 +10,7 @@
         {
             var variantString = "";
 
-            if (!task.Variant.Equals("default"))
+            if (task.Variant != null && !task.Variant.Equals("default"))
             {
                 TextInfo variantText = new CultureInfo("en-US", false).TextInfo;
                 variantString = variantText.ToTitleCase(task.Variant);
