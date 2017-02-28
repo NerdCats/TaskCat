@@ -19,8 +19,7 @@
         /// <returns></returns>
         public static bool IsAdmin(this IPrincipal user)
         {
-            return user.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
-                || user.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN);
+            return user.IsInRole(RoleNames.ROLE_ADMINISTRATOR);
         }
 
         /// <summary>
