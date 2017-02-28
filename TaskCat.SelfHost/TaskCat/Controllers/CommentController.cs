@@ -5,6 +5,7 @@
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Data.Entity;
+    using Data.Entity.Identity;
     using Data.Model;
     using Job;
     using Lib.Comments;
@@ -190,7 +191,7 @@
         public async Task<IHttpActionResult> Delete(string id)
         {
             var currentUserId = this.User.Identity.GetUserId();
-            if (!this.User.IsAdminOrBackOfficeAdmin())
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR))
             {
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)
