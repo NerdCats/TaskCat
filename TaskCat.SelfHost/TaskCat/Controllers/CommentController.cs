@@ -164,7 +164,7 @@
             var currentUserId = this.User.Identity.GetUserId();
             var comment = await service.Get(model.Id);
 
-            if (!this.User.IsAdmin())
+            if (!this.User.IsAdminOrBackOfficeAdmin())
             {
                 if (comment.User.Id != currentUserId)
                 {
@@ -190,7 +190,7 @@
         public async Task<IHttpActionResult> Delete(string id)
         {
             var currentUserId = this.User.Identity.GetUserId();
-            if (!this.User.IsAdmin())
+            if (!this.User.IsAdminOrBackOfficeAdmin())
             {
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)

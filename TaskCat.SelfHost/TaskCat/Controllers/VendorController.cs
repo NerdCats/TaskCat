@@ -54,7 +54,7 @@ namespace TaskCat.Controllers
             }
 
             var authorizedId = User.Identity.GetUserId();
-            if (!User.IsAdmin() && !string.IsNullOrEmpty(vendor.UserId) && authorizedId != vendor.UserId)
+            if (!User.IsAdminOrBackOfficeAdmin() && !string.IsNullOrEmpty(vendor.UserId) && authorizedId != vendor.UserId)
             {
                 logger.Error("User {0} is not authorized to subscribe for vendorship for user {1}",
                     authorizedId, vendor.UserId);

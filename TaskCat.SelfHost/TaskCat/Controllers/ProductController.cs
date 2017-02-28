@@ -59,7 +59,7 @@
             var authorizedId = this.User.Identity.GetUserId();
             var store = await storeService.Get(value.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
                 {
@@ -82,7 +82,7 @@
             var authorizedId = this.User.Identity.GetUserId();
             var store = await storeService.Get(value.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
                 {
@@ -107,7 +107,7 @@
             var product = await this.productService.Get(id);
             var store = await storeService.Get(product.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
                 {

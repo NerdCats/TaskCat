@@ -42,7 +42,7 @@
         public async Task<IHttpActionResult> GetJobActivityFeed()
         {
             IQueryable<JobActivity> activities = null;
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (User.IsInRole(RoleNames.ROLE_ASSET))
                     activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ByUser.Id == this.User.Identity.GetUserId());

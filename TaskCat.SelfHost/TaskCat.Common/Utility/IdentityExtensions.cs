@@ -17,9 +17,10 @@
         ///     Identity user that is to be checked
         /// </param>
         /// <returns></returns>
-        public static bool IsAdmin(this IPrincipal user)
+        public static bool IsAdminOrBackOfficeAdmin(this IPrincipal user)
         {
-            return user.IsInRole(RoleNames.ROLE_ADMINISTRATOR);
+            return user.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
+                || user.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN);
         }
 
         /// <summary>

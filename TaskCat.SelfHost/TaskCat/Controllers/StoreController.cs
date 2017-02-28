@@ -56,7 +56,7 @@ namespace TaskCat.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
                 {
@@ -79,7 +79,7 @@ namespace TaskCat.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
                 {
@@ -103,7 +103,7 @@ namespace TaskCat.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 var jobUserId = (await service.Get(id)).EnterpriseUserId;
                 if (authorizedId != jobUserId)
