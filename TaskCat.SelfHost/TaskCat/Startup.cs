@@ -20,6 +20,7 @@ using System.Reactive.Linq;
 using System;
 using TaskCat.Job.Extensions;
 using TaskCat.Data.Lib.Extension;
+using NerdCats.Owin;
 
 namespace TaskCat
 {
@@ -48,6 +49,7 @@ namespace TaskCat
 
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
+            app.UseForwardHeaders(options: default(ForwardedHeadersOptions));
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
