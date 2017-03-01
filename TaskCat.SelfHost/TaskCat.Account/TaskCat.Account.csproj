@@ -123,8 +123,8 @@
       <HintPath>..\packages\MongoDB.Driver.Core.2.3.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NerdCats.Owin.ForwardedHeaders, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NerdCats.Owin.ForwardedHeaders.1.0.3\lib\net45\NerdCats.Owin.ForwardedHeaders.dll</HintPath>
+    <Reference Include="NerdCats.Owin.ForwardedHeaders, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NerdCats.Owin.ForwardedHeaders.1.0.4\lib\net45\NerdCats.Owin.ForwardedHeaders.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
