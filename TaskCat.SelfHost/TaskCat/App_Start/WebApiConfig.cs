@@ -32,7 +32,7 @@ namespace TaskCat
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("docs/{apiVersion}/", c =>
+            config.EnableSwagger("docs/job/api/{apiVersion}/", c =>
             {
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
@@ -41,7 +41,7 @@ namespace TaskCat
                 c.IncludeXmlComments(commentsFile);
                 c.DescribeAllEnumsAsStrings();
                 c.SingleApiVersion("v1", "TaskCat Core Api");
-            }).EnableSwaggerUi();
+            }).EnableSwaggerUi("docs/job/{*assetPath}");
 
         }
 
