@@ -1,11 +1,11 @@
-﻿using MongoDB.Driver;
-using System.Configuration;
-using TaskCat.Data.Entity;
-using TaskCat.Data.Entity.Identity;
-using TaskCat.Data.Entity.ShadowCat;
-
-namespace TaskCat.Common.Db
+﻿namespace TaskCat.Common.Db
 {
+    using MongoDB.Driver;
+    using System.Configuration;
+    using TaskCat.Data.Entity;
+    using TaskCat.Data.Entity.Identity;
+    using TaskCat.Data.Entity.ShadowCat;
+
     public class DbContext : IDbContext
     {
         private MongoClient mongoClient;
@@ -49,6 +49,12 @@ namespace TaskCat.Common.Db
         #endregion
 
         #region JobsAndOrders
+
+        private IMongoCollection<Locality> _localities;
+        public IMongoCollection<Locality> Localities
+        {
+            get { return _localities; }
+        }
 
         private IMongoCollection<Job> _jobs;
         public IMongoCollection<Job> Jobs
@@ -178,8 +184,10 @@ namespace TaskCat.Common.Db
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
+            
 
             _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
+            _localities = Database.GetCollection<Locality>(CollectionNames.LocalityCollectionName);
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings.Get("ShadowCat.LocationCacheCollectionName")))
                 _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);

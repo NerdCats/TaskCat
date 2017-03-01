@@ -28,7 +28,7 @@
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("api/auth/docs/{apiVersion}/", c =>
+            config.EnableSwagger("docs/auth/api/{apiVersion}/", c =>
             {
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
@@ -37,7 +37,7 @@
                 c.IncludeXmlComments(commentsFile);
                 c.DescribeAllEnumsAsStrings();
                 c.SingleApiVersion("v1", "TaskCat Auth Api");
-            }).EnableSwaggerUi();
+            }).EnableSwaggerUi("docs/auth/{*assetPath}");
 
         }
 

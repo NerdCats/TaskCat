@@ -8,10 +8,11 @@
     using Data.Entity.Identity;
     using Data.Model.Identity;
     using Data.Model.Identity.Response;
-    using MongoDB.Driver;
     using Common.Exceptions;
     using Microsoft.Owin.Security.DataProtection;
     using Microsoft.AspNet.Identity.Owin;
+    using Data.Model.Operation;
+    using Lib.DataProtection;
 
     public class AccountManager : UserManager<User>
     {
@@ -30,12 +31,8 @@
             {
                 RequiredLength = 6
             };
-        }
 
-        public AccountManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : this(store)
-        {
-            //TODO: Define proper user token protection provider token here
-
+            MachineKeyDataProtectionProvider dataProtectionProvider = new MachineKeyDataProtectionProvider();
             this.UserTokenProvider = new DataProtectorTokenProvider<User, string>(dataProtectionProvider.Create("Email Notification"))
             {
                 TokenLifespan = TimeSpan.FromHours(6)
@@ -126,7 +123,7 @@
             return await accountStore.FindAllAsModelAsQueryable(start, limit);
         }
 
-        public async Task<UpdateResult> ChangeAvatar(string userId, string avatarUrl)
+        public async Task<UpdateResult<User>> ChangeAvatar(string userId, string avatarUrl)
         {
             return await accountStore.SetAvatarAsync(userId, avatarUrl);
         }
@@ -135,7 +132,5 @@
         {
             return await accountStore.GetUserCountAsync();
         }
-
-
     }
 }

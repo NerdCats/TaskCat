@@ -9,6 +9,7 @@
     using Lib.Constants;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
+    using NLog;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -22,6 +23,7 @@
     {
         private IRepository<Product> productService;
         private IRepository<Store> storeService;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public ProductController(IRepository<Product> productService, IRepository<Store> storeService)
         {
@@ -57,10 +59,15 @@
             var authorizedId = this.User.Identity.GetUserId();
             var store = await storeService.Get(value.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
+                {
+                    logger.Error("INVALID OPERATION: User {0} is not authorized to enlist a product in {1}",
+                        authorizedId, store.Name);
+
                     throw new InvalidOperationException($"User {authorizedId} is not authorized to enlist a product in {store.Name}");
+                }
             }
 
             var result = await productService.Insert(value);
@@ -75,10 +82,15 @@
             var authorizedId = this.User.Identity.GetUserId();
             var store = await storeService.Get(value.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
+                {
+                    logger.Error("INVALID OPERATION: User {0} is not authorized to update a product in {1}",
+                        authorizedId, store.Name);
+
                     throw new InvalidOperationException($"User {authorizedId} is not authorized to update a product in {store.Name}");
+                }
             }
 
             var result = await productService.Update(value);
@@ -95,10 +107,15 @@
             var product = await this.productService.Get(id);
             var store = await storeService.Get(product.StoreId);
 
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (authorizedId != store.EnterpriseUserId)
+                {
+                    logger.Error("User {0} is not authorized to delete a product in {1}",
+                        authorizedId, store.Name);
+
                     throw new InvalidOperationException($"User {authorizedId} is not authorized to delete a product in {store.Name}");
+                }
             }
 
             var result = await productService.Delete(id);

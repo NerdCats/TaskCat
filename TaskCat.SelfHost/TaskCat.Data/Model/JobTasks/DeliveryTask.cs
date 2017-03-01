@@ -7,29 +7,71 @@
     using Lib.Exceptions;
     using Geocoding;
     using Result;
+    using Utility;
 
     public class DeliveryTask : JobTask
     {
         public DefaultAddress From { get; set; }
         public DefaultAddress To { get; set; }
 
+        public DeliveryTask() : base(JobTaskTypes.DELIVERY, "Delivery")
+        {
+
+        }
+
         public DeliveryTask(DefaultAddress from, DefaultAddress to) :
-            base(JobTaskTypes.DELIVERY, "Deliverying Package")
+            base(JobTaskTypes.DELIVERY, "Delivery")
         {
             this.From = from;
             this.To = to;
             this.Result = new AssetTaskResult();
         }
 
-        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type, string name) : 
-            base(type, name)
+        protected DeliveryTask(DefaultAddress from, DefaultAddress to, string type) :
+            this(from, to)
         {
+            this.Type = type;
             if (type != JobTaskTypes.SECURE_DELIVERY)
                 throw new NotSupportedException($"{type} is not supported as a JobTaskType under Delivery JobTask");
         }
 
+        public DeliveryTask GenerateRetryTask()
+        {
+            var task = new DeliveryTask
+            {
+                From = this.From,
+                To = this.To,
+                State = JobTaskState.PENDING,
+                CreateTime = DateTime.UtcNow,
+                Name= "Retry Delivery",
+                Variant = DeliveryTaskVariants.Retry,
+                Result = new AssetTaskResult()
+            };
+            return task;
+        }
+
+        public DeliveryTask GenerateReturnTask()
+        {
+            var task = new DeliveryTask
+            {
+                From = this.To,
+                To = this.From,
+                State = JobTaskState.PENDING,
+                CreateTime = DateTime.UtcNow,
+                Name = "Return Delivery",
+                Variant = DeliveryTaskVariants.Return,
+                Result = new AssetTaskResult()
+            };
+            return task;
+        }
+
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
+            if (this.Predecessor != null)
+            {
+                this.Predecessor.JobTaskCompleted -= Predecessor_JobTaskCompleted;
+            }
+
             base.SetPredecessor(task, validateDependency);
             if (validateDependency)
             {
@@ -65,24 +107,28 @@
                 UpdateTask();
             }
 
-            try
+            // Making sure result only propagates if this doesn't have an asset assigned yet
+            if (this.Asset == null)
             {
-                var type = jobTaskResult.ResultType;
+                try
+                {
+                    var type = jobTaskResult.ResultType;
 
-                VerifyPropertyTypesFromResult(type);
+                    VerifyPropertyTypesFromResult(type);
 
-                var asset = type.GetProperty("Asset");
-                Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
-            }
-            catch (Exception)
-            {
-                throw;
+                    var asset = type.GetProperty("Asset");
+                    Asset = asset.GetValue(jobTaskResult, null) as AssetModel;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
         public override void UpdateTask()
         {
-            IsReadytoMoveToNextTask = (To != null && Asset != null && State == JobTaskState.COMPLETED) ? true : false;
+            IsReadytoMoveToNextTask = (To != null && Asset != null && State.IsConclusiveStateToMoveToNextTask()) ? true : false;
             UpdateStateParams();
         }
 
@@ -95,6 +141,11 @@
             result.Asset = this.Asset;
             result.TaskCompletionTime = DateTime.UtcNow;
             return result;
+        }
+
+        public override string GetHRState()
+        {
+            return this.GetHrStateString();
         }
     }
 }

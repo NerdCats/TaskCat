@@ -1,4 +1,4 @@
-﻿namespace TaskCat.Data.Model.Order
+﻿namespace TaskCat.Data.Model.Order.Delivery
 {
     public class DeliveryOrderVariants
     {

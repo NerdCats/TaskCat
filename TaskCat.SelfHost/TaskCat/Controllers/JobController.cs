@@ -1,5 +1,12 @@
-﻿namespace TaskCat.Controllers
+﻿using TaskCat.Data.Model.Order.Delivery;
+
+namespace TaskCat.Controllers
 {
+    using Common.Email;
+    using Common.Lib.Utility;
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
     using System;
     using System.Linq;
     using System.Net;
@@ -10,28 +17,23 @@
     using System.Web.Http.Description;
     using Marvin.JsonPatch;
     using Microsoft.AspNet.Identity;
-    using MongoDB.Driver;
     using Data.Entity;
     using Data.Entity.Identity;
+    using Data.Lib.Invoice.Request;
     using Data.Lib.Invoice.Response;
     using Data.Model;
     using Data.Model.Api;
     using Data.Model.Identity.Profile;
+    using Data.Model.Job;
     using Data.Model.Operation;
     using Data.Model.Order;
-    using Lib.Constants;
-    using Common.Model.Pagination;
-    using Common.Utility.ActionFilter;
-    using Common.Utility.Odata;
-    using Common.Email;
-    using Common.Lib.Utility;
-    using System.Reactive.Subjects;
-    using System.Collections.Generic;
     using Job;
-    using Job.Updaters;
     using Job.Invoice;
-    using Data.Lib.Invoice.Request;
-    using Data.Model.Job;
+    using Job.Updaters;
+    using Lib.Constants;
+    using NLog;
+    using System.Collections.Generic;
+    using System.Reactive.Subjects;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -42,12 +44,19 @@
         private IJobRepository repository;
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private ILocalityService localLityService;
 
-        public JobController(IJobRepository repository, IEmailService mailService, Subject<JobActivity> activitySubject)
+        public JobController(
+            IJobRepository repository, 
+            IEmailService mailService, 
+            ILocalityService localityService,
+            Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
             this.activitySubject = activitySubject;
+            this.localLityService = localityService;
         }
 
         /// <summary>
@@ -117,7 +126,7 @@
         public async Task<IHttpActionResult> List(string type = "", int pageSize = AppConstants.DefaultPageSize, int page = 0, bool envelope = false)
         {
             if (pageSize == 0)
-                return BadRequest("Page size cant be 0");
+                return BadRequest("Page size can't be 0");
             if (page < 0)
                 return BadRequest("Page index less than 0 provided");
 
@@ -184,6 +193,7 @@
             var currentUserId = User.Identity.GetUserId();
             if (User.IsInRole(RoleNames.ROLE_ASSET) && !string.IsNullOrWhiteSpace(assetId) && assetId != currentUserId)
             {
+                logger.Error("Asset {0} is not authorized to access job list assigned to {1}", User.Identity.Name, assetId);
                 throw new UnauthorizedAccessException($"Asset {User.Identity.Name} is not authorized to access job list assigned to {assetId}");
             }
 
@@ -227,7 +237,11 @@
                 DeliveryOrder order = job.Order as DeliveryOrder;
 
                 if (order.OrderCart == null)
+                {
+                    logger.Debug("\'order.OrderCart\' is null");
+                    logger.Error("Generating invoice with blank order cart is not supported");
                     throw new InvalidOperationException("Generating invoice with blank order cart is not supported");
+                }
 
                 IInvoiceService invoiceService = new InvoiceService();
                 DeliveryInvoice invoice = invoiceService.GenerateInvoice<ItemDetailsInvoiceRequest, DeliveryInvoice>(new ItemDetailsInvoiceRequest()
@@ -264,6 +278,7 @@
             }
             else
             {
+                logger.Error("Invoice for job type {0} is still not implemented", job.Order.Type);
                 throw new NotImplementedException($"Invoice for job type {job.Order.Type} is still not implemented");
             }
         }
@@ -324,7 +339,7 @@
             var result = await repository.Claim(job, this.User.Identity.GetUserId());
 
             Task.Run(() => this.activitySubject.OnNext(
-                new JobActivity(job, JobActivityOperatioNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
+                new JobActivity(job, JobActivityOperationNames.Claim, nameof(job.JobServedBy), new ReferenceUser(job.JobServedBy))));
 
             return Ok(result);
         }
@@ -352,10 +367,15 @@
         public async Task<IHttpActionResult> Update([FromUri]string jobId, [FromUri] string taskId, [FromBody] JsonPatchDocument<JobTask> taskPatch, [FromUri] bool updatedValue = false)
         {
             if (taskPatch == null)
+            {
+                logger.Error("\'taskPatch\' is null");
                 throw new ArgumentNullException(nameof(taskPatch));
+            }
 
             if (taskPatch.Operations.Any(x => x.OperationType != Marvin.JsonPatch.Operations.OperationType.Replace))
             {
+                logger.Debug(taskPatch.Operations.ToString());
+                logger.Error("Operations except replace is not supported");
                 throw new NotSupportedException("Operations except replace is not supported");
             }
 
@@ -366,6 +386,7 @@
 
             if (!taskPatch.Operations.All(x => allowedPaths.Any(a => x.path.EndsWith(a))))
             {
+                logger.Error("Patch operation not supported on one or more paths");
                 throw new NotSupportedException("Patch operation not supported on one or more paths");
             }
 
@@ -383,7 +404,7 @@
                 switch (eventArgs.PropertyName)
                 {
                     case nameof(Job.State):
-                        jobChangeActivity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.State), currentUser)
+                        jobChangeActivity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.State), currentUser)
                         {
                             Value = (sender as Job).State.ToString()
                         };
@@ -403,7 +424,7 @@
             {
                 var taskActivity = new JobActivity(
                     result.UpdatedValue,
-                    JobActivityOperatioNames.Update,
+                    JobActivityOperationNames.Update,
                     op.path.Substring(1),
                     currentUser,
                     new ReferenceActivity(taskId, updatedTask.Type))
@@ -449,7 +470,7 @@
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Cancel, currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Cancel, currentUser);
                 activitySubject.OnNext(activity);
             });
             return Ok(result);
@@ -471,7 +492,10 @@
         public async Task<IHttpActionResult> RestoreJob(string jobId)
         {
             if (string.IsNullOrWhiteSpace(jobId))
+            {
+                logger.Error("Null or WhiteSpace in JobID: {0}", jobId);
                 throw new ArgumentException(nameof(jobId));
+            }
 
             var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
             {
@@ -483,7 +507,7 @@
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Restore, currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Restore, currentUser);
                 activitySubject.OnNext(activity);
             });
 
@@ -527,27 +551,48 @@
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) && !this.User.IsInRole(RoleNames.ROLE_ASSET))
             {
                 if (orderModel.UserId != null && orderModel.UserId != currentUserId)
+                {
+                    logger.Error("Invalid Operation: Updating user id {0} is not authorized against user id {1}",
+                        orderModel.UserId, this.User.Identity.GetUserId());
+
                     throw new InvalidOperationException(string.Format(
                         "Updating user id {0} is not authorized against user id {1}",
                         orderModel.UserId, this.User.Identity.GetUserId()));
+                }
             }
             else if (this.User.IsInRole(RoleNames.ROLE_ASSET)
                 && !this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)
                 && !this.User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN))
             {
                 if (!job.Assets.Any(x => x.Key == currentUserId))
+                {
+                    logger.Error("{0} is not an associated asset with this job", currentUserId);
                     throw new UnauthorizedAccessException($"{currentUserId} is not an associated asset with this job");
+                }
             }
 
             var result = await repository.UpdateOrder(job, orderModel, mode);
 
             Task.Factory.StartNew(() =>
             {
-                var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.Order), currentUser);
+                var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.Order), currentUser);
                 activitySubject.OnNext(activity);
             });
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Get all the localities listed in the job order
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/Job/localities/refresh")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPost]
+        public async Task<IHttpActionResult> RefreshLocalities()
+        {
+            await localLityService.RefreshLocalities();
+            return Ok();
         }
     }
 }

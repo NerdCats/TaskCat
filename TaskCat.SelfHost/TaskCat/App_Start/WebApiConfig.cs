@@ -1,4 +1,6 @@
-﻿namespace TaskCat
+﻿using TaskCat.Lib.Constants;
+
+namespace TaskCat
 {
     using Autofac.Integration.WebApi;
     using Common.Utility.Converter;
@@ -21,7 +23,7 @@
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: AppConstants.DefaultApiRoute,
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
@@ -30,7 +32,7 @@
 
             ConfigureFormatters(config);
 
-            config.EnableSwagger("docs/{apiVersion}/", c =>
+            config.EnableSwagger("docs/job/api/{apiVersion}/", c =>
             {
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
@@ -39,7 +41,7 @@
                 c.IncludeXmlComments(commentsFile);
                 c.DescribeAllEnumsAsStrings();
                 c.SingleApiVersion("v1", "TaskCat Core Api");
-            }).EnableSwaggerUi();
+            }).EnableSwaggerUi("docs/job/{*assetPath}");
 
         }
 

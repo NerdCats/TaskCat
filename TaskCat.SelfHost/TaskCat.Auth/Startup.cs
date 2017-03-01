@@ -25,6 +25,7 @@
     using Common.Settings;
     using Settings;
     using Account.Core;
+    using NerdCats.Owin;
 
     public static class Startup
     {
@@ -41,7 +42,8 @@
             var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
-            
+            app.UseForwardHeaders(options: default(ForwardedHeadersOptions));
+
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             var config = new HttpConfiguration();

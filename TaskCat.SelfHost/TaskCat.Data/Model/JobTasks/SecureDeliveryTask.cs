@@ -2,6 +2,7 @@
 {
     using Lib.Constants;
     using Geocoding;
+    using System;
 
     public class SecureDeliveryTask : DeliveryTask
     {
@@ -11,9 +12,15 @@
             base.SetPredecessor(task, validateDependency);
         }
 
-        public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) : 
-            base(from, to, JobTaskTypes.SECURE_DELIVERY, "Deliverying Secure Package")
+        public SecureDeliveryTask()
         {
+            this.Name = "Secure delivery";
+        }
+
+        public SecureDeliveryTask(DefaultAddress from, DefaultAddress to) :
+            base(from, to, JobTaskTypes.SECURE_DELIVERY)
+        {
+            this.Name = "Secure delivery";
         }
 
         public override void UpdateTask()
@@ -25,6 +32,23 @@
         {
             return base.SetResultToNextState();
         }
-    }
 
+        public override string GetHRState()
+        {
+            var prefix = "Cash delivery to buyer";
+            switch (State)
+            {
+                case JobTaskState.PENDING:
+                    return $"{prefix} is pending";
+                case JobTaskState.IN_PROGRESS:
+                    return $"{prefix} is in progress";
+                case JobTaskState.COMPLETED:
+                    return $"{prefix} is completed";
+                case JobTaskState.CANCELLED:
+                    return $"{prefix} is cancelled";
+                default:
+                    throw new NotImplementedException(State.ToString());
+            }
+        }
+    }
 }

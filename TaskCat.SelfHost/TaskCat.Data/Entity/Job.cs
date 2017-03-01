@@ -12,8 +12,9 @@
     using Model.Payment;
     using System.ComponentModel;
     using Model.Vendor.ProfitSharing;
-    using Core;
     using System.Runtime.CompilerServices;
+    using Utility;
+    using Lib.Extension;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public class Job : HRIDEntity, INotifyPropertyChanged
@@ -83,6 +84,17 @@
             }
         }
 
+        public string HRState {
+            get
+            {
+                var lastSignificantTask = this.Tasks.LastOrDefault(x => x.State > JobTaskState.PENDING);
+
+                if (lastSignificantTask != null)
+                    return lastSignificantTask.GetHRState();
+                else return this.state.GetSimplifiedStateString();
+            }
+        }
+
         public DateTime? CreateTime { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public bool ETAFailed
@@ -124,6 +136,22 @@
             get { return _terminalTask; }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                if (!this.Tasks.Contains(value))
+                    throw new ArgumentException("Task doesn't belong to this job");
+
+                this.Tasks.ForEach(x => x.IsTerminatingTask = false);
+
+                // Removing current terminal task association
+                // We can remove this since now we have a propertychanged 
+                // handler for jobtasks and we can essentially find
+                // out that way when a job task ends
+
+                if (_terminalTask != null)
+                    _terminalTask.JobTaskCompleted -= _terminalTask_JobTaskCompleted;
+
                 _terminalTask = value;
                 _terminalTask.IsTerminatingTask = true;
                 _terminalTask.JobTaskCompleted += _terminalTask_JobTaskCompleted;
@@ -170,6 +198,8 @@
             }
         }
 
+        public int AttemptCount { get; set; } = 1;
+
         public Vendor Vendor { get; set; }
         public ProfitShareResult ProfitShareResult { get; set; }
 
@@ -180,7 +210,7 @@
 
         public void CompleteJob()
         {
-            if (!Tasks.All(x => x.State == JobTaskState.COMPLETED))
+            if (Tasks.Any(x => !x.State.IsConclusiveStateToMoveToNextTask()))
             {
                 throw new NotSupportedException("Setting Job State to COMPLETED when all the job Tasks are not completed");
             }
@@ -192,7 +222,7 @@
         {
             CreateTime = DateTime.UtcNow;
             ModifiedTime = DateTime.UtcNow;
-            this.Assets = new Dictionary<string, AssetModel>();
+            this.Assets = new Dictionary<string, AssetModel>(); 
         }
 
         public Job(string name) : this()
@@ -212,7 +242,6 @@
             this.HRID = hrid;
         }
 
-
         public void EnsureJobTaskChangeEventsRegistered(bool isFetchingJobPayload = false)
         {
             if (!isFetchingJobPayload)
@@ -220,8 +249,10 @@
                 if (this.Tasks.Any(x => x.State == JobTaskState.COMPLETED))
                     throw new InvalidOperationException("Job Task initialized in COMPLETED state");
             }
-            tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
-            IsJobTasksEventsHooked = true;
+
+           tasks.ForEach(x => x.PropertyChanged -= JobTask_PropertyChanged);
+           tasks.ForEach(x => x.PropertyChanged += JobTask_PropertyChanged);
+           IsJobTasksEventsHooked = true;          
         }
 
         private void JobTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -236,16 +267,33 @@
             {
                 case nameof(JobTask.State):
                     SetProperJobState(task);
+
+                    // INFO: We only execute extensions if and only if state changes are encountered
+                    // May be someday we can make it more flesible if need be
+                    ExecuteExtensions(task);
                     break;
                 case nameof(JobTask.AssetRef):
                     if (!Assets.ContainsKey(task.AssetRef))
                         Assets[task.AssetRef] = task.Asset;
                     break;
+            }    
+        }
+
+        private void ExecuteExtensions(JobTask task)
+        {
+            var extensions = JobTaskExtensionResolver.Resolve(this.Order.Type, task.Type);
+            if (extensions != null)
+            {
+                foreach (var extension in extensions)
+                {
+                    extension.CheckAndExecute(task, this);
+                }
             }
         }
 
         private void SetProperJobState(JobTask jobTask)
         {
+            // Set Job state based on job tasks state
             if (jobTask.State >= JobTaskState.IN_PROGRESS
                 && jobTask.State < JobTaskState.COMPLETED
                 && State != JobState.IN_PROGRESS)
@@ -278,12 +326,25 @@
             }
         }
 
-        public void AddTask(JobTask jtask)
+        public void AddTask(JobTask jtask, bool hookPropertyChangedEvent = false)
         {
             if (this.Tasks == null)
                 Tasks = new List<JobTask>();
             this.Tasks.Add(jtask);
 
+            if (hookPropertyChangedEvent)
+                jtask.PropertyChanged += this.JobTask_PropertyChanged;
+        }
+
+        public void AddTask(JobTask jtask, int index, bool hookPropertyChangedEvent = false)
+        {
+            if (this.Tasks == null)
+                throw new ArgumentNullException(nameof(Tasks));
+
+            this.Tasks.Insert(index, jtask);
+
+            if (hookPropertyChangedEvent)
+                jtask.PropertyChanged += this.JobTask_PropertyChanged;
         }
 
         private string GenerateDefaultJobName()

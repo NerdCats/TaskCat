@@ -18,7 +18,7 @@
     /// <summary>
     /// Controller for job activities.
     /// </summary>
-    public class JobActivityController: ApiController
+    public class JobActivityController : ApiController
     {
         private IDbContext dbContext;
 
@@ -42,7 +42,7 @@
         public async Task<IHttpActionResult> GetJobActivityFeed()
         {
             IQueryable<JobActivity> activities = null;
-            if (!User.IsAdmin())
+            if (!User.IsAdminOrBackOfficeAdmin())
             {
                 if (User.IsInRole(RoleNames.ROLE_ASSET))
                     activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ByUser.Id == this.User.Identity.GetUserId());
@@ -50,10 +50,10 @@
                     activities = dbContext.JobActivityCollection.AsQueryable().Where(x => x.ForUser.Id == this.User.Identity.GetUserId());
             }
             else
-            {   
+            {
                 activities = dbContext.JobActivityCollection.AsQueryable();
             }
-            
+
             var odataResult = await activities.ToOdataResponse(Request, AppConstants.DefaultApiRoute);
             return Ok(odataResult);
         }

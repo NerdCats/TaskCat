@@ -4,15 +4,18 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using System;
-    using Utility;
     using Identity.Response;
     using Core;
+    using Utility;
 
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class JobTask : ObservableObject
     {
-        protected string Name;
+        public string Name { get; set; } 
         public string id { get; protected set; }
+
+        [BsonIgnoreIfNull]
+        public string Variant { get; set; } = "default";   
 
         [JsonIgnore]
         [BsonIgnore]
@@ -27,12 +30,6 @@
         public JobTaskResult Result { get; protected set; }
 
         public string Type { get; set; }
-
-        [BsonIgnore]
-        public string JobTaskStateString
-        {
-            get { return StateStringGenerator.GenerateStateString(State, Name); }
-        }
 
         private JobTaskState state;
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
@@ -128,20 +125,21 @@
 
         public JobTask()
         {
-
         }
 
         public JobTask(string type, string name) : this()
         {
             id = Guid.NewGuid().ToString();
             Type = type;
-            Name = name;
 
             CreateTime = DateTime.Now;
             ModifiedTime = DateTime.Now;
+            this.Name = name;
         }
 
         public abstract void UpdateTask();
+        public abstract string GetHRState();
+
         public virtual JobTaskResult SetResultToNextState()
         {
             return this.Result;
@@ -157,8 +155,7 @@
             }
             
             this.Predecessor = task;
-            IsStartingTask = false;
-           
+            IsStartingTask = false;         
         }
 
         public virtual void UpdateStateParams()
@@ -179,7 +176,11 @@
        
             this.CompletionTime = DateTime.UtcNow;
             this.InitiationTime = this.InitiationTime ?? this.CompletionTime;
-            State = JobTaskState.COMPLETED;
+
+            // TODO: This has to be moved out when we do seperate states for the jobTasks.
+
+
+            State = State.IsConclusiveStateToMoveToNextTask() ? State : JobTaskState.COMPLETED;
             //FIXME: the JobTaskResult type has to be initiated
             if (JobTaskCompleted != null)
             {
@@ -191,7 +192,6 @@
                 JobTaskCompleted(this, Result);
             }
         }
-
     }
 
     //Should be moved to a new class file? No? Okay!
@@ -200,14 +200,5 @@
     {
         public DateTime? TaskCompletionTime { get; set; }       
         public Type ResultType { get; set; }
-    }
-
-    //FIXME: Might need to move this to an Util function
-    public static class JobTaskResultExtensions
-    {
-        public static T Cast<T>(this object input)
-        {
-            return (T)input;
-        }
     }
 }

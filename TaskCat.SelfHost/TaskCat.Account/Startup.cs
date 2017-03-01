@@ -14,6 +14,7 @@
     using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Conventions;
     using MongoDB.Driver;
+    using NerdCats.Owin;
     using Owin;
     using System.Linq;
     using System.Reflection;
@@ -22,7 +23,7 @@
 
     public static class Startup
     {
-        public static void ConfigureApp(IAppBuilder app)
+        public static void ConfigureApp(IAppBuilder app, IContainer container)
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
 
@@ -30,9 +31,9 @@
 
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
 
-            var container = builder.BuildContainer(app);
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
+            app.UseForwardHeaders(options: default(ForwardedHeadersOptions));
 
             var webApiDependencyResolver = new AutofacWebApiDependencyResolver(container);
 
@@ -42,8 +43,7 @@
 
             WebApiConfig.Register(config, webApiDependencyResolver);
             config.Filters.Add(new ErrorDocumentFilter());
-
-
+         
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             app.UseWebApi(config);

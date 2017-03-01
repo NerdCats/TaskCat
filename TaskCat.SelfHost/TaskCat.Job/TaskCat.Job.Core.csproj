@@ -70,6 +70,10 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -108,10 +112,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\DeliveryJobBuilder.cs" />
+    <Compile Include="Extensions\DeliveryJobExtensions.cs" />
+    <Compile Include="ILocalityService.cs" />
     <Compile Include="Invoice\DeliveryInvoicePDFGenerator.cs" />
     <Compile Include="Invoice\IInvoiceService.cs" />
     <Compile Include="Invoice\InvoiceService.cs" />
     <Compile Include="Invoice\IPDFService.cs" />
+    <Compile Include="LocalityService.cs" />
     <Compile Include="Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Utility\Converter\ProfitSharingModelConverter.cs" />
     <Compile Include="Utility\Converter\VendorConverter.cs" />
@@ -163,6 +170,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

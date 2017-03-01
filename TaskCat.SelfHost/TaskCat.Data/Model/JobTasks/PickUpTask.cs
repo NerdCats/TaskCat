@@ -4,19 +4,25 @@
     using System;
     using Identity.Response;
     using Geocoding;
+    using Lib.Constants;
 
     public abstract class PickUpTask : JobTask
     {
         public DefaultAddress AssetLocation { get; set; }
         public DefaultAddress PickupLocation { get; set; }
 
-        public PickUpTask(string type, string name, DefaultAddress pickupLocation) : base(type, name)
+        public PickUpTask(string type, DefaultAddress pickupLocation) : base(type, "Pick up")
         {
             this.PickupLocation = pickupLocation;
         }
 
         public override void SetPredecessor(JobTask task, bool validateDependency = true)
         {
+            if (this.Predecessor != null)
+            {
+                this.Predecessor.JobTaskCompleted -= Predecessor_JobTaskCompleted;
+            }
+
             base.SetPredecessor(task, validateDependency);
             if (validateDependency)
             {
@@ -55,19 +61,22 @@
                 UpdateTask();
             }
 
-            try
+            if (this.Asset == null)
             {
-                var type = jobTaskResult.ResultType;
+                try
+                {
+                    var type = jobTaskResult.ResultType;
 
-                var ride = type.GetProperty("Asset");
-                if (ride.PropertyType != typeof(AssetModel))
-                    throw new InvalidCastException("Type Verification Asset field failed");
+                    var ride = type.GetProperty("Asset");
+                    if (ride.PropertyType != typeof(AssetModel))
+                        throw new InvalidCastException("Type Verification Asset field failed");
 
-                Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
-            }
-            catch (Exception)
-            {
-                throw;
+                    Asset = ride.GetValue(jobTaskResult, null) as AssetModel;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 

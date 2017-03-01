@@ -5,12 +5,14 @@
     using Common.Utility.ActionFilter;
     using Common.Utility.Odata;
     using Data.Entity;
+    using Data.Entity.Identity;
     using Data.Model;
     using Job;
     using Lib.Comments;
     using Lib.Constants;
     using Microsoft.AspNet.Identity;
     using MongoDB.Driver;
+    using NLog;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -25,6 +27,7 @@
     {
         private ICommentService service;
         private IJobRepository jobRepository;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Initializes a default instance of CommentController
@@ -95,7 +98,10 @@
                 {
                     var job = await jobRepository.GetJobByHrid(refId);
                     if (job.User.UserId != currentUserId)
+                    {
+                        logger.Error("{0} is not allowed to get comment feed of {1}", currentUserId, refId);
                         throw new InvalidOperationException($"{currentUserId} is not allowed to get comment feed of {refId}");
+                    }
                 }
                 var comments = await service.GetByRefId(refId, entityType, pageSize, page);
                 return Ok(new PageEnvelope<Comment>(comments.Total, page, pageSize, AppConstants.DefaultCommentsRoute, comments.Result, this.Request));
@@ -127,7 +133,10 @@
                 {
                     var job = await jobRepository.GetJobByHrid(comment.RefId);
                     if (job.User.UserId != currentUserId)
+                    {
+                        logger.Error($"{currentUserId} is not allowed to comment on {comment.RefId}");
                         throw new InvalidOperationException($"{currentUserId} is not allowed to comment on {comment.RefId}");
+                    }
                 }
 
                 comment.User = new ReferenceUser(currentUserId, this.User.Identity.GetUserName())
@@ -156,10 +165,13 @@
             var currentUserId = this.User.Identity.GetUserId();
             var comment = await service.Get(model.Id);
 
-            if (!this.User.IsAdmin())
+            if (!this.User.IsAdminOrBackOfficeAdmin())
             {
                 if (comment.User.Id != currentUserId)
+                {
+                    logger.Error($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to update comment {model.Id}");
+                }
             }
 
             comment.LastModified = DateTime.UtcNow;
@@ -179,11 +191,14 @@
         public async Task<IHttpActionResult> Delete(string id)
         {
             var currentUserId = this.User.Identity.GetUserId();
-            if (!this.User.IsAdmin())
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR))
             {
                 var comment = await service.Get(id);
                 if (comment.User.Id != currentUserId)
+                {
+                    logger.Error($"{this.User.Identity.Name} is not allowed to delete comment {id}");
                     throw new InvalidOperationException($"{this.User.Identity.Name} is not allowed to delete comment {id}");
+                }
             }
 
             var result = await service.Delete(id);

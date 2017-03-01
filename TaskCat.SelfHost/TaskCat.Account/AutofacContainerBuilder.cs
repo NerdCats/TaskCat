@@ -4,7 +4,6 @@
     using Autofac.Builder;
     using Autofac.Integration.WebApi;
     using Microsoft.AspNet.Identity;
-    using Owin;
     using Core;
     using Common.Db;
     using Common.Email;
@@ -14,14 +13,18 @@
     using AppSettings = Its.Configuration.Settings;
     using Common.Settings;
     using Lib.Db;
-    using Lib.ServiceBus;
-    using Core.Lib.ServiceBus;
+    using System.Reactive.Subjects;
+    using System;
 
     public class AutofacContainerBuilder
     {
-        public IContainer BuildContainer(IAppBuilder app)
+        public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
+
+            var userSubject = new Subject<User>();
+            builder.Register(x => userSubject).As<IObserver<User>>().SingleInstance();
+            builder.Register(x => userSubject).As<IObservable<User>>().SingleInstance();
 
             #region Account
 
@@ -41,11 +44,6 @@
             #region Storage
             builder.Register(c => new BlobService()).As<IBlobService>().SingleInstance();
             builder.RegisterType<StorageRepository>().AsImplementedInterfaces<IStorageRepository, ConcreteReflectionActivatorData>().SingleInstance();
-            #endregion
-
-            #region ServiceBus
-            ServiceBusClient serviceBusClient = new ServiceBusClient(AppSettings.Get<ClientSettings>());
-            builder.Register(s => serviceBusClient).As<IServiceBusClient>().SingleInstance();
             #endregion
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);

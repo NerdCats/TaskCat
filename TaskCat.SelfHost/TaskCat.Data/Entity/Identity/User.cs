@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using Model.Identity.Profile;
     using Model.Identity.Registration;
+    using Model.Identity.Response;
 
     [BsonDiscriminator(Required = true)]
     [BsonKnownTypes(typeof(Asset), typeof(EnterpriseUser))]
@@ -53,5 +54,9 @@
             Roles.Add(role);
         }
         
+        public virtual UserModel ToModel()
+        {
+            return new UserModel(this);
+        } 
     }
 }

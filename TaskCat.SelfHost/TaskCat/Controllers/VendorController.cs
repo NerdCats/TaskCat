@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using MongoDB.Driver;
+using NLog;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.Identity;
-using MongoDB.Driver;
-using TaskCat.Data.Entity;
-using TaskCat.Lib.Constants;
 using System.Web.Http.Description;
+using TaskCat.Common.Lib.Utility;
 using TaskCat.Common.Model.Pagination;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Utility.Odata;
-using TaskCat.Common.Lib.Utility;
+using TaskCat.Data.Entity;
 using TaskCat.Job.Vendor;
+using TaskCat.Lib.Constants;
 
 namespace TaskCat.Controllers
 {
@@ -20,6 +21,7 @@ namespace TaskCat.Controllers
     public class VendorController : ApiController
     {
         private IVendorService service;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public VendorController(IVendorService service)
         {
@@ -45,11 +47,20 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (vendor == null) throw new ArgumentNullException("Invalid/Null Vendor provided");
+            if (vendor == null)
+            {
+                logger.Error("Invalid/Null Vendor provided");
+                throw new ArgumentNullException("Invalid/Null Vendor provided");
+            }
 
             var authorizedId = User.Identity.GetUserId();
-            if (!User.IsAdmin() && !string.IsNullOrEmpty(vendor.UserId) && authorizedId != vendor.UserId)
+            if (!User.IsAdminOrBackOfficeAdmin() && !string.IsNullOrEmpty(vendor.UserId) && authorizedId != vendor.UserId)
+            {
+                logger.Error("User {0} is not authorized to subscribe for vendorship for user {1}",
+                    authorizedId, vendor.UserId);
+
                 throw new InvalidOperationException($"User {authorizedId} is not authorized to subscribe for vendorship for user {vendor.UserId}");
+            }
 
             var result = await service.Subscribe(vendor);
 
@@ -60,8 +71,10 @@ namespace TaskCat.Controllers
                 case SubscriptionResult.NOT_MODIFIED:
                     return StatusCode(HttpStatusCode.NotModified);
                 case SubscriptionResult.FAILED:
+                    logger.Error("Subscribing as a vendor process failed");
                     throw new Exception("Subscribing as a vendor process failed");
                 default:
+                    logger.Error("Subscription result {0} is not supported/implemented", result);
                     throw new NotImplementedException($"Subscription result {result} is not supported/implemented");
             }
         }

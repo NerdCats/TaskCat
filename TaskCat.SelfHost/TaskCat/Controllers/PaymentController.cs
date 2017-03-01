@@ -12,6 +12,7 @@
     using Data.Lib.Payment.Request;
     using Payment.Core;
     using Job;
+    using NLog;
 
     /// <summary>
     /// <c>PaymentController</c> exposes all services provided by a <c>IPaymentManager</c>
@@ -22,6 +23,7 @@
         private IJobRepository jobRepository;
         private IPaymentManager manager;
         private IPaymentService service;
+        private Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// <c>PaymentController</c> constructor
@@ -91,7 +93,7 @@
 
                 Task.Factory.StartNew(() =>
                 {
-                    var activity = new JobActivity(job, JobActivityOperatioNames.Update, nameof(Job.PaymentStatus), currentUser)
+                    var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.PaymentStatus), currentUser)
                     {
                         Value = result.NewPaymentStatus.ToString()
                     };
@@ -101,10 +103,14 @@
                 if (jobUpdateResult.ModifiedCount > 0)
                     return Ok();
                 else
+                {
+                    logger.Error("Job update failed for JobId: {0}", jobid);
                     throw new ServerErrorException("job update failed");
+                }
             }
             else
             {
+                logger.Error("Internal Server Error");
                 return InternalServerError();
             }
         }

@@ -57,6 +57,9 @@
             if (webApp != null)
             {
                 webApp.Dispose();
+            }
+            if (container != null)
+            {
                 container.Dispose();
             }
         }

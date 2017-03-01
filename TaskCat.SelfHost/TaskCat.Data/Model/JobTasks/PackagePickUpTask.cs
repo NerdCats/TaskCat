@@ -5,12 +5,19 @@
     using Lib.Constants;
     using Geocoding;
     using Result;
+    using Utility;
 
     public class PackagePickUpTask : PickUpTask
     {
-        public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, "Picking up Package", pickupLocation)
+        public PackagePickUpTask(DefaultAddress pickupLocation) : base(JobTaskTypes.PACKAGE_PICKUP, pickupLocation)
         {
+            this.Name = "Package pick up";
             this.Result = new AssetTaskResult();
+        }
+
+        public override string GetHRState()
+        {
+            return this.GetHrStateString();
         }
 
         public override JobTaskResult SetResultToNextState()

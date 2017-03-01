@@ -7,7 +7,6 @@
     using JobTasks.Preference;
     using System.Collections.Generic;
     using Order.Delivery;
-    using Order;
 
     [BsonKnownTypes(typeof(DeliveryOrder), typeof(ClassifiedDeliveryOrder))]
     [BsonIgnoreExtraElements(Inherited = true)]
@@ -130,7 +129,7 @@
 
         public OrderModel()
         {
-
+            
         }
 
         public OrderModel(string name, string type)

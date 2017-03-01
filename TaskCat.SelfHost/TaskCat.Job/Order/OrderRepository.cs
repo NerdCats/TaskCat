@@ -1,7 +1,8 @@
 ﻿namespace TaskCat.Job.Order
 {
     using Job;
-    using Job.Builders;
+    using Builders;
+    using Data.Model.Order.Delivery;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -16,7 +17,6 @@
     using Data.Model.Identity.Profile;
     using Data.Entity.Identity;
     using Account.Core;
-    using Common.Search;
     using Vendor;
     using Payment.Core;
 
@@ -32,7 +32,6 @@
         IPaymentService paymentService;
         private IVendorService vendorService;
         private IObserver<Job> jobSearchIndexService;
-        private ISearchContext searchContext;
 
         public OrderRepository(
             IJobManager manager,
