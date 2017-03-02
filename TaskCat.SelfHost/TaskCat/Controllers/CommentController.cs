@@ -165,7 +165,7 @@
             var currentUserId = this.User.Identity.GetUserId();
             var comment = await service.Get(model.Id);
 
-            if (!this.User.IsAdminOrBackOfficeAdmin())
+            if (!this.User.IsInRole(RoleNames.ROLE_ADMINISTRATOR))
             {
                 if (comment.User.Id != currentUserId)
                 {
