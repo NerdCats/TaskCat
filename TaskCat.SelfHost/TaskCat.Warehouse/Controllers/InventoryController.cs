@@ -1,6 +1,5 @@
 ﻿namespace TaskCat.Warehouse.Controllers
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -34,6 +33,13 @@
             return Ok(result);
         }
 
+        [HttpPut]
+        [Route("stock")]
+        public async Task<IHttpActionResult> UpdateStock([FromBody]StockItem item)
+        {
+            var result = await stockService.Update(item);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("checkin/{refId}")]
