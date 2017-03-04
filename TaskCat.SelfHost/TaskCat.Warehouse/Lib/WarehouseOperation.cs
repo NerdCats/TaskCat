@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskCat.Warehouse.Lib
+﻿namespace TaskCat.Warehouse.Lib
 {
+    using Data.Model;
+
     public class WarehouseOperation
     {
+        public string Op { get; internal set; }
+        public StockItemModel Payload { get; internal set; }
     }
 }

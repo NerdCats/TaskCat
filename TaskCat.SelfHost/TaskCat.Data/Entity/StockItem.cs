@@ -35,6 +35,8 @@
         [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
 
+        public string Location { get; set; }
+
         /// <summary>
         /// Creation time of the StockItem entry 
         /// </summary>
@@ -47,6 +49,15 @@
 
         public static StockItem FromModel(StockItemModel model)
         {
+            var isReferenced = !string.IsNullOrWhiteSpace(model.RefId)
+                && !string.IsNullOrWhiteSpace(model.RefEntityType);
+
+            if (!isReferenced)
+            {
+                model.RefId = null;
+                model.RefEntityType = null;
+            }
+
             return new StockItem()
             {
                 CreateTime = DateTime.UtcNow,
@@ -55,7 +66,8 @@
                 PicUrl = model.PicUrl,
                 Quantity = model.Quantity,
                 RefEntityType = model.RefEntityType,
-                RefId = model.RefId
+                RefId = model.RefId,
+                Location = model.Location
             };
         }
     }

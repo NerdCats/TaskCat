@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using TaskCat.Data.Entity;
-using TaskCat.Job;
-using TaskCat.Warehouse.Lib;
-
-namespace TaskCat.Warehouse.Controllers
+﻿namespace TaskCat.Warehouse.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using Data.Entity;
+    using Data.Model;
+    using Job;
+    using Lib;
+
     [RoutePrefix("api/warehouse")]
     public class InventoryController : ApiController
     {
@@ -21,24 +22,17 @@ namespace TaskCat.Warehouse.Controllers
         }
 
         /// <summary>
-        /// Stock a new 
+        /// Stock a new stock item. If Reference id is used, use a reference type too. Otherwise it would be ignored
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Route("stock")]
-        public async Task<IHttpActionResult> Stock([FromBody]StockItem item)
+        public async Task<IHttpActionResult> Stock([FromBody]StockItemModel itemModel)
         {
-            var isReferenced = !string.IsNullOrWhiteSpace(item.RefId) && !string.IsNullOrWhiteSpace(item.RefEntityType);
-
-            if(!isReferenced)
-            {
-                item.RefId = null;
-                item.RefEntityType = null;
-            }
-
-           
-            return Ok();
+            var result = await stockService.Insert(StockItem.FromModel(itemModel));
+            return Ok(result);
         }
+
 
         [HttpPost]
         [Route("register/{refEntity}/{refId}")]
@@ -50,19 +44,38 @@ namespace TaskCat.Warehouse.Controllers
             // is making sure whether we have this job referenced in the system
 
             var items = await this.stockService.GetStocksByReference(refId, refEntity);
+            // INFO: No items or anything here, send back them an option to check in.
 
             if (items == null || !items.Any())
             {
-                // INFO: No items or anything here, send back them an option to check in.
+                var result = items.Select(item => new WarehouseOperation()
+                {
+                    Op = "stock",
+                    Payload = new StockItemModel()
+                    {
+                        Item = item.Item,
+                        PicUrl = item.PicUrl,
+                        Quantity = item.Quantity,
+                        RefEntityType = item.RefEntityType,
+                        RefId = item.RefId
+                    }
+                });
 
-
+                return Ok(result);      
             }
             else
             {
+                // Find out which one of the products are not checked in yet and send back operations to do so
+                var itemsInStock = items.GroupBy(x => x.Item).Select(x => x.Key);
+                var itemsInJob = items.GroupBy(x => x.Item).Select(x => x.Key);
 
+                foreach (var item in itemsInStock)
+                {
+
+                }
+
+                var newThingsInJob = itemsInStock.Union(itemsInJob).Except(itemsInStock);
             }
-
-            throw new NotImplementedException();
         }
     }
 }

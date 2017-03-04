@@ -10,5 +10,6 @@
         public string Item { get; set; }
         public string PicUrl { get; set; }
         public int Quantity { get; set; }
+        public string Location { get; set; }
     }
 }

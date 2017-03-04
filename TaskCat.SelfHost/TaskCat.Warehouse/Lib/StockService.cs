@@ -46,7 +46,7 @@
             throw new NotImplementedException();
         }
 
-        public Task<StockItem> Insert(StockItem obj)
+        public async Task<StockItem> Insert(StockItem obj)
         {
             throw new NotImplementedException();
         }
