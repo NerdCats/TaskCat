@@ -54,7 +54,7 @@
             {
                 var result = job.Order.OrderCart.PackageList.Select(item => new WarehouseOperation()
                 {
-                    Op = "stock",
+                    Op = "insert",
                     Payload = new StockItemModel()
                     {
                         Item = item.Item,
@@ -78,7 +78,7 @@
                     {
                         SuggestedOperations.Add(new WarehouseOperation()
                         {
-                            Op = "stock",
+                            Op = "insert",
                             Payload = new StockItemModel()
                             {
                                 Item = item.Item,
@@ -98,7 +98,7 @@
                             {
                                 SuggestedOperations.Add(new WarehouseOperation()
                                 {
-                                    Op = "stock",
+                                    Op = "update",
                                     Payload = new StockItemModel()
                                     {
                                         Item = item.Item,
