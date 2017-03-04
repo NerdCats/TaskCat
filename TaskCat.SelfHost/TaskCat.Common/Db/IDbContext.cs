@@ -31,5 +31,7 @@
         IMongoCollection<Comment> Comments { get; }
 
         IMongoCollection<JobActivity> JobActivityCollection { get; }
+
+        IMongoCollection<StockItem> StockItems { get; }
     }
 }

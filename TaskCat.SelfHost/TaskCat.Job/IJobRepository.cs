@@ -13,6 +13,7 @@
 
     public interface IJobRepository
     {
+        Task<Job> GetJobByIdOrHrid(string id);
         Task<Job> GetJob(string id);
         IQueryable<Job> GetJobs();
         Task<Job> GetJobByHrid(string id);

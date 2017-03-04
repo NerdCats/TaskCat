@@ -40,6 +40,17 @@ namespace TaskCat.Job
             this.jobSearchSubject = jobIndexingSubject;
         }
 
+        public async Task<Job> GetJobByIdOrHrid(string id)
+        {
+            Job job = null;
+            if (id.Length == 24)
+                job = await this.GetJob(id);
+            else
+                job = await this.GetJobByHrid(id);
+
+            return job;
+        }
+
         public async Task<Job> GetJob(string id)
         {
             return await manager.GetJob(id);

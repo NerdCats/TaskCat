@@ -165,12 +165,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="AutofacContainerBuilder.cs" />
     <Compile Include="ConsoleApplicationInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Lib\AppConstants.cs" />
+    <Compile Include="Lib\IStockService.cs" />
+    <Compile Include="Lib\StockService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -201,7 +203,12 @@
       <Project>{3cbadd98-c5b3-4475-b18e-f9af0efd4a2f}</Project>
       <Name>TaskCat.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskCat.Job\TaskCat.Job.Core.csproj">
+      <Project>{ce6f8fc6-5725-4038-a29a-5e094342b848}</Project>
+      <Name>TaskCat.Job.Core</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

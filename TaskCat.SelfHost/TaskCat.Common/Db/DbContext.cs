@@ -160,6 +160,14 @@
         }
         #endregion
 
+        #region StockItem
+        private IMongoCollection<StockItem> _stockItems;
+        public IMongoCollection<StockItem> StockItems
+        {
+            get { return _stockItems; }
+        }
+        #endregion
+
         public DbContext()
         {
             InitiateDatabase();
@@ -188,6 +196,8 @@
 
             _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
             _localities = Database.GetCollection<Locality>(CollectionNames.LocalityCollectionName);
+
+            _stockItems = Database.GetCollection<StockItem>(CollectionNames.StockItemCollectionName);
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings.Get("ShadowCat.LocationCacheCollectionName")))
                 _assetLocations = ShadowCatDatabase.GetCollection<AssetLocation>(ConfigurationManager.AppSettings["ShadowCat.LocationCacheCollectionName"]);

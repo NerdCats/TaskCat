@@ -120,7 +120,6 @@
     <Compile Include="Entity\StockItem.cs" />
     <Compile Include="Entity\Store.cs" />
     <Compile Include="Entity\Vendor.cs" />
-    <Compile Include="Entity\WarehouseItem.cs" />
     <Compile Include="Lib\Core\ObservableObject.cs" />
     <Compile Include="Lib\Extension\JobTaskExtension.cs" />
     <Compile Include="Lib\Extension\JobTaskExtensionResolver.cs" />

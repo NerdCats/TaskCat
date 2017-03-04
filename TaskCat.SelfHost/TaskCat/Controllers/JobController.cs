@@ -85,12 +85,7 @@ namespace TaskCat.Controllers
                 //FIXME: In this way an asset can see every job he is assigned or
                 //not assigned to. Need to fix that
 
-                Job job = null;
-                if (id.Length == 24)
-                    job = await repository.GetJob(id);
-                else
-                    job = await repository.GetJobByHrid(id);
-
+                Job job = await repository.GetJobByIdOrHrid(id);
                 return Ok(job);
             }
             else

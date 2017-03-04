@@ -228,7 +228,6 @@
         public Job(string name) : this()
         {
             Name = name;
-
         }
 
         public Job(OrderModel order, string hrid) : this()
