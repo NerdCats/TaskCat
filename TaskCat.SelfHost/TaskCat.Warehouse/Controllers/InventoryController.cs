@@ -8,6 +8,7 @@
     using Data.Model;
     using Job;
     using Lib;
+    using System.Collections.Generic;
 
     [RoutePrefix("api/warehouse")]
     public class InventoryController : ApiController
@@ -35,20 +36,23 @@
 
 
         [HttpPost]
-        [Route("register/{refEntity}/{refId}")]
-        public async Task<IHttpActionResult> CheckIn([FromUri]string refEntity, [FromUri]string refId)
+        [Route("checkin/{refId}")]
+        public async Task<IHttpActionResult> CheckIn([FromUri]string refId)
         {
             var job = await jobRepo.GetJobByIdOrHrid(refId);
 
             // INFO: We got the job now, the next thing we need to do 
             // is making sure whether we have this job referenced in the system
 
-            var items = await this.stockService.GetStocksByReference(refId, refEntity);
-            // INFO: No items or anything here, send back them an option to check in.
+            // The reason we list out Entity type is in future we might need a different
+            // entity to have stocks in the system. For now, this is hard coded, when
+            // there comes a scenario where we have multiple entities, we can reuse this.
+            var items = await this.stockService.GetStocksByReference(refId, "Job");
 
+            // INFO: No items or anything here, send back them an option to check in.
             if (items == null || !items.Any())
             {
-                var result = items.Select(item => new WarehouseOperation()
+                var result = job.Order.OrderCart.PackageList.Select(item => new WarehouseOperation()
                 {
                     Op = "stock",
                     Payload = new StockItemModel()
@@ -56,25 +60,60 @@
                         Item = item.Item,
                         PicUrl = item.PicUrl,
                         Quantity = item.Quantity,
-                        RefEntityType = item.RefEntityType,
-                        RefId = item.RefId
+                        RefEntityType = "Job",
+                        RefId = refId
                     }
                 });
 
-                return Ok(result);      
+                return Ok(result);
             }
             else
             {
-                // Find out which one of the products are not checked in yet and send back operations to do so
-                var itemsInStock = items.GroupBy(x => x.Item).Select(x => x.Key);
-                var itemsInJob = items.GroupBy(x => x.Item).Select(x => x.Key);
+                var SuggestedOperations = new List<WarehouseOperation>();
 
-                foreach (var item in itemsInStock)
+                var itemDict = items.ToDictionary(x => x.Item, x => x.Quantity);
+                foreach (var item in job.Order.OrderCart.PackageList)
                 {
-
+                    if (!itemDict.ContainsKey(item.Item))
+                    {
+                        SuggestedOperations.Add(new WarehouseOperation()
+                        {
+                            Op = "stock",
+                            Payload = new StockItemModel()
+                            {
+                                Item = item.Item,
+                                PicUrl = item.PicUrl,
+                                Quantity = item.Quantity,
+                                RefEntityType = "Job",
+                                RefId = refId
+                            }
+                        });
+                    }
+                    else
+                    {
+                        var itemQtyDiff = item.Quantity - itemDict[item.Item];
+                        if (itemQtyDiff > 0)
+                        {
+                            for (int i = 0; i < itemQtyDiff; i++)
+                            {
+                                SuggestedOperations.Add(new WarehouseOperation()
+                                {
+                                    Op = "stock",
+                                    Payload = new StockItemModel()
+                                    {
+                                        Item = item.Item,
+                                        PicUrl = item.PicUrl,
+                                        Quantity = item.Quantity,
+                                        RefEntityType = "Job",
+                                        RefId = refId
+                                    }
+                                });
+                            }
+                        }
+                    }
                 }
 
-                var newThingsInJob = itemsInStock.Union(itemsInJob).Except(itemsInStock);
+                return Ok(SuggestedOperations);
             }
         }
     }
