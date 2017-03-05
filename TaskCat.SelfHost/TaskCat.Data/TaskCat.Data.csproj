@@ -206,6 +206,7 @@
     <Compile Include="Model\Operation\QueryResult.cs" />
     <Compile Include="Model\Person\PersonInfo.cs" />
     <Compile Include="Model\ShadowCat\AssetLocationWithDistance.cs" />
+    <Compile Include="Model\StockItemModel.cs" />
     <Compile Include="Model\VehicleInfo.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\FlatRateStrategy.cs" />
     <Compile Include="Model\Vendor\ProfitSharing\ProfitShareResult.cs" />
