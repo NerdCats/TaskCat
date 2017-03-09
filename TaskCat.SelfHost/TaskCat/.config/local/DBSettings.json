@@ -1,0 +1,3 @@
+﻿{
+  "ConnectionString":  "mongodb://gobd:Beattraffic1@gofetch.cloudapp.net:27017/taskcatdev"
+}

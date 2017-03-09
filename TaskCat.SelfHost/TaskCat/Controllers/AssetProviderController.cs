@@ -9,7 +9,7 @@ using TaskCat.Model.Asset;
 namespace TaskCat.Controllers
 {
     /// <summary>
-    /// Asset Providers are responsible for fetching eligible assets 
+    /// Asset Providers are responsible for fetching eligible assets
     /// for a certain job
     /// </summary>
     public class AssetProviderController : ApiController
