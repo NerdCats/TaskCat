@@ -42,7 +42,7 @@
             //JobState Index
             List<CreateIndexModel<Job>> BackgroundIndexes = new List<CreateIndexModel<Job>>();
 
-            var ascendJobState = new CreateIndexModel<Job>(Builders<Job>.IndexKeys.Ascending(x=>x.State), options);
+            var ascendJobState = new CreateIndexModel<Job>(Builders<Job>.IndexKeys.Ascending(x => x.State), options);
             BackgroundIndexes.Add(ascendCreateTime);
             var descendJobState = new CreateIndexModel<Job>(Builders<Job>.IndexKeys.Descending(x => x.State), options);
             BackgroundIndexes.Add(descendCreateTime);
@@ -64,7 +64,7 @@
             options.Unique = true;
 
             dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Ascending(x => x.Id), options);
-
+            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Text(x => x.Id));
         }
 
         public static void EnsureJobActivityIndexes(IMongoCollection<JobActivity> jobActivityCollection)
@@ -72,7 +72,7 @@
             var jobActivityIndexOptions = new CreateIndexOptions();
             jobActivityIndexOptions.Background = true;
 
-            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.JobId) ,jobActivityIndexOptions);
+            jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.JobId), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.Operation), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Id), jobActivityIndexOptions);
             jobActivityCollection.Indexes.CreateOne(Builders<JobActivity>.IndexKeys.Ascending(x => x.ForUser.Username), jobActivityIndexOptions);
@@ -100,7 +100,7 @@
             var hridIndexOptions = new CreateIndexOptions();
             hridIndexOptions.Unique = true;
 
-            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x=>x.HRID), hridIndexOptions);
+            hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Ascending(x => x.HRID), hridIndexOptions);
             hridCollection.Indexes.CreateOne(Builders<HRIDEntity>.IndexKeys.Descending(x => x.HRID), hridIndexOptions);
         }
 
