@@ -24,7 +24,7 @@
         IMongoCollection<AssetLocation> AssetLocations { get; }
         IMongoCollection<HRIDEntity> HRIDs { get; }
         IMongoCollection<DropPoint> DropPoints { get; }
-        IMongoCollection<Store> Stores { get; }
+        IMongoCollection<DataTag> Stores { get; }
         IMongoCollection<ProductCategory> ProductCategories { get; }
         IMongoCollection<Vendor> Vendors { get; }
         IMongoCollection<Product> Products { get; }

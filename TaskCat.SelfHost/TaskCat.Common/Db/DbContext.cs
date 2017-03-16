@@ -119,8 +119,8 @@
         #endregion
 
         #region Catalog
-        private IMongoCollection<Store> _stores;
-        public IMongoCollection<Store> Stores
+        private IMongoCollection<DataTag> _stores;
+        public IMongoCollection<DataTag> Stores
         {
             get
             {
@@ -198,7 +198,7 @@
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
             _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
 
-            _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
+            _stores = Database.GetCollection<DataTag>(CollectionNames.StoreColletionName);
             _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
             _vendors = Database.GetCollection<Vendor>(CollectionNames.VendorCollectionName);
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
