@@ -9,16 +9,16 @@
     using Common.Exceptions;
     using Common.Db;
 
-    public class StoreService : IRepository<DataTag>
+    public class StoreService : IRepository<Store>
     {
-        public IMongoCollection<DataTag> Collection { get; set; }
+        public IMongoCollection<Store> Collection { get; set; }
 
         public StoreService(IDbContext dbContext)
         {
             this.Collection = dbContext.Stores;
         }
 
-        public async Task<DataTag> Delete(string id)
+        public async Task<Store> Delete(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -28,11 +28,11 @@
             var result = await Collection.FindOneAndDeleteAsync(x => x.Id == id);
 
             if (result == null)
-                throw new EntityDeleteException(typeof(DataTag), id);
+                throw new EntityDeleteException(typeof(Store), id);
             return result;
         }
 
-        public async Task<DataTag> Get(string id)
+        public async Task<Store> Get(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -42,12 +42,12 @@
             var result = (await Collection.Find(x => x.Id == id).ToListAsync()).FirstOrDefault();
             if (result == null)
             {
-                throw new EntityNotFoundException(typeof(DataTag), id);
+                throw new EntityNotFoundException(typeof(Store), id);
             }
             return result;
         }
 
-        public async Task<DataTag> Insert(DataTag store)
+        public async Task<Store> Insert(Store store)
         {
             if (store == null) throw new ArgumentNullException(nameof(store));
             
@@ -55,14 +55,14 @@
             return store;
         }
 
-        public async Task<DataTag> Update(DataTag store)
+        public async Task<Store> Update(Store store)
         {
             if (string.IsNullOrWhiteSpace(store.Id)) throw new ArgumentNullException(nameof(store.Id));
             if (String.IsNullOrWhiteSpace(store.EnterpriseUserId)) throw new ArgumentNullException(nameof(store.EnterpriseUserId));
             
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == store.Id && x.EnterpriseUserId == store.EnterpriseUserId, store);
             if (result == null)
-                throw new EntityUpdateException(typeof(DataTag), store.Id);
+                throw new EntityUpdateException(typeof(Store), store.Id);
             return result;
         }
     }

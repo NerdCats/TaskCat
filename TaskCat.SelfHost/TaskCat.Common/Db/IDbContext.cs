@@ -24,13 +24,13 @@
         IMongoCollection<AssetLocation> AssetLocations { get; }
         IMongoCollection<HRIDEntity> HRIDs { get; }
         IMongoCollection<DropPoint> DropPoints { get; }
-        IMongoCollection<DataTag> Stores { get; }
+        IMongoCollection<Store> Stores { get; }
         IMongoCollection<ProductCategory> ProductCategories { get; }
         IMongoCollection<Vendor> Vendors { get; }
         IMongoCollection<Product> Products { get; }
         IMongoCollection<Comment> Comments { get; }
 
         IMongoCollection<JobActivity> JobActivityCollection { get; }
-        IMongoCollection<DataTag> Tags { get;}
+        IMongoCollection<DataTag> DataTags { get;}
     }
 }

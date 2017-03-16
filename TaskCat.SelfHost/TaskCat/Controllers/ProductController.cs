@@ -22,10 +22,10 @@
     public class ProductController : ApiController
     {
         private IRepository<Product> productService;
-        private IRepository<DataTag> storeService;
+        private IRepository<Store> storeService;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public ProductController(IRepository<Product> productService, IRepository<DataTag> storeService)
+        public ProductController(IRepository<Product> productService, IRepository<Store> storeService)
         {
             this.productService = productService;
             this.storeService = storeService;

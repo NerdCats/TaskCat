@@ -57,6 +57,16 @@
             jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
         }
 
+        internal static void EnsureDataTagIndexes(IMongoCollection<DataTag> dataTagCollection)
+        {
+            CreateIndexOptions<DataTag> options = new CreateIndexOptions<DataTag>();
+            options.Background = true;
+            options.Unique = true;
+
+            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Ascending(x => x.Id), options);
+
+        }
+
         public static void EnsureJobActivityIndexes(IMongoCollection<JobActivity> jobActivityCollection)
         {
             var jobActivityIndexOptions = new CreateIndexOptions();

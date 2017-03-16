@@ -21,21 +21,21 @@ namespace TaskCat.Controllers
 {
     public class StoreController : ApiController
     {
-        private IRepository<DataTag> service;
+        private IRepository<Store> service;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public StoreController(IRepository<DataTag> service)
+        public StoreController(IRepository<Store> service)
         {
             this.service = service;
         }
 
-        [ResponseType(typeof(PageEnvelope<DataTag>))]
+        [ResponseType(typeof(PageEnvelope<Store>))]
         [HttpGet]
         [Route("api/Store/odata", Name = AppConstants.StoreOdataRoute)]
         [TaskCatOdataRoute(maxPageSize: AppConstants.MaxPageSize)]
         public async Task<IHttpActionResult> Get()
         {
-            IQueryable<DataTag> stores = service.Collection.AsQueryable();
+            IQueryable<Store> stores = service.Collection.AsQueryable();
             
             var odataResult = await stores.ToOdataResponse(this.Request, AppConstants.StoreOdataRoute);
             return Ok(odataResult);
@@ -52,7 +52,7 @@ namespace TaskCat.Controllers
 
         [Authorize(Roles = "Administrator, Enterprise, BackOcffficeAdmin")]
         [HttpPost]
-        public async Task<IHttpActionResult> Post([FromBody]DataTag store)
+        public async Task<IHttpActionResult> Post([FromBody]Store store)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();
@@ -75,7 +75,7 @@ namespace TaskCat.Controllers
 
         [Authorize(Roles = "Administrator, Enterprise, BackOfficeAdmin")]
         [HttpPut]
-        public async Task<IHttpActionResult> Put([FromBody]DataTag store)
+        public async Task<IHttpActionResult> Put([FromBody]Store store)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var authorizedId = this.User.Identity.GetUserId();

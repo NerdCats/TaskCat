@@ -15,7 +15,7 @@
 
         public DataTagService(IDbContext dbContext)
         {
-            this.Collection = dbContext.Tags;
+            this.Collection = dbContext.DataTags;
         }
 
         public async Task<DataTag> Delete(string id)

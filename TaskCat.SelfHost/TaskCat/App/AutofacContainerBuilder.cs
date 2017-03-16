@@ -103,7 +103,7 @@
             #region Catalog
             builder.RegisterType<ProductCategoryService>().AsImplementedInterfaces<IRepository<ProductCategory>, ConcreteReflectionActivatorData>().SingleInstance();
             builder.RegisterType<ProductService>().AsImplementedInterfaces<IRepository<Product>, ConcreteReflectionActivatorData>().SingleInstance();
-            builder.RegisterType<StoreService>().AsImplementedInterfaces<IRepository<DataTag>, ConcreteReflectionActivatorData>().SingleInstance();
+            builder.RegisterType<StoreService>().AsImplementedInterfaces<IRepository<Store>, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
             #region Comment

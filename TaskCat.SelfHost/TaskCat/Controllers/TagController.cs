@@ -26,7 +26,6 @@ namespace TaskCat.Controllers
             this._service = service;
         }
 
-
         [ResponseType(typeof(PageEnvelope<DataTag>))]
         [HttpGet]
         [Route("api/DataTag/odata", Name = AppConstants.DataTagOdataRoute)]

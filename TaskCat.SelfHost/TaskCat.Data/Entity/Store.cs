@@ -6,7 +6,7 @@
     /// <summary>
     /// Represents a store
     /// </summary>
-    public class DataTag : DbEntity
+    public class Store : DbEntity
     {
         /// <summary>
         /// Gets or sets the store name
