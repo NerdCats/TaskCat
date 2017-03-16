@@ -9,11 +9,11 @@
     using Common.Exceptions;
     using System.Linq;
 
-    public class TagService : ITagService
+    public class DataTagService : IDataTagService
     {
         public IMongoCollection<DataTag> Collection { get; set; }
 
-        public TagService(IDbContext dbContext)
+        public DataTagService(IDbContext dbContext)
         {
             this.Collection = dbContext.Tags;
         }

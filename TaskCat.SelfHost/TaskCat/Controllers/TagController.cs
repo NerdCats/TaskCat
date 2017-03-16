@@ -5,9 +5,9 @@ namespace TaskCat.Controllers
 {
     public class TagController: ApiController
     {
-        private readonly ITagService _service;
+        private readonly IDataTagService _service;
 
-        public TagController(ITagService service)
+        public TagController(IDataTagService service)
         {
             this._service = service;
         }

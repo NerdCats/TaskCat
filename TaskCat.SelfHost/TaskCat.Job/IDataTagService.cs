@@ -3,7 +3,7 @@ using TaskCat.Data.Entity;
 
 namespace TaskCat.Job
 {
-    public interface ITagService : IRepository<DataTag>
+    public interface IDataTagService : IRepository<DataTag>
     {
     }
 }
