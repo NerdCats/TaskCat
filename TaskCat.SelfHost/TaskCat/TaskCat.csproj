@@ -398,7 +398,10 @@
     <Compile Include="Lib\Job\JobActivityService.cs" />
     <Compile Include="Lib\Job\JobSearchIndexService.cs" />
     <Compile Include="Lib\Tag\DataTagService.cs" />
+    <Compile Include="Lib\Tag\TagExtensionService.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
+    <Compile Include="Model\Tag\TagActivity.cs" />
+    <Compile Include="Model\Tag\TagOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Startup.cs" />
