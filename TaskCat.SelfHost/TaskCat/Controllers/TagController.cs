@@ -76,13 +76,12 @@ namespace TaskCat.Controllers
 
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpDelete]
-        public async Task<IHttpActionResult> Delete(
-    [Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id)
+        public async Task<IHttpActionResult> Delete([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await _service.Delete(id);
-            return Ok(result);
+            return Content(HttpStatusCode.Accepted, result, new JsonMediaTypeFormatter());
         }
     }
 }
