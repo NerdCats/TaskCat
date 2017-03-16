@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using NLog;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -36,6 +37,14 @@ namespace TaskCat.Controllers
 
             var odataResult = await stores.ToOdataResponse(this.Request, AppConstants.DataTagOdataRoute);
             return Ok(odataResult);
+        }
+
+        [ResponseType(typeof(List<DataTag>))]
+        [Route("api/DataTag/suggestions")]
+        public async Task<IHttpActionResult> GetSuggestions(string q)
+        {
+            var suggestions = await _service.GetDataTagSuggestions(q);
+            return Ok(suggestions);
         }
 
         [HttpGet]

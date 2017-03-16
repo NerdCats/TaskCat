@@ -8,6 +8,7 @@
     using Data.Entity;
     using Common.Exceptions;
     using System.Linq;
+    using System.Collections.Generic;
 
     public class DataTagService : IDataTagService
     {
@@ -62,6 +63,12 @@
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == tag.Id, tag);
             if (result == null)
                 throw new EntityUpdateException(typeof(DataTag), tag.Id);
+            return result;
+        }
+
+        public async Task<IEnumerable<DataTag>> GetDataTagSuggestions(string q)
+        {
+            var result = await Collection.Find(Builders<DataTag>.Filter.Text(q)).Limit(20).ToListAsync();
             return result;
         }
     }
