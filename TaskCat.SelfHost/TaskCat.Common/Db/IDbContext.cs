@@ -31,5 +31,6 @@
         IMongoCollection<Comment> Comments { get; }
 
         IMongoCollection<JobActivity> JobActivityCollection { get; }
+        IMongoCollection<DataTag> Tags { get;}
     }
 }
