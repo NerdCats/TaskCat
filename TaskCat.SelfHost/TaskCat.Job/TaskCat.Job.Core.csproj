@@ -118,6 +118,7 @@
     <Compile Include="Invoice\IInvoiceService.cs" />
     <Compile Include="Invoice\InvoiceService.cs" />
     <Compile Include="Invoice\IPDFService.cs" />
+    <Compile Include="IDataTagService.cs" />
     <Compile Include="LocalityService.cs" />
     <Compile Include="Utility\Converter\OrderModelConverter.cs" />
     <Compile Include="Utility\Converter\ProfitSharingModelConverter.cs" />

@@ -46,6 +46,8 @@
                     return $"{prefix} is completed";
                 case JobTaskState.CANCELLED:
                     return $"{prefix} is cancelled";
+                case JobTaskState.FAILED:
+                    return $"{prefix} is failed";
                 default:
                     throw new NotImplementedException(State.ToString());
             }
