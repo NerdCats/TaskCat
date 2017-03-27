@@ -35,7 +35,7 @@
 
         public override string GetHRState()
         {
-            var prefix = "Cash delivery to buyer";
+            var prefix = "Cash delivery to seller";
             switch (State)
             {
                 case JobTaskState.PENDING:
