@@ -12,6 +12,7 @@
         public const string StoreOdataRoute = "StoreOdata";
         public const string AccountOdataRoute = "AccountOdata";
         public const string JobsByAssetOdataRoute = "JobsByAssetOdata";
+        public const string DataTagOdataRoute = "DataTagOdata";
 
         public const string DefaultCommentsRoute = "DefaultComments";
         public const string ConfirmEmailRoute = "ConfirmEmailRoute";

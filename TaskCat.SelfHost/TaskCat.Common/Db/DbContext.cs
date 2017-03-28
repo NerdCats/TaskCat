@@ -5,6 +5,7 @@
     using TaskCat.Data.Entity;
     using TaskCat.Data.Entity.Identity;
     using TaskCat.Data.Entity.ShadowCat;
+    using System;
 
     public class DbContext : IDbContext
     {
@@ -68,6 +69,17 @@
             get
             {
                 return _supportedOrders;
+            }
+        }
+        #endregion
+
+        #region Tags
+        private IMongoCollection<DataTag> _dataTags;
+        public IMongoCollection<DataTag> DataTags
+        {
+            get
+            {
+                return _dataTags;
             }
         }
         #endregion
@@ -158,6 +170,14 @@
         {
             get { return _jobActivityCollection; }
         }
+
+        public IMongoCollection<Store> Tags
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion
 
         public DbContext()
@@ -184,6 +204,8 @@
             _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
+
+            _dataTags = Database.GetCollection<DataTag>(CollectionNames.DataTagCollectionName);
             
 
             _jobActivityCollection = Database.GetCollection<JobActivity>(CollectionNames.JobActivityCollectionName);
