@@ -35,7 +35,7 @@
 
         public override string GetHRState()
         {
-            var prefix = "Cash delivery to buyer";
+            var prefix = "Cash delivery to seller";
             switch (State)
             {
                 case JobTaskState.PENDING:
@@ -46,6 +46,8 @@
                     return $"{prefix} is completed";
                 case JobTaskState.CANCELLED:
                     return $"{prefix} is cancelled";
+                case JobTaskState.FAILED:
+                    return $"{prefix} is failed";
                 default:
                     throw new NotImplementedException(State.ToString());
             }
