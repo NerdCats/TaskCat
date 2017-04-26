@@ -594,5 +594,18 @@ namespace TaskCat.Controllers
             await localLityService.RefreshLocalities();
             return Ok();
         }
+
+        /// <summary>
+        /// Tag a job
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/Job/tag")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPatch]
+        public async Task<IHttpActionResult> Tag([FromUri]string jobId, [FromBody] JsonPatchDocument<JobTask> taskPatch)
+        {
+
+            return Ok();
+        }
     }
 }
