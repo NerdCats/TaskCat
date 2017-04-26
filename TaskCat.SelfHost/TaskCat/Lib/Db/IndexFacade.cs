@@ -49,12 +49,22 @@
 
             jobCollection.Indexes.CreateMany(BackgroundIndexes);
 
+            //Reference Invoice Id index
+            List<CreateIndexModel<Job>> ReferenceInvoiceIdIndex = new List<CreateIndexModel<Job>>();
+            var ascendReferenceInvoiceIdState = new CreateIndexModel<Job>(Builders<Job>.IndexKeys.Ascending(x => x.Order.ReferenceInvoiceId), options);
+            BackgroundIndexes.Add(ascendReferenceInvoiceIdState);
+            var desecndReferenceInvoiceIdState = new CreateIndexModel<Job>(Builders<Job>.IndexKeys.Descending(x => x.Order.ReferenceInvoiceId), options);
+            BackgroundIndexes.Add(desecndReferenceInvoiceIdState);
+
+            jobCollection.Indexes.CreateMany(BackgroundIndexes);
+
             //Geo Indexes
             var geoIndexOptions = new CreateIndexOptions();
             geoIndexOptions.Background = true;
             geoIndexOptions.Sparse = true;
 
             jobCollection.Indexes.CreateOne(Builders<Job>.IndexKeys.Geo2DSphere(x => x.Order.OrderLocation), geoIndexOptions);
+            
         }
 
         public static void EnsureJobActivityIndexes(IMongoCollection<JobActivity> jobActivityCollection)
