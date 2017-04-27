@@ -23,12 +23,12 @@
             Assigned = 0;
             Completed = 0;
             Failed = 0;
-            Attempted = 0;
+            Covered = 0;
         }
 
         public long Assigned { get; set; } // total jobs assigned to the asset
         public long Completed { get; set; }
         public long Failed { get; set; }
-        public long Attempted { get; set; } // sum of completed and failed
+        public long Covered { get; set; } // sum of completed and failed
     }
 }
