@@ -599,12 +599,14 @@ namespace TaskCat.Controllers
         /// Tag a job
         /// </summary>
         /// <returns></returns>
-        [Route("api/Job/tag")]
+        [ResponseType(typeof(UpdateResult<Job>))]
+        [Route("api/Job/tag/{jobId}")]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPatch]
+        
         public async Task<IHttpActionResult> Tag([FromUri]string jobId, [FromBody] JsonPatchDocument<Job> tagPatch)
         {
-            if (!User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) || !User.IsInRole(RoleNames.ROLE_ADMINISTRATOR))
+            if (!(User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) || User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)))
             {
                 logger.Error("User {0} is not authorized to do this operation", User.Identity.Name);
                 throw new UnauthorizedAccessException($"User {User.Identity.Name} is not authorized to do this operation");
@@ -621,7 +623,7 @@ namespace TaskCat.Controllers
 
             var jobUpdateresult = await repository.UpdateJob(job);
             var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);           
-            return Ok(result);            
+            return Ok(result);         
         }
     }
 }

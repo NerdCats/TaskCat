@@ -415,7 +415,7 @@
 
 
 ---
-#### Method Controllers.JobController.Tag(System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask})
+#### Method Controllers.JobController.Tag(System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Entity.Job})
 
  Tag a job 
 
