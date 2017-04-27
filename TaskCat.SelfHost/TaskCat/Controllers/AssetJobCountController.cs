@@ -34,6 +34,8 @@ namespace TaskCat.Controllers
         /// 
 
         [HttpGet]
+        [AllowAnonymous]       
+        [Route("api/assetJjbcount/search/{AssetID}")]
         public async Task<IHttpActionResult> Search(
             string AssetID)
         {
