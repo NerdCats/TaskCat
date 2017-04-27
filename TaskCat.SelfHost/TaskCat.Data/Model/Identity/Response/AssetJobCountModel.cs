@@ -7,7 +7,9 @@
     {
         public AssetJobCountModel()
         {
-
+            Pick_Up = new AssetJobCountModelBase();
+            Delivery = new AssetJobCountModelBase();
+            Exp_Delivery = new AssetJobCountModelBase();
         }
         public AssetJobCountModelBase Pick_Up { get; set; }
         public AssetJobCountModelBase Delivery { get; set; }

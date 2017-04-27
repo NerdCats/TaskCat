@@ -30,37 +30,44 @@
 
             AssetJobCountModel ajcm = new AssetJobCountModel();
 
-            var jobsAssignedToAsset = await Collection.FindAsync(x => x.Tasks.Any(y => y.AssetRef == AssetID) && x.State == JobState.IN_PROGRESS);// all jobs assigned to this asset which are in progress
+            List<Job> jobsAssignedToAsset = await Collection.Find(x => x.State == JobState.IN_PROGRESS && x.Tasks.Any(y => y.AssetRef.Equals(AssetID))).ToListAsync();// all jobs assigned to this asset which are in progress
 
-            IEnumerable<Job> jList = jobsAssignedToAsset.ToEnumerable();// make them IEnumerable to help linq
+            if (jobsAssignedToAsset != null)
+            {
+                #region Pick_Up
 
-            #region Pick_Up
+                List<Job> jList_Pick_Up = jobsAssignedToAsset.Where(y => y.Tasks.Any(x => x.Type.Equals("PackagePickUp"))).ToList();// filtering all PackagePickUp Type jobs
 
-            IEnumerable<Job> jList_Pick_Up = jList.Where(y => y.Tasks.Any(x => x.Type.Equals("PackagePickUp")));// filtering all PackagePickUp Type jobs
+                if (jList_Pick_Up != null)
+                {
+                    ajcm.Pick_Up.Assigned = jList_Pick_Up.Count;// total assigned PackagePickUp
+                    ajcm.Pick_Up.Completed = jList_Pick_Up.Count(y => y.Tasks.Any(x => x.State == JobTaskState.COMPLETED));// total jobs COMPLETED
+                    ajcm.Pick_Up.Failed = jList_Pick_Up.Count(y => y.Tasks.Any(x => x.State == JobTaskState.FAILED));// total jobs FAILED
+                    ajcm.Pick_Up.Attempted = ajcm.Pick_Up.Completed + ajcm.Pick_Up.Failed; // sum of all jobs ATTEMPTED 
+                }
 
-            ajcm.Pick_Up.Assigned = jList_Pick_Up.Count();// total assigned PackagePickUp
-            ajcm.Pick_Up.Completed = jList_Pick_Up.Count(y => y.Tasks.Any(x => x.State == JobTaskState.COMPLETED));// total jobs COMPLETED
-            ajcm.Pick_Up.Failed = jList_Pick_Up.Count(y => y.Tasks.Any(x => x.State == JobTaskState.FAILED));// total jobs FAILED
-            ajcm.Pick_Up.Attempted = ajcm.Pick_Up.Completed + ajcm.Pick_Up.Failed; // sum of all jobs ATTEMPTED
+                #endregion
 
-            #endregion
+                #region Delivery
 
-            #region Delivery
+                List<Job> jList_Delivery = jobsAssignedToAsset.Where(y => y.Tasks.Any(x => x.Type.Equals("Delivery"))).ToList();// filtering all Delivery Type jobs
 
-            IEnumerable<Job> jList_Delivery = jList.Where(y => y.Tasks.Any(x => x.Type.Equals("Delivery")));// filtering all Delivery Type jobs
+                if (jList_Delivery != null)
+                {
+                    ajcm.Delivery.Assigned = jList_Delivery.Count;// total assigned Delivery
+                    ajcm.Delivery.Completed = jList_Delivery.Count(y => y.Tasks.Any(x => x.State == JobTaskState.COMPLETED));
+                    ajcm.Delivery.Failed = jList_Delivery.Count(y => y.Tasks.Any(x => x.State == JobTaskState.FAILED));
+                    ajcm.Delivery.Attempted = ajcm.Delivery.Completed + ajcm.Delivery.Failed;
+                }
 
-            ajcm.Delivery.Assigned = jList_Delivery.Count();// total assigned Delivery
-            ajcm.Delivery.Completed = jList_Delivery.Count(y => y.Tasks.Any(x => x.State == JobTaskState.COMPLETED));
-            ajcm.Delivery.Failed = jList_Delivery.Count(y => y.Tasks.Any(x => x.State == JobTaskState.FAILED));
-            ajcm.Delivery.Attempted = ajcm.Delivery.Completed + ajcm.Delivery.Failed;
+                #endregion
 
-            #endregion
+                #region Exp_Delivery
 
-            #region Exp_Delivery
+                // we do not have concrete properties which will signify Exp_Delivery jobs
 
-            // we do not have concrete properties which will signify Exp_Delivery jobs
-
-            #endregion
+                #endregion 
+            }
 
             if (jobsAssignedToAsset == null)
             {
