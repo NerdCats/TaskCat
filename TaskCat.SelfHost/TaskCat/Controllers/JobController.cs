@@ -623,7 +623,7 @@ namespace TaskCat.Controllers
 
             var jobUpdateresult = await repository.UpdateJob(job);
             var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);           
-            return Ok(result);         
+            return Ok(result);
         }
     }
 }
