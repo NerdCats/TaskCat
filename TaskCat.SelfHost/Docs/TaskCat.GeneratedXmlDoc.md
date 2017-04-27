@@ -415,6 +415,15 @@
 
 
 ---
+#### Method Controllers.JobController.Tag(System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Model.JobTask})
+
+ Tag a job 
+
+**Returns**: 
+
+
+
+---
 ## Type Controllers.LocalityController
 
  Localities fetched from jobs 
