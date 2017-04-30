@@ -7,6 +7,7 @@
     using Common.Db;
     using Data.Entity;
     using Model.Tag;
+    using MongoDB.Bson;
 
     public class TagExtensionService
     {
@@ -36,16 +37,25 @@
                     DeleteTagFromJobs(activity.Value);
                     break;
                 case TagOperation.UPDATE:
-                    UpdateTagsInJobs(activity.Value);
+                    UpdateTagsInJobs(activity.Value, activity.OldValue);
                     break;
                 default:
                     throw new NotImplementedException($"{activity.Operation} is not supported for extension works");
             }
         }
 
-        private void UpdateTagsInJobs(DataTag tag)
+        private void UpdateTagsInJobs(DataTag tag, DataTag oldTag)
         {
-            throw new NotImplementedException();
+            var matchFilter = new BsonDocument($"{nameof(Job.Tasks)}", oldTag.Id);
+            var updateFilter = new BsonDocument {
+                { "$set", new BsonDocument {
+                            { $"{nameof(Job.Tasks)}.$", tag.Id }
+                        }
+                }
+            };
+
+            // TODO: need a logger here. Need to log if anything fails like miserably
+            var result = this.dbContext.Jobs.UpdateMany(matchFilter, updateFilter);
         }
 
         private void DeleteTagFromJobs(DataTag tag)

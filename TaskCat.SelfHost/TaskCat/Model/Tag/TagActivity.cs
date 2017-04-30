@@ -5,6 +5,8 @@
     public class TagActivity
     {
         public TagOperation Operation { get; set; }
+
+        public DataTag OldValue { get; set; }
         public DataTag Value { get; set; }
 
         public TagActivity(TagOperation op, DataTag value)
