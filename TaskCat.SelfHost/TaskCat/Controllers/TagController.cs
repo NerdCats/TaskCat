@@ -55,7 +55,7 @@ namespace TaskCat.Controllers
             return Ok(dataTag);
         }
 
-        [Authorize(Roles = "Administrator, BackOcffficeAdmin")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]DataTag dataTag)
         {
@@ -64,7 +64,7 @@ namespace TaskCat.Controllers
             return Content(HttpStatusCode.Created, dataTag, new JsonMediaTypeFormatter());
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Authorize(Roles = "Administrator")]
         [HttpPut]
         public async Task<IHttpActionResult> Put([FromBody]DataTag dataTag)
         {
@@ -74,7 +74,7 @@ namespace TaskCat.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [Authorize(Roles = "Administrator")]
         [HttpDelete]
         public async Task<IHttpActionResult> Delete([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id)
         {

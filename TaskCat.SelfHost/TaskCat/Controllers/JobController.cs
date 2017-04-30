@@ -34,6 +34,7 @@ namespace TaskCat.Controllers
     using NLog;
     using System.Collections.Generic;
     using System.Reactive.Subjects;
+    using System.Net.Http.Formatting;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -42,21 +43,24 @@ namespace TaskCat.Controllers
     public class JobController : ApiController
     {
         private IJobRepository repository;
+        private IDataTagService dataTagService;
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private ILocalityService localLityService;
 
         public JobController(
-            IJobRepository repository, 
-            IEmailService mailService, 
+            IJobRepository repository,
+            IEmailService mailService,
             ILocalityService localityService,
+            IDataTagService service,
             Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
             this.activitySubject = activitySubject;
             this.localLityService = localityService;
+            this.dataTagService = service;
         }
 
         /// <summary>
@@ -603,7 +607,7 @@ namespace TaskCat.Controllers
         [Route("api/Job/tag/{jobId}")]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPatch]
-        
+
         public async Task<IHttpActionResult> Tag([FromUri]string jobId, [FromBody] JsonPatchDocument<Job> tagPatch)
         {
             if (!(User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) || User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)))
@@ -612,17 +616,38 @@ namespace TaskCat.Controllers
                 throw new UnauthorizedAccessException($"User {User.Identity.Name} is not authorized to do this operation");
             }
 
+            if (!tagPatch.Operations.All(x => x.path.Contains("/Tags/")))
+            {
+                logger.Error("Patch operation not supported any fields except Tags");
+                throw new NotSupportedException("Patch operation not supported any fields except Tags");
+            }
+
+            foreach (var patch in tagPatch.Operations.Where(x => !string.IsNullOrEmpty(x.value.ToString())))
+            {
+                var tagExists = !await dataTagService.Exist(patch.value.ToString());
+                if (tagExists)
+                {
+                    throw new NotSupportedException("The tag '" + patch.value.ToString() + "' doesn't exist in the Datatags collection!");
+                }                
+            }
+
+            // get current user
             var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
             {
                 Name = this.User.Identity.GetUserFullName()
             };
-            
+
             var job = await repository.GetJob(jobId);
+            
+            job.Tags = job.Tags == null? new List<string>(): job.Tags;            
             tagPatch.ApplyTo(job);
+            job.Tags = job.Tags.Distinct().ToList();
+            job.Tags = job.Tags.Count == 0 ? null : job.Tags;
             job.ModifiedTime = DateTime.UtcNow;
 
+            // update job with tag
             var jobUpdateresult = await repository.UpdateJob(job);
-            var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);           
+            var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);
             return Ok(result);
         }
     }
