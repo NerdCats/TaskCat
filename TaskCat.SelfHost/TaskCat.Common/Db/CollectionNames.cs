@@ -20,5 +20,7 @@
 
         public const string JobActivityCollectionName = "JobActivities";
         public const string LocalityCollectionName = "Localities";
+
+        public const string DataTagCollectionName = "DataTags";
     }
 }

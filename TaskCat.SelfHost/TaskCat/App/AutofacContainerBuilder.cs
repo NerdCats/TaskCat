@@ -29,6 +29,8 @@
     using Job;
     using Job.Order;
     using Job.Vendor;
+    using Lib.Tag;
+    using Model.Tag;
 
     public class AutofacContainerBuilder
     {
@@ -109,7 +111,16 @@
             #region Comment
             builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
-         
+
+            #region Tags                       
+            builder.RegisterType<DataTagService>().As<IDataTagService>().SingleInstance();
+
+            var tagsIndexSubject = new Subject<TagActivity>();
+            builder.Register(x => tagsIndexSubject).As<IObserver<TagActivity>>().SingleInstance();
+            builder.Register(x => tagsIndexSubject).As<IObservable<TagActivity>>().SingleInstance();
+
+            #endregion
+
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }
