@@ -9,10 +9,11 @@
         public DataTag OldValue { get; set; }
         public DataTag Value { get; set; }
 
-        public TagActivity(TagOperation op, DataTag value)
+        public TagActivity(TagOperation op, DataTag value, DataTag oldValue = null)
         {
             this.Operation = op;
             this.Value = value;
+            this.OldValue = oldValue;
         }
     }
 }

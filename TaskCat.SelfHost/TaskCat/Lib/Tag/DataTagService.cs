@@ -9,14 +9,21 @@
     using Common.Exceptions;
     using System.Linq;
     using System.Collections.Generic;
+    using Model.Tag;
 
     public class DataTagService : IDataTagService
     {
+        private IObserver<TagActivity> tagActivityObserver;
+
         public IMongoCollection<DataTag> Collection { get; set; }
 
-        public DataTagService(IDbContext dbContext)
+        public DataTagService(IDbContext dbContext, IObserver<TagActivity> tagActivityObserver)
         {
+            if (this.tagActivityObserver == null)
+                throw new ArgumentNullException(nameof(tagActivityObserver));
+
             this.Collection = dbContext.DataTags;
+            this.tagActivityObserver = tagActivityObserver;
         }
 
         public async Task<DataTag> Delete(string id)
@@ -30,6 +37,8 @@
 
             if (result == null)
                 throw new EntityDeleteException(typeof(DataTag), id);
+
+            tagActivityObserver.OnNext(new TagActivity(TagOperation.DELETE, result));
 
             return result;
         }
@@ -64,7 +73,8 @@
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == tag.Id, tag);
             if (result == null)
                 throw new EntityUpdateException(typeof(DataTag), tag.Id);
-        
+
+            tagActivityObserver.OnNext(new TagActivity(TagOperation.UPDATE, result, tag));
             return result;
         }
 
