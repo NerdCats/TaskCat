@@ -30,6 +30,7 @@
     using Job.Order;
     using Job.Vendor;
     using TaskCat.Lib.Tag;
+    using Data.Model.Tag;
 
     public class AutofacContainerBuilder
     {
@@ -111,8 +112,13 @@
             builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
-            #region Tags
+            #region Tags                       
             builder.RegisterType<DataTagService>().As<IDataTagService>().SingleInstance();
+
+            var tagsIndexSubject = new Subject<TagIndexOperation>();
+            builder.Register(x => tagsIndexSubject).As<IObserver<TagIndexOperation>>().SingleInstance();
+            builder.Register(x => tagsIndexSubject).As<IObservable<TagIndexOperation>>().SingleInstance();
+
             #endregion
 
             builder.RegisterApiControllers(typeof(Startup).Assembly);

@@ -1,6 +1,4 @@
-﻿using TaskCat.Data.Model.Order.Delivery;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
     using Common.Email;
     using Common.Lib.Utility;
@@ -23,6 +21,7 @@ namespace TaskCat.Controllers
     using Data.Lib.Invoice.Response;
     using Data.Model;
     using Data.Model.Api;
+    using Data.Model.Order.Delivery;
     using Data.Model.Identity.Profile;
     using Data.Model.Job;
     using Data.Model.Operation;
@@ -33,8 +32,7 @@ namespace TaskCat.Controllers
     using Lib.Constants;
     using NLog;
     using System.Collections.Generic;
-    using System.Reactive.Subjects;
-    using System.Net.Http.Formatting;
+    using System.Reactive.Subjects; 
     using Marvin.JsonPatch.Operations;
     using MongoDB.Driver;
 
