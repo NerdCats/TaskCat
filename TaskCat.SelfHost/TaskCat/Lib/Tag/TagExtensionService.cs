@@ -1,13 +1,13 @@
-﻿using System;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using TaskCat.Common.Db;
-using TaskCat.Data.Entity;
-using TaskCat.Job;
-using TaskCat.Model.Tag;
-
-namespace TaskCat.Lib.Tag
+﻿namespace TaskCat.Lib.Tag
 {
+    using MongoDB.Driver;
+    using System;
+    using System.Reactive.Concurrency;
+    using System.Reactive.Linq;
+    using Common.Db;
+    using Data.Entity;
+    using Model.Tag;
+
     public class TagExtensionService
     {
         private IDbContext dbContext;
@@ -30,17 +30,29 @@ namespace TaskCat.Lib.Tag
 
         private void OnNext(TagActivity activity)
         {
-            switch(activity.Operation)
+            switch (activity.Operation)
             {
                 case TagOperation.DELETE:
                     DeleteTagFromJobs(activity.Value);
                     break;
+                case TagOperation.UPDATE:
+                    UpdateTagsInJobs(activity.Value);
+                    break;
+                default:
+                    throw new NotImplementedException($"{activity.Operation} is not supported for extension works");
             }
         }
 
-        private void DeleteTagFromJobs(DataTag value)
+        private void UpdateTagsInJobs(DataTag tag)
         {
             throw new NotImplementedException();
+        }
+
+        private void DeleteTagFromJobs(DataTag tag)
+        {
+            // TODO: need a logger here. Need to log if anything fails like miserably
+            var updateFilter = Builders<Job>.Update.PullFilter(x => x.Tags, y => y == tag.Id);
+            var result = this.dbContext.Jobs.UpdateMany(Builders<Job>.Filter.Empty, updateFilter);
         }
 
         private void OnError(Exception exception)
