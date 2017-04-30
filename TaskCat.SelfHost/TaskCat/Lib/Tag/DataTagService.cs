@@ -9,7 +9,6 @@
     using Common.Exceptions;
     using System.Linq;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
 
     public class DataTagService : IDataTagService
     {

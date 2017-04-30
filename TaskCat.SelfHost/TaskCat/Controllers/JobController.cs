@@ -35,6 +35,7 @@ namespace TaskCat.Controllers
     using System.Collections.Generic;
     using System.Reactive.Subjects;
     using System.Net.Http.Formatting;
+    using Marvin.JsonPatch.Operations;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -372,7 +373,7 @@ namespace TaskCat.Controllers
         {
             if (taskPatch == null)
             {
-                logger.Error("\'taskPatch\' is null");
+                logger.Error($"{nameof(taskPatch)} is null");
                 throw new ArgumentNullException(nameof(taskPatch));
             }
 
@@ -616,7 +617,19 @@ namespace TaskCat.Controllers
                 throw new UnauthorizedAccessException($"User {User.Identity.Name} is not authorized to do this operation");
             }
 
-            if (!tagPatch.Operations.All(x => x.path.Contains("/Tags/")))
+            var unsupportedOp = tagPatch.Operations.Where(x =>
+            x.OperationType == OperationType.Move ||
+            x.OperationType == OperationType.Test ||
+            x.OperationType == OperationType.Copy);
+
+
+            if (unsupportedOp.Count() > 0)
+            {
+                logger.Error($"Unsupported operation type {unsupportedOp.First()}");
+                throw new NotSupportedException($"Unsupported operation type {unsupportedOp.First()}");
+            }
+
+            if (!tagPatch.Operations.All(x => x.path.StartsWith("/Tags/")))
             {
                 logger.Error("Patch operation not supported any fields except Tags");
                 throw new NotSupportedException("Patch operation not supported any fields except Tags");
@@ -628,7 +641,7 @@ namespace TaskCat.Controllers
                 if (tagExists)
                 {
                     throw new NotSupportedException("The tag '" + patch.value.ToString() + "' doesn't exist in the Datatags collection!");
-                }                
+                }
             }
 
             // get current user
@@ -638,8 +651,8 @@ namespace TaskCat.Controllers
             };
 
             var job = await repository.GetJob(jobId);
-            
-            job.Tags = job.Tags == null? new List<string>(): job.Tags;            
+
+            job.Tags = job.Tags == null ? new List<string>() : job.Tags;
             tagPatch.ApplyTo(job);
             job.Tags = job.Tags.Distinct().ToList();
             job.Tags = job.Tags.Count == 0 ? null : job.Tags;
