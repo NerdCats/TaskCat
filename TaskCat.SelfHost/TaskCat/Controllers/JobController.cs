@@ -677,6 +677,11 @@ namespace TaskCat.Controllers
             // update job with tag
             var jobUpdateresult = await repository.UpdateJob(job);
             var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);
+
+            // log job activity
+            var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.Tags), currentUser);
+            activitySubject.OnNext(activity);
+
             return Ok(result);
         }
     }
