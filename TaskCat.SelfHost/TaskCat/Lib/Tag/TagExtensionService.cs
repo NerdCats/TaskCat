@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using TaskCat.Common.Db;
 using TaskCat.Data.Entity;
 using TaskCat.Job;
 using TaskCat.Model.Tag;
@@ -9,17 +10,17 @@ namespace TaskCat.Lib.Tag
 {
     public class TagExtensionService
     {
-        private IJobRepository jobRepository;
+        private IDbContext dbContext;
         private IObservable<TagActivity> tagActivitySource;
 
-        public TagExtensionService(IJobRepository jobRepository, IObservable<TagActivity> tagActivitySource)
+        public TagExtensionService(IDbContext dbContext, IObservable<TagActivity> tagActivitySource)
         {
-            if (jobRepository == null)
-                throw new ArgumentNullException(nameof(jobRepository));
+            if (dbContext == null)
+                throw new ArgumentNullException(nameof(dbContext));
             if (tagActivitySource == null)
                 throw new ArgumentNullException(nameof(tagActivitySource));
 
-            this.jobRepository = jobRepository;
+            this.dbContext = dbContext;
             this.tagActivitySource = tagActivitySource;
 
             this.tagActivitySource

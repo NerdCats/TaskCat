@@ -397,7 +397,6 @@
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
     <Compile Include="Lib\Job\JobActivityService.cs" />
     <Compile Include="Lib\Job\JobSearchIndexService.cs" />
-    <Compile Include="Lib\Job\TagUpdateService.cs" />
     <Compile Include="Lib\Tag\DataTagService.cs" />
     <Compile Include="Lib\Tag\TagExtensionService.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />

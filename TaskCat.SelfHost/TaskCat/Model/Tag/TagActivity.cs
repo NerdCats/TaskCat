@@ -1,7 +1,7 @@
-﻿using TaskCat.Data.Entity;
-
-namespace TaskCat.Model.Tag
+﻿namespace TaskCat.Model.Tag
 {
+    using Data.Entity;
+
     public class TagActivity
     {
         public TagOperation Operation { get; set; }

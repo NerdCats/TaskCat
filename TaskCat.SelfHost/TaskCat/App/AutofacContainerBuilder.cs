@@ -29,8 +29,8 @@
     using Job;
     using Job.Order;
     using Job.Vendor;
-    using TaskCat.Lib.Tag;
-    using Data.Model.Tag;
+    using Lib.Tag;
+    using Model.Tag;
 
     public class AutofacContainerBuilder
     {
@@ -115,9 +115,9 @@
             #region Tags                       
             builder.RegisterType<DataTagService>().As<IDataTagService>().SingleInstance();
 
-            var tagsIndexSubject = new Subject<TagIndexOperation>();
-            builder.Register(x => tagsIndexSubject).As<IObserver<TagIndexOperation>>().SingleInstance();
-            builder.Register(x => tagsIndexSubject).As<IObservable<TagIndexOperation>>().SingleInstance();
+            var tagsIndexSubject = new Subject<TagActivity>();
+            builder.Register(x => tagsIndexSubject).As<IObserver<TagActivity>>().SingleInstance();
+            builder.Register(x => tagsIndexSubject).As<IObservable<TagActivity>>().SingleInstance();
 
             #endregion
 

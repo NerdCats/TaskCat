@@ -30,6 +30,7 @@
 
             if (result == null)
                 throw new EntityDeleteException(typeof(DataTag), id);
+
             return result;
         }
 
@@ -63,6 +64,7 @@
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == tag.Id, tag);
             if (result == null)
                 throw new EntityUpdateException(typeof(DataTag), tag.Id);
+        
             return result;
         }
 

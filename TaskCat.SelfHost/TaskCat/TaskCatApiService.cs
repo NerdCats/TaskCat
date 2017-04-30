@@ -14,7 +14,8 @@
     using System.Reactive.Subjects;
     using System.Diagnostics;
     using Common.Search;
-    using Data.Model.Tag;
+    using Lib.Tag;
+    using Model.Tag;
 
     public class TaskCatApiService : IDichotomyService
     {
@@ -24,7 +25,7 @@
 
         private JobActivityService jobActivityService;
         private JobSearchIndexService jobIndexService;
-        private TagIndexService tagIndexService;
+        private TagExtensionService tagActivityService;
 
         public TaskCatApiService()
         {
@@ -50,7 +51,7 @@
         {
             this.jobActivityService = new JobActivityService(container.Resolve<IDbContext>(), container.Resolve<Subject<JobActivity>>());
             this.jobIndexService = new JobSearchIndexService(container.Resolve<ISearchContext>(), container.Resolve<IObservable<Data.Entity.Job>>());
-            this.tagIndexService = new TagIndexService(container.Resolve<IDbContext>(), container.Resolve<IObservable<TagIndexOperation>>());
+            this.tagActivityService = new TagExtensionService(container.Resolve<IDbContext>(), container.Resolve<IObservable<TagActivity>>());
         }
 
         public void Dispose()
