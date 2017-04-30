@@ -2,12 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TaskCat.Common.Domain;
-    using TaskCat.Data.Entity;
+    using Common.Domain;
+    using Data.Entity;
 
     public interface IDataTagService : IRepository<DataTag>
     {
         Task<IEnumerable<DataTag>> GetDataTagSuggestions(string q);
-        Task<bool> Exist(string q);
     }
 }

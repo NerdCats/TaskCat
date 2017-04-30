@@ -71,15 +71,5 @@
             var result = await Collection.Find(Builders<DataTag>.Filter.Text(q)).Limit(20).ToListAsync();
             return result;
         }
-
-        public async Task<bool> Exist(string q)
-        {
-            if (!string.IsNullOrEmpty(q))
-            {
-                var result = await Collection.Find(x => x.Id.ToLower().Contains(q.ToLower())).ToListAsync();
-                return (result != null && result.Any()) ? true : false;
-            }
-            return false;
-        }
     }
 }

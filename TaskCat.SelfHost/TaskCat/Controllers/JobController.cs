@@ -36,6 +36,7 @@ namespace TaskCat.Controllers
     using System.Reactive.Subjects;
     using System.Net.Http.Formatting;
     using Marvin.JsonPatch.Operations;
+    using MongoDB.Driver;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -611,6 +612,9 @@ namespace TaskCat.Controllers
 
         public async Task<IHttpActionResult> Tag([FromUri]string jobId, [FromBody] JsonPatchDocument<Job> tagPatch)
         {
+            if (tagPatch == null)
+                throw new ArgumentException($"request body is null");
+
             if (!(User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) || User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)))
             {
                 logger.Error("User {0} is not authorized to do this operation", User.Identity.Name);
@@ -635,13 +639,25 @@ namespace TaskCat.Controllers
                 throw new NotSupportedException("Patch operation not supported any fields except Tags");
             }
 
-            foreach (var patch in tagPatch.Operations.Where(x => !string.IsNullOrEmpty(x.value.ToString())))
+            // Check tags meant for addition and replacements. 
+            var tagsToCheckFor = tagPatch.Operations.Where(
+                x => x.OperationType == OperationType.Add || x.OperationType == OperationType.Replace)
+                .Select(x => x.value.ToString());
+
+            // The question here might say why I didn't put this method in the repository
+            // We don't really need this method to be reused, or at least don't see a potential 
+            // use case yet. When we do, we would make it a reusable method
+                     
+            var nonExistentTags = 
+                tagsToCheckFor.Except(
+                    dataTagService.Collection.Find(
+                    Builders<DataTag>.Filter.Or(tagsToCheckFor.Select(x => Builders<DataTag>.Filter.Eq(y => y.Id, x))))
+                    .ToList()
+                    .Select(x => x.Id));
+
+            if (nonExistentTags.Count()>0)
             {
-                var tagExists = !await dataTagService.Exist(patch.value.ToString());
-                if (tagExists)
-                {
-                    throw new NotSupportedException("The tag '" + patch.value.ToString() + "' doesn't exist in the Datatags collection!");
-                }
+                throw new NotSupportedException($"tag {nonExistentTags.First()} is invalid");
             }
 
             // get current user
