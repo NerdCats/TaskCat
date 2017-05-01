@@ -19,7 +19,7 @@
 
         public DataTagService(IDbContext dbContext, IObserver<TagActivity> tagActivityObserver)
         {
-            if (this.tagActivityObserver == null)
+            if (tagActivityObserver == null)
                 throw new ArgumentNullException(nameof(tagActivityObserver));
 
             this.Collection = dbContext.DataTags;
