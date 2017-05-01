@@ -604,7 +604,7 @@
         /// </summary>
         /// <returns></returns>
         [ResponseType(typeof(UpdateResult<Job>))]
-        [Route("api/Job/tag/{jobId}")]
+        [Route("api/Job/{jobId}/tag")]
         [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPatch]
 
