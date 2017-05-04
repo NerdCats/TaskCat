@@ -81,7 +81,7 @@ namespace TaskCat.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await _service.Delete(id);
-            return Content(HttpStatusCode.Accepted, result, new JsonMediaTypeFormatter());
+            return Content(HttpStatusCode.Accepted, result, new JsonMediaTypeFormatter()); 
         }
     }
 }
