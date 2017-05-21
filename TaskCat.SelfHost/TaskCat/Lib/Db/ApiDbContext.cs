@@ -21,7 +21,6 @@
                 IndexFacade.EnsureHRIDIndex(this.HRIDs);
                 IndexFacade.EnsureDropPointIndex(this.DropPoints);
                 IndexFacade.EnsureVendorIndex(this.Vendors);
-                IndexFacade.EnsureProductCategoriesIndex(this.ProductCategories);
                 IndexFacade.EnsureCommentIndexes(this.Comments);
                 IndexFacade.EnsureJobActivityIndexes(this.JobActivityCollection);
                 IndexFacade.EnsureDataTagIndexes(this.DataTags);

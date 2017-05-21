@@ -374,17 +374,11 @@
     <Compile Include="Controllers\LocalityController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
-    <Compile Include="Controllers\ProductCategoryController.cs" />
-    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\StorageController.cs" />
-    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\DataTagController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Lib\Asset\DefaultAssetProvider.cs" />
     <Compile Include="Lib\Asset\IAssetProvider.cs" />
-    <Compile Include="Lib\Catalog\ProductCategoryService.cs" />
-    <Compile Include="Lib\Catalog\ProductService.cs" />
-    <Compile Include="Lib\Catalog\StoreService.cs" />
     <Compile Include="Lib\Comments\CommentService.cs" />
     <Compile Include="Lib\Comments\ICommentService.cs" />
     <Compile Include="Lib\Constants\AppConstants.cs" />

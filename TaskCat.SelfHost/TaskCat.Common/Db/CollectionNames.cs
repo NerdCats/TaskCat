@@ -11,10 +11,7 @@
         public const string HRIDCollectionName = "HRIDs";
 
         public const string DropPointCollectionName = "DropPoints";
-        public const string StoreColletionName = "Stores";
-        public const string ProductCategoryCollectionName = "ProductCategories";
         public const string VendorCollectionName = "Vendors";
-        public const string ProductCollectionName = "Products";
 
         public const string CommentCollectionName = "Comments";
 

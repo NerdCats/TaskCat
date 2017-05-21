@@ -129,15 +129,6 @@
 
         }
 
-        public static void EnsureProductCategoriesIndex(IMongoCollection<ProductCategory> productCategoryCollection)
-        {
-            var UniqueIndexOptions = new CreateIndexOptions();
-            UniqueIndexOptions.Unique = true;
-
-            productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Ascending(c => c.Name), UniqueIndexOptions);
-            productCategoryCollection.Indexes.CreateOne(Builders<ProductCategory>.IndexKeys.Descending(c => c.Name), UniqueIndexOptions);
-        }
-
         internal static void EnsureCommentIndexes(IMongoCollection<Comment> commentCollection)
         {
             var SparseIndexOptions = new CreateIndexOptions();

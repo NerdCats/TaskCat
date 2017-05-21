@@ -7,9 +7,6 @@
         public const string JobsOdataRoute = "JobsOdata";
         public const string CommentOdataRoute = "CommentOdata";
         public const string DropPointOdataRoute = "DropPointOdata";
-        public const string ProductCategoryRoute = "ProductCategoryOdata";
-        public const string ProductOdataRoute = "ProductOdata";
-        public const string StoreOdataRoute = "StoreOdata";
         public const string AccountOdataRoute = "AccountOdata";
         public const string JobsByAssetOdataRoute = "JobsByAssetOdata";
         public const string DataTagOdataRoute = "DataTagOdata";

@@ -119,24 +119,6 @@
         #endregion
 
         #region Catalog
-        private IMongoCollection<Store> _stores;
-        public IMongoCollection<Store> Stores
-        {
-            get
-            {
-                return _stores;
-            }
-        }
-
-        private IMongoCollection<ProductCategory> _productCategories;
-        public IMongoCollection<ProductCategory> ProductCategories
-        {
-            get
-            {
-                return _productCategories;
-            }
-        }
-
         private IMongoCollection<Vendor> _vendors;
         public IMongoCollection<Vendor> Vendors
         {
@@ -145,14 +127,6 @@
                 return _vendors;
             }
         }
-
-        private IMongoCollection<Product> _products;
-
-        public IMongoCollection<Product> Products
-        {
-            get { return _products; }
-        }
-
         #endregion
 
         #region Comment
@@ -169,14 +143,6 @@
         public IMongoCollection<JobActivity> JobActivityCollection
         {
             get { return _jobActivityCollection; }
-        }
-
-        public IMongoCollection<Store> Tags
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
         }
         #endregion
 
@@ -198,10 +164,7 @@
             _hrids = Database.GetCollection<HRIDEntity>(CollectionNames.HRIDCollectionName);
             _dropPoints = Database.GetCollection<DropPoint>(CollectionNames.DropPointCollectionName);
 
-            _stores = Database.GetCollection<Store>(CollectionNames.StoreColletionName);
-            _productCategories = Database.GetCollection<ProductCategory>(CollectionNames.ProductCategoryCollectionName);
             _vendors = Database.GetCollection<Vendor>(CollectionNames.VendorCollectionName);
-            _products = Database.GetCollection<Product>(CollectionNames.ProductCollectionName);
 
             _comments = Database.GetCollection<Comment>(CollectionNames.CommentCollectionName);
 
