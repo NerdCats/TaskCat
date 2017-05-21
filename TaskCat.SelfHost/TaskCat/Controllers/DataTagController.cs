@@ -17,12 +17,12 @@ using TaskCat.Lib.Constants;
 
 namespace TaskCat.Controllers
 {
-    public class TagController : ApiController
+    public class DataTagController : ApiController
     {
         private readonly IDataTagService _service;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public TagController(IDataTagService service)
+        public DataTagController(IDataTagService service)
         {
             this._service = service;
         }
@@ -66,7 +66,7 @@ namespace TaskCat.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpPut]
-        public async Task<IHttpActionResult> Put([FromBody]DataTag dataTag)
+        public async Task<IHttpActionResult> Put([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id, [FromBody]DataTag dataTag)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
