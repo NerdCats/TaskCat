@@ -8,11 +8,13 @@
     using Data.Entity;
     using Model.Tag;
     using MongoDB.Bson;
+    using NLog;
 
     public class TagExtensionService
     {
         private IDbContext dbContext;
         private IObservable<TagActivity> tagActivitySource;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public TagExtensionService(IDbContext dbContext, IObservable<TagActivity> tagActivitySource)
         {
@@ -54,23 +56,29 @@
                 }
             };
 
-            // TODO: need a logger here. Need to log if anything fails like miserably
+            if(matchFilter == updateFilter)
+            {
+                logger.Error($"{nameof(updateFilter)} and the {nameof(matchFilter)} are same!");
+                throw new InvalidOperationException($"{nameof(updateFilter)} and the {nameof(matchFilter)} are same!");
+            }
             var result = this.dbContext.Jobs.UpdateMany(matchFilter, updateFilter);
         }
 
         private void DeleteTagFromJobs(DataTag tag)
         {
-            // TODO: need a logger here. Need to log if anything fails like miserably
-            var updateFilter = Builders<Job>.Update.Pull(x => x.Tags, tag.Id);
-            var jobFilter = Builders<Job>.Filter.Where(x => x.Tags != null);
-
-            var result = this.dbContext.Jobs.UpdateMany(jobFilter, updateFilter);
+            if(tag.Id == null)
+            {
+                logger.Error("Nothing to delete here!");
+                throw new InvalidOperationException("Nothing to delete here!");
+            }
+            var updateFilter = Builders<Job>.Update.PullFilter(x => x.Tags, y => y == tag.Id);
+            var result = this.dbContext.Jobs.UpdateMany(Builders<Job>.Filter.Empty, updateFilter);
         }
 
         private void OnError(Exception exception)
         {
             Console.WriteLine(exception);
-            // TODO: Log the exception here and we might need to redo things here
+            logger.Error(exception);
         }
     }
 }

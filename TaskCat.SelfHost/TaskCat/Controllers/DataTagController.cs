@@ -81,7 +81,7 @@ namespace TaskCat.Controllers
         /// </summary>
         /// <param name="dataTag">DataTag object from the body.</param>
         /// <returns>The newly created DataTag</returns>
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]DataTag dataTag)
         {
@@ -90,13 +90,14 @@ namespace TaskCat.Controllers
             return Content(HttpStatusCode.Created, dataTag, new JsonMediaTypeFormatter());
         }
 
+
         /// <summary>
         /// Updates a data tag
         /// </summary>
         /// <param name="id">The old data tag</param>
         /// <param name="dataTag">the new data tag as a DataTag object in the body</param>
         /// <returns>The updated data tag</returns>
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
         [HttpPut]
         public async Task<IHttpActionResult> Put([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id, [FromBody]DataTag dataTag)
         {
@@ -111,14 +112,14 @@ namespace TaskCat.Controllers
         /// </summary>
         /// <param name="id">The data tag to be deleted</param>
         /// <returns>The deleted data tag</returns>
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, BackOfficAdmin")]
         [HttpDelete]
         public async Task<IHttpActionResult> Delete([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await _service.Delete(id);
-            return Content(HttpStatusCode.Accepted, result, new JsonMediaTypeFormatter());
+            return Content(HttpStatusCode.Accepted, result, new JsonMediaTypeFormatter()); 
         }
     }
 }
