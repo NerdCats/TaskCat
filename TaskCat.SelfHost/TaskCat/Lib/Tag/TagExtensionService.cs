@@ -71,8 +71,9 @@
                 logger.Error("Nothing to delete here!");
                 throw new InvalidOperationException("Nothing to delete here!");
             }
-            var updateFilter = Builders<Job>.Update.PullFilter(x => x.Tags, y => y == tag.Id);
-            var result = this.dbContext.Jobs.UpdateMany(Builders<Job>.Filter.Empty, updateFilter);
+            var updateFilter = Builders<Job>.Update.Pull(x => x.Tags, tag.Id);
+            var jobFilter = Builders<Job>.Filter.Where(x => x.Tags != null);
+            var result = this.dbContext.Jobs.UpdateMany(jobFilter, updateFilter);
         }
 
         private void OnError(Exception exception)
