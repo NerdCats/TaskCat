@@ -1,12 +1,10 @@
 ﻿namespace TaskCat.Data.Entity
 {
-    using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Attributes;
 
-    public class DataTag
+    public class DataTag : DbEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.String)]
-        public string Id { get; set; }
+        [BsonRequired]
+        public string Value { get; set; }
     }
 }

@@ -63,8 +63,8 @@
             options.Background = true;
             options.Unique = true;
 
-            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Ascending(x => x.Id), options);
-            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Text(x => x.Id));
+            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Ascending(x => x.Value), options);
+            dataTagCollection.Indexes.CreateOne(Builders<DataTag>.IndexKeys.Text(x => x.Value));
         }
 
         public static void EnsureJobActivityIndexes(IMongoCollection<JobActivity> jobActivityCollection)

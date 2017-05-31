@@ -1,22 +1,22 @@
-﻿using MongoDB.Driver;
-using NLog;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
-using System.Net.Http.Formatting;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using TaskCat.Common.Model.Pagination;
-using TaskCat.Common.Utility.ActionFilter;
-using TaskCat.Common.Utility.Odata;
-using TaskCat.Data.Entity;
-using TaskCat.Job;
-using TaskCat.Lib.Constants;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
+    using MongoDB.Driver;
+    using NLog;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http.Formatting;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using Common.Model.Pagination;
+    using Common.Utility.ActionFilter;
+    using Common.Utility.Odata;
+    using Data.Entity;
+    using Job;
+    using Lib.Constants;
+
     /// <summary>
     /// A basic controller to manage data tags
     /// </summary>
