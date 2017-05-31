@@ -63,12 +63,10 @@
 
         private void DeleteTagFromJobs(DataTag tag)
         {
-            if(tag.Id == null)
-            {
-                logger.Error("Nothing to delete here!");
-                throw new InvalidOperationException("Nothing to delete here!");
-            }
-            var updateFilter = Builders<Job>.Update.Pull(x => x.Tags, tag.Id);
+            if (tag == null)
+                throw new ArgumentNullException(nameof(tag));
+
+            var updateFilter = Builders<Job>.Update.Pull(x => x.Tags, tag.Value);
             var jobFilter = Builders<Job>.Filter.Where(x => x.Tags != null);
             var result = this.dbContext.Jobs.UpdateMany(jobFilter, updateFilter);
         }
