@@ -66,23 +66,20 @@
             return tag;
         }
 
-        public async Task<DataTag> Update(string id, DataTag tag)
+        public async Task<DataTag> Update(DataTag tag)
         {
-            if (string.IsNullOrWhiteSpace(id))
-                throw new ArgumentNullException(nameof(id));
+            if (tag == null)
+                throw new ArgumentNullException(nameof(tag));
 
-            var result = await Collection.FindOneAndReplaceAsync(x => x.Id == id, tag);
+            if (string.IsNullOrWhiteSpace(tag.Id))
+                throw new ArgumentNullException(nameof(tag.Id));
+
+            var result = await Collection.FindOneAndReplaceAsync(x => x.Id == tag.Id, tag);
             if (result == null)
-                throw new EntityUpdateException(typeof(DataTag), id);
+                throw new EntityUpdateException(typeof(DataTag), tag.Id);
 
             tagActivityObserver.OnNext(new TagActivity(TagOperation.UPDATE, result, tag));
             return result;
-        }
-
-        [ObsoleteAttribute("Use Update(string id, DataTag tag) instead, this will throw a NotImplementedException")]
-        public async Task<DataTag> Update(DataTag tag)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<DataTag>> GetDataTagSuggestions(string q)

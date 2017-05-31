@@ -48,19 +48,16 @@
 
         private void UpdateTagsInJobs(DataTag tag, DataTag oldTag)
         {
-            var matchFilter = new BsonDocument($"{nameof(Job.Tasks)}", oldTag.Id);
+            // INFO: If this magic looks confusing, please visit https://docs.mongodb.com/manual/reference/operator/update/set/
+
+            var matchFilter = new BsonDocument($"{nameof(Job.Tags)}", oldTag.Value);
             var updateFilter = new BsonDocument {
                 { "$set", new BsonDocument {
-                            { $"{nameof(Job.Tasks)}.$", tag.Id }
+                            { $"{nameof(Job.Tags)}.$", tag.Value }
                         }
                 }
             };
 
-            if(matchFilter == updateFilter)
-            {
-                logger.Error($"{nameof(updateFilter)} and the {nameof(matchFilter)} are same!");
-                throw new InvalidOperationException($"{nameof(updateFilter)} and the {nameof(matchFilter)} are same!");
-            }
             var result = this.dbContext.Jobs.UpdateMany(matchFilter, updateFilter);
         }
 

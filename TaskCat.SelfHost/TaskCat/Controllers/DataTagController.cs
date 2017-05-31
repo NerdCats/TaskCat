@@ -16,6 +16,7 @@
     using Data.Entity;
     using Job;
     using Lib.Constants;
+    using Common.Model.Response;
 
     /// <summary>
     /// A basic controller to manage data tags
@@ -102,8 +103,23 @@
         public async Task<IHttpActionResult> Put([Required(AllowEmptyStrings = false, ErrorMessage = "Data tag Id not provided")]string id, [FromBody]DataTag dataTag)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (dataTag == null)
+            {
+                return Content(HttpStatusCode.BadRequest, new ErrorResponse()
+                {
+                    Message = "Data tag payload null or empty"
+                });
+            }
 
-            var result = await _service.Update(id, dataTag);
+            if (dataTag.Id != id)
+            {
+                return Content(HttpStatusCode.BadRequest, new ErrorResponse()
+                {
+                    Message = "Data tag payload id and uri parameter id doesn't match"
+                });
+            }
+
+            var result = await _service.Update(dataTag);
             return Ok(result);
         }
 
