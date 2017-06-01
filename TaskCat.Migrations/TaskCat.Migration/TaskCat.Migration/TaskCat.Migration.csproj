@@ -61,10 +61,6 @@
       <Project>{fcb2cf19-ebe7-4dcf-bd48-ec164015ba3f}</Project>
       <Name>MongoMigrations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DotNetMongoMigrations\src\RunMongoMigrations\RunMongoMigrations.csproj">
-      <Project>{0b4f8485-f0a8-48f7-876f-65490e788dc7}</Project>
-      <Name>RunMongoMigrations</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

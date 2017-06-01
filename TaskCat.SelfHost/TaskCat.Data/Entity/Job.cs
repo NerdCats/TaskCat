@@ -198,6 +198,8 @@
             }
         }
 
+        public List<string> Tags { get; set; }
+
         public int AttemptCount { get; set; } = 1;
 
         public Vendor Vendor { get; set; }

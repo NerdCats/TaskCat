@@ -10,7 +10,6 @@
     using Data.Lib.Payment;
     using Lib.DropPoint;
     using Data.Entity;
-    using Lib.Catalog;
     using Lib.Comments;
     using Common.Email;
     using Common.Storage;
@@ -29,6 +28,8 @@
     using Job;
     using Job.Order;
     using Job.Vendor;
+    using Lib.Tag;
+    using Model.Tag;
 
     public class AutofacContainerBuilder
     {
@@ -100,16 +101,19 @@
             builder.RegisterType<VendorService>().AsImplementedInterfaces<IVendorService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
 
-            #region Catalog
-            builder.RegisterType<ProductCategoryService>().AsImplementedInterfaces<IRepository<ProductCategory>, ConcreteReflectionActivatorData>().SingleInstance();
-            builder.RegisterType<ProductService>().AsImplementedInterfaces<IRepository<Product>, ConcreteReflectionActivatorData>().SingleInstance();
-            builder.RegisterType<StoreService>().AsImplementedInterfaces<IRepository<Store>, ConcreteReflectionActivatorData>().SingleInstance();
-            #endregion
-
             #region Comment
             builder.RegisterType<CommentService>().AsImplementedInterfaces<ICommentService, ConcreteReflectionActivatorData>().SingleInstance();
             #endregion
-         
+
+            #region Tags                       
+            builder.RegisterType<DataTagService>().As<IDataTagService>().SingleInstance();
+
+            var tagsIndexSubject = new Subject<TagActivity>();
+            builder.Register(x => tagsIndexSubject).As<IObserver<TagActivity>>().SingleInstance();
+            builder.Register(x => tagsIndexSubject).As<IObservable<TagActivity>>().SingleInstance();
+
+            #endregion
+
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             return builder.Build();
         }

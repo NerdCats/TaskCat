@@ -17,9 +17,7 @@ using TaskCat.Common.Owin;
 using TaskCat.Common.Utility.ActionFilter;
 using TaskCat.Common.Settings;
 using System.Reactive.Linq;
-using System;
 using TaskCat.Job.Extensions;
-using TaskCat.Data.Lib.Extension;
 using NerdCats.Owin;
 
 namespace TaskCat

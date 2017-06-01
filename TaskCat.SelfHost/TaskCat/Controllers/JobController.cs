@@ -1,6 +1,4 @@
-﻿using TaskCat.Data.Model.Order.Delivery;
-
-namespace TaskCat.Controllers
+﻿namespace TaskCat.Controllers
 {
     using Common.Email;
     using Common.Lib.Utility;
@@ -23,6 +21,7 @@ namespace TaskCat.Controllers
     using Data.Lib.Invoice.Response;
     using Data.Model;
     using Data.Model.Api;
+    using Data.Model.Order.Delivery;
     using Data.Model.Identity.Profile;
     using Data.Model.Job;
     using Data.Model.Operation;
@@ -33,7 +32,9 @@ namespace TaskCat.Controllers
     using Lib.Constants;
     using NLog;
     using System.Collections.Generic;
-    using System.Reactive.Subjects;
+    using System.Reactive.Subjects; 
+    using Marvin.JsonPatch.Operations;
+    using MongoDB.Driver;
 
     /// <summary>
     /// Controller to Post Custom Jobs, List, Delete and Update Jobs 
@@ -42,21 +43,24 @@ namespace TaskCat.Controllers
     public class JobController : ApiController
     {
         private IJobRepository repository;
+        private IDataTagService dataTagService;
         private IEmailService mailService;
         private Subject<JobActivity> activitySubject;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private ILocalityService localLityService;
 
         public JobController(
-            IJobRepository repository, 
-            IEmailService mailService, 
+            IJobRepository repository,
+            IEmailService mailService,
             ILocalityService localityService,
+            IDataTagService service,
             Subject<JobActivity> activitySubject)
         {
             this.repository = repository;
             this.mailService = mailService;
             this.activitySubject = activitySubject;
             this.localLityService = localityService;
+            this.dataTagService = service;
         }
 
         /// <summary>
@@ -368,7 +372,7 @@ namespace TaskCat.Controllers
         {
             if (taskPatch == null)
             {
-                logger.Error("\'taskPatch\' is null");
+                logger.Error($"{nameof(taskPatch)} is null");
                 throw new ArgumentNullException(nameof(taskPatch));
             }
 
@@ -593,6 +597,90 @@ namespace TaskCat.Controllers
         {
             await localLityService.RefreshLocalities();
             return Ok();
+        }
+
+        /// <summary>
+        /// Tag a job
+        /// </summary>
+        /// <returns></returns>
+        [ResponseType(typeof(UpdateResult<Job>))]
+        [Route("api/Job/{jobId}/tag")]
+        [Authorize(Roles = "Administrator, BackOfficeAdmin")]
+        [HttpPatch]
+
+        public async Task<IHttpActionResult> Tag([FromUri]string jobId, [FromBody] JsonPatchDocument<Job> tagPatch)
+        {
+            if (tagPatch == null)
+                throw new ArgumentException($"request body is null");
+
+            if (!(User.IsInRole(RoleNames.ROLE_BACKOFFICEADMIN) || User.IsInRole(RoleNames.ROLE_ADMINISTRATOR)))
+            {
+                logger.Error("User {0} is not authorized to do this operation", User.Identity.Name);
+                throw new UnauthorizedAccessException($"User {User.Identity.Name} is not authorized to do this operation");
+            }
+
+            var unsupportedOp = tagPatch.Operations.Where(x =>
+            x.OperationType == OperationType.Move ||
+            x.OperationType == OperationType.Test ||
+            x.OperationType == OperationType.Copy);
+
+
+            if (unsupportedOp.Count() > 0)
+            {
+                logger.Error($"Unsupported operation type {unsupportedOp.First()}");
+                throw new NotSupportedException($"Unsupported operation type {unsupportedOp.First()}");
+            }
+
+            if (!tagPatch.Operations.All(x => x.path.StartsWith("/Tags/")))
+            {
+                logger.Error("Patch operation not supported any fields except Tags");
+                throw new NotSupportedException("Patch operation not supported any fields except Tags");
+            }
+
+            // Check tags meant for addition and replacements. 
+            var tagsToCheckFor = tagPatch.Operations.Where(
+                x => x.OperationType == OperationType.Add || x.OperationType == OperationType.Replace)
+                .Select(x => x.value.ToString());
+
+            // The question here might say why I didn't put this method in the repository
+            // We don't really need this method to be reused, or at least don't see a potential 
+            // use case yet. When we do, we would make it a reusable method
+                     
+            var nonExistentTags = 
+                tagsToCheckFor.Except(
+                    dataTagService.Collection.Find(
+                    Builders<DataTag>.Filter.Or(tagsToCheckFor.Select(x => Builders<DataTag>.Filter.Eq(y => y.Id, x))))
+                    .ToList()
+                    .Select(x => x.Id));
+
+            if (nonExistentTags.Count()>0)
+            {
+                throw new NotSupportedException($"tag {nonExistentTags.First()} is invalid");
+            }
+
+            // get current user
+            var currentUser = new ReferenceUser(this.User.Identity.GetUserId(), this.User.Identity.GetUserName())
+            {
+                Name = this.User.Identity.GetUserFullName()
+            };
+
+            var job = await repository.GetJob(jobId);
+
+            job.Tags = job.Tags == null ? new List<string>() : job.Tags;
+            tagPatch.ApplyTo(job);
+            job.Tags = job.Tags.Distinct().ToList();
+            job.Tags = job.Tags.Count == 0 ? null : job.Tags;
+            job.ModifiedTime = DateTime.UtcNow;
+
+            // update job with tag
+            var jobUpdateresult = await repository.UpdateJob(job);
+            var result = new UpdateResult<Job>(jobUpdateresult.MatchedCount, jobUpdateresult.ModifiedCount, job);
+
+            // log job activity
+            var activity = new JobActivity(job, JobActivityOperationNames.Update, nameof(Job.Tags), currentUser);
+            activitySubject.OnNext(activity);
+
+            return Ok(result);
         }
     }
 }

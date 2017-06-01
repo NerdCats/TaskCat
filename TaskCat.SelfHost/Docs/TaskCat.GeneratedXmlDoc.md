@@ -415,6 +415,15 @@
 
 
 ---
+#### Method Controllers.JobController.Tag(System.String,Marvin.JsonPatch.JsonPatchDocument{TaskCat.Data.Entity.Job})
+
+ Tag a job 
+
+**Returns**: 
+
+
+
+---
 ## Type Controllers.LocalityController
 
  Localities fetched from jobs 
@@ -590,6 +599,93 @@
 |-----|------|
 |fileName: | desired file name to be deleted |
 **Returns**:  File Deletion Status as a FileDeleteModel 
+
+
+
+---
+## Type Controllers.DataTagController
+
+ A basic controller to manage data tags 
+
+
+
+---
+#### Method Controllers.DataTagController.#ctor(TaskCat.Job.IDataTagService)
+
+ Instantiates a data tag service 
+
+|Name | Description |
+|-----|------|
+|service: |IDataTagService instance|
+
+
+---
+#### Method Controllers.DataTagController.Get
+
+ Odata route to search data tags 
+
+**Returns**: paginated response based on the odata query
+
+
+
+---
+#### Method Controllers.DataTagController.GetSuggestions(System.String)
+
+ Suggestion of data tag, to be used as an autocomplete source 
+
+|Name | Description |
+|-----|------|
+|q: |query string|
+**Returns**: data tags that matches the request
+
+
+
+---
+#### Method Controllers.DataTagController.Get(System.String)
+
+ Get a data tag or check for existence 
+
+|Name | Description |
+|-----|------|
+|id: |The data tag to be checked|
+**Returns**: The data tag if it exists
+
+
+
+---
+#### Method Controllers.DataTagController.Post(TaskCat.Data.Entity.DataTag)
+
+ Create a new data tag 
+
+|Name | Description |
+|-----|------|
+|dataTag: |DataTag object from the body.|
+**Returns**: The newly created DataTag
+
+
+
+---
+#### Method Controllers.DataTagController.Put(System.String,TaskCat.Data.Entity.DataTag)
+
+ Updates a data tag 
+
+|Name | Description |
+|-----|------|
+|id: |The old data tag|
+|dataTag: |the new data tag as a DataTag object in the body|
+**Returns**: The updated data tag
+
+
+
+---
+#### Method Controllers.DataTagController.Delete(System.String)
+
+ Delete an existing data tag 
+
+|Name | Description |
+|-----|------|
+|id: |The data tag to be deleted|
+**Returns**: The deleted data tag
 
 
 
