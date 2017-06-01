@@ -75,6 +75,9 @@
                 throw new ArgumentNullException(nameof(tag.Id));
 
             var result = await Collection.FindOneAndReplaceAsync(x => x.Id == tag.Id, tag);
+
+            result = Collection.Find(x => x.Id == tag.Id).FirstOrDefault();
+
             if (result == null)
                 throw new EntityUpdateException(typeof(DataTag), tag.Id);
 
