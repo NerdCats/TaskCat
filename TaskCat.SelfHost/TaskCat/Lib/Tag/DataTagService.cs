@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using Model.Tag;
+    using MongoDB.Bson;
 
     public class DataTagService : IDataTagService
     {
@@ -78,13 +79,20 @@
             if (result == null)
                 throw new EntityUpdateException(typeof(DataTag), tag.Id);
 
-            tagActivityObserver.OnNext(new TagActivity(TagOperation.UPDATE, result, tag));
+            tagActivityObserver.OnNext(new TagActivity(TagOperation.UPDATE, tag, result));
             return result;
         }
 
         public async Task<IEnumerable<DataTag>> GetDataTagSuggestions(string q)
         {
-            var result = await Collection.Find(Builders<DataTag>.Filter.Text(q)).Limit(20).ToListAsync();
+            var options = new TextSearchOptions();
+            options.CaseSensitive = false;
+            options.Language = "en";
+
+            var regexFilter = Builders<DataTag>.Filter.Regex(x => x.Value, new BsonRegularExpression(q, "i"));
+            var textFilter = Builders<DataTag>.Filter.Text(q, options);
+
+            var result = await Collection.Find(Builders<DataTag>.Filter.Or(textFilter, regexFilter)).Limit(20).ToListAsync();
             return result;
         }
     }
