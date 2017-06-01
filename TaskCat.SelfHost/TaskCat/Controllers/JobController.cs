@@ -649,9 +649,9 @@
             var nonExistentTags = 
                 tagsToCheckFor.Except(
                     dataTagService.Collection.Find(
-                    Builders<DataTag>.Filter.Or(tagsToCheckFor.Select(x => Builders<DataTag>.Filter.Eq(y => y.Id, x))))
+                    Builders<DataTag>.Filter.Or(tagsToCheckFor.Select(x => Builders<DataTag>.Filter.Eq(y => y.Value, x))))
                     .ToList()
-                    .Select(x => x.Id));
+                    .Select(x => x.Value));
 
             if (nonExistentTags.Count()>0)
             {
