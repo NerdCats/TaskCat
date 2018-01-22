@@ -1,5 +1,5 @@
 ﻿{
-  "WebCatUrl": "http://localhost:3000/",
+  "WebCatUrl": "http://fetchprod.gobd.co/",
   "ConfirmEmailPath": "confirm",
   "HostingAddress": "",
   "AuthenticationIssuerName": "TaskCat.Auth",
