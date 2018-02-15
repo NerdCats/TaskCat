@@ -15,7 +15,7 @@
                 decimal TotalWeight = 0.0M;
                 TotalWeight = items.Sum(x => x.Weight);
 
-                if (TotalWeight > 1.0M)
+                if (TotalWeight < 1.0M)
                 {
                     ServiceCharge = 0.0M;
                 }

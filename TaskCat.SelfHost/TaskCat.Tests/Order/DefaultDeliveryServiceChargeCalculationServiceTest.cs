@@ -34,7 +34,7 @@ namespace TaskCat.Tests.Order
             // Act
             var deliveryChargeCalcSvc = new DefaultDeliveryServiceChargeCalculationService();
             var actual = deliveryChargeCalcSvc.CalculateServiceCharge(items);
-            var expected = 150.0m;
+            var expected = 0.0m;
 
             // Assert
             Assert.AreEqual(expected, actual);
