@@ -39,7 +39,7 @@
 
             var cart = orderModel.OrderCart;
 
-            if (cart.ServiceCharge == null)
+            if (cart.ServiceCharge == null || cart.ServiceCharge == 0)
             {
                 cart.ServiceCharge = serviceChargeCalculationService.
                     CalculateServiceCharge(cart.PackageList);
