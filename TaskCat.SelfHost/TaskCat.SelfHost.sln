@@ -25,7 +25,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.Job.Index", "TaskCa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskCat.BackgroundJobService", "TaskCat.BackgroundJobService\TaskCat.BackgroundJobService.csproj", "{798D377C-FD6D-4B80-8E90-C040B95B1D47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.PartnerModels", "TaskCat.PartnerModels\TaskCat.PartnerModels.csproj", "{2A70A65A-D994-4123-BD8F-AC6A63A1CEF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskCat.PartnerModels", "TaskCat.PartnerModels\TaskCat.PartnerModels.csproj", "{2A70A65A-D994-4123-BD8F-AC6A63A1CEF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskCat.PartnerServices", "TaskCat.PartnerServices\TaskCat.PartnerServices.csproj", "{E87A113D-2C48-473D-91E8-9F4B6280EF6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,14 @@ Global
 		{2A70A65A-D994-4123-BD8F-AC6A63A1CEF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A70A65A-D994-4123-BD8F-AC6A63A1CEF9}.Release|x64.ActiveCfg = Release|Any CPU
 		{2A70A65A-D994-4123-BD8F-AC6A63A1CEF9}.Release|x64.Build.0 = Release|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Debug|x64.Build.0 = Debug|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Release|x64.ActiveCfg = Release|Any CPU
+		{E87A113D-2C48-473D-91E8-9F4B6280EF6E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
