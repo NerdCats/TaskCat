@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting.;
+using Microsoft.Extensions.Hosting;
 
 namespace TaskCat.BackgroundJobService
 {
@@ -9,7 +9,7 @@ namespace TaskCat.BackgroundJobService
     {
         static void Main(string[] args)
         {
-            var host = new Microsoft.Extensions.Hosting. HostBuilder();
+           // var host = new HostBuilder();
         }
     }
 }

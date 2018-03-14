@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TaskCat.BackgroundJobService
 {
-    public class TimedHostedService: IHostedService, IDisposable
+    public class TimedJobPollingService: IHostedService, IDisposable
     {
         private ILogger _logger;
         private Timer _timer;
 
-        public TimedHostedService(ILogger<TimedHostedService> logger)
+        public TimedJobPollingService(ILogger<TimedJobPollingService> logger)
         {
             _logger = logger;
         }
