@@ -13,9 +13,36 @@ namespace TaskCat.PartnerServices.Infini
         private const string baseUri = "http://buyersclub.infinisystem.com";
         private HttpClient _httpClient;
 
+        // TODO: Make sure these are loaded from configuration/settings
+        private const string username = "delivery@buyersclub.com";
+        private const string password = "buyersclub@123$";
+
         public OrderService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
+        }
+
+        public async Task<string> Login()
+        {
+            var uriBuilder = new UriBuilder(baseUri);
+            uriBuilder.Path = "/api/api-admin-login";
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["email"] = username;
+            query["password"] = password;
+            uriBuilder.Query = query.ToString();
+
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = uriBuilder.Uri,
+                Method = HttpMethod.Post
+            };
+
+            var response = await this._httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            var token = await response.Content.ReadAsStringAsync();
+            return token;
         }
 
         public async Task<OrderStatus> UpdateOrderStatus(string token, string order_id, string order_status)
