@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using TaskCat.PartnerModels;
+using TaskCat.PartnerServices.Infini;
 
 namespace TaskCat.BackgroundJobService
 {
@@ -10,6 +13,8 @@ namespace TaskCat.BackgroundJobService
     {
         private ILogger _logger;
         private Timer _timer;
+        private HttpClient httpClient;
+        private object httpClient1;
 
         public TimedJobPollingService(ILogger<TimedJobPollingService> logger)
         {
@@ -28,6 +33,17 @@ namespace TaskCat.BackgroundJobService
         private void DoWork(object state)
         {
             _logger.LogInformation("Timed Background Service is working.");
+            ValidToken();
+        }
+
+        public async Task<bool> ValidToken()
+        {
+            OrderService orderService = new OrderService(httpClient, httpClient1);
+            string logInToken = await orderService.Login();
+            if (logInToken != null)
+                return true;
+            else
+                return false;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
