@@ -24,18 +24,25 @@ namespace TaskCat.BackgroundJobService
 
         private async Task DoWork()
         {
-            _logger.LogInformation("Timed Background Service is working.");
+            _logger.LogInformation("Background task is working.");
 
             try
             {
-                this._infiniToken = await this._orderService.Login();            
+                _logger.LogInformation("Fetching token");
+                this._infiniToken = await this._orderService.Login();
+                
+                _logger.LogInformation("Fetching new orders");
                 var newOrders = await this._orderService.GetOrders(this._infiniToken, OrderStatusCode.Ready_To_Ship);
+
+                foreach (var order in newOrders)
+                {
+                    await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
+                }
             }
-            catch (Exception)
-            { 
-                throw;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error encountered");
             }
-           
         }
 
         public void Dispose()

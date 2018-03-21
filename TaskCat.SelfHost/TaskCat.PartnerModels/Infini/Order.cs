@@ -36,7 +36,7 @@ namespace TaskCat.PartnerModels.Infini
         public int referal_code_amt { get; set; }
         public int user_ref_points { get; set; }
         public int ref_flag { get; set; }
-        public int order_status { get; set; }
+        public OrderStatusCode order_status { get; set; }
         public int forward_id { get; set; }
         public string ship_date { get; set; }
         public string order_comment { get; set; }

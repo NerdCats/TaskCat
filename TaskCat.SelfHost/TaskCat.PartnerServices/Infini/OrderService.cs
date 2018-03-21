@@ -49,7 +49,7 @@ namespace TaskCat.PartnerServices.Infini
             return token;
         }
 
-        public async Task<OrderStatus> UpdateOrderStatus(string token, string order_id, OrderStatusCode order_status)
+        public async Task<UpdateOrderResponse> UpdateOrderStatus(string token, string order_id, OrderStatusCode order_status)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -86,7 +86,7 @@ namespace TaskCat.PartnerServices.Infini
             response.EnsureSuccessStatusCode();
 
             var responseJson = await response.Content.ReadAsStringAsync();
-            var returnVal = JsonConvert.DeserializeObject<OrderStatus>(responseJson);
+            var returnVal = JsonConvert.DeserializeObject<UpdateOrderResponse>(responseJson);
 
             return returnVal;
         }
