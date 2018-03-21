@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskCat.PartnerModels\TaskCat.PartnerModels.csproj" />
+    <ProjectReference Include="..\TaskCat.PartnerServices\TaskCat.PartnerServices.csproj" />
   </ItemGroup>
 
 </Project>

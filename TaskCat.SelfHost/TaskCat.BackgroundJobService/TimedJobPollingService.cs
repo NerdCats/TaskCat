@@ -38,7 +38,7 @@ namespace TaskCat.BackgroundJobService
 
         public async Task<bool> ValidToken()
         {
-            OrderService orderService = new OrderService(httpClient, httpClient1);
+            OrderService orderService = new OrderService(httpClient);
             string logInToken = await orderService.Login();
             if (logInToken != null)
                 return true;
