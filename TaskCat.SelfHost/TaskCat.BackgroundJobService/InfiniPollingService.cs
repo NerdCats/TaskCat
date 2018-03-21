@@ -34,6 +34,16 @@ namespace TaskCat.BackgroundJobService
                 _logger.LogInformation("Fetching new orders");
                 var newOrders = await this._orderService.GetOrders(this._infiniToken, OrderStatusCode.Ready_To_Ship);
 
+                // TODO:
+                /* 1. Set a customer ID for infini in taskcat
+                 * 2. Use taskcat job.core to create jobs from each new order
+                 * 3. Find a way to reference this in the order we create. May be add a field to ordermodel?
+                 * 4. Find a way so TaskCat can communicate everytime these jobs are updated. 
+                 * 5. When any of these jobs are updated TaskCat will notify some message channel .
+                 * 6. Add a new code block here that listens to that channel and updates the job using something like the following/
+                 * */
+
+                // Sample update code, possibly useless here, we shouldn't use it anyway.
                 foreach (var order in newOrders)
                 {
                     await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
