@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -41,11 +42,14 @@ namespace TaskCat.PartnerServices.Infini
             var response = await this._httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            var token = await response.Content.ReadAsStringAsync();
+            if (!response.Headers.TryGetValues("token", out IEnumerable<string> tokenVals))
+                throw new InvalidOperationException("Failed to extract token from the headers");
+
+            var token = tokenVals.First();
             return token;
         }
 
-        public async Task<OrderStatus> UpdateOrderStatus(string token, string order_id, string order_status)
+        public async Task<OrderStatus> UpdateOrderStatus(string token, string order_id, OrderStatusCode order_status)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -57,7 +61,7 @@ namespace TaskCat.PartnerServices.Infini
                 throw new ArgumentException("Invalid order_id provided", nameof(order_id));
             }
 
-            if (string.IsNullOrWhiteSpace(order_status))
+            if (order_status == OrderStatusCode.Undefined)
             {
                 throw new ArgumentException("Invalid order_status provided", nameof(order_status));
             }
@@ -66,7 +70,7 @@ namespace TaskCat.PartnerServices.Infini
             uriBuilder.Path = "api/orders/api-update-order-status";
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["order_status"] = order_status;
+            query["order_status"] = ((int)order_status).ToString();
             query["order_id"] = order_id;
             uriBuilder.Query = query.ToString();
 
@@ -87,7 +91,7 @@ namespace TaskCat.PartnerServices.Infini
             return returnVal;
         }
 
-        public async Task<IEnumerable<Order>> GetOrders(string token, string orderStatus = null)
+        public async Task<IEnumerable<Order>> GetOrders(string token, OrderStatusCode orderStatus = OrderStatusCode.Undefined)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -97,10 +101,10 @@ namespace TaskCat.PartnerServices.Infini
             var uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path = "api/orders/get-orders";
 
-            if (!string.IsNullOrWhiteSpace(orderStatus))
+            if (orderStatus != OrderStatusCode.Undefined)
             {
                 var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-                query["order_status"] = orderStatus;
+                query["order_status"] = ((int)orderStatus).ToString();
                 uriBuilder.Query = query.ToString();
             }
 

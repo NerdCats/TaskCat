@@ -2,6 +2,7 @@
 {
     public enum OrderStatusCode
     {
+        Undefined = 0,
         Delivered = 3,
         Cancelled = 4,
         Exchanged = 5,

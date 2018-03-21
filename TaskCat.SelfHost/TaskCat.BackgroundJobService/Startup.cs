@@ -9,7 +9,7 @@ namespace TaskCat.BackgroundJobService
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHostedService, TimedJobPollingService>();        
+            services.AddSingleton<IHostedService, InfiniPollingService>();        
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,4 +1,6 @@
-﻿namespace TaskCat.PartnerModels.Infini
+﻿using Newtonsoft.Json.Linq;
+
+namespace TaskCat.PartnerModels.Infini
 {
     public class Order
     {
@@ -18,7 +20,7 @@
         public string transaction_id { get; set; }
         public string transaction_status { get; set; }
         public string description { get; set; }
-        public string cart { get; set; }
+        public JValue cart { get; set; }
         public int cashback_used { get; set; }
         public int cashback_earned { get; set; }
         public int cashback_credited { get; set; }
