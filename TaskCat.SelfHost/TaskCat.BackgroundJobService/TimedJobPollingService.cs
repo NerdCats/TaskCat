@@ -4,7 +4,6 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using TaskCat.PartnerModels;
 using TaskCat.PartnerServices.Infini;
 
 namespace TaskCat.BackgroundJobService
@@ -13,12 +12,15 @@ namespace TaskCat.BackgroundJobService
     {
         private ILogger _logger;
         private Timer _timer;
-        private HttpClient httpClient;
-        private object httpClient1;
+        private HttpClient _httpClient;
+        private OrderService _orderService;
+        private string _infiniToken;
 
         public TimedJobPollingService(ILogger<TimedJobPollingService> logger)
         {
             _logger = logger;
+            _httpClient = new HttpClient();
+            _orderService = new OrderService(_httpClient);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -30,15 +32,29 @@ namespace TaskCat.BackgroundJobService
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        private async void DoWork(object state)
         {
             _logger.LogInformation("Timed Background Service is working.");
-            ValidToken();
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(this._infiniToken))
+                {
+                    this._infiniToken = await this._orderService.Login();
+                }
+
+            }
+            catch (Exception)
+            {
+                // relogin here
+                throw;
+            }
+           
         }
 
         public async Task<bool> ValidToken()
         {
-            OrderService orderService = new OrderService(httpClient);
+            OrderService orderService = new OrderService(_httpClient);
             string logInToken = await orderService.Login();
             if (logInToken != null)
                 return true;

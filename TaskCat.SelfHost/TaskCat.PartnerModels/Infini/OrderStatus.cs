@@ -2,7 +2,7 @@
 {
     public class OrderStatus
     {
-        public string status { get; set; }
+        public OrderStatusCode status { get; set; }
         public Order order { get; set; }
     }
 }
