@@ -15,8 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TaskCat.Common\TaskCat.Common.csproj" />
+    <ProjectReference Include="..\TaskCat.Data\TaskCat.Data.csproj" />
     <ProjectReference Include="..\TaskCat.PartnerModels\TaskCat.PartnerModels.csproj" />
     <ProjectReference Include="..\TaskCat.PartnerServices\TaskCat.PartnerServices.csproj" />
+    <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.Core.csproj" />
   </ItemGroup>
 
 </Project>
