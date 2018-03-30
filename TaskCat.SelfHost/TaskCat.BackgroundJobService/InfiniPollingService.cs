@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -46,7 +47,7 @@ namespace TaskCat.BackgroundJobService
                 // Sample update code, possibly useless here, we shouldn't use it anyway.
                 foreach (var order in newOrders)
                 {
-                    await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
+                    //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
                 }
             }
             catch (Exception ex)

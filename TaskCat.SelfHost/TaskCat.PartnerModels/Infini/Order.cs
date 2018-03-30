@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
 
 namespace TaskCat.PartnerModels.Infini
 {
@@ -7,9 +7,6 @@ namespace TaskCat.PartnerModels.Infini
         public int id { get; set; }
         public int user_id { get; set; }
         public int otype { get; set; }
-        public object table_id { get; set; }
-        public string join_tables { get; set; }
-        public int created_by { get; set; }
         public int order_amt { get; set; }
         public int pay_amt { get; set; }
         public int cod_charges { get; set; }
@@ -20,7 +17,7 @@ namespace TaskCat.PartnerModels.Infini
         public string transaction_id { get; set; }
         public string transaction_status { get; set; }
         public string description { get; set; }
-        public JValue cart { get; set; }
+        public Dictionary<string, CartItem> cart { get; set; }
         public int cashback_used { get; set; }
         public int cashback_earned { get; set; }
         public int cashback_credited { get; set; }
@@ -64,7 +61,6 @@ namespace TaskCat.PartnerModels.Infini
         public int credit_interest_rate { get; set; }
         public int credit_no_of_days { get; set; }
         public int credit_interest_val { get; set; }
-        public string additional_charge { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
     }
