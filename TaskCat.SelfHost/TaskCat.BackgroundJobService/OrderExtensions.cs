@@ -83,6 +83,8 @@ namespace TaskCat.BackgroundJobService
                 PhoneNumber = infiniOrder.phone_no
             };
 
+            taskcatOrder.Variant = DeliveryOrderVariants.EnterpriseDelivery;
+
             return taskcatOrder;
         }
     }
