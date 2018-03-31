@@ -395,6 +395,8 @@
   <ItemGroup>
     <Compile Include="App\AutofacContainerBuilder.cs" />
     <Compile Include="App\Settings\EmailTemplatePathSettings.cs" />
+    <Compile Include="App\Settings\QueueConfig.cs" />
+    <Compile Include="App\Settings\ServiceBusSettings.cs" />
     <Compile Include="App_Start\BsonSerializerConfig.cs" />
     <Compile Include="App_Start\EmailTemplatesConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -426,6 +428,7 @@
     <Compile Include="Lib\Email\Razor\RazorTemplateParser.cs" />
     <Compile Include="Lib\Job\JobActivityService.cs" />
     <Compile Include="Lib\Job\JobSearchIndexService.cs" />
+    <Compile Include="Lib\ServiceBus\JobpullQueueHandler.cs" />
     <Compile Include="Lib\Tag\DataTagService.cs" />
     <Compile Include="Lib\Tag\TagExtensionService.cs" />
     <Compile Include="Model\Asset\AssetSearchRequest.cs" />
@@ -464,6 +467,9 @@
     <Content Include=".config\local\ElasticSearchSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include=".config\local\ServiceBusSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
