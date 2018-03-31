@@ -19,6 +19,7 @@
     using TaskCat.App.Settings;
     using Microsoft.Azure.ServiceBus;
     using TaskCat.Lib.ServiceBus;
+    using TaskCat.Job.Order;
 
     public class TaskCatApiService : IDichotomyService
     {
@@ -31,7 +32,8 @@
         private TagExtensionService tagActivityService;
 
         private QueueClient jobpullQueueClient;
-        private JobpullQueueHandler jobpullMessageHandler;
+        private QueueClient jobpushQueueClient;
+        private JobQueueHandler jobpullMessageHandler;
 
         public TaskCatApiService()
         {
@@ -64,9 +66,16 @@
         {
             var serviceBusSettings = Settings.Get<ServiceBusSettings>();
             var jobpullQueueConfig = serviceBusSettings.JobPullConfig;
+            var jobpushQueueConfig = serviceBusSettings.JobPushConfig;
 
             this.jobpullQueueClient = new QueueClient(jobpullQueueConfig.ConnectionString, jobpullQueueConfig.Queue);
-            this.jobpullMessageHandler = new JobpullQueueHandler(jobpullQueueClient);
+            this.jobpushQueueClient = new QueueClient(jobpushQueueConfig.ConnectionString, jobpushQueueConfig.Queue);
+
+            this.jobpullMessageHandler = new JobQueueHandler(
+                pullQueueClient: this.jobpullQueueClient,
+                pushQueueClient: this.jobpushQueueClient,
+                repository: container.Resolve<IOrderRepository>(),
+                activitySubject: container.Resolve<Subject<JobActivity>>());
 
             this.jobpullMessageHandler.Initiate();
         }

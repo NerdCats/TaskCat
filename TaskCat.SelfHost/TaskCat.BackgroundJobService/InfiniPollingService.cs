@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TaskCat.Common.Settings;
+using TaskCat.Data.Message;
 using TaskCat.PartnerModels.Infini;
 using TaskCat.PartnerServices.Infini;
 
@@ -56,9 +57,7 @@ namespace TaskCat.BackgroundJobService
                 logger.LogInformation("Fetching new orders");
                 var newOrders = await this.orderService.GetOrders(this.infiniToken, OrderStatusCode.Ready_To_Ship);
 
-                // TODO
-                /* 1. Set a customer ID for infini in taskcat
-                 * 4. Find a way so TaskCat can communicate everytime these jobs are updated. 
+                /* TODO
                  * 5. When any of these jobs are updated TaskCat will notify some message channel .
                  * 6. Add a new code block here that listens to that channel and updates the job using something like the following/
                  * */
@@ -69,7 +68,7 @@ namespace TaskCat.BackgroundJobService
                 // Sample update code, possibly useless here, we shouldn't use it anyway.
                 foreach (var order in newOrders)
                 {
-                    await ProcessNewOrder(cache, defaultAddressSettings, order);
+                    await ProcessOrder(cache, defaultAddressSettings, order);
                 }
             }
             catch (Exception ex)
@@ -80,10 +79,10 @@ namespace TaskCat.BackgroundJobService
 
         private bool shouldProcess(string cacheState)
         {
-            return !(cacheState == CacheStates.POSTED || cacheState == CacheStates.CLAIMED);
+            return !(cacheState == JobMessageEvents.POSTED || cacheState == JobMessageEvents.CLAIMED);
         }
 
-        private async Task ProcessNewOrder(IDatabase cache, ProprietorSettings defaultAddressSettings, PartnerModels.Infini.Order order)
+        private async Task ProcessOrder(IDatabase cache, ProprietorSettings defaultAddressSettings, PartnerModels.Infini.Order order)
         {
             // Step: Did we read this order before and if we did should we process it?
             var cachedOrderState = cache.StringGet(order.id.ToString());
@@ -99,11 +98,12 @@ namespace TaskCat.BackgroundJobService
             {
                 // Step: We didn't read this order before. Let's just mark it read before anything happens
                 // We are not using this state now, may be later.
-                cache.StringSet(order.id.ToString(), CacheStates.READ);
+                cache.StringSet(order.id.ToString(), JobMessageEvents.READ);
             }
 
+            var infiniUserId = this.configuration["Infini:userid"];
             // Step: Convert the partner order to native taskcat order
-            var taskcatOrder = order.ToClassifiedDeliveryOrder(defaultAddressSettings);
+            var taskcatOrder = order.ToClassifiedDeliveryOrder(defaultAddressSettings, infiniUserId);
 
             logger.LogInformation($"Preparing message for order {order.id.ToString()}");
             // Step: Throw it to our message bus and update the state to posted.
@@ -113,13 +113,13 @@ namespace TaskCat.BackgroundJobService
             try
             {
                 await this.queueClient.SendAsync(createNewTaskCatJobMessage);
-                cache.StringSet(order.id.ToString(), CacheStates.POSTED);
+                cache.StringSet(order.id.ToString(), JobMessageEvents.POSTED);
 
-                logger.LogInformation($"order {order.id.ToString()} is {CacheStates.POSTED}");
+                logger.LogInformation($"order {order.id.ToString()} is {JobMessageEvents.POSTED}");
             }
             catch (Exception ex) when (ex is ServiceBusException || ex is InvalidOperationException)
             {
-                logger.LogError($"Service bus exception encountered, skipping marking the order {CacheStates.POSTED}", ex);
+                logger.LogError($"Service bus exception encountered, skipping marking the order {JobMessageEvents.POSTED}", ex);
             }
 
             //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);

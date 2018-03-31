@@ -14,11 +14,22 @@ namespace TaskCat.BackgroundJobService
     {
         public static ClassifiedDeliveryOrder ToClassifiedDeliveryOrder(
             this Order infiniOrder,
-            ProprietorSettings defaultAddressSettings)
+            ProprietorSettings defaultAddressSettings,
+            string userId)
         {
             if (infiniOrder == null)
             {
                 throw new ArgumentNullException(nameof(infiniOrder));
+            }
+
+            if (defaultAddressSettings == null)
+            {
+                throw new ArgumentNullException(nameof(defaultAddressSettings));
+            }
+
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
             }
 
             const string orderPrefix = "IFA";
@@ -38,6 +49,15 @@ namespace TaskCat.BackgroundJobService
                 }
             };
 
+            taskcatOrder.OrderCart.TotalToPay = infiniOrder.pay_amt + taskcatOrder.OrderCart.ServiceCharge;
+            taskcatOrder.OrderCart.PackageList = infiniOrder.cart.Select(x =>
+                new ItemDetails()
+                {
+                    Item = x.Value.name,
+                    Price = Decimal.Parse(x.Value.price),
+                    Quantity = Int32.Parse(x.Value.qty)
+                }).ToList();
+
             // Infini doesn't provide a from address for now. We are setting it to a configured default
             taskcatOrder.From = defaultAddressSettings.Address;
             taskcatOrder.SellerInfo = new PersonInfo()
@@ -45,6 +65,8 @@ namespace TaskCat.BackgroundJobService
                 Name = defaultAddressSettings.Name,
                 PhoneNumber = defaultAddressSettings.PhoneNumber
             };
+
+            taskcatOrder.UserId = userId;
 
             taskcatOrder.To = new DefaultAddress(
                 addressLine1: infiniOrder.address1,
@@ -60,15 +82,6 @@ namespace TaskCat.BackgroundJobService
                 Name = infiniOrder.first_name + " " + infiniOrder.last_name,
                 PhoneNumber = infiniOrder.phone_no
             };
-
-            taskcatOrder.OrderCart.TotalToPay = infiniOrder.pay_amt + taskcatOrder.OrderCart.ServiceCharge;
-            taskcatOrder.OrderCart.PackageList = infiniOrder.cart.Select(x =>
-                new ItemDetails()
-                {
-                    Item = x.Value.name,
-                    Price = Decimal.Parse(x.Value.price),
-                    Quantity = Int32.Parse(x.Value.qty)
-                }).ToList();
 
             return taskcatOrder;
         }

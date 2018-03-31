@@ -190,5 +190,6 @@
         public const string Claim = "Claim";
         public const string Cancel = "Cancel";
         public const string Restore = "Restore";
+        public const string Error = "Error";
     }
 }
