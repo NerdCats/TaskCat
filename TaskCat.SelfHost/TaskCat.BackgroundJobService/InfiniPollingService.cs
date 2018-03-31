@@ -1,18 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using TaskCat.Common.Settings;
-using TaskCat.Data.Model.Geocoding;
-using TaskCat.Data.Model.Inventory;
-using TaskCat.Data.Model.Order.Delivery;
-using TaskCat.Data.Model.Person;
 using TaskCat.PartnerModels.Infini;
 using TaskCat.PartnerServices.Infini;
-using TaskCat.Payment.Core.Manual;
 
 namespace TaskCat.BackgroundJobService
 {
@@ -21,16 +15,19 @@ namespace TaskCat.BackgroundJobService
         private const string DefaultAddressConfiguration = "DefaultFromAddress";
         private readonly ILogger _logger;
         private readonly IConfiguration configuration;
+        private readonly RedisContext context;
         private HttpClient _httpClient;
         private OrderService _orderService;
         private string _infiniToken;
 
         public InfiniPollingService(
             ILogger<InfiniPollingService> logger,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            RedisContext context)
         {
             _logger = logger;
             this.configuration = configuration;
+            this.context = context;
             _httpClient = new HttpClient();
             _orderService = new OrderService(_httpClient);
         }
@@ -38,6 +35,7 @@ namespace TaskCat.BackgroundJobService
         private async Task DoWork()
         {
             _logger.LogInformation("Background task is working.");
+            var cache = context.Connection.GetDatabase();
 
             try
             {
@@ -61,6 +59,15 @@ namespace TaskCat.BackgroundJobService
                 foreach (var order in newOrders)
                 {
                     var taskcatOrder = order.ToClassifiedDeliveryOrder(defaultAddressSettings);
+                    cache.StringSet(order.id.ToString(), CacheStates.READ);
+
+                    var cacheVal = cache.StringGet(order.id.ToString());
+                    
+                    if(cacheVal.HasValue)
+                    {
+                        var stringVal = cacheVal.ToString();
+                    }
+                    
                     //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
                 }
             }

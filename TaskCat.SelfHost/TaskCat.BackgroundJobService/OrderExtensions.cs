@@ -2,6 +2,7 @@
 using System.Linq;
 using TaskCat.Common.Settings;
 using TaskCat.Data.Model.Geocoding;
+using TaskCat.Data.Model.Inventory;
 using TaskCat.Data.Model.Order.Delivery;
 using TaskCat.Data.Model.Person;
 using TaskCat.PartnerModels.Infini;
