@@ -51,27 +51,33 @@ namespace TaskCat.Lib.ServiceBus
 
             Console.WriteLine($"Order from {taskcatOrder.UserId} converted, ready to order");
 
-            var pushMessage = new PushMessage();
+            var pushMessage = new TaskCatMessage();
 
             try
             {
                 var newJob = await PostNewOrder(taskcatOrder);
-                pushMessage = new PushMessage
+
+                Console.WriteLine($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id}");
+                pushMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
                     Job = newJob,
                     JobActivityOperationName = JobActivityOperationNames.Create
                 };                
             }
-            catch (Exception) // Catching global exception is a bad thing, fix this
+            catch (Exception ex) // Catching global exception is a bad thing, fix this
             {
-                pushMessage = new PushMessage
+                Console.WriteLine(ex);
+                Console.WriteLine($"Error processing remote Order = {taskcatOrder.ReferenceOrderId}");
+
+                pushMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
                     JobActivityOperationName = JobActivityOperationNames.Error
                 }; 
             }
 
+            Console.WriteLine($"Sending message back to polling service");
             var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pushMessage)));
             await this.pushQueueClient.SendAsync(pushMessageBody);
         }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TaskCat.Common.Settings;
+using TaskCat.Data.Entity;
 using TaskCat.Data.Message;
 using TaskCat.PartnerModels.Infini;
 using TaskCat.PartnerServices.Infini;
@@ -24,30 +25,32 @@ namespace TaskCat.BackgroundJobService
         private readonly ServiceBusContext serviceBusContext;
         private HttpClient httpClient;
         private OrderService orderService;
-        private QueueClient queueClient;
+        private QueueClient pushQueueClient;
+        private QueueClient pullQueueClient;
         private string infiniToken;
+        private IDatabase cache;
 
         public InfiniPollingService(
             ILogger<InfiniPollingService> logger,
             IConfiguration configuration,
-            RedisContext redixContext,
+            RedisContext redisContext,
             ServiceBusContext serviceBusContext,
             HttpClient httpClient)
         {
             this.logger = logger;
             this.configuration = configuration;
-            this.redisContext = redixContext;
+            this.redisContext = redisContext;
             this.serviceBusContext = serviceBusContext;
             this.httpClient = httpClient;
             orderService = new OrderService(httpClient);
 
-            this.queueClient = this.serviceBusContext.QueueClient;
+            this.pushQueueClient = this.serviceBusContext.PushQueueClient;
+            this.pullQueueClient = this.serviceBusContext.PullQueueClient;
         }
 
         private async Task DoWork()
         {
             logger.LogInformation("Background task is working.");
-            var cache = redisContext.Connection.GetDatabase();
 
             try
             {
@@ -79,7 +82,7 @@ namespace TaskCat.BackgroundJobService
 
         private bool shouldProcess(string cacheState)
         {
-            return !(cacheState == JobMessageEvents.POSTED || cacheState == JobMessageEvents.CLAIMED);
+            return !(cacheState == RemoteJobState.POSTED || cacheState == RemoteJobState.CLAIMED);
         }
 
         private async Task ProcessOrder(IDatabase cache, ProprietorSettings defaultAddressSettings, PartnerModels.Infini.Order order)
@@ -98,7 +101,7 @@ namespace TaskCat.BackgroundJobService
             {
                 // Step: We didn't read this order before. Let's just mark it read before anything happens
                 // We are not using this state now, may be later.
-                cache.StringSet(order.id.ToString(), JobMessageEvents.READ);
+                cache.StringSet(order.id.ToString(), RemoteJobState.READ);
             }
 
             var infiniUserId = this.configuration["Infini:userid"];
@@ -112,14 +115,14 @@ namespace TaskCat.BackgroundJobService
 
             try
             {
-                await this.queueClient.SendAsync(createNewTaskCatJobMessage);
-                cache.StringSet(order.id.ToString(), JobMessageEvents.POSTED);
+                await this.pushQueueClient.SendAsync(createNewTaskCatJobMessage);
+                cache.StringSet(order.id.ToString(), RemoteJobState.POSTED);
 
-                logger.LogInformation($"order {order.id.ToString()} is {JobMessageEvents.POSTED}");
+                logger.LogInformation($"order {order.id.ToString()} is {RemoteJobState.POSTED}");
             }
             catch (Exception ex) when (ex is ServiceBusException || ex is InvalidOperationException)
             {
-                logger.LogError($"Service bus exception encountered, skipping marking the order {JobMessageEvents.POSTED}", ex);
+                logger.LogError($"Service bus exception encountered, skipping marking the order {RemoteJobState.POSTED}", ex);
             }
 
             //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
@@ -133,6 +136,8 @@ namespace TaskCat.BackgroundJobService
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("Infini Background Service is starting.");
+            InitiatePullQueueHandler();
+            this.cache = redisContext.Connection.GetDatabase();
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -140,7 +145,49 @@ namespace TaskCat.BackgroundJobService
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }
 
-            await queueClient.CloseAsync();
+            await pushQueueClient.CloseAsync();
+        }
+
+        private void InitiatePullQueueHandler()
+        {
+            var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
+            {
+                MaxConcurrentCalls = 1,
+                MaxAutoRenewDuration = TimeSpan.FromHours(1)
+            };
+
+            pullQueueClient.RegisterMessageHandler(ProcessTaskCatMessagesAsync, messageHandlerOptions);
+        }
+
+        private async Task ProcessTaskCatMessagesAsync(Message message, CancellationToken token)
+        {
+            logger.LogInformation($"Received message from TaskCat: SequenceNumber:{message.SystemProperties.SequenceNumber}");
+
+            var messageBody = Encoding.UTF8.GetString(message.Body);
+            var taskCatMessage = JsonConvert.DeserializeObject<TaskCatMessage>(messageBody);
+
+            if (taskCatMessage.JobActivityOperationName == JobActivityOperationNames.Error)
+            {
+                logger.LogInformation($"Order {taskCatMessage.ReferenceId} ended in {RemoteJobState.ERROR}");
+                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobState.ERROR);
+            }
+            else if (taskCatMessage.JobActivityOperationName == JobActivityOperationNames.Create)
+            {
+                logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat Job Id: {taskCatMessage.Job.Id}");
+                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobState.CREATED);
+            }    
+        }
+
+        private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
+        {
+            logger.LogError($"jobpull message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
+
+            var context = exceptionReceivedEventArgs.ExceptionReceivedContext;
+            logger.LogInformation("Exception context for troubleshooting:");
+            logger.LogInformation($"- Endpoint: {context.Endpoint}");
+            logger.LogInformation($"- Entity Path: {context.EntityPath}");
+            logger.LogInformation($"- Executing Action: {context.Action}");
+            return Task.CompletedTask;
         }
     }
 }

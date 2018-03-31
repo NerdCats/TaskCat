@@ -24,9 +24,14 @@ namespace TaskCat.BackgroundJobService
             services.AddSingleton<RedisContext>(redisContext);
 
             var serviceBusConnectionString = configuration["servicebus"];
-            var serviceBusQueueName = configuration["queue"];
+            var pushQueueName = configuration["pushqueue"];
+            var pullQueueName = configuration["pullqueue"];
 
-            var serviceBusContext = new ServiceBusContext(serviceBusConnectionString, serviceBusQueueName);
+            var serviceBusContext = new ServiceBusContext(
+                connectionString: serviceBusConnectionString, 
+                pushQueueName: pushQueueName,
+                pullQueueName: pullQueueName);
+
             services.AddSingleton(serviceBusContext);
 
             services.AddSingleton<HttpClient>();
