@@ -9,7 +9,6 @@ using TaskCat.Data.Entity;
 using TaskCat.Data.Message;
 using TaskCat.Data.Model.Order.Delivery;
 using TaskCat.Job.Order;
-using TaskCat.Job.Order.Exceptions;
 
 namespace TaskCat.Lib.ServiceBus
 {
@@ -41,6 +40,12 @@ namespace TaskCat.Lib.ServiceBus
             };
 
             pullQueueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            activitySubject.Subscribe(OnNext, CancellationToken.None);
+        }
+
+        private void OnNext(JobActivity activity)
+        {
+
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)

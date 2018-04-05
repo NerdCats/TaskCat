@@ -174,6 +174,7 @@ namespace TaskCat.BackgroundJobService
             else if (taskCatMessage.JobActivityOperationName == JobActivityOperationNames.Create)
             {
                 logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat Job Id: {taskCatMessage.Job.Id}");
+                await this.orderService.UpdateOrderReferenceId(this.infiniToken, taskCatMessage.ReferenceId, taskCatMessage.Job.HRID);
                 await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobState.CREATED);
             }    
         }

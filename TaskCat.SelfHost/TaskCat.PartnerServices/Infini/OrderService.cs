@@ -11,7 +11,7 @@ namespace TaskCat.PartnerServices.Infini
 {
     public class OrderService
     {
-        private const string baseUri = "http://buyersclub.infinisystem.com";
+        private const string baseUri = "http://alladin.com.bd";
         private HttpClient _httpClient;
 
         // TODO: Make sure these are loaded from configuration/settings
@@ -49,6 +49,39 @@ namespace TaskCat.PartnerServices.Infini
             return token;
         }
 
+        public async Task<UpdateOrderResponse> UpdateOrderReferenceId(string token, string order_id, string taskCatJobId)
+        {
+            if (token == null)
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            var uriBuilder = new UriBuilder(baseUri);
+            uriBuilder.Path = "api/orders/update-api-shipping-id";
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["shipping_id"] = taskCatJobId ?? throw new ArgumentNullException(nameof(taskCatJobId));
+            query["order_id"] = order_id ?? throw new ArgumentNullException(nameof(order_id));
+            uriBuilder.Query = query.ToString();
+
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = uriBuilder.Uri,
+                Method = HttpMethod.Post
+            };
+
+            request.Headers.Add("token", token);
+
+            var response = await this._httpClient.SendAsync(request);
+            //TODO: Do they actually send back an error code, not sure, need to handle this.
+            response.EnsureSuccessStatusCode();
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var returnVal = JsonConvert.DeserializeObject<UpdateOrderResponse>(responseJson);
+
+            return returnVal;
+        }
+
         public async Task<UpdateOrderResponse> UpdateOrderStatus(string token, string order_id, OrderStatusCode order_status)
         {
             if (string.IsNullOrWhiteSpace(token))
@@ -83,6 +116,7 @@ namespace TaskCat.PartnerServices.Infini
             request.Headers.Add("token", token);
 
             var response = await this._httpClient.SendAsync(request);
+            //TODO: Do they actually send back an error code, not sure, need to handle this.
             response.EnsureSuccessStatusCode();
 
             var responseJson = await response.Content.ReadAsStringAsync();
