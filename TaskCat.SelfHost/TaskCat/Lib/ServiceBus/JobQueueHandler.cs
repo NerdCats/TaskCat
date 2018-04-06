@@ -93,6 +93,7 @@ namespace TaskCat.Lib.ServiceBus
             Console.WriteLine($"Sending message back to polling service");
             var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobCreatedMessage)));
             await this.pushQueueClient.SendAsync(pushMessageBody);
+            Console.WriteLine($"Sent message back to polling service");
         }
 
         private async Task<Data.Entity.Job> PostNewOrder(ClassifiedDeliveryOrder taskcatOrder)

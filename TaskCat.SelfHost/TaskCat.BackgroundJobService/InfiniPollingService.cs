@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -59,7 +60,7 @@ namespace TaskCat.BackgroundJobService
                 
                 logger.LogInformation("Fetching new orders");
                 var newOrders = await this.orderService.GetOrders(this.infiniToken, OrderStatusCode.Ready_To_Ship);
-
+                logger.LogInformation($"Fetched {newOrders.Count()} new orders");
                 /* TODO
                  * 5. When any of these jobs are updated TaskCat will notify some message channel .
                  * 6. Add a new code block here that listens to that channel and updates the job using something like the following/
