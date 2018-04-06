@@ -19,12 +19,7 @@ using TaskCat.Common.Settings;
 using System.Reactive.Linq;
 using TaskCat.Job.Extensions;
 using NerdCats.Owin;
-using TaskCat.Data.Lib.Extension;
-using System.Collections.Generic;
 using System;
-using System.Reactive;
-using TaskCat.Data.Entity;
-using System.Reactive.Subjects;
 
 namespace TaskCat
 {

@@ -58,10 +58,14 @@ namespace TaskCat.Lib.ServiceBus
                 var jobUpdatedMessage = new TaskCatMessage()
 
                 {
-                    ReferenceId = activity.HRID,
+                    JobID = activity.JobId,
+                    JobHRID = activity.HRID,
+                    ReferenceId = activity.ReferenceId,
                     RemoteJobStage = RemoteJobStage.UPDATE,
                     RemoteJobState = activity.Value.ToString()
                 };
+
+
             }
         }
 
