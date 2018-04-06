@@ -56,6 +56,7 @@ namespace TaskCat.Lib.ServiceBus
             if (activity.Operation == JobActivityOperationNames.Update)
             {
                 var jobUpdatedMessage = new TaskCatMessage()
+
                 {
                     ReferenceId = activity.HRID,
                     RemoteJobStage = RemoteJobStage.UPDATE,

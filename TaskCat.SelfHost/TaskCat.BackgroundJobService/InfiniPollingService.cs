@@ -83,7 +83,9 @@ namespace TaskCat.BackgroundJobService
 
         private bool shouldProcess(string cacheState)
         {
-            return !(cacheState == RemoteJobStage.POSTED || cacheState == RemoteJobStage.CLAIMED);
+            return (cacheState == RemoteJobStage.ERROR 
+                || cacheState == RemoteJobStage.READ
+                || cacheState == RemoteJobStage.UPDATE);
         }
 
         private async Task ProcessOrder(IDatabase cache, ProprietorSettings defaultAddressSettings, PartnerModels.Infini.Order order)
