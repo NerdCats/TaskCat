@@ -15,19 +15,16 @@
     {
         public Dictionary<string, List<JobTaskExtension>> ExtensionsDictionary { get; private set; }
 
-        public DeliveryJobExtensions(IEnumerable<JobTaskExtension> partnerExtensions = null)
+        public DeliveryJobExtensions()
         {
             ExtensionsDictionary = new Dictionary<string, List<JobTaskExtension>>();
-            PopulateExtensions(partnerExtensions);
+            PopulateExtensions();
         }
 
-        private void PopulateExtensions(IEnumerable<JobTaskExtension> partnerExtensions)
+        private void PopulateExtensions()
         {
             EnlistClassifiedDeliveryExtensions();
             EnlistDeliveryExtensions();
-
-            if (partnerExtensions != null)
-                EnlistPartnerExtensions(partnerExtensions);
         }
 
         private void EnlistPartnerExtensions(IEnumerable<JobTaskExtension> partnerExtensions)
@@ -322,9 +319,9 @@
             }
         }
 
-        public static void RegisterExtensions(IEnumerable<JobTaskExtension> partnerExtensions = null)
+        public static void RegisterExtensions()
         {
-            var extensions = new DeliveryJobExtensions(partnerExtensions);            
+            var extensions = new DeliveryJobExtensions();            
             foreach (var item in extensions.ExtensionsDictionary)
             {
                 JobTaskExtensionResolver.Register(item.Key, item.Value);

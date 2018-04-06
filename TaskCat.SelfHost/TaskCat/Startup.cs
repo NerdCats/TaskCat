@@ -92,11 +92,7 @@ namespace TaskCat
                 throw new ArgumentNullException(nameof(container));
             }
 
-            // TODO: Make this even more generic, time for a plugin architecture.      
-            var infiniExtension = new PartnerServices.Infini.InfiniUpdateJobTaskStateExtension(container.Resolve<Subject<JobActivity>>());
-            var partnerExtensions = new List<JobTaskExtension>() { infiniExtension };
-
-            DeliveryJobExtensions.RegisterExtensions(partnerExtensions);
+            DeliveryJobExtensions.RegisterExtensions();
         }
 
         private static void SetupMongoConventions()
