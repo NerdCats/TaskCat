@@ -20,6 +20,7 @@
     using Microsoft.Azure.ServiceBus;
     using TaskCat.Lib.ServiceBus;
     using TaskCat.Job.Order;
+    using System.Threading.Tasks;
 
     public class TaskCatApiService : IDichotomyService
     {
@@ -68,16 +69,19 @@
             var jobpullQueueConfig = serviceBusSettings.JobPullConfig;
             var jobpushQueueConfig = serviceBusSettings.JobPushConfig;
 
-            this.jobpullQueueClient = new QueueClient(jobpullQueueConfig.ConnectionString, jobpullQueueConfig.Queue);
-            this.jobpushQueueClient = new QueueClient(jobpushQueueConfig.ConnectionString, jobpushQueueConfig.Queue);
+            Task.Factory.StartNew(() => {
+                this.jobpullQueueClient = new QueueClient(jobpullQueueConfig.ConnectionString, jobpullQueueConfig.Queue);
+                this.jobpushQueueClient = new QueueClient(jobpushQueueConfig.ConnectionString, jobpushQueueConfig.Queue);
 
-            this.jobpullMessageHandler = new JobQueueHandler(
-                pullQueueClient: this.jobpullQueueClient,
-                pushQueueClient: this.jobpushQueueClient,
-                repository: container.Resolve<IOrderRepository>(),
-                activitySubject: container.Resolve<Subject<JobActivity>>());
+                this.jobpullMessageHandler = new JobQueueHandler(
+                    pullQueueClient: this.jobpullQueueClient,
+                    pushQueueClient: this.jobpushQueueClient,
+                    repository: container.Resolve<IOrderRepository>(),
+                    activitySubject: container.Resolve<Subject<JobActivity>>());
 
-            this.jobpullMessageHandler.Initiate();
+                this.jobpullMessageHandler.Initiate();
+            }, 
+            TaskCreationOptions.LongRunning);
         }
 
         public void Dispose()

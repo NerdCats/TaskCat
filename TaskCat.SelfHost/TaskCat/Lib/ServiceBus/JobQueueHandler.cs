@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
+using NLog;
 using System;
 using System.Reactive.Subjects;
 using System.Text;
@@ -19,6 +20,8 @@ namespace TaskCat.Lib.ServiceBus
         private readonly IOrderRepository repository;
         private readonly Subject<JobActivity> activitySubject;
 
+        private static Logger logger = LogManager.GetLogger(nameof(JobQueueHandler));
+
         public JobQueueHandler(
             IQueueClient pullQueueClient,
             IQueueClient pushQueueClient,
@@ -33,13 +36,18 @@ namespace TaskCat.Lib.ServiceBus
 
         public void Initiate()
         {
+            logger.Info("Initiating Job Queue Handler");
+
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
                 MaxConcurrentCalls = 1,
                 MaxAutoRenewDuration = TimeSpan.FromHours(1)
             };
 
+            logger.Info("Registering pull queue client");
             pullQueueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+
+            logger.Info("Registering on job activity stream");
             activitySubject.Subscribe(OnNext, CancellationToken.None);
         }
 
@@ -58,11 +66,11 @@ namespace TaskCat.Lib.ServiceBus
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
-            Console.WriteLine($"Received jobpull message: SequenceNumber:{message.SystemProperties.SequenceNumber}");
+            logger.Info($"Received jobpull message: SequenceNumber:{message.SystemProperties.SequenceNumber}");
             var messageString = Encoding.UTF8.GetString(message.Body);
             var taskcatOrder = JsonConvert.DeserializeObject<ClassifiedDeliveryOrder>(messageString);
 
-            Console.WriteLine($"Order from {taskcatOrder.UserId} converted, ready to order");
+            logger.Info($"Order from {taskcatOrder.UserId} converted, ready to order");
 
             var jobCreatedMessage = new TaskCatMessage();
 
@@ -70,7 +78,7 @@ namespace TaskCat.Lib.ServiceBus
             {
                 var newJob = await PostNewOrder(taskcatOrder);
 
-                Console.WriteLine($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id}");
+                logger.Info($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id}");
                 jobCreatedMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
@@ -80,8 +88,8 @@ namespace TaskCat.Lib.ServiceBus
             }
             catch (Exception ex) // Catching global exception is a bad thing, fix this
             {
-                Console.WriteLine(ex);
-                Console.WriteLine($"Error processing remote Order = {taskcatOrder.ReferenceOrderId}");
+                logger.Error(ex);
+                logger.Error($"Error processing remote Order = {taskcatOrder.ReferenceOrderId}");
 
                 jobCreatedMessage = new TaskCatMessage
                 {
@@ -90,10 +98,10 @@ namespace TaskCat.Lib.ServiceBus
                 }; 
             }
 
-            Console.WriteLine($"Sending message back to polling service");
+            logger.Info($"Sending message back to polling service");
             var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobCreatedMessage)));
             await this.pushQueueClient.SendAsync(pushMessageBody);
-            Console.WriteLine($"Sent message back to polling service");
+            logger.Info($"Sent message back to polling service");
         }
 
         private async Task<Data.Entity.Job> PostNewOrder(ClassifiedDeliveryOrder taskcatOrder)
@@ -106,13 +114,13 @@ namespace TaskCat.Lib.ServiceBus
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
-            Console.WriteLine($"jobpull message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
+            logger.Error($"jobpull message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
 
             var context = exceptionReceivedEventArgs.ExceptionReceivedContext;
-            Console.WriteLine("Exception context for troubleshooting:");
-            Console.WriteLine($"- Endpoint: {context.Endpoint}");
-            Console.WriteLine($"- Entity Path: {context.EntityPath}");
-            Console.WriteLine($"- Executing Action: {context.Action}");
+            logger.Info("Exception context for troubleshooting:");
+            logger.Info($"- Endpoint: {context.Endpoint}");
+            logger.Info($"- Entity Path: {context.EntityPath}");
+            logger.Info($"- Executing Action: {context.Action}");
             return Task.CompletedTask;
         }
     }
