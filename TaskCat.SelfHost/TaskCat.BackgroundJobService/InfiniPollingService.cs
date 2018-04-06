@@ -106,8 +106,9 @@ namespace TaskCat.BackgroundJobService
             }
 
             var infiniUserId = this.configuration["Infini:userid"];
+            var serviceCharge = Decimal.Parse(this.configuration["ServiceCharge"]);
             // Step: Convert the partner order to native taskcat order
-            var taskcatOrder = order.ToClassifiedDeliveryOrder(defaultAddressSettings, infiniUserId);
+            var taskcatOrder = order.ToClassifiedDeliveryOrder(serviceCharge, defaultAddressSettings, infiniUserId);
 
             logger.LogInformation($"Preparing message for order {order.id.ToString()}");
             // Step: Throw it to our message bus and update the state to posted.

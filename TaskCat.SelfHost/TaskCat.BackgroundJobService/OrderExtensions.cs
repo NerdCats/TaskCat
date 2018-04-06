@@ -15,6 +15,7 @@ namespace TaskCat.BackgroundJobService
     {
         public static ClassifiedDeliveryOrder ToClassifiedDeliveryOrder(
             this Order infiniOrder,
+            Decimal serviceCharge,
             ProprietorSettings defaultAddressSettings,
             string userId)
         {
@@ -45,7 +46,7 @@ namespace TaskCat.BackgroundJobService
 
                 OrderCart = new OrderDetails
                 {
-                    ServiceCharge = 150, // TODO: This needs some lookup here.
+                    ServiceCharge = serviceCharge,
                     SubTotal = infiniOrder.total
                 }
             };
@@ -53,15 +54,12 @@ namespace TaskCat.BackgroundJobService
             taskcatOrder.OrderCart.TotalToPay = infiniOrder.total + taskcatOrder.OrderCart.ServiceCharge;
             taskcatOrder.OrderCart.PackageList = new List<ItemDetails>();
 
-            for (int i = 0; i < infiniOrder.qty; i++)
+            taskcatOrder.OrderCart.PackageList.Add(new ItemDetails()
             {
-                taskcatOrder.OrderCart.PackageList.Add(new ItemDetails()
-                {
-                    Item = infiniOrder.product,
-                    Price = infiniOrder.unit_price,
-                    Quantity = infiniOrder.qty
-                });
-            }
+                Item = infiniOrder.product,
+                Price = infiniOrder.unit_price,
+                Quantity = infiniOrder.qty
+            });
 
             // Infini doesn't provide a from address for now. We are setting it to a configured default
             if (infiniOrder.vendor_address == null || !infiniOrder.vendor_address.Any())
