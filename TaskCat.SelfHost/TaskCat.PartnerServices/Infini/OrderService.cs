@@ -75,9 +75,11 @@ namespace TaskCat.PartnerServices.Infini
             var response = await this._httpClient.SendAsync(request);
             //TODO: Do they actually send back an error code, not sure, need to handle this.
             response.EnsureSuccessStatusCode();
-
             var responseJson = await response.Content.ReadAsStringAsync();
             var returnVal = JsonConvert.DeserializeObject<UpdateOrderResponse>(responseJson);
+
+            if (returnVal.status != "success")
+                throw new HttpRequestException("Http operation failed, return payload indicates failure");
 
             return returnVal;
         }

@@ -78,7 +78,7 @@ namespace TaskCat.Lib.ServiceBus
             {
                 var newJob = await PostNewOrder(taskcatOrder);
 
-                logger.Info($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id}");
+                logger.Info($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id} => HRID {newJob.HRID}");
                 jobCreatedMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
