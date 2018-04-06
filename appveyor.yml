@@ -34,6 +34,7 @@ artifacts:
 - path: TaskCat.SelfHost\TaskCat.Job.Index\bin\$(configuration)
   name: TaskCatJobIndex
   type: zip
+test: off
 deploy:
 - provider: Environment
   name: TaskCatDev
