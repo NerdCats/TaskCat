@@ -45,6 +45,7 @@ namespace TaskCat.BackgroundJobService
             this.httpClient = httpClient;
             orderService = new OrderService(httpClient);
 
+            
             this.pushQueueClient = this.serviceBusContext.PushQueueClient;
             this.pullQueueClient = this.serviceBusContext.PullQueueClient;
         }
@@ -52,6 +53,8 @@ namespace TaskCat.BackgroundJobService
         private async Task DoWork()
         {
             logger.LogInformation("Background task is working.");
+            logger.LogInformation($"Pulling messages from {this.pullQueueClient.QueueName}");
+            logger.LogInformation($"Pushing messages to {this.pushQueueClient.QueueName}");
 
             try
             {

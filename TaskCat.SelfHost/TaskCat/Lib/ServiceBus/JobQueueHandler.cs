@@ -39,6 +39,8 @@ namespace TaskCat.Lib.ServiceBus
         public void Initiate()
         {
             logger.Info("Initiating Job Queue Handler");
+            logger.Info($"Pulling messages from {this.pullQueueClient.QueueName}");
+            logger.Info($"Pushing messages to {this.pushQueueClient.QueueName}");
 
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
@@ -46,7 +48,7 @@ namespace TaskCat.Lib.ServiceBus
                 MaxAutoRenewDuration = TimeSpan.FromHours(1)
             };
 
-            logger.Info("Registering pull queue client");
+            logger.Info($"Registering pull queue client to {pullQueueClient.QueueName}");
             pullQueueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
 
             logger.Info("Registering on job activity stream");
