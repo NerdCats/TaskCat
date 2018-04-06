@@ -40,12 +40,7 @@ namespace TaskCat.Lib.ServiceBus
             };
 
             pullQueueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
-            activitySubject.Subscribe(OnNext, CancellationToken.None);
-        }
-
-        private void OnNext(JobActivity activity)
-        {
-
+            // activitySubject.Subscribe(OnNext, CancellationToken.None);
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
@@ -56,18 +51,18 @@ namespace TaskCat.Lib.ServiceBus
 
             Console.WriteLine($"Order from {taskcatOrder.UserId} converted, ready to order");
 
-            var pushMessage = new TaskCatMessage();
+            var jobCreatedMessage = new TaskCatMessage();
 
             try
             {
                 var newJob = await PostNewOrder(taskcatOrder);
 
                 Console.WriteLine($"New job created. Remote Order = {taskcatOrder.ReferenceOrderId} => TaskCat Job {newJob.Id}");
-                pushMessage = new TaskCatMessage
+                jobCreatedMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
                     Job = newJob,
-                    JobActivityOperationName = JobActivityOperationNames.Create
+                    RemoteJobStage = RemoteJobStage.CREATED
                 };                
             }
             catch (Exception ex) // Catching global exception is a bad thing, fix this
@@ -75,15 +70,15 @@ namespace TaskCat.Lib.ServiceBus
                 Console.WriteLine(ex);
                 Console.WriteLine($"Error processing remote Order = {taskcatOrder.ReferenceOrderId}");
 
-                pushMessage = new TaskCatMessage
+                jobCreatedMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
-                    JobActivityOperationName = JobActivityOperationNames.Error
+                    RemoteJobStage = RemoteJobStage.ERROR
                 }; 
             }
 
             Console.WriteLine($"Sending message back to polling service");
-            var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pushMessage)));
+            var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobCreatedMessage)));
             await this.pushQueueClient.SendAsync(pushMessageBody);
         }
 

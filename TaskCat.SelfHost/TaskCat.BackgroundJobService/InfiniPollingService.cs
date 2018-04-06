@@ -82,7 +82,7 @@ namespace TaskCat.BackgroundJobService
 
         private bool shouldProcess(string cacheState)
         {
-            return !(cacheState == RemoteJobState.POSTED || cacheState == RemoteJobState.CLAIMED);
+            return !(cacheState == RemoteJobStage.POSTED || cacheState == RemoteJobStage.CLAIMED);
         }
 
         private async Task ProcessOrder(IDatabase cache, ProprietorSettings defaultAddressSettings, PartnerModels.Infini.Order order)
@@ -101,7 +101,7 @@ namespace TaskCat.BackgroundJobService
             {
                 // Step: We didn't read this order before. Let's just mark it read before anything happens
                 // We are not using this state now, may be later.
-                cache.StringSet(order.id.ToString(), RemoteJobState.READ);
+                cache.StringSet(order.id.ToString(), RemoteJobStage.READ);
             }
 
             var infiniUserId = this.configuration["Infini:userid"];
@@ -116,13 +116,13 @@ namespace TaskCat.BackgroundJobService
             try
             {
                 await this.pushQueueClient.SendAsync(createNewTaskCatJobMessage);
-                cache.StringSet(order.id.ToString(), RemoteJobState.POSTED);
+                cache.StringSet(order.id.ToString(), RemoteJobStage.POSTED);
 
-                logger.LogInformation($"order {order.id.ToString()} is {RemoteJobState.POSTED}");
+                logger.LogInformation($"order {order.id.ToString()} is {RemoteJobStage.POSTED}");
             }
             catch (Exception ex) when (ex is ServiceBusException || ex is InvalidOperationException)
             {
-                logger.LogError($"Service bus exception encountered, skipping marking the order {RemoteJobState.POSTED}", ex);
+                logger.LogError($"Service bus exception encountered, skipping marking the order {RemoteJobStage.POSTED}", ex);
             }
 
             //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
@@ -166,16 +166,16 @@ namespace TaskCat.BackgroundJobService
             var messageBody = Encoding.UTF8.GetString(message.Body);
             var taskCatMessage = JsonConvert.DeserializeObject<TaskCatMessage>(messageBody);
 
-            if (taskCatMessage.JobActivityOperationName == JobActivityOperationNames.Error)
+            if (taskCatMessage.RemoteJobStage == RemoteJobStage.ERROR)
             {
-                logger.LogInformation($"Order {taskCatMessage.ReferenceId} ended in {RemoteJobState.ERROR}");
-                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobState.ERROR);
+                logger.LogInformation($"Order {taskCatMessage.ReferenceId} ended in {RemoteJobStage.ERROR}");
+                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobStage.ERROR);
             }
-            else if (taskCatMessage.JobActivityOperationName == JobActivityOperationNames.Create)
+            else if (taskCatMessage.RemoteJobStage == RemoteJobStage.CREATED)
             {
                 logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat Job Id: {taskCatMessage.Job.Id}");
                 await this.orderService.UpdateOrderReferenceId(this.infiniToken, taskCatMessage.ReferenceId, taskCatMessage.Job.HRID);
-                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobState.CREATED);
+                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobStage.CREATED);
             }    
         }
 
