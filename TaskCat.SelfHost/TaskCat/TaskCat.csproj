@@ -510,6 +510,10 @@
       <Project>{CE6F8FC6-5725-4038-A29A-5E094342B848}</Project>
       <Name>TaskCat.Job.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskCat.PartnerServices\TaskCat.PartnerServices.csproj">
+      <Project>{e87a113d-2c48-473d-91e8-9f4b6280ef6e}</Project>
+      <Name>TaskCat.PartnerServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskCat.Payment\TaskCat.Payment.Core.csproj">
       <Project>{816B4F10-12BB-475A-84A3-B8D317862F44}</Project>
       <Name>TaskCat.Payment.Core</Name>

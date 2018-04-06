@@ -15,16 +15,41 @@
     {
         public Dictionary<string, List<JobTaskExtension>> ExtensionsDictionary { get; private set; }
 
-        public DeliveryJobExtensions()
+        public DeliveryJobExtensions(IEnumerable<JobTaskExtension> partnerExtensions = null)
         {
             ExtensionsDictionary = new Dictionary<string, List<JobTaskExtension>>();
-            PopulateExtensions();
+            PopulateExtensions(partnerExtensions);
         }
 
-        private void PopulateExtensions()
+        private void PopulateExtensions(IEnumerable<JobTaskExtension> partnerExtensions)
         {
             EnlistClassifiedDeliveryExtensions();
             EnlistDeliveryExtensions();
+
+            if (partnerExtensions != null)
+                EnlistPartnerExtensions(partnerExtensions);
+        }
+
+        private void EnlistPartnerExtensions(IEnumerable<JobTaskExtension> partnerExtensions)
+        {
+            if (partnerExtensions == null)
+            {
+                throw new ArgumentNullException(nameof(partnerExtensions));
+            }
+
+            foreach (var ext in partnerExtensions)
+            {
+                var orderType = ext.OrderType;
+                if (this.ExtensionsDictionary.ContainsKey(orderType))
+                {
+                    var extensions = this.ExtensionsDictionary[orderType];
+                    extensions.Add(ext);
+                }
+                else
+                {
+                    this.ExtensionsDictionary.Add(orderType, new List<JobTaskExtension>() { ext });
+                }
+            }
         }
 
         private void EnlistDeliveryExtensions()
@@ -297,9 +322,9 @@
             }
         }
 
-        public static void RegisterExtensions()
+        public static void RegisterExtensions(IEnumerable<JobTaskExtension> partnerExtensions = null)
         {
-            var extensions = new DeliveryJobExtensions();
+            var extensions = new DeliveryJobExtensions(partnerExtensions);            
             foreach (var item in extensions.ExtensionsDictionary)
             {
                 JobTaskExtensionResolver.Register(item.Key, item.Value);

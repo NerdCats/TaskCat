@@ -40,7 +40,20 @@ namespace TaskCat.Lib.ServiceBus
             };
 
             pullQueueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
-            // activitySubject.Subscribe(OnNext, CancellationToken.None);
+            activitySubject.Subscribe(OnNext, CancellationToken.None);
+        }
+
+        private void OnNext(JobActivity activity)
+        {
+            if (activity.Operation == JobActivityOperationNames.Update)
+            {
+                var jobUpdatedMessage = new TaskCatMessage()
+                {
+                    ReferenceId = activity.HRID,
+                    RemoteJobStage = RemoteJobStage.UPDATE,
+                    RemoteJobState = activity.Value.ToString()
+                };
+            }
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)

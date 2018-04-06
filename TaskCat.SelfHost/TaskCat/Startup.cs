@@ -19,6 +19,12 @@ using TaskCat.Common.Settings;
 using System.Reactive.Linq;
 using TaskCat.Job.Extensions;
 using NerdCats.Owin;
+using TaskCat.Data.Lib.Extension;
+using System.Collections.Generic;
+using System;
+using System.Reactive;
+using TaskCat.Data.Entity;
+using System.Reactive.Subjects;
 
 namespace TaskCat
 {
@@ -43,7 +49,7 @@ namespace TaskCat
             }
 
             SetupMongoConventions();
-            SetupJobTaskExtensions();
+            SetupJobTaskExtensions(container);
 
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
@@ -79,9 +85,18 @@ namespace TaskCat
             });
         }
 
-        private static void SetupJobTaskExtensions()
+        private static void SetupJobTaskExtensions(IContainer container)
         {
-            DeliveryJobExtensions.RegisterExtensions();
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            // TODO: Make this even more generic, time for a plugin architecture.      
+            var infiniExtension = new PartnerServices.Infini.InfiniUpdateJobTaskStateExtension(container.Resolve<Subject<JobActivity>>());
+            var partnerExtensions = new List<JobTaskExtension>() { infiniExtension };
+
+            DeliveryJobExtensions.RegisterExtensions(partnerExtensions);
         }
 
         private static void SetupMongoConventions()
