@@ -128,8 +128,6 @@ namespace TaskCat.BackgroundJobService
             {
                 logger.LogError($"Service bus exception encountered, skipping marking the order {RemoteJobStage.POSTED}", ex);
             }
-
-            //await this._orderService.UpdateOrderStatus(this._infiniToken, order.id.ToString(), OrderStatusCode.Ready_To_Ship);
         }
 
         public void Dispose()
@@ -180,6 +178,16 @@ namespace TaskCat.BackgroundJobService
                 logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat job ID/HRID: {taskCatMessage.JobID} => {taskCatMessage.JobHRID}");
                 await this.orderService.UpdateOrderReferenceId(this.infiniToken, taskCatMessage.ReferenceId, taskCatMessage.JobHRID);
                 await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobStage.CREATED);
+            }
+            else if (taskCatMessage.RemoteJobStage == RemoteJobStage.UPDATE)
+            {
+                logger.LogInformation($"Order {taskCatMessage.ReferenceId} was updated in TaskCat. Taskcat job ID/HRID: {taskCatMessage.JobID} => {taskCatMessage.JobHRID}");
+
+                OrderStatusCode translatedStatus = StatusTranslator.TranslateStatus(taskCatMessage.RemoteJobState);
+                if (translatedStatus != OrderStatusCode.Undefined)
+                    await this.orderService.UpdateOrderStatus(this.infiniToken, taskCatMessage.ReferenceId, translatedStatus);
+
+                await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobStage.UPDATE);
             }
         }
 

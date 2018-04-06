@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using NLog;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
@@ -51,12 +53,19 @@ namespace TaskCat.Lib.ServiceBus
             activitySubject.Subscribe(OnNext, CancellationToken.None);
         }
 
-        private void OnNext(JobActivity activity)
+        private async void OnNext(JobActivity activity)
         {
-            if (activity.Operation == JobActivityOperationNames.Update)
+            List<string> eligibleActivity = new List<string>()
+            {
+                JobActivityOperationNames.Cancel,
+                JobActivityOperationNames.Delete,
+                JobActivityOperationNames.Restore,
+                JobActivityOperationNames.Update
+            };
+
+            if (activity.ReferenceId != null && eligibleActivity.Any(x=>x == activity.Operation))
             {
                 var jobUpdatedMessage = new TaskCatMessage()
-
                 {
                     JobID = activity.JobId,
                     JobHRID = activity.HRID,
@@ -65,8 +74,12 @@ namespace TaskCat.Lib.ServiceBus
                     RemoteJobState = activity.Value.ToString()
                 };
 
-
+                logger.Info($"Sending update {activity.Value.ToString()} back to polling service for job {activity.HRID}");
+                var pushMessageBody = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobUpdatedMessage)));
+                await this.pushQueueClient.SendAsync(pushMessageBody);
+                logger.Info($"Sent message back to polling service");
             }
+            
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
