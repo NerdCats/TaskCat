@@ -14,16 +14,12 @@ namespace TaskCat.PartnerServices.Infini
         private const string baseUri = "http://alladin.com.bd";
         private HttpClient _httpClient;
 
-        // TODO: Make sure these are loaded from configuration/settings
-        private const string username = "delivery@buyersclub.com";
-        private const string password = "buyersclub@123$";
-
         public OrderService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task<string> Login()
+        public async Task<string> Login(string username, string password)
         {
             var uriBuilder = new UriBuilder(baseUri);
             uriBuilder.Path = "/api/api-admin-login";

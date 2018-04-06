@@ -59,7 +59,10 @@ namespace TaskCat.BackgroundJobService
             try
             {
                 logger.LogInformation("Fetching token");
-                this.infiniToken = await this.orderService.Login();
+                var username = this.configuration["userid"];
+                var password = this.configuration["password"];
+
+                this.infiniToken = await this.orderService.Login(username, password);
                 
                 logger.LogInformation("Fetching new orders");
                 var newOrders = await this.orderService.GetOrders(this.infiniToken, OrderStatusCode.Ready_To_Ship);
@@ -99,7 +102,7 @@ namespace TaskCat.BackgroundJobService
             {
                 if (!shouldProcess(cachedOrderState.ToString()))
                 {
-                    logger.LogInformation($"Skipping order {order.id.ToString()}, it is cached as {cachedOrderState.ToString()}");
+                    logger.LogDebug($"Skipping order {order.id.ToString()}, it is cached as {cachedOrderState.ToString()}");
                     return;
                 }
             }
@@ -115,7 +118,7 @@ namespace TaskCat.BackgroundJobService
             // Step: Convert the partner order to native taskcat order
             var taskcatOrder = order.ToClassifiedDeliveryOrder(serviceCharge, defaultAddressSettings, infiniUserId);
 
-            logger.LogInformation($"Preparing message for order {order.id.ToString()}");
+            logger.LogDebug($"Preparing message for order {order.id.ToString()}");
             // Step: Throw it to our message bus and update the state to posted.
             var createJobMessageBody = JsonConvert.SerializeObject(taskcatOrder);
             var createNewTaskCatJobMessage = new Message(Encoding.UTF8.GetBytes(createJobMessageBody));
