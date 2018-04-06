@@ -18,12 +18,12 @@ namespace TaskCat.BackgroundJobService
 
         public QueueClient PushQueueClient => lazyPushQueueClient.Value;
 
-        private Lazy<QueueClient> lazyPushQueueClient => 
-            new Lazy<QueueClient>(new QueueClient(this.connectionString, this.pushQueueName));
+        private Lazy<QueueClient> lazyPushQueueClient =>
+            new Lazy<QueueClient>(() => new QueueClient(this.connectionString, this.pushQueueName));
 
         public QueueClient PullQueueClient => lazyPullQueueClient.Value;
 
         private Lazy<QueueClient> lazyPullQueueClient =>
-            new Lazy<QueueClient>(new QueueClient(this.connectionString, this.pullQueueName));
+            new Lazy<QueueClient>(() => new QueueClient(this.connectionString, this.pullQueueName));
     }
 }

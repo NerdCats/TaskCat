@@ -63,7 +63,7 @@
             var replaceOneResult = new ReplaceOneResult.Acknowledged(1, 1, null);
 
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(()=> null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
             var jobRepository = new JobRepository(jobManagerMock.Object,
@@ -163,7 +163,7 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(()=> null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
@@ -187,7 +187,7 @@
 
             var jobManagerMock = new Mock<IJobManager>();
             jobManagerMock.Setup(x => x.UpdateJob(It.IsAny<Job>()))
-                .ReturnsAsync(null);
+                .ReturnsAsync(()=> null);
 
             var userStoreMock = new Mock<IUserStore<User>>();
 
