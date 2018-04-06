@@ -82,7 +82,8 @@ namespace TaskCat.Lib.ServiceBus
                 jobCreatedMessage = new TaskCatMessage
                 {
                     ReferenceId = taskcatOrder.ReferenceOrderId,
-                    Job = newJob,
+                    JobHRID = newJob.HRID,
+                    JobID = newJob.Id,
                     RemoteJobStage = RemoteJobStage.CREATED
                 };                
             }

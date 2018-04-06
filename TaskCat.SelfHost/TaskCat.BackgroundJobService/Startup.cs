@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
 namespace TaskCat.BackgroundJobService
@@ -38,8 +39,12 @@ namespace TaskCat.BackgroundJobService
             services.AddSingleton<IHostedService, InfiniPollingService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile($"Logs/{nameof(InfiniPollingService)}-{{Date}}.txt");
         }
     }
 }

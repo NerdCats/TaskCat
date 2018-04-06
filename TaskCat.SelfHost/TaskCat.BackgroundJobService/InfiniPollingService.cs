@@ -175,10 +175,10 @@ namespace TaskCat.BackgroundJobService
             }
             else if (taskCatMessage.RemoteJobStage == RemoteJobStage.CREATED)
             {
-                logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat Job Id: {taskCatMessage.Job.Id}");
-                await this.orderService.UpdateOrderReferenceId(this.infiniToken, taskCatMessage.ReferenceId, taskCatMessage.Job.HRID);
+                logger.LogInformation($"Order {taskCatMessage.ReferenceId} was created in TaskCat. Taskcat Job Id: {taskCatMessage.JobID}");
+                await this.orderService.UpdateOrderReferenceId(this.infiniToken, taskCatMessage.ReferenceId, taskCatMessage.JobHRID);
                 await this.cache.StringSetAsync(taskCatMessage.ReferenceId, RemoteJobStage.CREATED);
-            }    
+            }
         }
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
