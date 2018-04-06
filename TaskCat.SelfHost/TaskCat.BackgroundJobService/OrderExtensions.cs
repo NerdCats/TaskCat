@@ -65,6 +65,11 @@ namespace TaskCat.BackgroundJobService
             if (infiniOrder.vendor_address == null || !infiniOrder.vendor_address.Any())
             {
                 taskcatOrder.From = defaultAddressSettings.Address;
+                taskcatOrder.SellerInfo = new PersonInfo()
+                {
+                    Name = defaultAddressSettings.Name,
+                    PhoneNumber = defaultAddressSettings.PhoneNumber
+                };
             }
             else
             {
@@ -74,13 +79,13 @@ namespace TaskCat.BackgroundJobService
                     AddressLine1 = vendorAddress.address1,
                     AddressLine2 = String.IsNullOrWhiteSpace(vendorAddress.address3) ? vendorAddress.address2 : string.Join(" ", vendorAddress.address2, vendorAddress.address3),
                 };
-            }
 
-            taskcatOrder.SellerInfo = new PersonInfo()
-            {
-                Name = defaultAddressSettings.Name,
-                PhoneNumber = defaultAddressSettings.PhoneNumber
-            };
+                taskcatOrder.SellerInfo = new PersonInfo()
+                {
+                    Name = string.Join(" ", vendorAddress.firstname, vendorAddress.lastname),
+                    PhoneNumber = vendorAddress.phone_no
+                };
+            }
 
             taskcatOrder.UserId = userId;
 
