@@ -16,6 +16,11 @@
     using Common.Search;
     using Lib.Tag;
     using Model.Tag;
+    using TaskCat.App.Settings;
+    using Microsoft.Azure.ServiceBus;
+    using TaskCat.Lib.ServiceBus;
+    using TaskCat.Job.Order;
+    using System.Threading.Tasks;
 
     public class TaskCatApiService : IDichotomyService
     {
@@ -26,6 +31,10 @@
         private JobActivityService jobActivityService;
         private JobSearchIndexService jobIndexService;
         private TagExtensionService tagActivityService;
+
+        private QueueClient jobpullQueueClient;
+        private QueueClient jobpushQueueClient;
+        private JobQueueHandler jobpullMessageHandler;
 
         public TaskCatApiService()
         {
@@ -46,7 +55,7 @@
         {
             // INFO: Doing the IoC container building here
             AutofacContainerBuilder builder = new AutofacContainerBuilder();
-            this.container = builder.BuildContainer();           
+            this.container = builder.BuildContainer();
         }
 
         private void InitializeReactiveServices()
@@ -54,6 +63,27 @@
             this.jobActivityService = new JobActivityService(container.Resolve<IDbContext>(), container.Resolve<Subject<JobActivity>>());
             this.jobIndexService = new JobSearchIndexService(container.Resolve<ISearchContext>(), container.Resolve<IObservable<Data.Entity.Job>>());
             this.tagActivityService = new TagExtensionService(container.Resolve<IDbContext>(), container.Resolve<IObservable<TagActivity>>());
+        }
+
+        private void InitializeServiceBusClients()
+        {
+            var serviceBusSettings = Settings.Get<ServiceBusSettings>();
+            var jobpullQueueConfig = serviceBusSettings.JobPullConfig;
+            var jobpushQueueConfig = serviceBusSettings.JobPushConfig;
+
+            Task.Factory.StartNew(() => {
+                this.jobpullQueueClient = new QueueClient(jobpullQueueConfig.ConnectionString, jobpullQueueConfig.Queue);
+                this.jobpushQueueClient = new QueueClient(jobpushQueueConfig.ConnectionString, jobpushQueueConfig.Queue);
+
+                this.jobpullMessageHandler = new JobQueueHandler(
+                    pullQueueClient: this.jobpullQueueClient,
+                    pushQueueClient: this.jobpushQueueClient,
+                    repository: container.Resolve<IOrderRepository>(),
+                    activitySubject: container.Resolve<Subject<JobActivity>>());
+
+                this.jobpullMessageHandler.Initiate();
+            }, 
+            TaskCreationOptions.LongRunning);
         }
 
         public void Dispose()
@@ -77,7 +107,8 @@
 
             Console.WriteLine("Building Container...");
             BuildAutofacContainerAndStartActivityService();
-            InitializeReactiveServices();          
+            InitializeReactiveServices();
+            InitializeServiceBusClients();
 
             this.webApp = WebApp.Start(listeningAddress, appBuilder => Startup.ConfigureApp(appBuilder, container));
 

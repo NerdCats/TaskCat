@@ -19,6 +19,7 @@ using TaskCat.Common.Settings;
 using System.Reactive.Linq;
 using TaskCat.Job.Extensions;
 using NerdCats.Owin;
+using System;
 
 namespace TaskCat
 {
@@ -43,7 +44,7 @@ namespace TaskCat
             }
 
             SetupMongoConventions();
-            SetupJobTaskExtensions();
+            SetupJobTaskExtensions(container);
 
             app.UseAutofacMiddleware(container);
             app.Use(typeof(PreflightRequestsHandler));
@@ -79,8 +80,13 @@ namespace TaskCat
             });
         }
 
-        private static void SetupJobTaskExtensions()
+        private static void SetupJobTaskExtensions(IContainer container)
         {
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
             DeliveryJobExtensions.RegisterExtensions();
         }
 

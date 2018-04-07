@@ -27,6 +27,28 @@
             EnlistDeliveryExtensions();
         }
 
+        private void EnlistPartnerExtensions(IEnumerable<JobTaskExtension> partnerExtensions)
+        {
+            if (partnerExtensions == null)
+            {
+                throw new ArgumentNullException(nameof(partnerExtensions));
+            }
+
+            foreach (var ext in partnerExtensions)
+            {
+                var orderType = ext.OrderType;
+                if (this.ExtensionsDictionary.ContainsKey(orderType))
+                {
+                    var extensions = this.ExtensionsDictionary[orderType];
+                    extensions.Add(ext);
+                }
+                else
+                {
+                    this.ExtensionsDictionary.Add(orderType, new List<JobTaskExtension>() { ext });
+                }
+            }
+        }
+
         private void EnlistDeliveryExtensions()
         {
             var extensions = new List<JobTaskExtension>();
@@ -299,7 +321,7 @@
 
         public static void RegisterExtensions()
         {
-            var extensions = new DeliveryJobExtensions();
+            var extensions = new DeliveryJobExtensions();            
             foreach (var item in extensions.ExtensionsDictionary)
             {
                 JobTaskExtensionResolver.Register(item.Key, item.Value);

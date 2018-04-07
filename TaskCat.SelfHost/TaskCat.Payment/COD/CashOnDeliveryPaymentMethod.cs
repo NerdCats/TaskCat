@@ -14,8 +14,8 @@
     /// </summary>
     public class CashOnDeliveryPaymentMethod : IPaymentMethod
     {
-
         private readonly CashOnDeliveryPaymentSettings _codPaymentSettings;
+        public const string PaymentMethodKey = "CashOnDelivery";
 
         public CashOnDeliveryPaymentMethod(CashOnDeliveryPaymentSettings codPaymentSettings)
         {
@@ -26,7 +26,7 @@
         {
             get
             {
-                return "CashOnDelivery";
+                return PaymentMethodKey;
             }
         }
 

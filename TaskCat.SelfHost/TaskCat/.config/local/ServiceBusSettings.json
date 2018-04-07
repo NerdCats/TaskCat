@@ -1,0 +1,11 @@
+﻿{
+  "JobPullConfig": {
+    "ConnectionString": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=taskcat.jobpull.access;SharedAccessKey=trRssc/OUXktyrWEsEy+CyYjak+0h5t43dbbLi4YHcM=",
+    "Queue": "taskcat.jobpull-dev"
+  },
+
+  "JobPushConfig": {
+    "ConnectionString": "Endpoint=sb://gobdmjolinir.servicebus.windows.net/;SharedAccessKeyName=taskcat.jobpull.access;SharedAccessKey=trRssc/OUXktyrWEsEy+CyYjak+0h5t43dbbLi4YHcM=",
+    "Queue": "taskcat.jobpush-dev"
+  }
+}

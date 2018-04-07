@@ -8,6 +8,7 @@
     {
         public string JobId { get; set; }
         public string HRID { get; set; }
+        public string ReferenceId { get; set; }
 
         public string Operation { get; set; }
 
@@ -73,6 +74,9 @@
 
             this.JobId = job.Id;
             this.HRID = job.HRID;
+
+            if (!string.IsNullOrWhiteSpace(job.Order.ReferenceOrderId))
+                this.ReferenceId = job.Order.ReferenceOrderId;
 
             this.Operation = operation;
             TimeStamp = DateTime.UtcNow;
@@ -190,5 +194,6 @@
         public const string Claim = "Claim";
         public const string Cancel = "Cancel";
         public const string Restore = "Restore";
+        public const string Error = "Error";
     }
 }

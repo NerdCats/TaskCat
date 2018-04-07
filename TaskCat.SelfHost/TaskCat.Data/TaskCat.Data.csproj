@@ -140,6 +140,8 @@
     <Compile Include="Lib\Payment\Response\RefundPaymentResponse.cs" />
     <Compile Include="Lib\Payment\Request\VoidPaymentRequest.cs" />
     <Compile Include="Lib\Payment\Response\VoidPaymentResponse.cs" />
+    <Compile Include="Message\RemoteJobStage.cs" />
+    <Compile Include="Message\TaskCatMessage.cs" />
     <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\CommentUpdateModel.cs" />
     <Compile Include="Model\Geocoding\Address.cs" />
