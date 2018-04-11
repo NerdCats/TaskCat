@@ -11,12 +11,13 @@ namespace TaskCat.PartnerServices.Infini
 {
     public class OrderService
     {
-        private const string baseUri = "http://alladin.com.bd";
+        private string baseUri;
         private HttpClient _httpClient;
 
-        public OrderService(HttpClient httpClient)
+        public OrderService(HttpClient httpClient, string baseUri)
         {
-            _httpClient = httpClient ?? throw new System.ArgumentNullException(nameof(httpClient));
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this.baseUri = baseUri ?? throw new ArgumentNullException(nameof(baseUri));
         }
 
         public async Task<string> Login(string username, string password)

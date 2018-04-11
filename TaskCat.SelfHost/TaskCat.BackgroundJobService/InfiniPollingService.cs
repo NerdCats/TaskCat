@@ -43,8 +43,9 @@ namespace TaskCat.BackgroundJobService
             this.redisContext = redisContext;
             this.serviceBusContext = serviceBusContext;
             this.httpClient = httpClient;
-            orderService = new OrderService(httpClient);
 
+            var baseurl = configuration["Infini:baseurl"];
+            orderService = new OrderService(httpClient, baseurl);
             
             this.pushQueueClient = this.serviceBusContext.PushQueueClient;
             this.pullQueueClient = this.serviceBusContext.PullQueueClient;
