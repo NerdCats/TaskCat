@@ -34,9 +34,9 @@ artifacts:
 - path: TaskCat.SelfHost\TaskCat.Job.Index\bin\$(configuration)
   name: TaskCatJobIndex
   type: zip
-# - path: TaskCat.SelfHost\TaskCat.BackgroundJobService\bin\$(configuration)\net462\win7-x64
-#   name: TaskCatBackgroundJobService
-#   type: zip
+- path: TaskCat.SelfHost\TaskCat.BackgroundJobService\bin\$(configuration)\net462\win7-x64
+  name: TaskCatBackgroundJobService
+  type: zip
 test: off
 deploy:
 - provider: Environment
